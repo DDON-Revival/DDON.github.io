@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>DDON – Monster Search</title>
+  <title>DDON – Item Search</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="js/theme.js" defer></script>  
 </head>
 <body>
 
-<h1>Monster Search</h1>
+<h1>Item Search</h1>
 
 <input
   id="search"
@@ -54,7 +54,7 @@ Promise.all([
       .forEach(m => {
         const li = document.createElement("li");
         li.innerHTML = `
-          <a href="monster.html?id=${m.id}">
+          <a href="item.html?id=${m.id}">
             ${m.name} <small>(${m.id})</small>
           </a>
         `;
