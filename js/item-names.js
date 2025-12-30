@@ -8,11 +8,18 @@ export async function loadItemNames() {
 
   let current = null;
 
+  const commit = () => {
+    if (current && current.id && current.new) {
+      map[String(current.id)] = { en: current.new };
+    }
+  };
+
   text.split("\n").forEach(line => {
     line = line.trim();
 
-    // start of [[item]]
+    // start of new item → save previous
     if (line === "[[item]]") {
+      commit();
       current = {};
       return;
     }
@@ -29,13 +36,10 @@ export async function loadItemNames() {
       current.new = value.replace(/^['"]|['"]$/g, "");
       return;
     }
-
-    // end of entry → save
-    if (current.id && current.new) {
-      map[current.id] = { en: current.new };
-      current = null;
-    }
   });
+
+  // commit last item (EOF)
+  commit();
 
   return map;
 }
