@@ -6,8 +6,13 @@ export function buildDropIndex(monsters) {
 
     m.drops.items.forEach(i => {
       const itemId = String(i.ItemId);
-      if (!index[itemId]) index[itemId] = new Set();
-      index[itemId].add(m.name);
+
+      if (!index[itemId]) {
+        index[itemId] = new Set();
+      }
+
+      // nur EINMAL pro Monster
+      index[itemId].add(m.id);
     });
   });
 
