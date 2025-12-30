@@ -15,13 +15,5 @@
   "0x010902": "Formless", 
   "0x010510": "Formless", 
   "0x010915": "Formless", 
-  "0x010800": "Formless",  
-
-  "0x010100": "DemiHuman",
-  "0x010102": "DemiHuman",
-  "0x010103": "DemiHuman",
-
-  "0x020403": "Demon",
-  "0x015610": "Dragon",
-  "0x015000": "Giant"
+  "0x010800": "Formless"
 }
