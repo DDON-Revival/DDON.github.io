@@ -13,8 +13,7 @@
 import { parseDDON } from "./js/ddon-parser.js";
 import { loadEnemyNames } from "./js/enemy-names.js";
 
-/* ================= ITEM NAMES (INLINE, ROBUST) ================= */
-
+/* ---------- inline item-name loader (funktioniert sicher) ---------- */
 async function loadItemNames() {
   const res = await fetch(
     "https://raw.githubusercontent.com/riftcrystal/DDON-Translation/master/ui/00_message/common/item_name.toml",
@@ -26,8 +25,8 @@ async function loadItemNames() {
   let current = null;
 
   const commit = () => {
-    if (current && current.id && current.name) {
-      map[String(current.id)] = current.name;
+    if (current && current.id && current.new) {
+      map[String(current.id)] = current.new;
     }
   };
 
@@ -48,7 +47,7 @@ async function loadItemNames() {
     }
 
     if (line.startsWith("new")) {
-      current.name = line
+      current.new = line
         .split("=")
         .slice(1)
         .join("=")
@@ -61,15 +60,14 @@ async function loadItemNames() {
   return map;
 }
 
-/* ================= MAIN ================= */
-
+/* ---------- main ---------- */
 const itemId = new URLSearchParams(location.search).get("id");
 
 Promise.all([
   fetch("data/EnemySpawn.json", { cache: "no-store" }).then(r => r.json()),
-  loadItemNames(),
-  loadEnemyNames()
-]).then(([enemyData, itemNames, enemyNames]) => {
+  loadEnemyNames(),
+  loadItemNames()
+]).then(([enemyData, enemyNames, itemNames]) => {
 
   if (!itemId) {
     document.getElementById("content").innerHTML =
@@ -80,50 +78,52 @@ Promise.all([
   const itemName = itemNames[itemId] || `Item ${itemId}`;
   const { enemies } = parseDDON(enemyData);
 
-  /* alle Enemies finden, die dieses Item droppen */
+  /* build drop list */
   const drops = [];
 
   enemies.forEach(e => {
     if (!e.drops || !e.drops.items) return;
 
     e.drops.items.forEach(d => {
-      if (String(d.ItemId) === String(itemId)) {
-        drops.push({
-          enemyId: e.EnemyId,
-          chance: Math.round(d.DropChance * 100)
-        });
-      }
+      if (String(d.ItemId) !== String(itemId)) return;
+
+      drops.push({
+        enemyId: e.EnemyId,
+        chance: Math.round(d.DropChance * 100)
+      });
     });
   });
 
-  if (!drops.length) {
-    document.getElementById("content").innerHTML = `
-      <h1>${itemName}</h1>
-      <p><b>Item ID:</b> ${itemId}</p>
-      <p>No enemies drop this item.</p>
-    `;
-    return;
-  }
+  /* deduplicate enemies (wichtig!) */
+  const unique = {};
+  drops.forEach(d => {
+    const key = d.enemyId;
+    if (!unique[key]) unique[key] = d;
+  });
+
+  const list = Object.values(unique);
 
   document.getElementById("content").innerHTML = `
     <h1>${itemName}</h1>
     <p><b>Item ID:</b> ${itemId}</p>
 
     <h2>Dropped by</h2>
-    <ul>
-      ${drops.map(d => {
-        const enemyName =
-          enemyNames[d.enemyId] || `Enemy ${d.enemyId}`;
-        return `
-          <li>
-            <a href="monster.html?id=${d.enemyId}">
-              ${enemyName}
-            </a>
-            (${d.chance}%)
-          </li>
-        `;
-      }).join("")}
-    </ul>
+    ${
+      list.length
+        ? `<ul>
+            ${list.map(d => {
+              const name =
+                enemyNames[d.enemyId] || `Enemy ${d.enemyId}`;
+              return `
+                <li>
+                  <a href="monster.html?id=${d.enemyId}">
+                    ${name}
+                  </a> (${d.chance}%)
+                </li>`;
+            }).join("")}
+          </ul>`
+        : "<p>No enemies drop this item.</p>"
+    }
   `;
 }).catch(err => {
   console.error(err);
