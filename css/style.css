@@ -1,49 +1,20 @@
 :root {
+  --bg: #ffffff;
+  --text: #111;
+  --box: #f2f2f2;
+  --accent: #0969da;
+}
+
+[data-theme="dark"] {
   --bg: #0d1117;
   --text: #c9d1d9;
   --box: #161b22;
   --accent: #58a6ff;
 }
 
-body {
+html, body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
   font-family: system-ui, sans-serif;
-}
-
-.layout {
-  display: flex;
-  min-height: 100vh;
-}
-
-.sidebar {
-  width: 220px;
-  background: #111;
-  padding: 1rem;
-  box-sizing: border-box;
-}
-
-.sidebar h2 {
-  margin-top: 0;
-}
-
-.sidebar a {
-  display: block;
-  color: #ddd;
-  text-decoration: none;
-  margin: 0.4rem 0;
-}
-
-.sidebar a:hover {
-  color: #fff;
-}
-
-.content {
-  flex: 1;
-  padding: 2rem;
-}
-
-a {
-  color: var(--accent);
 }
