@@ -1,6 +1,7 @@
 export async function loadItemNames() {
   const res = await fetch(
-    "https://raw.githubusercontent.com/riftcrystal/DDON-Translation/master/ui/00_message/common/item_name.toml"
+    "https://raw.githubusercontent.com/riftcrystal/DDON-Translation/master/ui/00_message/common/item_name.toml",
+    { cache: "no-store" }
   );
 
   const text = await res.text();
@@ -17,7 +18,7 @@ export async function loadItemNames() {
   text.split("\n").forEach(line => {
     line = line.trim();
 
-    // start of new item → save previous
+    // ✅ RICHTIG: [[item]] (klein!)
     if (line === "[[item]]") {
       commit();
       current = {};
@@ -38,7 +39,7 @@ export async function loadItemNames() {
     }
   });
 
-  // commit last item (EOF)
+  // commit last entry
   commit();
 
   return map;

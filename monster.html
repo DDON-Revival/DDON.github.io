@@ -1,45 +1,98 @@
-export async function loadItemNames() {
-  const res = await fetch(
-    "https://raw.githubusercontent.com/riftcrystal/DDON-Translation/master/ui/00_message/common/item_name.toml"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DDON – Monster</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="content">Loading…</div>
+
+<script type="module">
+import { parseDDON } from "./js/ddon-parser.js";
+import { loadItemNames } from "./js/item-names.js";
+import { loadEnemyNames } from "./js/enemy-names.js";
+import { loadEnemySpecies } from "./js/enemy-species.js";
+
+/* ---------- helpers ---------- */
+function getItemName(itemNames, id) {
+  const key = String(id);
+  return itemNames[key]?.en || `Item ${id}`;
+}
+
+/* ---------- main ---------- */
+const enemyId = new URLSearchParams(location.search).get("id");
+
+Promise.all([
+  fetch("data/EnemySpawn.json").then(r => r.json()),
+  loadItemNames(),
+  loadEnemyNames(),
+  loadEnemySpecies()
+]).then(([enemyData, itemNames, enemyNames, enemySpecies]) => {
+
+  const { enemies } = parseDDON(enemyData);
+
+  const spawns = enemies.filter(e =>
+    String(e.EnemyId).toLowerCase() === String(enemyId).toLowerCase()
   );
 
-  const text = await res.text();
-  const map = {};
+  if (!spawns.length) {
+    document.getElementById("content").innerHTML =
+      `<h1>Monster not found</h1><p>EnemyId: ${enemyId}</p>`;
+    return;
+  }
 
-  let current = null;
+  const name = enemyNames[enemyId] || `Enemy ${enemyId}`;
+  const species =
+    enemySpecies[enemyId] ||
+    enemySpecies[name] ||
+    "Unknown";
 
-  const commit = () => {
-    if (current && current.id && current.new) {
-      map[String(current.id)] = { en: current.new };
-    }
-  };
+  const levels = spawns.map(s => s.Lv);
+  const minLv = Math.min(...levels);
+  const maxLv = Math.max(...levels);
 
-  text.split("\n").forEach(line => {
-    line = line.trim();
+  const dropTable = spawns.find(s => s.drops)?.drops;
 
-    // start of new item → save previous
-    if (line === "[[item]]") {
-      commit();
-      current = {};
-      return;
-    }
+  let dropsHtml = "<p>No drops</p>";
+  if (dropTable?.items) {
+    dropsHtml = `
+      <ul>
+        ${dropTable.items.map(d => {
+          const itemName = getItemName(itemNames, d.ItemId);
+          const chance = Math.round(d.DropChance * 100);
+          return `<li>${itemName} (${chance}%)</li>`;
+        }).join("")}
+      </ul>
+    `;
+  }
 
-    if (!current) return;
+  const stages = [...new Set(spawns.map(s => s.StageId))];
 
-    if (line.startsWith("id")) {
-      current.id = line.split("=")[1].trim();
-      return;
-    }
+  document.getElementById("content").innerHTML = `
+    <h1>${name}</h1>
 
-    if (line.startsWith("new")) {
-      const value = line.split("=").slice(1).join("=").trim();
-      current.new = value.replace(/^['"]|['"]$/g, "");
-      return;
-    }
-  });
+    <p><b>EnemyId:</b> ${enemyId}</p>
+    <p><b>Species:</b> ${species}</p>
+    <p><b>Level Range:</b> ${minLv} – ${maxLv}</p>
+    <p><b>Spawn Count:</b> ${spawns.length}</p>
 
-  // commit last item (EOF)
-  commit();
+    <h2>Drops</h2>
+    ${dropsHtml}
 
-  return map;
-}
+    <h2>Spawn Stages</h2>
+    <ul>
+      ${stages.map(s => `<li>Stage ${s}</li>`).join("")}
+    </ul>
+  `;
+}).catch(err => {
+  console.error(err);
+  document.getElementById("content").innerHTML =
+    "<h1>Error loading monster</h1>";
+});
+</script>
+
+</body>
+</html>
