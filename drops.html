@@ -1,8 +1,41 @@
-const map = {};
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Drop Search</title>
+</head>
+<body>
 
-MONSTERS.forEach(m => {
-  m.drops.forEach(d => {
-    if (!map[d.Name]) map[d.Name] = [];
-    map[d.Name].push(m.name);
+<h1>Drop Search</h1>
+
+<input id="search" placeholder="Enter Item ID (e.g. 19508)">
+<div id="results"></div>
+
+<script type="module">
+import { parseDDON } from "./js/ddon-parser.js";
+import { groupByEnemy } from "./js/monster-utils.js";
+import { buildDropIndex } from "./js/drop-utils.js";
+
+fetch("data/EnemySpawn.json")
+  .then(r => r.json())
+  .then(data => {
+    const { enemies } = parseDDON(data);
+    const monsters = groupByEnemy(enemies);
+    const dropIndex = buildDropIndex(monsters);
+
+    console.log("DropIndex keys:", Object.keys(dropIndex).slice(0, 20));
+
+    document.getElementById("search").addEventListener("input", e => {
+      const id = e.target.value.trim();
+      const list = dropIndex[id] || [];
+
+      document.getElementById("results").innerHTML =
+        list.length
+          ? `<ul>${list.map(m => `<li>${m}</li>`).join("")}</ul>`
+          : "No monsters drop this item.";
+    });
   });
-});
+</script>
+
+</body>
+</html>
