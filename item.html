@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DDON – Item</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="content">Loading…</div>
+
+<script type="module">
+import { parseDDON } from "./js/ddon-parser.js";
+import { loadEnemyNames } from "./js/enemy-names.js";
+
+/* ---------- ITEM NAMES (INLINE, SAME AS monster.html) ---------- */
+async function loadItemNames() {
+  const res = await fetch(
+    "https://raw.githubusercontent.com/riftcrystal/DDON-Translation/master/ui/00_message/common/item_name.toml",
+    { cache: "no-store" }
+  );
+
+  const text = await res.text();
+  const map = {};
+  let current = null;
+
+  const commit = () => {
+    if (current && current.id && current.new) {
+      map[String(current.id)] = current.new;
+    }
+  };
+
+  text.split("\n").forEach(line => {
+    line = line.trim();
+
+    if (line === "[[item]]") {
+      commit();
+      current = {};
+      return;
+    }
+
+    if (!current) return;
+
+    if (line.startsWith("id")) {
+      current.id = line.split("=")[1].trim();
+      return;
+    }
+
+    if (line.startsWith("new")) {
+      current.new = line.split("=").slice(1).join("=")
+        .trim().replace(/^['"]|['"]$/g, "");
+    }
+  });
+
+  commit();
+  return map;
+}
+
+/* ---------- MAIN ---------- */
+
+const itemId = new URLSearchParams(location.search).get("id");
+
+Promise.all([
+  fetch("data/EnemySpawn.json", { cache: "no-store" }).then(r => r.json()),
+  loadEnemyNames(),
+  loadItemNames()
+]).then(([enemyData, enemyNames, itemNames]) => {
+
+  const { enemies } = parseDDON(enemyData);
+
+  const itemName = itemNames[itemId] || `Item ${itemId}`;
+
+  const drops = [];
+
+  enemies.forEach(e => {
+    if (!e.drops || !e.drops.items) return;
+
+    e.drops.items.forEach(d => {
+      if (String(d.ItemId) === String(itemId)) {
+        drops.push({
+          enemyId: e.EnemyId,
+          chance: Math.round(d.DropChance * 100)
+        });
+      }
+    });
+  });
+
+  if (!drops.length) {
+    document.getElementById("content").innerHTML = `
+      <h1>${itemName}</h1>
+      <p>No monsters drop this item.</p>
+    `;
+    return;
+  }
+
+  document.getElementById("content").innerHTML = `
+    <h1>${itemName}</h1>
+    <p><b>Item ID:</b> ${itemId}</p>
+
+    <h2>Dropped by</h2>
+    <ul>
+      ${drops.map(d => {
+        const enemyName =
+          enemyNames[d.enemyId] || `Enemy ${d.enemyId}`;
+        return `
+          <li>
+            <a href="monster.html?id=${d.enemyId}">
+              ${enemyName}
+            </a> (${d.chance}%)
+          </li>
+        `;
+      }).join("")}
+    </ul>
+  `;
+});
+</script>
+
+</body>
+</html>
