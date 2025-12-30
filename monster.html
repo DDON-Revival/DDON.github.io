@@ -1,17 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Monster</title>
-  <link rel="stylesheet" href="css/style.css">
-  <script type="module" src="js/monster-page.js"></script>
-</head>
-<body>
+<script type="module">
+import { parseDDON } from "./js/ddon-parser.js";
+import { groupByEnemy } from "./js/monster-utils.js";
 
-<div style="display:flex">
-  <aside id="sidebar" style="width:250px"></aside>
-  <main id="content" style="padding:2rem"></main>
-</div>
+const id = new URLSearchParams(location.search).get("id");
 
-</body>
-</html>
+fetch("data/EnemySpawn.json")
+  .then(r => r.json())
+  .then(data => {
+    const { enemies } = parseDDON(data);
+    const monsters = groupByEnemy(enemies);
+    const m = monsters.find(x => x.id == id);
+
+    document.body.innerHTML = `
+      <h1>${m.name}</h1>
+      <p>Level: ${m.minLv}–${m.maxLv}</p>
+
+      <h2>Drops</h2>
+      <ul>
+        ${m.drops.items.map(d =>
+          `<li>Item ${d.ItemId} (${d.DropChance * 100}%)</li>`
+        ).join("")}
+      </ul>
+
+      <h2>Spawns</h2>
+      <p>${m.spawns.length} known spawn points</p>
+    `;
+  });
+</script>
