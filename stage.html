@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DDON – Stage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="content">Loading…</div>
+
+<script type="module">
+import { parseDDON } from "./js/ddon-parser.js";
+import { loadEnemyNames } from "./js/enemy-names.js";
+
+/* ---------- LOAD STAGE NAMES (LOCAL JSON) ---------- */
+async function loadStageNames() {
+  const res = await fetch("data/stage-names.json", { cache: "no-store" });
+  return await res.json();
+}
+
+/* ---------- MAIN ---------- */
+const stageId = Number(new URLSearchParams(location.search).get("id"));
+
+Promise.all([
+  fetch("data/EnemySpawn.json", { cache: "no-store" }).then(r => r.json()),
+  loadEnemyNames(),
+  loadStageNames()
+]).then(([enemyData, enemyNames, stageNames]) => {
+
+  const { enemies } = parseDDON(enemyData);
+
+  const spawns = enemies.filter(e => e.StageId === stageId);
+
+  if (!spawns.length) {
+    document.getElementById("content").innerHTML = `
+      <h1>Stage not found</h1>
+      <p>StageId: ${stageId}</p>
+    `;
+    return;
+  }
+
+  const stage = stageNames[stageId] || {};
+  const stageNameEN = stage.en || `Stage ${stageId}`;
+  const stageNameJP = stage.jp || "";
+
+  /* Group enemies by EnemyId */
+  const enemyMap = {};
+  spawns.forEach(s => {
+    const id = s.EnemyId;
+    if (!enemyMap[id]) {
+      enemyMap[id] = {
+        id,
+        count: 0,
+        minLv: s.Lv,
+        maxLv: s.Lv
+      };
+    }
+    enemyMap[id].count++;
+    enemyMap[id].minLv = Math.min(enemyMap[id].minLv, s.Lv);
+    enemyMap[id].maxLv = Math.max(enemyMap[id].maxLv, s.Lv);
+  });
+
+  const enemyList = Object.values(enemyMap);
+
+  document.getElementById("content").innerHTML = `
+    <h1>${stageNameEN}</h1>
+    ${stageNameJP ? `<p><i>${stageNameJP}</i></p>` : ""}
+    <p><b>Stage ID:</b> ${stageId}</p>
+    <p><b>Enemy Types:</b> ${enemyList.length}</p>
+
+    <h2>Enemies in this Stage</h2>
+    <ul>
+      ${enemyList.map(e => {
+        const name = enemyNames[e.id] || `Enemy ${e.id}`;
+        return `
+          <li>
+            <a href="monster.html?id=${e.id}">${name}</a>
+            — Lv ${e.minLv}–${e.maxLv}
+            (${e.count} spawns)
+          </li>
+        `;
+      }).join("")}
+    </ul>
+  `;
+}).catch(err => {
+  console.error(err);
+  document.getElementById("content").innerHTML =
+    "<h1>Error loading stage</h1>";
+});
+</script>
+
+</body>
+</html>
