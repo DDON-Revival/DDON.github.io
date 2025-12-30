@@ -38,7 +38,10 @@ Promise.all([
   }
 
   const name = enemyNames[enemyId] || `Enemy ${enemyId}`;
-  const species = enemySpecies[name] || "Unknown";
+  const species =
+  enemySpecies[enemyId] ||
+  enemySpecies[name] ||
+  "Unknown";
 
   const levels = spawns.map(s => s.Lv);
   const minLv = Math.min(...levels);
@@ -52,8 +55,10 @@ Promise.all([
     dropsHtml = `
       <ul>
         ${dropTable.items.map(d => {
-          const itemName =
-            itemNames[d.ItemId]?.en || itemNames[String(d.ItemId)]?.en || `Item ${d.ItemId}`;
+  const itemName =
+  itemNames[d.ItemId]?.en ||
+  itemNames[String(d.ItemId)]?.en ||
+  `Item ${d.ItemId}`;
           const chance = Math.round(d.DropChance * 100);
           return `<li>${itemName} (${chance}%)</li>`;
         }).join("")}
