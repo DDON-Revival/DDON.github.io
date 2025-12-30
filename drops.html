@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>DDON</title>
+  <title>DDON – Drop Search</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Optional: dein bestehendes CSS -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -72,10 +75,6 @@ Promise.all([
     `;
   });
 });
-<script>
-fetch("partials/sidebar.html")
-  .then(r => r.text())
-  .then(html => document.getElementById("sidebar").innerHTML = html);
 </script>
 
 </body>

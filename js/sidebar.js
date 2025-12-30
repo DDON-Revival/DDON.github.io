@@ -1,46 +1,32 @@
-const langKey = "ddon-lang";
-
-export function getLang() {
-  return localStorage.getItem(langKey) || "en";
-}
-
-export function toggleLang() {
-  const next = getLang() === "en" ? "jp" : "en";
-  localStorage.setItem(langKey, next);
-  location.reload();
-}
-
-export function renderSidebar() {
-  const lang = getLang();
-
-  const sidebar = document.createElement("div");
-  sidebar.id = "sidebar";
+document.addEventListener("DOMContentLoaded", async () => {
+  const sidebar = document.createElement("nav");
+  sidebar.className = "sidebar";
 
   sidebar.innerHTML = `
-    <h1>DDON Wiki</h1>
+    <h2>DDON Wiki</h2>
 
-    <div class="section">
-      <a href="index.html">Home</a>
-    </div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+    </ul>
 
-    <div class="section">
-      <a href="monsters.html">Monster</a>
-      <a href="items.html">Items</a>
-      <a href="stages.html">Stages</a>
-    </div>
+    <h3>Search</h3>
+    <ul>
+      <li><a href="monsters.html">Monster Search</a></li>
+      <li><a href="drops.html">Item / Drop Search</a></li>
+      <li><a href="stages.html">Stage Search</a></li>
+    </ul>
 
-    <div class="section">
-      <a href="wiki.html">Wiki</a>
-    </div>
+    <h3>Wiki</h3>
+    <ul>
+      <li><a href="monsters.html">Monsters</a></li>
+      <li><a href="items.html">Items</a></li>
+      <li><a href="stages.html">Stages</a></li>
+    </ul>
 
-    <button id="langToggle">
-      Language: ${lang === "en" ? "EN" : "JP"}
-    </button>
+    <hr>
+
+    <button id="langToggle">EN / JP</button>
   `;
 
   document.body.prepend(sidebar);
-
-  document
-    .getElementById("langToggle")
-    .addEventListener("click", toggleLang);
-}
+});

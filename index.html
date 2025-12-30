@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>DDON</title>
+  <title>DDON Wiki</title>
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js" defer></script>
 </head>
 <body>
 
@@ -27,11 +28,5 @@
   </div>
 
 </main>
-<script>
-fetch("partials/sidebar.html")
-  .then(r => r.text())
-  .then(html => document.getElementById("sidebar").innerHTML = html);
-</script>
-
 </body>
 </html>
