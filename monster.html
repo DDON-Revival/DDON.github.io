@@ -16,6 +16,20 @@ import { loadItemNames } from "./js/item-names.js";
 import { loadEnemyNames } from "./js/enemy-names.js";
 import { loadEnemySpecies } from "./js/enemy-species.js";
 
+/* ---------- helpers ---------- */
+function getItemName(itemNames, id) {
+  return (
+    itemNames[id]?.en ||
+    itemNames[id] ||
+    itemNames[String(id)]?.en ||
+    itemNames[String(id)] ||
+    itemNames.items?.[id]?.en ||
+    itemNames.items?.[String(id)]?.en ||
+    `Item ${id}`
+  );
+}
+
+/* ---------- main ---------- */
 const enemyId = new URLSearchParams(location.search).get("id");
 
 Promise.all([
@@ -27,38 +41,37 @@ Promise.all([
 
   const { enemies } = parseDDON(enemyData);
 
+  /* alle Spawns dieses EnemyId */
   const spawns = enemies.filter(e =>
     String(e.EnemyId).toLowerCase() === String(enemyId).toLowerCase()
   );
 
   if (!spawns.length) {
     document.getElementById("content").innerHTML =
-      `<h1>Monster not found</h1><p>ID: ${enemyId}</p>`;
+      `<h1>Monster not found</h1><p>EnemyId: ${enemyId}</p>`;
     return;
   }
 
+  /* Basisdaten */
   const name = enemyNames[enemyId] || `Enemy ${enemyId}`;
   const species =
-  enemySpecies[enemyId] ||
-  enemySpecies[name] ||
-  "Unknown";
+    enemySpecies[enemyId] ||
+    enemySpecies[name] ||
+    "Unknown";
 
   const levels = spawns.map(s => s.Lv);
   const minLv = Math.min(...levels);
   const maxLv = Math.max(...levels);
 
+  /* Drops (erste gültige DropTable) */
   const dropTable = spawns.find(s => s.drops)?.drops;
 
-  // ✅ Drops mit Item-Namen
   let dropsHtml = "<p>No drops</p>";
   if (dropTable && dropTable.items) {
     dropsHtml = `
       <ul>
         ${dropTable.items.map(d => {
-  const itemName =
-  itemNames[d.ItemId]?.en ||
-  itemNames[String(d.ItemId)]?.en ||
-  `Item ${d.ItemId}`;
+          const itemName = getItemName(itemNames, d.ItemId);
           const chance = Math.round(d.DropChance * 100);
           return `<li>${itemName} (${chance}%)</li>`;
         }).join("")}
@@ -66,7 +79,7 @@ Promise.all([
     `;
   }
 
-  // ✅ Stage-Deduplizierung
+  /* Stages dedupliziert */
   const stages = [...new Set(spawns.map(s => s.StageId))];
 
   document.getElementById("content").innerHTML = `
@@ -82,11 +95,13 @@ Promise.all([
 
     <h2>Spawn Stages</h2>
     <ul>
-      ${stages.map(s =>
-        `<li>Stage ${s}</li>`
-      ).join("")}
+      ${stages.map(s => `<li>Stage ${s}</li>`).join("")}
     </ul>
   `;
+}).catch(err => {
+  console.error(err);
+  document.getElementById("content").innerHTML =
+    "<h1>Error loading monster data</h1>";
 });
 </script>
 
