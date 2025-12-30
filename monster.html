@@ -2,30 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>DDON – Monster Search</title>
+  <title>DDON – Monster</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/style.css">
- <script src="js/theme.js" defer></script> 
+  <script src="js/theme.js" defer></script>
 </head>
 <body>
 
 <div class="layout">
 
   <!-- SIDEBAR -->
-<aside class="sidebar">
-  <h2>DDON Wiki</h2>
+  <aside class="sidebar">
+    <h2>DDON Wiki</h2>
 
-  <a href="index.html">Home</a>
-  <a href="monster-search.html">Monsters</a>
-  <a href="item-search.html">Items</a>
-  <a href="stage-search.html">Stages</a>
+    <a href="index.html">Home</a>
+    <a href="monster-search.html">Monsters</a>
+    <a href="item-search.html">Items</a>
+    <a href="stage-search.html">Stages</a>
 
-  <hr>
+    <hr>
 
-  <strong>Language</strong>
-  <a href="#" onclick="setLang('en')">EN</a>
-  <a href="#" onclick="setLang('jp')">JP</a>
-</aside>
-
+    <strong>Language</strong>
+    <a href="#" onclick="setLang('en')">EN</a>
+    <a href="#" onclick="setLang('jp')">JP</a>
+  </aside>
 
   <!-- CONTENT -->
   <main class="content">
@@ -38,20 +38,24 @@
 import { parseDDON } from "./js/ddon-parser.js";
 import { loadEnemyNames } from "./js/enemy-names.js";
 import { loadEnemySpecies } from "./js/enemy-species.js";
+import { loadStageNames } from "./js/stage-names.js";
 import { loadItemNames } from "./js/item-names.js";
 
 const enemyId = new URLSearchParams(location.search).get("id");
 
 Promise.all([
   fetch("data/EnemySpawn.json").then(r => r.json()),
-  fetch("data/stage-names.json").then(r => r.json()),
   loadEnemyNames(),
   loadEnemySpecies(),
+  loadStageNames(),
   loadItemNames()
-]).then(([enemyData, stageNames, enemyNames, enemySpecies, itemNames]) => {
+]).then(([enemyData, enemyNames, enemySpecies, stageNames, itemNames]) => {
 
   const { enemies } = parseDDON(enemyData);
-  const spawns = enemies.filter(e => String(e.EnemyId) === enemyId);
+
+  const spawns = enemies.filter(e =>
+    String(e.EnemyId).toLowerCase() === String(enemyId).toLowerCase()
+  );
 
   if (!spawns.length) {
     document.getElementById("content").innerHTML = "<h1>Monster not found</h1>";
@@ -67,28 +71,53 @@ Promise.all([
 
   const dropTable = spawns.find(s => s.drops)?.drops;
 
-  const dropsHtml = dropTable?.items
-    ? `<ul>${dropTable.items.map(d => {
-        const n = itemNames[d.ItemId]?.en || `Item ${d.ItemId}`;
-        return `<li><a href="item.html?id=${d.ItemId}">${n}</a> (${Math.round(d.DropChance*100)}%)</li>`;
-      }).join("")}</ul>`
-    : "<p>No drops</p>";
+  let dropsHtml = "<p>No drops</p>";
+  if (dropTable?.items) {
+    dropsHtml = `
+      <ul>
+        ${dropTable.items.map(d => {
+          const itemName = itemNames[d.ItemId]?.en || `Item ${d.ItemId}`;
+          return `
+            <li>
+              <a href="item.html?id=${d.ItemId}">
+                ${itemName}
+              </a> (${Math.round(d.DropChance * 100)}%)
+            </li>`;
+        }).join("")}
+      </ul>
+    `;
+  }
 
-  const stages = [...new Set(spawns.map(s => s.StageId))];
+  const stageIds = [...new Set(spawns.map(s => String(s.StageId)))];
+
+  const stagesHtml = `
+    <ul>
+      ${stageIds.map(id => {
+        const stage = stageNames[id];
+        if (!stage) return `<li>Stage ${id}</li>`;
+        return `
+          <li>
+            <a href="stage.html?id=${id}">
+              ${stage.en}
+            </a> / ${stage.jp}
+          </li>`;
+      }).join("")}
+    </ul>
+  `;
 
   document.getElementById("content").innerHTML = `
     <h1>${name}</h1>
+
     <p><b>EnemyId:</b> ${enemyId}</p>
     <p><b>Species:</b> ${species}</p>
     <p><b>Level Range:</b> ${minLv} – ${maxLv}</p>
+    <p><b>Spawn Count:</b> ${spawns.length}</p>
 
     <h2>Drops</h2>
     ${dropsHtml}
 
     <h2>Spawn Stages</h2>
-    <ul>
-      ${stages.map(id => `<li><a href="stage.html?id=${id}">Stage ${id}</a></li>`).join("")}
-    </ul>
+    ${stagesHtml}
   `;
 });
 </script>
