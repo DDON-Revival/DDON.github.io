@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>DDON – Item</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DDON</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -130,6 +130,10 @@ Promise.all([
   document.getElementById("content").innerHTML =
     "<h1>Error loading item</h1>";
 });
+<script>
+fetch("partials/sidebar.html")
+  .then(r => r.text())
+  .then(html => document.getElementById("sidebar").innerHTML = html);
 </script>
 
 </body>
