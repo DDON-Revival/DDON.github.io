@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>DDON – Monster</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -12,21 +11,57 @@
 
 <script type="module">
 import { parseDDON } from "./js/ddon-parser.js";
-import { loadItemNames } from "./js/item-names.js";
 import { loadEnemyNames } from "./js/enemy-names.js";
 import { loadEnemySpecies } from "./js/enemy-species.js";
 
-/* ---------- helpers ---------- */
-function getItemName(itemNames, id) {
-  const key = String(id);
-  return itemNames[key]?.en || `Item ${id}`;
+/* ---------- ITEM NAMES (INLINE PARSER) ---------- */
+async function loadItemNames() {
+  const res = await fetch(
+    "https://raw.githubusercontent.com/riftcrystal/DDON-Translation/master/ui/00_message/common/item_name.toml",
+    { cache: "no-store" }
+  );
+
+  const text = await res.text();
+  const map = {};
+  let current = null;
+
+  const commit = () => {
+    if (current && current.id && current.new) {
+      map[String(current.id)] = current.new;
+    }
+  };
+
+  text.split("\n").forEach(line => {
+    line = line.trim();
+
+    if (line === "[[item]]") {
+      commit();
+      current = {};
+      return;
+    }
+
+    if (!current) return;
+
+    if (line.startsWith("id")) {
+      current.id = line.split("=")[1].trim();
+      return;
+    }
+
+    if (line.startsWith("new")) {
+      current.new = line.split("=").slice(1).join("=").trim()
+        .replace(/^['"]|['"]$/g, "");
+    }
+  });
+
+  commit();
+  return map;
 }
 
-/* ---------- main ---------- */
+/* ---------- MAIN ---------- */
 const enemyId = new URLSearchParams(location.search).get("id");
 
 Promise.all([
-  fetch("data/EnemySpawn.json").then(r => r.json()),
+  fetch("data/EnemySpawn.json", { cache: "no-store" }).then(r => r.json()),
   loadItemNames(),
   loadEnemyNames(),
   loadEnemySpecies()
@@ -40,7 +75,7 @@ Promise.all([
 
   if (!spawns.length) {
     document.getElementById("content").innerHTML =
-      `<h1>Monster not found</h1><p>EnemyId: ${enemyId}</p>`;
+      `<h1>Monster not found</h1><p>${enemyId}</p>`;
     return;
   }
 
@@ -61,9 +96,16 @@ Promise.all([
     dropsHtml = `
       <ul>
         ${dropTable.items.map(d => {
-          const itemName = getItemName(itemNames, d.ItemId);
+          const itemName = itemNames[String(d.ItemId)] || `Item ${d.ItemId}`;
           const chance = Math.round(d.DropChance * 100);
-          return `<li>${itemName} (${chance}%)</li>`;
+          return `
+            <li>
+              <a href="item.html?id=${d.ItemId}">
+                ${itemName}
+              </a>
+              (${chance}%)
+            </li>
+          `;
         }).join("")}
       </ul>
     `;
@@ -87,10 +129,6 @@ Promise.all([
       ${stages.map(s => `<li>Stage ${s}</li>`).join("")}
     </ul>
   `;
-}).catch(err => {
-  console.error(err);
-  document.getElementById("content").innerHTML =
-    "<h1>Error loading monster</h1>";
 });
 </script>
 
