@@ -12,7 +12,6 @@
 
 <script type="module">
 import { parseDDON } from "./js/ddon-parser.js";
-import { groupByEnemy } from "./js/monster-utils.js";
 import { loadItemNames } from "./js/item-names.js";
 import { loadEnemyNames } from "./js/enemy-names.js";
 import { loadEnemySpecies } from "./js/enemy-species.js";
@@ -27,26 +26,32 @@ Promise.all([
 ]).then(([enemyData, itemNames, enemyNames, enemySpecies]) => {
 
   const { enemies } = parseDDON(enemyData);
-  const monsters = groupByEnemy(enemies);
 
-  const monster = monsters.find(m => String(m.id) === String(enemyId));
+  // 🔴 WICHTIG: direkt nach EnemyId filtern
+  const spawns = enemies.filter(e =>
+    String(e.EnemyId).toLowerCase() === String(enemyId).toLowerCase()
+  );
 
-  if (!monster) {
+  if (!spawns.length) {
     document.getElementById("content").innerHTML =
-      "<h1>Monster not found</h1>";
+      `<h1>Monster not found</h1><p>ID: ${enemyId}</p>`;
     return;
   }
 
   const name = enemyNames[enemyId] || `Enemy ${enemyId}`;
-  const species = enemySpecies[enemyId] || "Unknown";
-  const level = `${monster.minLv} – ${monster.maxLv}`;
-  const spawnCount = monster.spawns.length;
+  const species = enemySpecies[name] || "Unknown";
+
+  const levels = spawns.map(s => s.Lv);
+  const minLv = Math.min(...levels);
+  const maxLv = Math.max(...levels);
+
+  const dropsTable = spawns.find(s => s.drops)?.drops;
 
   let dropsHtml = "<p>No drops</p>";
-  if (monster.drops && monster.drops.items) {
+  if (dropsTable && dropsTable.items) {
     dropsHtml = `
       <ul>
-        ${monster.drops.items.map(d => {
+        ${dropsTable.items.map(d => {
           const itemName =
             itemNames[d.ItemId]?.en || `Item ${d.ItemId}`;
           const chance = Math.round(d.DropChance * 100);
@@ -61,16 +66,16 @@ Promise.all([
 
     <p><b>EnemyId:</b> ${enemyId}</p>
     <p><b>Species:</b> ${species}</p>
-    <p><b>Level Range:</b> ${level}</p>
-    <p><b>Spawn Count:</b> ${spawnCount}</p>
+    <p><b>Level Range:</b> ${minLv} – ${maxLv}</p>
+    <p><b>Spawn Count:</b> ${spawns.length}</p>
 
     <h2>Drops</h2>
     ${dropsHtml}
 
     <h2>Spawns</h2>
     <ul>
-      ${monster.spawns.map(s =>
-        `<li>Stage ${s.stage}</li>`
+      ${spawns.map(s =>
+        `<li>Stage ${s.StageId}</li>`
       ).join("")}
     </ul>
   `;
