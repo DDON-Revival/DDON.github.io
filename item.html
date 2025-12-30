@@ -2,12 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>DDON – Item</title>
+  <title>DDON – Monster</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- optional: Theme / Sidebar JS -->
+  <script src="js/theme.js" defer></script>
 </head>
+
 <body>
 
-<div id="content">Loading…</div>
+<!-- ===== SIDEBAR ===== -->
+<nav class="sidebar">
+  <h2>DDON Wiki</h2>
+
+  <ul>
+    <li><a href="index.html">Home</a></li>
+  </ul>
+
+  <h3>Search</h3>
+  <ul>
+    <li><a href="monsters.html">Monster</a></li>
+    <li><a href="drops.html">Items</a></li>
+    <li><a href="stages.html">Stages</a></li>
+  </ul>
+
+  <h3>Language</h3>
+  <ul>
+    <li><a href="#" onclick="setLang('en')">EN</a></li>
+    <li><a href="#" onclick="setLang('jp')">JP</a></li>
+  </ul>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main>
+  <div id="content">Loading…</div>
+</main>
 
 <script type="module">
 import { parseDDON } from "./js/ddon-parser.js";
