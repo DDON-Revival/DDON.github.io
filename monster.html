@@ -13,59 +13,19 @@
 import { parseDDON } from "./js/ddon-parser.js";
 import { loadEnemyNames } from "./js/enemy-names.js";
 import { loadEnemySpecies } from "./js/enemy-species.js";
+import { loadItemNames } from "./js/item-names.js";
 
-/* ---------- ITEM NAMES (INLINE PARSER) ---------- */
-async function loadItemNames() {
-  const res = await fetch(
-    "https://raw.githubusercontent.com/riftcrystal/DDON-Translation/master/ui/00_message/common/item_name.toml",
-    { cache: "no-store" }
-  );
+/* ---------------- LOAD ---------------- */
 
-  const text = await res.text();
-  const map = {};
-  let current = null;
-
-  const commit = () => {
-    if (current && current.id && current.new) {
-      map[String(current.id)] = current.new;
-    }
-  };
-
-  text.split("\n").forEach(line => {
-    line = line.trim();
-
-    if (line === "[[item]]") {
-      commit();
-      current = {};
-      return;
-    }
-
-    if (!current) return;
-
-    if (line.startsWith("id")) {
-      current.id = line.split("=")[1].trim();
-      return;
-    }
-
-    if (line.startsWith("new")) {
-      current.new = line.split("=").slice(1).join("=").trim()
-        .replace(/^['"]|['"]$/g, "");
-    }
-  });
-
-  commit();
-  return map;
-}
-
-/* ---------- MAIN ---------- */
 const enemyId = new URLSearchParams(location.search).get("id");
 
 Promise.all([
-  fetch("data/EnemySpawn.json", { cache: "no-store" }).then(r => r.json()),
-  loadItemNames(),
+  fetch("data/EnemySpawn.json").then(r => r.json()),
+  fetch("data/stage-names.json").then(r => r.json()),
   loadEnemyNames(),
-  loadEnemySpecies()
-]).then(([enemyData, itemNames, enemyNames, enemySpecies]) => {
+  loadEnemySpecies(),
+  loadItemNames()
+]).then(([enemyData, stageNames, enemyNames, enemySpecies, itemNames]) => {
 
   const { enemies } = parseDDON(enemyData);
 
@@ -74,10 +34,11 @@ Promise.all([
   );
 
   if (!spawns.length) {
-    document.getElementById("content").innerHTML =
-      `<h1>Monster not found</h1><p>${enemyId}</p>`;
+    document.getElementById("content").innerHTML = "<h1>Monster not found</h1>";
     return;
   }
+
+  /* ---------------- BASIC INFO ---------------- */
 
   const name = enemyNames[enemyId] || `Enemy ${enemyId}`;
   const species =
@@ -89,6 +50,8 @@ Promise.all([
   const minLv = Math.min(...levels);
   const maxLv = Math.max(...levels);
 
+  /* ---------------- DROPS ---------------- */
+
   const dropTable = spawns.find(s => s.drops)?.drops;
 
   let dropsHtml = "<p>No drops</p>";
@@ -96,22 +59,42 @@ Promise.all([
     dropsHtml = `
       <ul>
         ${dropTable.items.map(d => {
-          const itemName = itemNames[String(d.ItemId)] || `Item ${d.ItemId}`;
+          const itemName = itemNames[d.ItemId]?.en || `Item ${d.ItemId}`;
           const chance = Math.round(d.DropChance * 100);
           return `
             <li>
               <a href="item.html?id=${d.ItemId}">
                 ${itemName}
-              </a>
-              (${chance}%)
-            </li>
-          `;
+              </a> (${chance}%)
+            </li>`;
         }).join("")}
       </ul>
     `;
   }
 
-  const stages = [...new Set(spawns.map(s => s.StageId))];
+  /* ---------------- STAGES ---------------- */
+
+  const stageIds = [...new Set(spawns.map(s => String(s.StageId)))];
+
+  const stagesHtml = `
+    <ul>
+      ${stageIds.map(id => {
+        const stage = stageNames[id];
+        if (!stage) {
+          return `<li>Stage ${id}</li>`;
+        }
+        return `
+          <li>
+            <a href="stage.html?id=${id}">
+              ${stage.en}
+            </a>
+            <small> / ${stage.jp}</small>
+          </li>`;
+      }).join("")}
+    </ul>
+  `;
+
+  /* ---------------- RENDER ---------------- */
 
   document.getElementById("content").innerHTML = `
     <h1>${name}</h1>
@@ -125,9 +108,7 @@ Promise.all([
     ${dropsHtml}
 
     <h2>Spawn Stages</h2>
-    <ul>
-      ${stages.map(s => `<li>Stage ${s}</li>`).join("")}
-    </ul>
+    ${stagesHtml}
   `;
 });
 </script>
