@@ -1,37 +1,52 @@
-<main class="content">
-  <h1>DDON</h1>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>DDON Wiki</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <p>Welcome to the DDON Homepage.</p>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js" defer></script>
+</head>
+<body>
 
-  <ul>
-    <li><a href="index.html">Home</a></li>  
-    <li><a href="monster-search.html">Monster Wiki</a></li>
-    <li><a href="item-search.html">Drop Search</a></li>
-    <li><a href="stage-search.html?id=1">Stages</a></li>
-  </ul>
-</main>
+<div class="layout">
 
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>DDON Wiki</h2>
+
+    <a href="index.html">Home</a>
+    <a href="monster-search.html">Monsters</a>
+    <a href="item-search.html">Item Search</a>
+    <a href="stage-search.html?id=1">Stages</a>
+
+    <hr>
+
+    <strong>Theme</strong>
+    <a href="#" onclick="toggleTheme()">🌙 Toggle</a>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <h1>DDON</h1>
+    <p>Welcome to the DDON Homepage.</p>
+
+    <div class="box">
+      <h2>Server Info</h2>
+      <p>Infos about our Server.</p>
+      <a href="server.html">Open →</a>
+    </div>
+
+    <div class="box">
+      <h2>Monster Wiki</h2>
+      <p>Search monsters, loot and spawn data.</p>
+      <a href="monster-search.html">Open →</a>
+    </div>
+
+  </main>
 </div>
 
-<header>
-  <h1>DDON Wiki</h1>
-  <button onclick="toggleTheme()">🌙</button>
-</header>
-
-<main style="max-width:900px;margin:auto;padding:2rem">
-
-  <div class="box">
-    <h2>Server Info</h2>
-    <p>Infos about our Server.</p>
-    <a href="server.html">Open →</a>
-  </div>
-
-  <div class="box">
-    <h2>Monster Wiki</h2>
-    <p>Search monsters, loot and spawn data.</p>
-    <a href="monster.html">Open →</a>
-  </div>
-
-</main>
 </body>
 </html>
