@@ -3,45 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <title>DDON – Monster</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Styles -->
   <link rel="stylesheet" href="css/style.css">
-
-  <!-- optional: Theme / Sidebar JS -->
-  <script src="js/theme.js" defer></script>
 </head>
-
 <body>
 
-<!-- ===== SIDEBAR ===== -->
-<nav class="sidebar">
-  <h2>DDON Wiki</h2>
+<div class="layout">
 
-  <ul>
-    <li><a href="index.html">Home</a></li>
-  </ul>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>DDON Wiki</h2>
+    <a href="index.html">Home</a>
+    <a href="monsters.html">Monsters</a>
+    <a href="drops.html">Item Search</a>
+    <a href="stage.html?id=1">Stages</a>
+  </aside>
 
-  <h3>Search</h3>
-  <ul>
-    <li><a href="monsters.html">Monster</a></li>
-    <li><a href="drops.html">Items</a></li>
-    <li><a href="stages.html">Stages</a></li>
-  </ul>
+  <!-- CONTENT -->
+  <main class="content">
+    <div id="content">Loading…</div>
+  </main>
 
-  <h3>Language</h3>
-  <ul>
-    <li><a href="#" onclick="setLang('en')">EN</a></li>
-    <li><a href="#" onclick="setLang('jp')">JP</a></li>
-  </ul>
-</nav>
+</div>
 
-<!-- ===== MAIN CONTENT ===== -->
-<main>
-  <div id="content">Loading…</div>
-</main>
-
-<!-- ===== PAGE SCRIPT ===== -->
 <script type="module">
 import { parseDDON } from "./js/ddon-parser.js";
 import { loadEnemyNames } from "./js/enemy-names.js";
@@ -59,79 +42,44 @@ Promise.all([
 ]).then(([enemyData, stageNames, enemyNames, enemySpecies, itemNames]) => {
 
   const { enemies } = parseDDON(enemyData);
-
-  const spawns = enemies.filter(e =>
-    String(e.EnemyId).toLowerCase() === String(enemyId).toLowerCase()
-  );
+  const spawns = enemies.filter(e => String(e.EnemyId) === enemyId);
 
   if (!spawns.length) {
-    document.getElementById("content").innerHTML =
-      "<h1>Monster not found</h1>";
+    document.getElementById("content").innerHTML = "<h1>Monster not found</h1>";
     return;
   }
 
   const name = enemyNames[enemyId] || `Enemy ${enemyId}`;
-  const species =
-    enemySpecies[enemyId] ||
-    enemySpecies[name] ||
-    "Unknown";
+  const species = enemySpecies[enemyId] || "Unknown";
 
   const levels = spawns.map(s => s.Lv);
   const minLv = Math.min(...levels);
   const maxLv = Math.max(...levels);
 
-  /* DROPS */
   const dropTable = spawns.find(s => s.drops)?.drops;
 
-  let dropsHtml = "<p>No drops</p>";
-  if (dropTable?.items) {
-    dropsHtml = `
-      <ul>
-        ${dropTable.items.map(d => {
-          const itemName = itemNames[d.ItemId]?.en || `Item ${d.ItemId}`;
-          const chance = Math.round(d.DropChance * 100);
-          return `
-            <li>
-              <a href="item.html?id=${d.ItemId}">
-                ${itemName}
-              </a> (${chance}%)
-            </li>`;
-        }).join("")}
-      </ul>
-    `;
-  }
+  const dropsHtml = dropTable?.items
+    ? `<ul>${dropTable.items.map(d => {
+        const n = itemNames[d.ItemId]?.en || `Item ${d.ItemId}`;
+        return `<li><a href="item.html?id=${d.ItemId}">${n}</a> (${Math.round(d.DropChance*100)}%)</li>`;
+      }).join("")}</ul>`
+    : "<p>No drops</p>";
 
-  /* STAGES */
-  const stageIds = [...new Set(spawns.map(s => String(s.StageId)))];
-
-  const stagesHtml = `
-    <ul>
-      ${stageIds.map(id => {
-        const s = stageNames[id];
-        return `
-          <li>
-            <a href="stage.html?id=${id}">
-              ${s?.en || `Stage ${id}`}
-            </a>
-            ${s?.jp ? `<small> / ${s.jp}</small>` : ""}
-          </li>`;
-      }).join("")}
-    </ul>
-  `;
+  const stages = [...new Set(spawns.map(s => s.StageId))];
 
   document.getElementById("content").innerHTML = `
     <h1>${name}</h1>
-
     <p><b>EnemyId:</b> ${enemyId}</p>
     <p><b>Species:</b> ${species}</p>
     <p><b>Level Range:</b> ${minLv} – ${maxLv}</p>
-    <p><b>Spawn Count:</b> ${spawns.length}</p>
 
     <h2>Drops</h2>
     ${dropsHtml}
 
     <h2>Spawn Stages</h2>
-    ${stagesHtml}
+    <ul>
+      ${stages.map(id => `<li><a href="stage.html?id=${id}">Stage ${id}</a></li>`).join("")}
+    </ul>
   `;
 });
 </script>
