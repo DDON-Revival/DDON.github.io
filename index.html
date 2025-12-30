@@ -17,21 +17,23 @@
     <h2>DDON Wiki</h2>
 
     <a href="index.html">Home</a>
-    <a href="monster.html">Monsters</a>
-    <a href="item.html">Item Search</a>
-    <a href="stage.html?id=1">Stages</a>
+    <a href="monster-search.html">Monsters</a>
+    <a href="item-search.html">Items</a>
+    <a href="stage-search.html">Stages</a>
 
     <hr>
 
-    <strong>Theme</strong>
-    <a href="#" onclick="toggleTheme()">🌙 Toggle</a>
+    <strong>Language</strong>
+    <a href="#" onclick="setLang('en')">EN</a>
+    <a href="#" onclick="setLang('jp')">JP</a>
   </aside>
 
   <!-- CONTENT -->
   <main class="content">
-
-    <h1>DDON</h1>
-    <p>Welcome to the DDON Homepage.</p>
+    <header style="display:flex;justify-content:space-between;align-items:center">
+      <h1>DDON Wiki</h1>
+      <button onclick="toggleTheme()">🌙</button>
+    </header>
 
     <div class="box">
       <h2>Server Info</h2>
@@ -42,10 +44,10 @@
     <div class="box">
       <h2>Monster Wiki</h2>
       <p>Search monsters, loot and spawn data.</p>
-      <a href="monster.html">Open →</a>
+      <a href="monster-search.html">Open →</a>
     </div>
-
   </main>
+
 </div>
 
 </body>
