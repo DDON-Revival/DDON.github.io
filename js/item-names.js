@@ -9,16 +9,16 @@ export async function loadItemNames() {
 
   let current = null;
 
-  const commit = () => {
+  function commit() {
     if (current && current.id && current.new) {
       map[String(current.id)] = { en: current.new };
     }
-  };
+  }
 
   text.split("\n").forEach(line => {
     line = line.trim();
 
-    // ✅ RICHTIG: [[item]] (klein!)
+    // start of new [[item]]
     if (line === "[[item]]") {
       commit();
       current = {};
@@ -39,7 +39,7 @@ export async function loadItemNames() {
     }
   });
 
-  // commit last entry
+  // commit last item (EOF)
   commit();
 
   return map;
