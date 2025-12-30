@@ -1,0 +1,8 @@
+const map = {};
+
+MONSTERS.forEach(m => {
+  m.drops.forEach(d => {
+    if (!map[d.Name]) map[d.Name] = [];
+    map[d.Name].push(m.name);
+  });
+});
