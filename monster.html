@@ -27,7 +27,6 @@ Promise.all([
 
   const { enemies } = parseDDON(enemyData);
 
-  // 🔴 WICHTIG: direkt nach EnemyId filtern
   const spawns = enemies.filter(e =>
     String(e.EnemyId).toLowerCase() === String(enemyId).toLowerCase()
   );
@@ -39,19 +38,20 @@ Promise.all([
   }
 
   const name = enemyNames[enemyId] || `Enemy ${enemyId}`;
-  const species = enemySpecies[name] || "Unknown";
+  const species = enemySpecies[enemyId] || "Unknown";
 
   const levels = spawns.map(s => s.Lv);
   const minLv = Math.min(...levels);
   const maxLv = Math.max(...levels);
 
-  const dropsTable = spawns.find(s => s.drops)?.drops;
+  const dropTable = spawns.find(s => s.drops)?.drops;
 
+  // ✅ Drops mit Item-Namen
   let dropsHtml = "<p>No drops</p>";
-  if (dropsTable && dropsTable.items) {
+  if (dropTable && dropTable.items) {
     dropsHtml = `
       <ul>
-        ${dropsTable.items.map(d => {
+        ${dropTable.items.map(d => {
           const itemName =
             itemNames[d.ItemId]?.en || `Item ${d.ItemId}`;
           const chance = Math.round(d.DropChance * 100);
@@ -60,6 +60,9 @@ Promise.all([
       </ul>
     `;
   }
+
+  // ✅ Stage-Deduplizierung
+  const stages = [...new Set(spawns.map(s => s.StageId))];
 
   document.getElementById("content").innerHTML = `
     <h1>${name}</h1>
@@ -72,10 +75,10 @@ Promise.all([
     <h2>Drops</h2>
     ${dropsHtml}
 
-    <h2>Spawns</h2>
+    <h2>Spawn Stages</h2>
     <ul>
-      ${spawns.map(s =>
-        `<li>Stage ${s.StageId}</li>`
+      ${stages.map(s =>
+        `<li>Stage ${s}</li>`
       ).join("")}
     </ul>
   `;
