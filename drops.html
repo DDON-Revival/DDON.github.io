@@ -2,39 +2,79 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Drop Search</title>
+  <title>DDON – Drop Search</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Optional: dein bestehendes CSS -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <h1>Drop Search</h1>
+<p>Search by Item ID (e.g. <code>19508</code>)</p>
 
-<input id="search" placeholder="Enter Item ID (e.g. 19508)">
-<div id="results"></div>
+<input
+  id="search"
+  type="text"
+  placeholder="Enter Item ID"
+  style="width:300px;padding:0.5rem;font-size:1rem"
+>
+
+<div id="results" style="margin-top:1rem"></div>
 
 <script type="module">
+/* ===== IMPORTS ===== */
 import { parseDDON } from "./js/ddon-parser.js";
 import { groupByEnemy } from "./js/monster-utils.js";
 import { buildDropIndex } from "./js/drop-utils.js";
+import { loadItemNames } from "./js/item-names.js";
 
-fetch("data/EnemySpawn.json")
-  .then(r => r.json())
-  .then(data => {
-    const { enemies } = parseDDON(data);
-    const monsters = groupByEnemy(enemies);
-    const dropIndex = buildDropIndex(monsters);
+/* ===== LOAD DATA ===== */
+Promise.all([
+  fetch("data/EnemySpawn.json").then(r => r.json()),
+  loadItemNames()
+]).then(([enemyData, itemNames]) => {
 
-    console.log("DropIndex keys:", Object.keys(dropIndex).slice(0, 20));
+  /* Parse & group enemies */
+  const { enemies } = parseDDON(enemyData);
+  const monsters = groupByEnemy(enemies);
 
-    document.getElementById("search").addEventListener("input", e => {
-      const id = e.target.value.trim();
-      const list = dropIndex[id] || [];
+  /* Build drop index */
+  const dropIndex = buildDropIndex(monsters);
 
-      document.getElementById("results").innerHTML =
-        list.length
-          ? `<ul>${list.map(m => `<li>${m}</li>`).join("")}</ul>`
-          : "No monsters drop this item.";
-    });
+  console.log("DropIndex keys:", Object.keys(dropIndex).slice(0, 20));
+
+  /* ===== SEARCH HANDLER ===== */
+  document.getElementById("search").addEventListener("input", e => {
+    const itemId = e.target.value.trim();
+    const resultsEl = document.getElementById("results");
+
+    if (!itemId) {
+      resultsEl.innerHTML = "";
+      return;
+    }
+
+    const monsterList = dropIndex[itemId] || [];
+    const itemName = itemNames[itemId]?.en || `Item ${itemId}`;
+
+    if (!monsterList.length) {
+      resultsEl.innerHTML = `
+        <h3>${itemName}</h3>
+        <p>No monsters drop this item.</p>
+      `;
+      return;
+    }
+
+    resultsEl.innerHTML = `
+      <h3>${itemName}</h3>
+      <ul>
+        ${monsterList.map(m =>
+          `<li>${m}</li>`
+        ).join("")}
+      </ul>
+    `;
   });
+});
 </script>
 
 </body>

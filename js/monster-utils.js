@@ -3,10 +3,14 @@ export function groupByEnemy(enemies) {
 
   enemies.forEach(e => {
     const id = e.EnemyId;
+
     if (!map[id]) {
       map[id] = {
         id,
-        name: e.NamedEnemyParamsId || `Enemy ${id}`,
+        // Übergangslösung: ID anzeigen
+        name: e.NamedEnemyParamsId
+          ? `Enemy ${id} (Named ${e.NamedEnemyParamsId})`
+          : `Enemy ${id} (DropsTable ${e.DropsTableId})`,
         minLv: e.Lv,
         maxLv: e.Lv,
         drops: e.drops,
