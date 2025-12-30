@@ -68,9 +68,9 @@ Promise.all([
     resultsEl.innerHTML = `
       <h3>${itemName}</h3>
       <ul>
-        ${monsterList.map(m =>
-          `<li>${m}</li>`
-        ).join("")}
+		${monsterList.map(id =>
+		`<li>Enemy ${id}</li>`
+		).join("")}
       </ul>
     `;
   });
