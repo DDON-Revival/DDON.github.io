@@ -1,112 +1,189 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DDON Revival</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
 <style>
-body {
-    margin:0;
-    font-family: 'Cinzel', serif;
-    background:#0f0f14;
-    color:#e6e6e6;
+:root{
+    --bg:#0f0f14;
+    --bg2:#1b1b25;
+    --accent:#c8a75d;
+    --red:#8b1e1e;
+    --text:#e6e6e6;
+    --muted:#9a9a9a;
 }
 
-header {
-    background:#1b1b25;
-    padding:20px;
+body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+/* ================= HEADER ================= */
+
+header{
+    background:var(--bg2);
+    padding:15px 40px;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    border-bottom:2px solid #c8a75d;
+    border-bottom:2px solid var(--accent);
 }
 
-nav a {
-    color:#e6e6e6;
+.logo{
+    font-family:'Cinzel',serif;
+    font-size:22px;
+    color:var(--accent);
+}
+
+nav a{
+    margin:0 12px;
     text-decoration:none;
-    margin:0 15px;
+    color:var(--text);
+    font-weight:500;
     transition:0.3s;
 }
 
-nav a:hover {
-    color:#c8a75d;
+nav a:hover{
+    color:var(--accent);
 }
 
-.hero {
+/* ================= LANGUAGE SELECTOR ================= */
+
+.language-selector{
+    position:relative;
+}
+
+.lang-btn{
+    background:none;
+    border:1px solid var(--accent);
+    color:var(--accent);
+    padding:6px 12px;
+    cursor:pointer;
+}
+
+.lang-menu{
+    display:none;
+    position:absolute;
+    right:0;
+    background:var(--bg2);
+    border:1px solid var(--accent);
+    margin-top:5px;
+    width:180px;
+    z-index:10;
+}
+
+.lang-menu div{
+    padding:8px 10px;
+    cursor:pointer;
+}
+
+.lang-menu div:hover{
+    background:#2a2a35;
+}
+
+.language-selector:hover .lang-menu{
+    display:block;
+}
+
+/* ================= HERO ================= */
+
+.hero{
     text-align:center;
     padding:120px 20px;
-    background:linear-gradient(to bottom, #1b1b25, #0f0f14);
+    background:linear-gradient(to bottom,var(--bg2),var(--bg));
 }
 
-.hero h1 {
+.hero h1{
+    font-family:'Cinzel',serif;
     font-size:60px;
-    color:#c8a75d;
+    color:var(--accent);
+    margin:0;
 }
 
-.hero p {
+.hero p{
+    color:var(--muted);
     font-size:20px;
-    color:#9a9a9a;
+    margin-top:15px;
 }
 
-.btn {
+.btn{
     display:inline-block;
-    margin:20px;
-    padding:15px 30px;
-    border:2px solid #c8a75d;
-    color:#c8a75d;
+    margin:20px 10px;
+    padding:14px 30px;
+    border:2px solid var(--accent);
+    color:var(--accent);
     text-decoration:none;
     transition:0.3s;
 }
 
-.btn:hover {
-    background:#c8a75d;
-    color:#0f0f14;
+.btn:hover{
+    background:var(--accent);
+    color:#000;
 }
 
-.discord {
-    border-color:#8b1e1e;
-    color:#8b1e1e;
+.discord{
+    border-color:var(--red);
+    color:var(--red);
 }
 
-.discord:hover {
-    background:#8b1e1e;
-    color:#fff;
+.discord:hover{
+    background:var(--red);
+    color:white;
 }
 
-.section {
+/* ================= SECTIONS ================= */
+
+.section{
     padding:80px 20px;
     text-align:center;
 }
 
-.card {
-    background:#1b1b25;
+.section h2{
+    font-family:'Cinzel',serif;
+    color:var(--accent);
+    margin-bottom:40px;
+}
+
+.card{
+    background:var(--bg2);
     padding:30px;
-    margin:20px;
+    margin:15px;
     display:inline-block;
-    width:300px;
+    width:280px;
     border:1px solid #2a2a35;
     transition:0.3s;
 }
 
-.card:hover {
-    border-color:#c8a75d;
+.card:hover{
+    border-color:var(--accent);
+    transform:translateY(-5px);
 }
 
-footer {
+/* ================= FOOTER ================= */
+
+footer{
+    background:var(--bg2);
     text-align:center;
-    padding:20px;
-    background:#1b1b25;
+    padding:25px;
     border-top:1px solid #2a2a35;
+    margin-top:60px;
 }
 </style>
 </head>
+
 <body>
 
 <header>
-    <h2>DDON Revival</h2>
+    <div class="logo">DDON Revival</div>
+
     <nav>
-        <a href="#">Start</a>
+        <a href="#">Home</a>
         <a href="#">News</a>
         <a href="#">Server Status</a>
         <a href="#">HC Leaderboard</a>
@@ -114,28 +191,68 @@ footer {
         <a href="#">Download</a>
         <a href="#">Info</a>
     </nav>
+
+    <div class="language-selector">
+        <button class="lang-btn">Language</button>
+        <div class="lang-menu">
+            <div>🇺🇸 English</div>
+            <div>🇯🇵 Japanese</div>
+            <div>🇨🇳 Chinese</div>
+            <div>🇵🇹 Portuguese</div>
+            <div>🇪🇸 Spanish</div>
+            <div>🇷🇺 Russian</div>
+            <div>🇹🇷 Turkish</div>
+            <div>🇵🇱 Polish</div>
+            <div>🇰🇷 Korean</div>
+            <div>🇮🇹 Italian</div>
+            <div>🇫🇷 French</div>
+            <div>🇬🇷 Greek</div>
+        </div>
+    </div>
 </header>
 
 <section class="hero">
     <h1>Dragons Dogma Online</h1>
-    <p>Biggest Server • Custom Content • Classic Experience with QOL</p>
+    <p>Biggest Revival Server • Hardcore Mode • Bitterblack Maze 2.0</p>
     <a href="#" class="btn">Download & Play</a>
     <a href="#" class="btn discord">Join Discord</a>
 </section>
 
 <section class="section">
-    <h2>Features</h2>
+    <h2>Game Features</h2>
+
     <div class="card">
-        <h3>[Exclusive here] Hardcore Mode</h3>
-        <p>Permadeath • Milestones • Ladder System</p>
+        <h3>Hardcore Mode</h3>
+        <p>Permadeath • Milestones • Global Ladder</p>
     </div>
+
     <div class="card">
         <h3>Bitterblack Maze 2.0</h3>
-        <p>Roguelite Mode • Unique Rewards</p>
+        <p>Roguelite Mode • Scaling Difficulty • Unique Drops</p>
     </div>
+
     <div class="card">
         <h3>Community Driven</h3>
-        <p>Events • Updates • Active Development</p>
+        <p>Active Development • Events • Player Feedback</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Wiki</h2>
+
+    <div class="card">
+        <h3>Monster Database</h3>
+        <p>All enemies, stats & weaknesses</p>
+    </div>
+
+    <div class="card">
+        <h3>Item Database</h3>
+        <p>Weapons, armor, materials & rare items</p>
+    </div>
+
+    <div class="card">
+        <h3>Stage Database</h3>
+        <p>Maps, dungeons & locations</p>
     </div>
 </section>
 
