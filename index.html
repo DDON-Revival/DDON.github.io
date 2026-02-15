@@ -145,7 +145,8 @@ footer {
     padding:20px;
     background:#1b1b25;
     border-top:1px solid #2a2a35;
-	
+}
+
 .leaderboard-wrapper {
     max-width:1100px;
     margin:0 auto;
@@ -241,8 +242,8 @@ footer {
     <div class="leaderboard-wrapper">
 
         <div class="leaderboard-tabs">
-<button class="btn" onclick="switchTab('normal')">Normal</button>
-<button class="btn" onclick="switchTab('hc')">Hardcore</button>
+<button id="tabNormalBtn" class="btn" onclick="switchTab('normal')">Normal</button>
+<button id="tabHardcoreBtn" class="btn" onclick="switchTab('hc')">Hardcore</button>
         </div>
 
         <input 
@@ -777,32 +778,20 @@ function setLanguage(lang){
     const t = translations[lang];
     if(!t) return;
 
-    document.querySelector('[data-key="home"]').textContent = t.home;
-    document.querySelector('[data-key="news"]').textContent = t.news;
-    document.querySelector('[data-key="status"]').textContent = t.status;
-    document.querySelector('[data-key="leaderboard"]').textContent = t.leaderboard;
-    document.querySelector('[data-key="wiki"]').textContent = t.wiki;
-    document.querySelector('[data-key="download"]').textContent = t.download;
-    document.querySelector('[data-key="info"]').textContent = t.info;
-    document.querySelector('[data-key="title"]').textContent = t.title;
-    document.querySelector('[data-key="subtitle"]').textContent = t.subtitle;
-    document.querySelector('[data-key="downloadBtn"]').textContent = t.downloadBtn;
+    // 🔥 Automatisch alle data-key Elemente übersetzen
+    document.querySelectorAll("[data-key]").forEach(el => {
+        const key = el.getAttribute("data-key");
+        if(t[key]) el.textContent = t[key];
+    });
 
-    document.querySelector('[data-key="newsTitle"]').textContent = t.newsTitle;
-    document.querySelector('[data-key="news1Title"]').textContent = t.news1Title;
-    document.querySelector('[data-key="news1Text"]').textContent = t.news1Text;
-    document.querySelector('[data-key="news2Title"]').textContent = t.news2Title;
-    document.querySelector('[data-key="news2Text"]').textContent = t.news2Text;
-
-	document.querySelector('[data-key="leaderboardTitle"]').textContent = t.leaderboardTitle;
-	document.getElementById("tabNormalBtn").textContent = t.normalTab;
-	document.getElementById("tabHardcoreBtn").textContent = t.hcTab;
-	document.getElementById("playerSearch").placeholder = t.searchPlaceholder;
-
-
-    document.querySelector('[data-key="serverStatusTitle"]').textContent = t.serverStatusTitle;
+    // 🔎 Search Placeholder
+    const search = document.getElementById("playerSearch");
+    if(search && t.searchPlaceholder){
+        search.placeholder = t.searchPlaceholder;
+    }
 
     loadServerStatus();
+    renderLeaderboard();
 }
 
 const list = document.getElementById("languageList");
