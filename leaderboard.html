@@ -34,7 +34,6 @@ h1{
     background:none;
     color:#c8a75d;
     cursor:pointer;
-    font-family:'Cinzel', serif;
 }
 
 .btn:hover{
@@ -49,7 +48,6 @@ h1{
     background:#1b1b25;
     border:1px solid #c8a75d;
     color:#fff;
-    font-family:'Cinzel', serif;
 }
 
 .grid{
@@ -74,10 +72,39 @@ h1{
     transform:translateY(-5px);
 }
 
-ul{
-    list-style-type:disc;
-    text-align:left;
-    padding-left:20px;
+/* 🌍 Language Dropdown */
+.lang-selector{
+    position:relative;
+    display:inline-block;
+}
+
+.lang-btn{
+    background:#1b1b25;
+    border:1px solid #c8a75d;
+    color:#c8a75d;
+    padding:6px 12px;
+    cursor:pointer;
+}
+
+.lang-dropdown{
+    display:none;
+    position:absolute;
+    right:0;
+    background:#1b1b25;
+    border:1px solid #c8a75d;
+}
+
+.lang-dropdown div{
+    padding:6px 12px;
+    cursor:pointer;
+}
+
+.lang-dropdown div:hover{
+    background:#2a2a35;
+}
+
+.lang-selector:hover .lang-dropdown{
+    display:block;
 }
 </style>
 </head>
@@ -87,20 +114,29 @@ ul{
 <header>
 <h1 data-key="leaderboardTitle">Leaderboard</h1>
 
-<button class="btn" id="btnNormal" onclick="switchTab('normal')">Normal</button>
-<button class="btn" id="btnHC" onclick="switchTab('hardcore')">Hardcore</button>
+<button class="btn" onclick="switchTab('normal')" data-key="normalTab">Normal</button>
+<button class="btn" onclick="switchTab('hc')" data-key="hcTab">Hardcore</button>
 
 <br>
 
-<input id="search" 
-       class="search" 
-       placeholder="Search player..." 
+<input id="search"
+       class="search"
+       data-placeholder="searchPlaceholder"
+       placeholder="Search player..."
        onkeyup="searchPlayer()">
+
+<br><br>
+
+<div class="lang-selector">
+    <button class="lang-btn">🌍</button>
+    <div class="lang-dropdown" id="languageList"></div>
+</div>
+
 </header>
 
 <div id="leaderboard" class="grid"></div>
 
-<!-- 🔥 translations FIRST -->
+<!-- 🔥 translations.js FIRST -->
 <script src="translations.js"></script>
 
 <script>
@@ -109,7 +145,7 @@ let leaderboardData = null;
 let currentTab = "normal";
 
 /* ===========================
-   LANGUAGE SYSTEM
+   🌍 LANGUAGE SYSTEM
 =========================== */
 
 function setLanguage(lang){
@@ -121,17 +157,24 @@ function setLanguage(lang){
         if(t[key]) el.textContent = t[key];
     });
 
-    document.getElementById("btnNormal").textContent = t.normalTab;
-    document.getElementById("btnHC").textContent = t.hcTab;
-    document.getElementById("search").placeholder = t.searchPlaceholder;
+    document.querySelectorAll("[data-placeholder]").forEach(el=>{
+        const key = el.getAttribute("data-placeholder");
+        if(t[key]) el.placeholder = t[key];
+    });
 
     localStorage.setItem("lang", lang);
-
     renderLeaderboard();
 }
 
-const savedLang = localStorage.getItem("lang") || "en";
-setLanguage(savedLang);
+languages.forEach(lang=>{
+    const div=document.createElement("div");
+    div.innerHTML=`${lang.flag} ${lang.name}`;
+    div.onclick=()=>setLanguage(lang.code);
+    document.getElementById("languageList").appendChild(div);
+});
+
+const saved = localStorage.getItem("lang") || "en";
+setLanguage(saved);
 
 /* ===========================
    LOAD DATA
@@ -171,14 +214,14 @@ function renderLeaderboard(){
         const div = document.createElement("div");
         div.className = "card";
 
-        const highestLevel = Math.max(...player.classes.map(c => c.level));
+        let highestLevel = Math.max(...player.classes.map(c => c.level));
 
         let extra = "";
 
-        if(currentTab === "hardcore"){
+        if(currentTab === "hc"){
             extra = `
                 <p>${t.hcSince}: ${player.hardcore_since || "-"}</p>
-                <p>${t.hcStatus}: ${player.dead ? "💀 " + t.dead : "🟢 " + t.alive}</p>
+                <p>${t.hcStatus}: ${player.dead ? "💀 "+t.dead : "🟢 "+t.alive}</p>
             `;
         }
 
@@ -187,9 +230,9 @@ function renderLeaderboard(){
             <p>${t.level}: ${highestLevel}</p>
             <p><strong>${t.classes}:</strong></p>
             <ul>
-                ${player.classes.map(c => 
-                    `<li>${c.class} (Lv.${c.level})</li>`
-                ).join("")}
+            ${player.classes.map(c =>
+                `<li>${c.class} (Lv.${c.level})</li>`
+            ).join("")}
             </ul>
             ${extra}
         `;
@@ -221,7 +264,7 @@ function searchPlayer(){
 
     const allPlayers = [
         ...(leaderboardData.normal || []),
-        ...(leaderboardData.hardcore || [])
+        ...(leaderboardData.hc || [])
     ];
 
     const results = allPlayers.filter(p =>
@@ -237,16 +280,16 @@ function searchPlayer(){
         const div = document.createElement("div");
         div.className = "card";
 
-        const highestLevel = Math.max(...player.classes.map(c => c.level));
+        let highestLevel = Math.max(...player.classes.map(c => c.level));
 
         div.innerHTML = `
             <h3>${player.name}</h3>
             <p>${t.level}: ${highestLevel}</p>
             <p><strong>${t.classes}:</strong></p>
             <ul>
-                ${player.classes.map(c => 
-                    `<li>${c.class} (Lv.${c.level})</li>`
-                ).join("")}
+            ${player.classes.map(c =>
+                `<li>${c.class} (Lv.${c.level})</li>`
+            ).join("")}
             </ul>
         `;
 
