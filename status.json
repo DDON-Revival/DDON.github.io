@@ -2,7 +2,7 @@
     {
         "name": "Channel 1",
         "online": true,
-        "players": 45
+        "players": 46
     },
     {
         "name": "Channel 2",
@@ -52,6 +52,6 @@
     {
         "name": "Boss Rush",
         "online": true,
-        "players": 1
+        "players": 2
     }
 ]
