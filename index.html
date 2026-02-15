@@ -241,8 +241,8 @@ footer {
     <div class="leaderboard-wrapper">
 
         <div class="leaderboard-tabs">
-            <button class="btn" onclick="switchTab('non_hc')" id="tabNormalBtn">Normal</button>
-            <button class="btn" onclick="switchTab('hc')" id="tabHardcoreBtn">Hardcore</button>
+<button class="btn" onclick="switchTab('normal')">Normal</button>
+<button class="btn" onclick="switchTab('hc')">Hardcore</button>
         </div>
 
         <input 
@@ -866,7 +866,7 @@ async function loadServerStatus(){
 =========================== */
 
 let leaderboardData = null;
-let currentTab = "non_hc";
+let currentTab = "normal";
 
 const jobNames = {
     1:"Fighter",
@@ -889,10 +889,13 @@ async function loadLeaderboard(){
 }
 
 function renderLeaderboard(){
+    if(!leaderboardData) return;
+
     const container = document.getElementById("leaderboardContainer");
     container.innerHTML = "";
 
     const data = leaderboardData[currentTab];
+    if(!data) return;
 
     data.forEach(player => {
         const div = document.createElement("div");
@@ -910,7 +913,7 @@ function renderLeaderboard(){
         div.innerHTML = `
             <h3>${player.name}</h3>
             <p>Level: ${player.level}</p>
-            <p>Class: ${jobNames[player.job]}</p>
+            <p>Class: ${player.class}</p>
             ${extra}
         `;
 
@@ -924,13 +927,15 @@ function switchTab(tab){
 }
 
 function searchPlayer(){
+    if(!leaderboardData) return;
+
     const input = document.getElementById("playerSearch").value.toLowerCase();
     const container = document.getElementById("leaderboardContainer");
     container.innerHTML = "";
 
     const allPlayers = [
-        ...leaderboardData.non_hc,
-        ...leaderboardData.hc
+        ...(leaderboardData.normal || []),
+        ...(leaderboardData.hc || [])
     ];
 
     const results = allPlayers.filter(p =>
@@ -943,7 +948,7 @@ function searchPlayer(){
         div.innerHTML = `
             <h3>${player.name}</h3>
             <p>Level: ${player.level}</p>
-            <p>Class: ${jobNames[player.job]}</p>
+            <p>Class: ${player.class}</p>
         `;
         container.appendChild(div);
     });
