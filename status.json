@@ -7,12 +7,12 @@
     {
         "name": "Channel 2",
         "online": true,
-        "players": 10
+        "players": 9
     },
     {
         "name": "Channel 3",
         "online": true,
-        "players": 2
+        "players": 3
     },
     {
         "name": "Channel 4",
@@ -52,6 +52,6 @@
     {
         "name": "Boss Rush",
         "online": true,
-        "players": 1
+        "players": 2
     }
 ]
