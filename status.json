@@ -47,7 +47,7 @@
     {
         "name": "Custom Enemy",
         "online": true,
-        "players": 5
+        "players": 4
     },
     {
         "name": "Boss Rush",
