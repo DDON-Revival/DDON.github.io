@@ -1,5 +1,6 @@
 /* =========================================
    🌍 GLOBAL TRANSLATIONS FILE
+   FULL VERSION – INDEX + LEADERBOARD
 ========================================= */
 
 window.languages = [
@@ -19,7 +20,33 @@ window.languages = [
 
 window.translations = {
 
+/* =========================================================
+   🇺🇸 ENGLISH
+========================================================= */
+
 en:{
+home:"Home",
+news:"News",
+status:"Server Status",
+leaderboard:"Leaderboard",
+download:"Download",
+
+title:"Dragon's Dogma Online",
+subtitle:"Biggest Server • Custom Content • Hardcore",
+
+newsTitle:"Latest News",
+news1Title:"Server Opening",
+news1Text:"DDON is now live!",
+news2Title:"Hardcore Mode",
+news2Text:"Hardcore Mode is now live!",
+
+serverStatusTitle:"Server Status",
+statusLabel:"Status",
+playersLabel:"Players",
+online:"Online",
+offline:"Offline",
+totalPlayers:"Total Players Online",
+
 leaderboardTitle:"Leaderboard",
 normalTab:"Normal",
 hcTab:"Hardcore",
@@ -31,6 +58,7 @@ hcStatus:"Status",
 alive:"Alive",
 dead:"Dead",
 noPlayersFound:"No players found",
+
 jobs:{
 "Fighter":"Fighter",
 "Seeker":"Seeker",
@@ -46,7 +74,33 @@ jobs:{
 }
 },
 
+/* =========================================================
+   🇯🇵 JAPANESE
+========================================================= */
+
 jp:{
+home:"ホーム",
+news:"ニュース",
+status:"サーバー状況",
+leaderboard:"ランキング",
+download:"ダウンロード",
+
+title:"ドラゴンズドグマオンライン",
+subtitle:"最大サーバー • カスタムコンテンツ • ハードコア",
+
+newsTitle:"最新ニュース",
+news1Title:"サーバー開始",
+news1Text:"DDONが開始しました！",
+news2Title:"ハードコアモード",
+news2Text:"ハードコアモード開始！",
+
+serverStatusTitle:"サーバー状況",
+statusLabel:"状態",
+playersLabel:"プレイヤー数",
+online:"オンライン",
+offline:"オフライン",
+totalPlayers:"総オンライン人数",
+
 leaderboardTitle:"ランキング",
 normalTab:"通常",
 hcTab:"ハードコア",
@@ -58,6 +112,7 @@ hcStatus:"状態",
 alive:"生存",
 dead:"死亡",
 noPlayersFound:"プレイヤーが見つかりません",
+
 jobs:{
 "Fighter":"ファイター",
 "Seeker":"シーカー",
@@ -73,7 +128,33 @@ jobs:{
 }
 },
 
+/* =========================================================
+   🇨🇳 CHINESE
+========================================================= */
+
 zh:{
+home:"首页",
+news:"新闻",
+status:"服务器状态",
+leaderboard:"排行榜",
+download:"下载",
+
+title:"龙之信条 Online",
+subtitle:"最大服务器 • 自定义内容 • 硬核",
+
+newsTitle:"最新消息",
+news1Title:"服务器开启",
+news1Text:"DDON 已上线！",
+news2Title:"硬核模式",
+news2Text:"硬核模式已开启！",
+
+serverStatusTitle:"服务器状态",
+statusLabel:"状态",
+playersLabel:"玩家数",
+online:"在线",
+offline:"离线",
+totalPlayers:"当前在线人数",
+
 leaderboardTitle:"排行榜",
 normalTab:"普通",
 hcTab:"硬核",
@@ -85,6 +166,7 @@ hcStatus:"状态",
 alive:"存活",
 dead:"死亡",
 noPlayersFound:"未找到玩家",
+
 jobs:{
 "Fighter":"战士",
 "Seeker":"探索者",
@@ -100,7 +182,33 @@ jobs:{
 }
 },
 
+/* =========================================================
+   🇵🇹 PORTUGUESE
+========================================================= */
+
 pt:{
+home:"Início",
+news:"Notícias",
+status:"Status do Servidor",
+leaderboard:"Classificação",
+download:"Download",
+
+title:"Dragon's Dogma Online",
+subtitle:"Maior Servidor • Hardcore",
+
+newsTitle:"Últimas Notícias",
+news1Title:"Abertura do Servidor",
+news1Text:"DDON está online!",
+news2Title:"Modo Hardcore",
+news2Text:"Modo Hardcore disponível!",
+
+serverStatusTitle:"Status do Servidor",
+statusLabel:"Status",
+playersLabel:"Jogadores",
+online:"Online",
+offline:"Offline",
+totalPlayers:"Total de Jogadores Online",
+
 leaderboardTitle:"Classificação",
 normalTab:"Normal",
 hcTab:"Hardcore",
@@ -112,6 +220,7 @@ hcStatus:"Status",
 alive:"Vivo",
 dead:"Morto",
 noPlayersFound:"Nenhum jogador encontrado",
+
 jobs:{
 "Fighter":"Guerreiro",
 "Seeker":"Explorador",
@@ -127,7 +236,33 @@ jobs:{
 }
 },
 
+/* =========================================================
+   🇪🇸 SPANISH
+========================================================= */
+
 es:{
+home:"Inicio",
+news:"Noticias",
+status:"Estado del Servidor",
+leaderboard:"Clasificación",
+download:"Descargar",
+
+title:"Dragon's Dogma Online",
+subtitle:"Servidor Más Grande • Hardcore",
+
+newsTitle:"Últimas Noticias",
+news1Title:"Apertura del Servidor",
+news1Text:"¡DDON ya está en línea!",
+news2Title:"Modo Hardcore",
+news2Text:"Modo Hardcore disponible.",
+
+serverStatusTitle:"Estado del Servidor",
+statusLabel:"Estado",
+playersLabel:"Jugadores",
+online:"En línea",
+offline:"Fuera de línea",
+totalPlayers:"Total de Jugadores en Línea",
+
 leaderboardTitle:"Clasificación",
 normalTab:"Normal",
 hcTab:"Hardcore",
@@ -139,6 +274,7 @@ hcStatus:"Estado",
 alive:"Vivo",
 dead:"Muerto",
 noPlayersFound:"No se encontraron jugadores",
+
 jobs:{
 "Fighter":"Guerrero",
 "Seeker":"Explorador",
@@ -154,7 +290,33 @@ jobs:{
 }
 },
 
+/* =========================================================
+   🇷🇺 RUSSIAN
+========================================================= */
+
 ru:{
+home:"Главная",
+news:"Новости",
+status:"Статус Сервера",
+leaderboard:"Таблица лидеров",
+download:"Скачать",
+
+title:"Dragon's Dogma Online",
+subtitle:"Крупнейший сервер • Hardcore",
+
+newsTitle:"Последние новости",
+news1Title:"Открытие сервера",
+news1Text:"DDON теперь доступен!",
+news2Title:"Hardcore режим",
+news2Text:"Hardcore режим доступен.",
+
+serverStatusTitle:"Статус Сервера",
+statusLabel:"Статус",
+playersLabel:"Игроки",
+online:"Онлайн",
+offline:"Оффлайн",
+totalPlayers:"Всего игроков онлайн",
+
 leaderboardTitle:"Таблица лидеров",
 normalTab:"Обычный",
 hcTab:"Хардкор",
@@ -166,6 +328,7 @@ hcStatus:"Статус",
 alive:"Жив",
 dead:"Мёртв",
 noPlayersFound:"Игроки не найдены",
+
 jobs:{
 "Fighter":"Воин",
 "Seeker":"Искатель",
@@ -181,7 +344,33 @@ jobs:{
 }
 },
 
+/* =========================================================
+   🇹🇷 TURKISH
+========================================================= */
+
 tr:{
+home:"Ana Sayfa",
+news:"Haberler",
+status:"Sunucu Durumu",
+leaderboard:"Lider Tablosu",
+download:"İndir",
+
+title:"Dragon's Dogma Online",
+subtitle:"En Büyük Sunucu • Hardcore",
+
+newsTitle:"Son Haberler",
+news1Title:"Sunucu Açılışı",
+news1Text:"DDON yayında!",
+news2Title:"Hardcore Modu",
+news2Text:"Hardcore modu aktif.",
+
+serverStatusTitle:"Sunucu Durumu",
+statusLabel:"Durum",
+playersLabel:"Oyuncular",
+online:"Çevrimiçi",
+offline:"Çevrimdışı",
+totalPlayers:"Toplam Oyuncu",
+
 leaderboardTitle:"Lider Tablosu",
 normalTab:"Normal",
 hcTab:"Hardcore",
@@ -193,6 +382,7 @@ hcStatus:"Durum",
 alive:"Hayatta",
 dead:"Ölü",
 noPlayersFound:"Oyuncu bulunamadı",
+
 jobs:{
 "Fighter":"Savaşçı",
 "Seeker":"Kaşif",
@@ -208,7 +398,33 @@ jobs:{
 }
 },
 
+/* =========================================================
+   🇵🇱 POLISH
+========================================================= */
+
 pl:{
+home:"Strona Główna",
+news:"Aktualności",
+status:"Status Serwera",
+leaderboard:"Ranking",
+download:"Pobierz",
+
+title:"Dragon's Dogma Online",
+subtitle:"Największy Serwer • Hardcore",
+
+newsTitle:"Najnowsze Wiadomości",
+news1Title:"Otwarcie Serwera",
+news1Text:"DDON jest online!",
+news2Title:"Tryb Hardcore",
+news2Text:"Tryb Hardcore dostępny.",
+
+serverStatusTitle:"Status Serwera",
+statusLabel:"Status",
+playersLabel:"Gracze",
+online:"Online",
+offline:"Offline",
+totalPlayers:"Łączna liczba graczy",
+
 leaderboardTitle:"Ranking",
 normalTab:"Normalny",
 hcTab:"Hardcore",
@@ -220,6 +436,7 @@ hcStatus:"Status",
 alive:"Żyje",
 dead:"Martwy",
 noPlayersFound:"Nie znaleziono graczy",
+
 jobs:{
 "Fighter":"Wojownik",
 "Seeker":"Poszukiwacz",
@@ -235,7 +452,33 @@ jobs:{
 }
 },
 
+/* =========================================================
+   🇰🇷 KOREAN
+========================================================= */
+
 kr:{
+home:"홈",
+news:"뉴스",
+status:"서버 상태",
+leaderboard:"리더보드",
+download:"다운로드",
+
+title:"드래곤즈 도그마 온라인",
+subtitle:"최대 서버 • 하드코어",
+
+newsTitle:"최신 뉴스",
+news1Title:"서버 오픈",
+news1Text:"DDON 시작!",
+news2Title:"하드코어 모드",
+news2Text:"하드코어 모드 활성화.",
+
+serverStatusTitle:"서버 상태",
+statusLabel:"상태",
+playersLabel:"플레이어 수",
+online:"온라인",
+offline:"오프라인",
+totalPlayers:"총 온라인 플레이어",
+
 leaderboardTitle:"리더보드",
 normalTab:"일반",
 hcTab:"하드코어",
@@ -247,6 +490,7 @@ hcStatus:"상태",
 alive:"생존",
 dead:"사망",
 noPlayersFound:"플레이어를 찾을 수 없습니다",
+
 jobs:{
 "Fighter":"파이터",
 "Seeker":"시커",
@@ -262,7 +506,33 @@ jobs:{
 }
 },
 
+/* =========================================================
+   🇮🇹 ITALIAN
+========================================================= */
+
 it:{
+home:"Home",
+news:"Notizie",
+status:"Stato Server",
+leaderboard:"Classifica",
+download:"Scarica",
+
+title:"Dragon's Dogma Online",
+subtitle:"Server Più Grande • Hardcore",
+
+newsTitle:"Ultime Notizie",
+news1Title:"Apertura Server",
+news1Text:"DDON è online!",
+news2Title:"Modalità Hardcore",
+news2Text:"Modalità Hardcore attiva.",
+
+serverStatusTitle:"Stato Server",
+statusLabel:"Stato",
+playersLabel:"Giocatori",
+online:"Online",
+offline:"Offline",
+totalPlayers:"Totale Giocatori Online",
+
 leaderboardTitle:"Classifica",
 normalTab:"Normale",
 hcTab:"Hardcore",
@@ -274,6 +544,7 @@ hcStatus:"Stato",
 alive:"Vivo",
 dead:"Morto",
 noPlayersFound:"Nessun giocatore trovato",
+
 jobs:{
 "Fighter":"Guerriero",
 "Seeker":"Esploratore",
@@ -289,7 +560,33 @@ jobs:{
 }
 },
 
+/* =========================================================
+   🇫🇷 FRENCH
+========================================================= */
+
 fr:{
+home:"Accueil",
+news:"Actualités",
+status:"Statut du Serveur",
+leaderboard:"Classement",
+download:"Télécharger",
+
+title:"Dragon's Dogma Online",
+subtitle:"Plus Grand Serveur • Hardcore",
+
+newsTitle:"Dernières Actualités",
+news1Title:"Ouverture du Serveur",
+news1Text:"DDON est en ligne!",
+news2Title:"Mode Hardcore",
+news2Text:"Mode Hardcore actif.",
+
+serverStatusTitle:"Statut du Serveur",
+statusLabel:"Statut",
+playersLabel:"Joueurs",
+online:"En ligne",
+offline:"Hors ligne",
+totalPlayers:"Total des Joueurs en Ligne",
+
 leaderboardTitle:"Classement",
 normalTab:"Normal",
 hcTab:"Hardcore",
@@ -301,6 +598,7 @@ hcStatus:"Statut",
 alive:"Vivant",
 dead:"Mort",
 noPlayersFound:"Aucun joueur trouvé",
+
 jobs:{
 "Fighter":"Guerrier",
 "Seeker":"Éclaireur",
@@ -316,7 +614,33 @@ jobs:{
 }
 },
 
+/* =========================================================
+   🇬🇷 GREEK
+========================================================= */
+
 gr:{
+home:"Αρχική",
+news:"Νέα",
+status:"Κατάσταση Διακομιστή",
+leaderboard:"Πίνακας Κατάταξης",
+download:"Λήψη",
+
+title:"Dragon's Dogma Online",
+subtitle:"Μεγαλύτερος Server • Hardcore",
+
+newsTitle:"Τελευταία Νέα",
+news1Title:"Άνοιγμα Διακομιστή",
+news1Text:"Το DDON είναι online!",
+news2Title:"Hardcore Mode",
+news2Text:"Hardcore Mode ενεργό.",
+
+serverStatusTitle:"Κατάσταση Διακομιστή",
+statusLabel:"Κατάσταση",
+playersLabel:"Παίκτες",
+online:"Online",
+offline:"Offline",
+totalPlayers:"Σύνολο Παικτών Online",
+
 leaderboardTitle:"Πίνακας Κατάταξης",
 normalTab:"Κανονικό",
 hcTab:"Hardcore",
@@ -328,6 +652,7 @@ hcStatus:"Κατάσταση",
 alive:"Ζωντανός",
 dead:"Νεκρός",
 noPlayersFound:"Δεν βρέθηκαν παίκτες",
+
 jobs:{
 "Fighter":"Πολεμιστής",
 "Seeker":"Εξερευνητής",
@@ -339,7 +664,7 @@ jobs:{
 "Element Archer":"Τοξότης Στοιχείων",
 "Alchemist":"Αλχημιστής",
 "Spirit Lancer":"Λογχοφόρος Πνεύματος",
-"High Scepter":"Ύπατος Σκήπτρο"
+"High Scepter":"Ύπατο Σκήπτρο"
 }
 }
 
