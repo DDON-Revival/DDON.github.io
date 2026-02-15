@@ -2,12 +2,12 @@
     {
         "name": "Channel 1",
         "online": true,
-        "players": 40
+        "players": 41
     },
     {
         "name": "Channel 2",
         "online": true,
-        "players": 9
+        "players": 8
     },
     {
         "name": "Channel 3",
