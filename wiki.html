@@ -2,214 +2,225 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>DDON Ultra Wiki</title>
+<title>DDON Ultra Wiki PRO</title>
+
 <style>
-
-body{
+body {
     margin:0;
-    background:#0b0f18;
-    font-family:Arial;
-    color:white;
+    font-family:Segoe UI;
+    background:#0f1420;
+    color:#e6e6e6;
 }
 
-header{
+header {
+    background:#151b2d;
     padding:20px;
-    font-size:28px;
+    font-size:26px;
     font-weight:bold;
-    background:#121a2b;
-    border-bottom:2px solid #c8a75d;
+    color:#e4b75a;
+    border-bottom:2px solid #e4b75a;
 }
 
-.tabs{
+nav {
     display:flex;
-    gap:20px;
+    gap:15px;
     padding:15px;
-    background:#0f1625;
+    background:#121826;
 }
 
-.tab{
-    cursor:pointer;
-    padding:8px 15px;
-    border:1px solid #c8a75d;
-}
-
-.tab:hover{
-    background:#c8a75d;
-    color:black;
-}
-
-.section{
-    padding:30px;
-}
-
-input{
-    width:100%;
-    padding:10px;
-    background:#1a2338;
-    border:1px solid #c8a75d;
+nav button {
+    background:#1f2740;
+    border:none;
+    padding:10px 20px;
     color:white;
-    margin-bottom:20px;
-}
-
-.card{
-    background:#1a2338;
-    padding:20px;
-    margin-bottom:15px;
+    cursor:pointer;
     border-radius:6px;
 }
 
-.spawn{
-    margin-top:10px;
-    font-size:14px;
-    opacity:0.9;
+nav button:hover {
+    background:#2e3a63;
 }
 
+.container {
+    padding:30px;
+}
+
+.card {
+    background:#1a2135;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:8px;
+}
+
+input, select {
+    padding:10px;
+    width:100%;
+    margin-bottom:20px;
+    background:#1f2740;
+    border:none;
+    color:white;
+}
 </style>
 </head>
+
 <body>
 
-<header>DDON Ultra Wiki</header>
+<header>DDON ULTRA WIKI PRO MODE</header>
 
-<div class="tabs">
-    <div class="tab" onclick="showTab('monsters')">Monsters</div>
-    <div class="tab" onclick="showTab('items')">Items</div>
-    <div class="tab" onclick="showTab('stages')">Stages</div>
+<nav>
+<button onclick="showTab('monster')">Monster Wiki</button>
+<button onclick="showTab('stage')">Stage Wiki</button>
+<button onclick="showTab('item')">Item Wiki</button>
+<button onclick="showTab('spawn')">Spawn Explorer</button>
+</nav>
+
+<div class="container">
+
+<div id="monsterTab">
+<input placeholder="Search Monster..." oninput="searchMonster(this.value)">
+<div id="monsterResults"></div>
 </div>
 
-<div id="content" class="section"></div>
+<div id="stageTab" style="display:none">
+<input placeholder="Search Stage..." oninput="searchStage(this.value)">
+<div id="stageResults"></div>
+</div>
+
+<div id="itemTab" style="display:none">
+<input placeholder="Search Item..." oninput="searchItem(this.value)">
+<div id="itemResults"></div>
+</div>
+
+<div id="spawnTab" style="display:none">
+<select id="spawnStageSelect" onchange="loadStageSpawns()"></select>
+<div id="spawnViewer"></div>
+</div>
+
+</div>
 
 <script>
 
 let enemyNames = {};
-let enemySpawn = {};
 let stageNames = {};
+let enemySpawn = {};
 let items = [];
 
 async function loadData(){
-
     enemyNames = await fetch("datas/enemy-names.json").then(r=>r.json());
-    enemySpawn = await fetch("datas/EnemySpawn.json").then(r=>r.json());
     stageNames = await fetch("datas/stage-names.json").then(r=>r.json());
-
-    const itemText = await fetch("datas/itemlist.csv").then(r=>r.text());
-    items = itemText.split("\n").slice(1).map(row=>{
-        const cols = row.split(",");
-        return {
-            id: cols[0],
-            name: cols[1]
-        }
-    });
-
-    showTab("monsters");
+    enemySpawn = await fetch("datas/EnemySpawn.json").then(r=>r.json());
+    items = await fetch("datas/itemlist.csv").then(r=>r.text());
+    buildStageDropdown();
 }
 
 function showTab(tab){
-
-    if(tab==="monsters") renderMonsters();
-    if(tab==="items") renderItems();
-    if(tab==="stages") renderStages();
+    document.getElementById("monsterTab").style.display="none";
+    document.getElementById("stageTab").style.display="none";
+    document.getElementById("itemTab").style.display="none";
+    document.getElementById("spawnTab").style.display="none";
+    document.getElementById(tab+"Tab").style.display="block";
 }
 
-function renderMonsters(){
-
-    let html = `
-        <input placeholder="Search monster..." oninput="filterMonsters(this.value)">
-        <div id="monsterList"></div>
-    `;
-
-    document.getElementById("content").innerHTML = html;
-    filterMonsters("");
-}
-
-function filterMonsters(search){
-
-    const container = document.getElementById("monsterList");
-    container.innerHTML="";
-
-    Object.entries(enemyNames).forEach(([id,name])=>{
-
-        if(!name.toLowerCase().includes(search.toLowerCase())) return;
-
-        let spawnData = "";
-        if(enemySpawn[id]){
-            spawnData = enemySpawn[id].map(sp=>{
-                const stage = stageNames[sp.stageId]?.en || "Unknown Stage";
-                return `<div>Stage: ${stage} (Lv.${sp.level})</div>`;
-            }).join("");
+function searchMonster(q){
+    let out="";
+    q=q.toLowerCase();
+    for(let id in enemyNames){
+        let name = enemyNames[id];
+        if(name.toLowerCase().includes(q)){
+            out+=`
+            <div class="card">
+            <h2>${name}</h2>
+            ID: ${id}<br>
+            Spawned in:<br>
+            ${findMonsterStages(id)}
+            </div>`;
         }
+    }
+    document.getElementById("monsterResults").innerHTML=out;
+}
 
-        container.innerHTML += `
+function findMonsterStages(enemyId){
+    let list="";
+    for(let stageId in enemySpawn){
+        let spawns = enemySpawn[stageId];
+        spawns.forEach(s=>{
+            if(s.enemyId===enemyId){
+                let stageName = stageNames[stageId]?.en || stageId;
+                list+= stageName+"<br>";
+            }
+        });
+    }
+    return list || "Unknown";
+}
+
+function searchStage(q){
+    let out="";
+    q=q.toLowerCase();
+    for(let id in stageNames){
+        let name = stageNames[id].en;
+        if(name.toLowerCase().includes(q)){
+            out+=`
             <div class="card">
-                <strong>${name}</strong><br>
-                ID: ${id}
-                <div class="spawn">${spawnData || "No spawn data"}</div>
-            </div>
-        `;
+            <h2>${name}</h2>
+            Stage ID: ${id}
+            <br><br>
+            Monsters:<br>
+            ${findStageMonsters(id)}
+            </div>`;
+        }
+    }
+    document.getElementById("stageResults").innerHTML=out;
+}
+
+function findStageMonsters(stageId){
+    let spawns = enemySpawn[stageId];
+    if(!spawns) return "None";
+    let list="";
+    spawns.forEach(s=>{
+        let name = enemyNames[s.enemyId] || s.enemyId;
+        list+= name+"<br>";
     });
+    return list;
 }
 
-function renderItems(){
-
-    let html = `
-        <input placeholder="Search item..." oninput="filterItems(this.value)">
-        <div id="itemList"></div>
-    `;
-
-    document.getElementById("content").innerHTML = html;
-    filterItems("");
-}
-
-function filterItems(search){
-
-    const container = document.getElementById("itemList");
-    container.innerHTML="";
-
-    items.forEach(item=>{
-
-        if(!item.name) return;
-        if(!item.name.toLowerCase().includes(search.toLowerCase())) return;
-
-        container.innerHTML += `
-            <div class="card">
-                <strong>${item.name}</strong><br>
-                ID: ${item.id}
-            </div>
-        `;
+function searchItem(q){
+    let rows = items.split("\n");
+    let out="";
+    q=q.toLowerCase();
+    rows.forEach(r=>{
+        if(r.toLowerCase().includes(q)){
+            out+=`<div class="card">${r}</div>`;
+        }
     });
+    document.getElementById("itemResults").innerHTML=out;
 }
 
-function renderStages(){
-
-    let html = `
-        <input placeholder="Search stage..." oninput="filterStages(this.value)">
-        <div id="stageList"></div>
-    `;
-
-    document.getElementById("content").innerHTML = html;
-    filterStages("");
+function buildStageDropdown(){
+    let select = document.getElementById("spawnStageSelect");
+    for(let id in stageNames){
+        let opt=document.createElement("option");
+        opt.value=id;
+        opt.textContent=stageNames[id].en;
+        select.appendChild(opt);
+    }
 }
 
-function filterStages(search){
-
-    const container = document.getElementById("stageList");
-    container.innerHTML="";
-
-    Object.entries(stageNames).forEach(([id,data])=>{
-
-        if(!data.en.toLowerCase().includes(search.toLowerCase())) return;
-
-        container.innerHTML += `
-            <div class="card">
-                <strong>${data.en}</strong><br>
-                ID: ${id}
-            </div>
-        `;
-    });
+function loadStageSpawns(){
+    let stageId = document.getElementById("spawnStageSelect").value;
+    let spawns = enemySpawn[stageId];
+    let out="";
+    if(!spawns) out="No spawn data";
+    else{
+        spawns.forEach(s=>{
+            let name = enemyNames[s.enemyId] || s.enemyId;
+            out+=`<div class="card">${name} (${s.enemyId})</div>`;
+        });
+    }
+    document.getElementById("spawnViewer").innerHTML=out;
 }
 
 loadData();
 
 </script>
-
 </body>
 </html>
