@@ -2,7 +2,7 @@
     {
         "name": "Channel 1",
         "online": true,
-        "players": 13
+        "players": 12
     },
     {
         "name": "Channel 2",
@@ -12,12 +12,12 @@
     {
         "name": "Channel 3",
         "online": true,
-        "players": 3
+        "players": 5
     },
     {
         "name": "Channel 4",
         "online": true,
-        "players": 2
+        "players": 4
     },
     {
         "name": "Channel 5",
@@ -27,7 +27,7 @@
     {
         "name": "Channel 6",
         "online": true,
-        "players": 3
+        "players": 8
     },
     {
         "name": "Channel 7",
@@ -42,16 +42,16 @@
     {
         "name": "Collab",
         "online": true,
-        "players": 2
+        "players": 6
     },
     {
         "name": "Custom Enemy",
         "online": true,
-        "players": 3
+        "players": 5
     },
     {
         "name": "Boss Rush",
         "online": true,
-        "players": 3
+        "players": 4
     }
 ]
