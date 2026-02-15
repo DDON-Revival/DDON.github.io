@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>How To Play - DDON Revival</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
@@ -10,11 +12,13 @@ body{
     margin:0;
     font-family:'Cinzel', serif;
     color:#e6e6e6;
+    line-height:1.7;
     background:
         linear-gradient(rgba(15,15,20,0.95), rgba(15,15,20,0.95)),
         url("ddon-bg.jpg") center/cover no-repeat fixed;
 }
 
+/* HEADER */
 header{
     background:#1b1b25;
     padding:20px;
@@ -24,54 +28,74 @@ header{
 
 h1{
     color:#c8a75d;
+    letter-spacing:2px;
 }
 
+/* LANGUAGE SELECTOR */
+#languageSelector{
+    margin-top:15px;
+    padding:6px 10px;
+    background:#111;
+    color:#c8a75d;
+    border:1px solid #c8a75d;
+}
+
+/* CONTAINER */
 .container{
     max-width:1000px;
     margin:60px auto;
     padding:20px;
 }
 
+/* SECTION */
 .section{
-    margin-bottom:70px;
+    margin-bottom:80px;
 }
 
 .section h2{
     display:flex;
     align-items:center;
     gap:15px;
+    font-size:22px;
+    color:#ffffff;
+    border-bottom:1px solid #2a2a35;
+    padding-bottom:15px;
 }
 
+/* GOLD STEP BOX */
 .step-box{
     background:#c8a75d;
     color:#0f0f14;
-    padding:6px 12px;
+    padding:8px 14px;
     font-weight:bold;
+    border-radius:4px;
+    font-size:16px;
 }
 
+/* BOX */
 .box{
     background:#1b1b25;
     padding:20px;
     border:1px solid #2a2a35;
+    margin-top:15px;
+    border-radius:6px;
 }
 
+/* DOWNLOAD BUTTON */
 .download-btn{
     display:inline-block;
-    padding:10px 25px;
+    padding:10px 20px;
     border:2px solid #c8a75d;
     color:#c8a75d;
-    margin-top:10px;
-    transition:0.3s;
+    text-decoration:none;
+    transition:all 0.3s ease;
+    margin-top:8px;
 }
 
 .download-btn:hover{
     background:#c8a75d;
     color:#0f0f14;
-}
-
-select{
-    padding:6px;
-    margin-top:10px;
+    transform:translateY(-2px);
 }
 </style>
 </head>
@@ -79,102 +103,82 @@ select{
 <body>
 
 <header>
-<h1 id="howTitle">How To Play</h1>
-<select id="languageSelector"></select>
+    <h1 id="howTitle"></h1>
+    <select id="languageSelector"></select>
 </header>
 
-<div class="container">
-
-<div class="section">
-<h2><span class="step-box">1</span> <span id="step1Title"></span></h2>
-<p id="step1Text"></p>
-
-<div class="box">
-<p><strong id="fullClientText"></strong><br>
-<a id="fullClientLink" class="download-btn" target="_blank"></a></p>
-
-<p><strong id="multipartText"></strong><br>
-<a id="multipartLink" class="download-btn" target="_blank"></a></p>
-</div>
-</div>
-
-<div class="section">
-<h2><span class="step-box">2</span> <span id="step2Title"></span></h2>
-<p id="step2Text"></p>
-</div>
-
-<div class="section">
-<h2><span class="step-box">3</span> <span id="step3Title"></span></h2>
-<p id="step3Text"></p>
-</div>
-
-<div class="section">
-<h2><span class="step-box">4</span> <span id="step4Title"></span></h2>
-<p id="step4Text"></p>
-</div>
-
-<div class="section">
-<h2><span class="step-box">5</span> <span id="step5Title"></span></h2>
-<p id="step5Text"></p>
-</div>
-
-<div class="section">
-<h2><span class="step-box">6</span> <span id="step6Title"></span></h2>
-<p id="step6Text"></p>
-</div>
-
-<div class="section">
-<h2><span class="step-box">7</span> <span id="step7Title"></span></h2>
-<p id="step7Text"></p>
-</div>
-
-</div>
+<div class="container" id="content"></div>
 
 <script src="translations.js"></script>
-
 <script>
 const selector = document.getElementById("languageSelector");
+const content = document.getElementById("content");
 
-window.languages.forEach(lang => {
-    const option = document.createElement("option");
-    option.value = lang.code;
-    option.textContent = `${lang.flag} ${lang.name}`;
+window.languages.forEach(lang=>{
+    const option=document.createElement("option");
+    option.value=lang.code;
+    option.textContent=lang.flag+" "+lang.name;
     selector.appendChild(option);
 });
 
-function applyLanguage(langCode){
+function render(langCode){
     const t = window.translations[langCode];
-
-    if(!t) return;
 
     document.getElementById("howTitle").textContent = t.howTitle || t.howToPlay;
 
-    document.getElementById("step1Title").textContent = t.step1Title || t.howto?.step1Title;
+    content.innerHTML = `
+    <div class="section">
+        <h2><span class="step-box">1</span> ${t.step1Title}</h2>
+        <p>${t.step1Text1 || t.howto?.step1Text || ""}</p>
+        <div class="box">
+            <p><strong>${t.downloadFull || t.howto?.fullClient || "Full Client"}</strong><br>
+            <a class="download-btn" href="${t.downloadLinks.full}" target="_blank">Download</a></p>
 
-    document.getElementById("fullClientText").textContent = t.downloadFull || t.howto?.fullClient || "Full Client";
-    document.getElementById("multipartText").textContent = t.downloadMulti || t.howto?.multiClient || "Multipart";
+            ${t.downloadLinks.multi ? `
+            <p><strong>${t.downloadMulti || t.howto?.multiClient || "Multipart Version"}</strong><br>
+            <a class="download-btn" href="${t.downloadLinks.multi}" target="_blank">Download</a></p>
+            ` : ``}
+        </div>
+    </div>
 
-    const fullLink = document.getElementById("fullClientLink");
-    const multiLink = document.getElementById("multipartLink");
+    <div class="section">
+        <h2><span class="step-box">2</span> ${t.step2Title}</h2>
+        <p>${t.step2Text1 || t.howto?.step2Text || ""}</p>
+    </div>
 
-    fullLink.textContent = t.downloadFull || "Download";
-    multiLink.textContent = t.downloadMulti || "Download";
+    <div class="section">
+        <h2><span class="step-box">3</span> ${t.step3Title}</h2>
+        <p>${t.step3Text1 || t.howto?.step3Text || ""}</p>
+    </div>
 
-    if(t.downloadLinks?.full)
-        fullLink.href = t.downloadLinks.full;
+    <div class="section">
+        <h2><span class="step-box">4</span> ${t.step4Title}</h2>
+        <p>${t.step4Text1 || t.howto?.step4Text || ""}</p>
+    </div>
 
-    if(t.downloadLinks?.multi)
-        multiLink.href = t.downloadLinks.multi;
+    <div class="section">
+        <h2><span class="step-box">5</span> ${t.step5Title}</h2>
+        <p>${t.step5Text1 || t.howto?.step5Text || ""}</p>
+    </div>
+
+    <div class="section">
+        <h2><span class="step-box">6</span> ${t.step6Title}</h2>
+        <p>${t.step6Text1 || t.howto?.step6Text || ""}</p>
+    </div>
+
+    <div class="section">
+        <h2><span class="step-box">7</span> ${t.step7Title}</h2>
+        <p>${t.step7Text1 || t.howto?.step7Text || ""}</p>
+    </div>
+    `;
 }
 
-selector.addEventListener("change", e => {
-    applyLanguage(e.target.value);
-    localStorage.setItem("lang", e.target.value);
+selector.addEventListener("change",()=>{
+    render(selector.value);
 });
 
-const savedLang = localStorage.getItem("lang") || "en";
-selector.value = savedLang;
-applyLanguage(savedLang);
+render("en");
 </script>
+
 </body>
 </html>
