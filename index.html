@@ -260,48 +260,216 @@ const languages = [
 ];
 
 const translations = {
-    en:{ statusLabel:"Status", playersLabel:"Players", online:"Online", offline:"Offline"},
-    jp:{ statusLabel:"状態", playersLabel:"プレイヤー数", online:"オンライン", offline:"オフライン"},
-    zh:{ statusLabel:"状态", playersLabel:"玩家数", online:"在线", offline:"离线"},
-    pt:{ statusLabel:"Status", playersLabel:"Jogadores", online:"Online", offline:"Offline"},
-    es:{ statusLabel:"Estado", playersLabel:"Jugadores", online:"En línea", offline:"Desconectado"},
-    ru:{ statusLabel:"Статус", playersLabel:"Игроки", online:"Онлайн", offline:"Оффлайн"},
-    tr:{ statusLabel:"Durum", playersLabel:"Oyuncular", online:"Çevrimiçi", offline:"Çevrimdışı"},
-    pl:{ statusLabel:"Status", playersLabel:"Gracze", online:"Online", offline:"Offline"},
-    kr:{ statusLabel:"상태", playersLabel:"플레이어", online:"온라인", offline:"오프라인"},
-    it:{ statusLabel:"Stato", playersLabel:"Giocatori", online:"Online", offline:"Offline"},
-    fr:{ statusLabel:"Statut", playersLabel:"Joueurs", online:"En ligne", offline:"Hors ligne"},
-    gr:{ statusLabel:"Κατάσταση", playersLabel:"Παίκτες", online:"Online", offline:"Offline"}
+    en: {
+        home:"Home",
+        news:"News",
+        status:"Server Status",
+        leaderboard:"HC Leaderboard",
+        wiki:"Wiki",
+        download:"Download",
+        info:"Info",
+        title:"Dragon's Dogma Online",
+        subtitle:"Biggest Server • Custom Content • Hardcore & BBM",
+        downloadBtn:"Download & Play",
+
+        newsTitle:"Latest News",
+        news1Title:"Server Opening",
+        news1Text:"DDON is now live! Join the adventure.",
+        news2Title:"Hardcore Mode",
+        news2Text:"Hardcore Mode our Second Custom Content is now Live! Compete for glory.",
+
+        serverStatusTitle:"Server Status",
+        statusLabel:"Status",
+        playersLabel:"Players",
+        online:"Online",
+        offline:"Offline"
+    },
+
+    jp: {
+        home:"ホーム",
+        news:"ニュース",
+        status:"サーバー状況",
+        leaderboard:"HCランキング",
+        wiki:"ウィキ",
+        download:"ダウンロード",
+        info:"情報",
+        title:"ドラゴンズドグマオンライン",
+        subtitle:"最大サーバー • カスタムコンテンツ • ハードコア & BBM",
+        downloadBtn:"ダウンロード",
+
+        newsTitle:"最新ニュース",
+        news1Title:"サーバーオープン",
+        news1Text:"DDONが正式に開始しました！冒険に参加しよう。",
+        news2Title:"ハードコアモード",
+        news2Text:"第2のカスタムコンテンツが開始！",
+
+        serverStatusTitle:"サーバー状況",
+        statusLabel:"状態",
+        playersLabel:"プレイヤー数",
+        online:"オンライン",
+        offline:"オフライン"
+    },
+
+    zh: {
+        home:"首页",
+        news:"新闻",
+        status:"服务器状态",
+        leaderboard:"硬核排行",
+        wiki:"维基",
+        download:"下载",
+        info:"信息",
+        title:"龙之信条 Online",
+        subtitle:"最大服务器 • 自定义内容 • 硬核 & BBM",
+        downloadBtn:"下载游戏",
+
+        newsTitle:"最新消息",
+        news1Title:"服务器开启",
+        news1Text:"DDON 已上线！加入冒险。",
+        news2Title:"硬核模式",
+        news2Text:"第二个自定义内容已上线。",
+
+        serverStatusTitle:"服务器状态",
+        statusLabel:"状态",
+        playersLabel:"玩家数",
+        online:"在线",
+        offline:"离线"
+    },
+
+    pt: {
+        home:"Início",
+        news:"Notícias",
+        status:"Status do Servidor",
+        leaderboard:"Ranking HC",
+        wiki:"Wiki",
+        download:"Download",
+        info:"Info",
+        title:"Dragon's Dogma Online",
+        subtitle:"Maior Servidor • Conteúdo Custom • Hardcore & BBM",
+        downloadBtn:"Baixar & Jogar",
+
+        newsTitle:"Últimas Notícias",
+        news1Title:"Abertura do Servidor",
+        news1Text:"DDON está online!",
+        news2Title:"Modo Hardcore",
+        news2Text:"Segundo conteúdo já disponível.",
+
+        serverStatusTitle:"Status do Servidor",
+        statusLabel:"Status",
+        playersLabel:"Jogadores",
+        online:"Online",
+        offline:"Offline"
+    },
+
+    es: {
+        home:"Inicio",
+        news:"Noticias",
+        status:"Estado del Servidor",
+        leaderboard:"Ranking HC",
+        wiki:"Wiki",
+        download:"Descargar",
+        info:"Info",
+        title:"Dragon's Dogma Online",
+        subtitle:"Servidor Más Grande • Hardcore & BBM",
+        downloadBtn:"Descargar & Jugar",
+
+        newsTitle:"Últimas Noticias",
+        news1Title:"Apertura del Servidor",
+        news1Text:"¡DDON ya está en línea!",
+        news2Title:"Modo Hardcore",
+        news2Text:"Nuevo contenido disponible.",
+
+        serverStatusTitle:"Estado del Servidor",
+        statusLabel:"Estado",
+        playersLabel:"Jugadores",
+        online:"En línea",
+        offline:"Fuera de línea"
+    },
+
+    ru: {
+        home:"Главная",
+        news:"Новости",
+        status:"Статус Сервера",
+        leaderboard:"HC Рейтинг",
+        wiki:"Wiki",
+        download:"Скачать",
+        info:"Инфо",
+        title:"Dragon's Dogma Online",
+        subtitle:"Крупнейший сервер",
+        downloadBtn:"Скачать",
+
+        newsTitle:"Последние новости",
+        news1Title:"Открытие сервера",
+        news1Text:"DDON теперь доступен!",
+        news2Title:"Hardcore режим",
+        news2Text:"Новый контент доступен.",
+
+        serverStatusTitle:"Статус Сервера",
+        statusLabel:"Статус",
+        playersLabel:"Игроки",
+        online:"Онлайн",
+        offline:"Оффлайн"
+    }
 };
 
+/* ===========================
+   LANGUAGE SWITCH
+=========================== */
+
 function setLanguage(lang){
-    localStorage.setItem("lang", lang);
-    loadServerStatus(); // 🔥 wichtig: Status neu rendern
+    const t = translations[lang];
+    if(!t) return;
+
+    document.querySelector('[data-key="home"]').textContent = t.home;
+    document.querySelector('[data-key="news"]').textContent = t.news;
+    document.querySelector('[data-key="status"]').textContent = t.status;
+    document.querySelector('[data-key="leaderboard"]').textContent = t.leaderboard;
+    document.querySelector('[data-key="wiki"]').textContent = t.wiki;
+    document.querySelector('[data-key="download"]').textContent = t.download;
+    document.querySelector('[data-key="info"]').textContent = t.info;
+    document.querySelector('[data-key="title"]').textContent = t.title;
+    document.querySelector('[data-key="subtitle"]').textContent = t.subtitle;
+    document.querySelector('[data-key="downloadBtn"]').textContent = t.downloadBtn;
+
+    document.querySelector('[data-key="newsTitle"]').textContent = t.newsTitle;
+    document.querySelector('[data-key="news1Title"]').textContent = t.news1Title;
+    document.querySelector('[data-key="news1Text"]').textContent = t.news1Text;
+    document.querySelector('[data-key="news2Title"]').textContent = t.news2Title;
+    document.querySelector('[data-key="news2Text"]').textContent = t.news2Text;
+
+    document.querySelector('[data-key="serverStatusTitle"]').textContent = t.serverStatusTitle;
+
+    loadServerStatus();
 }
 
-/* Dropdown */
 const list = document.getElementById("languageList");
+
 languages.forEach(lang=>{
     const div = document.createElement("div");
     div.innerHTML = `${lang.flag} ${lang.name}`;
-    div.onclick = () => setLanguage(lang.code);
+    div.onclick = () => {
+        setLanguage(lang.code);
+        localStorage.setItem("lang", lang.code);
+    };
     list.appendChild(div);
 });
 
+const saved = localStorage.getItem("lang") || "en";
+setLanguage(saved);
+
 /* ===========================
-   🟢 SERVER STATUS
+   SERVER STATUS
 =========================== */
 
 async function loadServerStatus(){
     try{
-        const response = await fetch("status.json?cache=" + new Date().getTime());
+        const response = await fetch("status.json");
         const data = await response.json();
-
-        const container = document.getElementById("serverStatusContainer");
-        container.innerHTML = "";
 
         const currentLang = localStorage.getItem("lang") || "en";
         const t = translations[currentLang];
+
+        const container = document.getElementById("serverStatusContainer");
+        container.innerHTML = "";
 
         data.forEach(server=>{
             const div = document.createElement("div");
