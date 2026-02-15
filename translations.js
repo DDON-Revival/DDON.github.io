@@ -20,7 +20,7 @@ window.languages = [
 
 window.translations = {
 
-en:{
+en: {
 home:"Home",
 news:"News",
 status:"Server Status",
@@ -59,7 +59,9 @@ dead:"Dead",
 noPlayersFound:"No players found"
 },
 
-jp:{
+/* ================= JAPANESE ================= */
+
+jp: {
 home:"ホーム",
 news:"ニュース",
 status:"サーバー状況",
@@ -75,7 +77,7 @@ newsTitle:"最新ニュース",
 news1Title:"サーバーオープン",
 news1Text:"DDONが正式に開始しました！冒険に参加しよう。",
 news2Title:"ハードコアモード",
-news2Text:"ハードコアモードが開始しました！",
+news2Text:"ハードコアモードが開始されました！",
 
 serverStatusTitle:"サーバー状況",
 statusLabel:"状態",
@@ -98,7 +100,9 @@ dead:"死亡",
 noPlayersFound:"プレイヤーが見つかりません"
 },
 
-zh:{
+/* ================= CHINESE ================= */
+
+zh: {
 home:"首页",
 news:"新闻",
 status:"服务器状态",
@@ -114,7 +118,7 @@ newsTitle:"最新消息",
 news1Title:"服务器开启",
 news1Text:"DDON 已上线！",
 news2Title:"硬核模式",
-news2Text:"硬核模式现已开放！",
+news2Text:"硬核模式现已上线！",
 
 serverStatusTitle:"服务器状态",
 statusLabel:"状态",
@@ -137,7 +141,9 @@ dead:"死亡",
 noPlayersFound:"未找到玩家"
 },
 
-pt:{
+/* ================= PORTUGUESE ================= */
+
+pt: {
 home:"Início",
 news:"Notícias",
 status:"Status do Servidor",
@@ -176,7 +182,9 @@ dead:"Morto",
 noPlayersFound:"Nenhum jogador encontrado"
 },
 
-es:{
+/* ================= SPANISH ================= */
+
+es: {
 home:"Inicio",
 news:"Noticias",
 status:"Estado del Servidor",
@@ -192,7 +200,7 @@ newsTitle:"Últimas Noticias",
 news1Title:"Apertura del Servidor",
 news1Text:"¡DDON ya está en línea!",
 news2Title:"Modo Hardcore",
-news2Text:"Modo Hardcore disponible.",
+news2Text:"Modo Hardcore disponible!",
 
 serverStatusTitle:"Estado del Servidor",
 statusLabel:"Estado",
@@ -215,7 +223,9 @@ dead:"Muerto",
 noPlayersFound:"No se encontraron jugadores"
 },
 
-ru:{
+/* ================= RUSSIAN ================= */
+
+ru: {
 home:"Главная",
 news:"Новости",
 status:"Статус Сервера",
@@ -231,7 +241,7 @@ newsTitle:"Последние новости",
 news1Title:"Открытие сервера",
 news1Text:"DDON теперь доступен!",
 news2Title:"Hardcore режим",
-news2Text:"Hardcore режим доступен.",
+news2Text:"Hardcore режим доступен!",
 
 serverStatusTitle:"Статус Сервера",
 statusLabel:"Статус",
@@ -254,7 +264,9 @@ dead:"Мёртв",
 noPlayersFound:"Игроки не найдены"
 },
 
-tr:{
+/* ================= TURKISH ================= */
+
+tr: {
 home:"Ana Sayfa",
 news:"Haberler",
 status:"Sunucu Durumu",
@@ -270,7 +282,7 @@ newsTitle:"Son Haberler",
 news1Title:"Sunucu Açılışı",
 news1Text:"DDON yayında!",
 news2Title:"Hardcore Modu",
-news2Text:"Hardcore modu aktif.",
+news2Text:"Hardcore modu aktif!",
 
 serverStatusTitle:"Sunucu Durumu",
 statusLabel:"Durum",
@@ -291,6 +303,211 @@ hcStatus:"Durum",
 alive:"Hayatta",
 dead:"Ölü",
 noPlayersFound:"Oyuncu bulunamadı"
+},
+
+/* ================= POLISH ================= */
+
+pl: {
+home:"Strona Główna",
+news:"Aktualności",
+status:"Status Serwera",
+leaderboard:"Ranking",
+wiki:"Wiki",
+download:"Pobierz",
+info:"Info",
+title:"Dragon's Dogma Online",
+subtitle:"Największy Serwer",
+downloadBtn:"Pobierz",
+
+newsTitle:"Najnowsze Wiadomości",
+news1Title:"Otwarcie Serwera",
+news1Text:"DDON jest online!",
+news2Title:"Tryb Hardcore",
+news2Text:"Tryb Hardcore dostępny!",
+
+serverStatusTitle:"Status Serwera",
+statusLabel:"Status",
+playersLabel:"Gracze",
+online:"Online",
+offline:"Offline",
+totalPlayers:"Łączna liczba graczy online",
+
+leaderboardTitle:"Ranking",
+hcTab:"Hardcore",
+normalTab:"Normalny",
+searchPlaceholder:"Szukaj gracza...",
+playerName:"Nazwa Gracza",
+level:"Poziom",
+classes:"Klasy",
+hcSince:"Hardcore od",
+hcStatus:"Status",
+alive:"Żyje",
+dead:"Martwy",
+noPlayersFound:"Nie znaleziono graczy"
+},
+
+/* ================= KOREAN ================= */
+
+kr: {
+home:"홈",
+news:"뉴스",
+status:"서버 상태",
+leaderboard:"리더보드",
+wiki:"위키",
+download:"다운로드",
+info:"정보",
+title:"드래곤즈 도그마 온라인",
+subtitle:"최대 서버",
+downloadBtn:"다운로드",
+
+newsTitle:"최신 뉴스",
+news1Title:"서버 오픈",
+news1Text:"DDON 라이브!",
+news2Title:"하드코어 모드",
+news2Text:"하드코어 모드 출시!",
+
+serverStatusTitle:"서버 상태",
+statusLabel:"상태",
+playersLabel:"플레이어 수",
+online:"온라인",
+offline:"오프라인",
+totalPlayers:"총 온라인 플레이어",
+
+leaderboardTitle:"리더보드",
+hcTab:"하드코어",
+normalTab:"일반",
+searchPlaceholder:"플레이어 검색...",
+playerName:"플레이어 이름",
+level:"레벨",
+classes:"직업",
+hcSince:"하드코어 시작일",
+hcStatus:"상태",
+alive:"생존",
+dead:"사망",
+noPlayersFound:"플레이어를 찾을 수 없습니다"
+},
+
+/* ================= ITALIAN ================= */
+
+it: {
+home:"Home",
+news:"Notizie",
+status:"Stato Server",
+leaderboard:"Classifica",
+wiki:"Wiki",
+download:"Download",
+info:"Info",
+title:"Dragon's Dogma Online",
+subtitle:"Server Più Grande",
+downloadBtn:"Scarica",
+
+newsTitle:"Ultime Notizie",
+news1Title:"Apertura Server",
+news1Text:"DDON è online!",
+news2Title:"Modalità Hardcore",
+news2Text:"Modalità Hardcore disponibile!",
+
+serverStatusTitle:"Stato Server",
+statusLabel:"Stato",
+playersLabel:"Giocatori",
+online:"Online",
+offline:"Offline",
+totalPlayers:"Totale Giocatori Online",
+
+leaderboardTitle:"Classifica",
+hcTab:"Hardcore",
+normalTab:"Normale",
+searchPlaceholder:"Cerca giocatore...",
+playerName:"Nome Giocatore",
+level:"Livello",
+classes:"Classi",
+hcSince:"Hardcore Dal",
+hcStatus:"Stato",
+alive:"Vivo",
+dead:"Morto",
+noPlayersFound:"Nessun giocatore trovato"
+},
+
+/* ================= FRENCH ================= */
+
+fr: {
+home:"Accueil",
+news:"Actualités",
+status:"Statut du Serveur",
+leaderboard:"Classement",
+wiki:"Wiki",
+download:"Télécharger",
+info:"Info",
+title:"Dragon's Dogma Online",
+subtitle:"Plus Grand Serveur",
+downloadBtn:"Télécharger",
+
+newsTitle:"Dernières Actualités",
+news1Title:"Ouverture du Serveur",
+news1Text:"DDON est en ligne!",
+news2Title:"Mode Hardcore",
+news2Text:"Mode Hardcore disponible!",
+
+serverStatusTitle:"Statut du Serveur",
+statusLabel:"Statut",
+playersLabel:"Joueurs",
+online:"En ligne",
+offline:"Hors ligne",
+totalPlayers:"Total des Joueurs en Ligne",
+
+leaderboardTitle:"Classement",
+hcTab:"Hardcore",
+normalTab:"Normal",
+searchPlaceholder:"Rechercher joueur...",
+playerName:"Nom du Joueur",
+level:"Niveau",
+classes:"Classes",
+hcSince:"Hardcore Depuis",
+hcStatus:"Statut",
+alive:"Vivant",
+dead:"Mort",
+noPlayersFound:"Aucun joueur trouvé"
+},
+
+/* ================= GREEK ================= */
+
+gr: {
+home:"Αρχική",
+news:"Νέα",
+status:"Κατάσταση Διακομιστή",
+leaderboard:"Πίνακας Κατάταξης",
+wiki:"Wiki",
+download:"Λήψη",
+info:"Πληροφορίες",
+title:"Dragon's Dogma Online",
+subtitle:"Μεγαλύτερος Server",
+downloadBtn:"Λήψη",
+
+newsTitle:"Τελευταία Νέα",
+news1Title:"Άνοιγμα Διακομιστή",
+news1Text:"Το DDON είναι online!",
+news2Title:"Hardcore Mode",
+news2Text:"Hardcore Mode διαθέσιμο!",
+
+serverStatusTitle:"Κατάσταση Διακομιστή",
+statusLabel:"Κατάσταση",
+playersLabel:"Παίκτες",
+online:"Online",
+offline:"Offline",
+totalPlayers:"Σύνολο Παικτών Online",
+
+leaderboardTitle:"Πίνακας Κατάταξης",
+hcTab:"Hardcore",
+normalTab:"Κανονικό",
+searchPlaceholder:"Αναζήτηση παίκτη...",
+playerName:"Όνομα Παίκτη",
+level:"Επίπεδο",
+classes:"Κλάσεις",
+hcSince:"Hardcore Από",
+hcStatus:"Κατάσταση",
+alive:"Ζωντανός",
+dead:"Νεκρός",
+noPlayersFound:"Δεν βρέθηκαν παίκτες"
 }
 
 };
