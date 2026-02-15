@@ -28,8 +28,8 @@ h1{
 }
 
 .btn{
-    padding:12px 25px;
-    margin:10px;
+    padding:10px 20px;
+    margin:5px;
     border:2px solid #c8a75d;
     background:none;
     color:#c8a75d;
@@ -67,6 +67,40 @@ h1{
     padding:20px;
     margin:15px;
 }
+
+.lang-selector{
+    position:relative;
+    display:inline-block;
+}
+
+.lang-btn{
+    background:#1b1b25;
+    border:1px solid #c8a75d;
+    color:#c8a75d;
+    padding:6px 12px;
+    cursor:pointer;
+}
+
+.lang-dropdown{
+    display:none;
+    position:absolute;
+    right:0;
+    background:#1b1b25;
+    border:1px solid #c8a75d;
+}
+
+.lang-dropdown div{
+    padding:6px 12px;
+    cursor:pointer;
+}
+
+.lang-dropdown div:hover{
+    background:#2a2a35;
+}
+
+.lang-selector:hover .lang-dropdown{
+    display:block;
+}
 </style>
 </head>
 
@@ -89,76 +123,73 @@ h1{
 
 <br><br>
 
-<div id="languageList"></div>
+<div class="lang-selector">
+    <button class="lang-btn">🌍</button>
+    <div class="lang-dropdown" id="languageList"></div>
+</div>
 
 </header>
 
 <div id="leaderboard" class="grid"></div>
 
-<!-- 🔥 translations FIRST -->
 <script src="translations.js"></script>
 
 <script>
 
-let leaderboardData = null;
-let currentTab = "normal";
+let leaderboardData=null;
+let currentTab="normal";
+let currentLang=localStorage.getItem("lang")||"en";
 
-/* ===========================
-   LANGUAGE SYSTEM
-=========================== */
+/* LANGUAGE SYSTEM */
 
 function setLanguage(lang){
-    const t = translations[lang];
+    currentLang=lang;
+    const t=translations[lang];
     if(!t) return;
 
     document.querySelectorAll("[data-key]").forEach(el=>{
-        const key = el.getAttribute("data-key");
-        if(t[key]) el.textContent = t[key];
+        const key=el.getAttribute("data-key");
+        if(t[key]) el.textContent=t[key];
     });
 
     document.querySelectorAll("[data-key-placeholder]").forEach(el=>{
-        const key = el.getAttribute("data-key-placeholder");
-        if(t[key]) el.placeholder = t[key];
+        const key=el.getAttribute("data-key-placeholder");
+        if(t[key]) el.placeholder=t[key];
     });
 
-    localStorage.setItem("lang", lang);
+    localStorage.setItem("lang",lang);
     renderLeaderboard();
 }
 
 languages.forEach(lang=>{
-    const btn = document.createElement("button");
-    btn.className="btn";
-    btn.textContent = lang.flag;
-    btn.onclick = ()=> setLanguage(lang.code);
-    document.getElementById("languageList").appendChild(btn);
+    const div=document.createElement("div");
+    div.innerHTML=`${lang.flag} ${lang.name}`;
+    div.onclick=()=>setLanguage(lang.code);
+    document.getElementById("languageList").appendChild(div);
 });
 
-setLanguage(localStorage.getItem("lang") || "en");
+setLanguage(currentLang);
 
-/* ===========================
-   LOAD DATA
-=========================== */
+/* LOAD DATA */
 
 async function loadLeaderboard(){
-    const res = await fetch("leaderboard.json?nocache="+Date.now());
-    leaderboardData = await res.json();
+    const res=await fetch("leaderboard.json?nocache="+Date.now());
+    leaderboardData=await res.json();
     renderLeaderboard();
 }
 
-/* ===========================
-   RENDER
-=========================== */
+/* RENDER */
 
 function renderLeaderboard(){
     if(!leaderboardData) return;
 
-    const t = translations[localStorage.getItem("lang") || "en"];
-    const container = document.getElementById("leaderboard");
+    const t=translations[currentLang];
+    const container=document.getElementById("leaderboard");
     container.innerHTML="";
 
-    const players = leaderboardData[currentTab];
+    const players=leaderboardData[currentTab];
 
-    if(!players || players.length===0){
+    if(!players||players.length===0){
         container.innerHTML=`<p>${t.noPlayersFound}</p>`;
         return;
     }
@@ -168,23 +199,23 @@ function renderLeaderboard(){
         const div=document.createElement("div");
         div.className="card";
 
-        const highestLevel = Math.max(...player.classes.map(c=>c.level));
+        const highest=Math.max(...player.classes.map(c=>c.level));
 
         let extra="";
         if(currentTab==="hc"){
             extra=`
-                <p>${t.hcSince}: ${player.hardcore_since || "-"}</p>
-                <p>${t.hcStatus}: ${player.dead ? t.dead : t.alive}</p>
+                <p>${t.hcSince}: ${player.hardcore_since||"-"}</p>
+                <p>${t.hcStatus}: ${player.dead?t.dead:t.alive}</p>
             `;
         }
 
         div.innerHTML=`
             <h3>${player.name}</h3>
-            <p>${t.level}: ${highestLevel}</p>
+            <p>${t.level}: ${highest}</p>
             <p><strong>${t.classes}:</strong></p>
             <ul>
                 ${player.classes.map(c=>
-                    `<li>${c.class} (Lv.${c.level})</li>`
+                    `<li>${t.jobs?.[c.class]||c.class} (${t.level} ${c.level})</li>`
                 ).join("")}
             </ul>
             ${extra}
@@ -194,29 +225,24 @@ function renderLeaderboard(){
     });
 }
 
-/* ===========================
-   TAB SWITCH
-=========================== */
+/* TAB SWITCH */
 
 function switchTab(tab){
     currentTab=tab;
     renderLeaderboard();
 }
 
-/* ===========================
-   SEARCH
-=========================== */
+/* SEARCH */
 
 function searchPlayer(){
     if(!leaderboardData) return;
 
-    const t = translations[localStorage.getItem("lang") || "en"];
+    const t=translations[currentLang];
     const value=document.getElementById("search").value.toLowerCase();
     const container=document.getElementById("leaderboard");
     container.innerHTML="";
 
     const all=[...(leaderboardData.normal||[]),...(leaderboardData.hc||[])];
-
     const results=all.filter(p=>p.name.toLowerCase().includes(value));
 
     if(results.length===0){
@@ -228,15 +254,15 @@ function searchPlayer(){
         const div=document.createElement("div");
         div.className="card";
 
-        const highestLevel = Math.max(...player.classes.map(c=>c.level));
+        const highest=Math.max(...player.classes.map(c=>c.level));
 
         div.innerHTML=`
             <h3>${player.name}</h3>
-            <p>${t.level}: ${highestLevel}</p>
+            <p>${t.level}: ${highest}</p>
             <p><strong>${t.classes}:</strong></p>
             <ul>
                 ${player.classes.map(c=>
-                    `<li>${c.class} (Lv.${c.level})</li>`
+                    `<li>${t.jobs?.[c.class]||c.class} (${t.level} ${c.level})</li>`
                 ).join("")}
             </ul>
         `;
