@@ -1,60 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Monsters - DDON Wiki</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DDON Wiki</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
 body{
     margin:0;
     font-family:'Cinzel', serif;
+    color:#e6e6e6;
     background:
         linear-gradient(rgba(15,15,20,0.95), rgba(15,15,20,0.95)),
         url("ddon-bg.jpg") center/cover no-repeat fixed;
-    color:#e6e6e6;
 }
 
 header{
     background:#1b1b25;
-    padding:20px;
+    padding:30px;
     text-align:center;
     border-bottom:2px solid #c8a75d;
 }
 
-.container{
-    max-width:1100px;
-    margin:50px auto;
-    padding:20px;
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(220px,1fr));
-    gap:25px;
+h1{
+    color:#c8a75d;
+    margin:0;
 }
 
-.monster-card{
+.container{
+    max-width:1000px;
+    margin:60px auto;
+    padding:20px;
+}
+
+.card{
     background:#1b1b25;
+    padding:30px;
+    margin-bottom:30px;
     border:1px solid #2a2a35;
-    padding:15px;
-    border-radius:6px;
-    text-align:center;
+    border-radius:8px;
     transition:0.3s;
 }
 
-.monster-card:hover{
+.card:hover{
     border-color:#c8a75d;
     transform:translateY(-4px);
 }
 
-.monster-card img{
-    max-width:100%;
-    height:150px;
-    object-fit:cover;
-}
-
-.monster-card a{
+.card a{
     color:#c8a75d;
+    font-size:22px;
     text-decoration:none;
-    display:block;
-    margin-top:10px;
 }
 </style>
 </head>
@@ -62,19 +60,21 @@ header{
 <body>
 
 <header>
-<h1>Monsters</h1>
+<h1>DDON Wiki</h1>
 </header>
 
 <div class="container">
 
-<div class="monster-card">
-<img src="assets/images/monsters/goblin.jpg">
-<a href="wiki/monster-detail.html">Goblin</a>
+<div class="card">
+<a href="monsters.html">Monsters</a>
 </div>
 
-<div class="monster-card">
-<img src="assets/images/monsters/cyclops.jpg">
-<a href="wiki/monster-detail.html">Cyclops</a>
+<div class="card">
+<a href="items.html">Items</a>
+</div>
+
+<div class="card">
+<a href="stages.html">Stages</a>
 </div>
 
 </div>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Items - DDON Wiki</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    font-family:'Cinzel', serif;
+    color:#e6e6e6;
+    background:
+        linear-gradient(rgba(15,15,20,0.95), rgba(15,15,20,0.95)),
+        url("ddon-bg.jpg") center/cover no-repeat fixed;
+}
+
+header{
+    background:#1b1b25;
+    padding:25px;
+    border-bottom:2px solid #c8a75d;
+    text-align:center;
+}
+
+h1{
+    color:#c8a75d;
+    margin:0;
+}
+
+.container{
+    max-width:1200px;
+    margin:60px auto;
+    padding:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:#1b1b25;
+    border:1px solid #2a2a35;
+    padding:20px;
+    border-radius:6px;
+    transition:0.3s;
+}
+
+.card:hover{
+    border-color:#c8a75d;
+    box-shadow:0 0 15px rgba(200,167,93,0.4);
+    transform:translateY(-5px);
+}
+
+.card h3{
+    margin-top:0;
+    color:#c8a75d;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Items</h1>
+</header>
+
+<div class="container">
+
+<div class="grid">
+
+<div class="card">
+<h3>Weapons</h3>
+<p>Swords, bows, staffs and more.</p>
+</div>
+
+<div class="card">
+<h3>Armor</h3>
+<p>Helmets, chest pieces and full sets.</p>
+</div>
+
+<div class="card">
+<h3>Materials</h3>
+<p>Crafting items and monster drops.</p>
+</div>
+
+<div class="card">
+<h3>Consumables</h3>
+<p>Healing, buffs and special items.</p>
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
