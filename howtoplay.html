@@ -6,6 +6,7 @@
 <title>How To Play - DDON Revival</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<script src="translations.js"></script>
 
 <style>
 body{
@@ -15,10 +16,9 @@ body{
     line-height:1.7;
     background:
         linear-gradient(rgba(15,15,20,0.95), rgba(15,15,20,0.95)),
-        url("images/ddon-bg.jpg") center/cover no-repeat fixed;
+        url("ddon-bg.jpg") center/cover no-repeat fixed;
 }
 
-/* HEADER */
 header{
     background:#1b1b25;
     padding:20px;
@@ -26,82 +26,59 @@ header{
     text-align:center;
 }
 
-h1{
+h1{ color:#c8a75d; }
+
+select{
+    margin-top:10px;
+    padding:6px;
+    background:#1b1b25;
     color:#c8a75d;
-    letter-spacing:2px;
+    border:1px solid #c8a75d;
 }
 
-/* CONTAINER */
-.container{
-    max-width:1000px;
-    margin:60px auto;
-    padding:20px;
-}
+.container{ max-width:1000px; margin:60px auto; padding:20px; }
 
-/* SECTIONS */
-.section{
-    margin-bottom:80px;
-}
+.section{ margin-bottom:80px; }
 
 .section h2{
     display:flex;
     align-items:center;
     gap:15px;
     font-size:22px;
-    color:#ffffff;
     border-bottom:1px solid #2a2a35;
     padding-bottom:15px;
 }
 
-/* GOLD STEP BOX */
 .step-box{
     background:#c8a75d;
     color:#0f0f14;
     padding:8px 14px;
     font-weight:bold;
     border-radius:4px;
-    font-size:16px;
-    box-shadow:0 0 15px rgba(200,167,93,0.4);
 }
 
-/* LINKS */
-a{
-    color:#c8a75d;
-    text-decoration:none;
-}
-
-a:hover{
-    text-decoration:underline;
-}
-
-/* DOWNLOAD BUTTONS */
 .download-btn{
     display:inline-block;
     padding:12px 25px;
     border:2px solid #c8a75d;
     color:#c8a75d;
-    margin-top:10px;
-    margin-bottom:10px;
-    transition:all 0.3s ease;
+    margin:10px 0;
+    transition:0.3s;
 }
 
 .download-btn:hover{
     background:#c8a75d;
     color:#0f0f14;
-    box-shadow:0 0 25px rgba(200,167,93,0.6);
-    transform:translateY(-3px);
+    box-shadow:0 0 20px rgba(200,167,93,0.6);
 }
 
-/* BOX */
 .box{
     background:#1b1b25;
     padding:20px;
     border:1px solid #2a2a35;
-    margin-top:15px;
     border-radius:6px;
 }
 
-/* NOTICE */
 .notice{
     background:#2a1a1a;
     border-left:4px solid #c8a75d;
@@ -109,175 +86,139 @@ a:hover{
     margin:20px 0;
 }
 
-/* ERROR IMAGE */
-.error-img{
-    margin-top:20px;
-    max-width:100%;
-    border:1px solid #2a2a35;
-    box-shadow:0 0 20px rgba(0,0,0,0.6);
-}
-
-/* HOWTO IMAGES */
-.howto-image {
-    margin-top: 30px;
-    margin-bottom: 50px;
-    text-align: center;
-}
-
-.howto-image img {
-    max-width: 100%;
-    border: 1px solid #2a2a35;
-    box-shadow: 0 0 20px rgba(0,0,0,0.6);
-}
-
-.howto-image.small img {
-    max-width: 220px;
-}
-
-/* SMOOTH FADE IN */
-.section{
-    animation:fadeIn 0.6s ease forwards;
-}
-
-@keyframes fadeIn{
-    from{opacity:0; transform:translateY(20px);}
-    to{opacity:1; transform:translateY(0);}
-}
+.howto-image{ text-align:center; margin:30px 0; }
+.howto-image img{ max-width:100%; border:1px solid #2a2a35; }
+.small img{ max-width:220px; }
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>How To Play</h1>
+    <h1 id="howTitle"></h1>
+    <select id="languageSelector"></select>
 </header>
 
 <div class="container">
 
-<!-- STEP 1 -->
 <div class="section">
-<h2><span class="step-box">1</span> Downloading</h2>
-
-<p>First of all you have to load the main game (~36GB). Just use one of these links:</p>
+<h2><span class="step-box">1</span> <span id="step1Title"></span></h2>
+<p id="step1Text1"></p>
 
 <div class="box">
-<p><strong>Full Client April 2025:</strong><br>
-<a href="https://1drv.ms/u/c/d03bbc39b7e96cf2/EWZJzkF-lppAo8dskWVs0_0Buwb-6p8IeGEz7n-nsyaqkQ?e=MOHgnr" target="_blank">
-Download Full Client
-</a>
-</p>
+    <strong id="fullClientLabel"></strong><br>
+    <a id="fullClientLink" target="_blank" class="download-btn"></a><br>
 
-<p><strong>Multipart Download April 2025:</strong><br>
-<a href="https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link" target="_blank">
-Download Multipart Version
-</a>
-</p>
+    <strong id="multiClientLabel"></strong><br>
+    <a id="multiClientLink" target="_blank" class="download-btn"></a>
+</div>
 </div>
 
-<p>If you get a "download quota exceeded" error:</p>
-<ol>
-<li>Add shortcut to your Google Drive</li>
-<li>Create a new folder</li>
-<li>Move shortcut into that folder</li>
-<li>Right click the folder and download it</li>
-</ol>
-</div>
-
-<!-- STEP 2 -->
 <div class="section">
-<h2><span class="step-box">2</span> Unzipping</h2>
-
-<p>After downloading, unzip the files using <strong>WinRAR or 7Zip</strong>. Windows default unpacking does NOT work.</p>
-
-<p>For Multipart: Put all files into one folder and extract the first part. The rest extracts automatically.</p>
-
-<p>Make sure files end with:</p>
-<ul>
-<li>.part01</li>
-<li>.part02</li>
-</ul>
-
-<p>NOT with -001 or -002. Delete those numbers if needed.</p>
-
-<div class="notice">
-OneDrive does NOT count as a real drive and will not work as install location.
+<h2><span class="step-box">2</span> <span id="step2Title"></span></h2>
+<p id="step2Text1"></p>
+<p id="step2Text2"></p>
+<p id="step2Text3"></p>
+<div class="notice" id="oneDriveWarning"></div>
 </div>
 
-<p>If you get this error while booting the game:</p>
-
-<img src="fatal-error.png" class="error-img" alt="Fatal Error Screenshot">
-</div>
-
-<!-- STEP 3 -->
 <div class="section">
-<h2><span class="step-box">3</span> Starting the Launcher</h2>
-
-<p>Run <strong>ddo_launcher.exe</strong> as Administrator.</p>
-
-<p>If prompted to install .NET 9.0, it's safe to install.</p>
-
-<p>Make sure DirectX is installed to avoid d3dx9 and XINPUT errors.</p>
+<h2><span class="step-box">3</span> <span id="step3Title"></span></h2>
+<p id="step3Text1"></p>
+<p id="step3Text2"></p>
+<p id="step3Text3"></p>
 <div class="howto-image">
-    <img src="DDO_Launcher.png" alt="DDO Launcher">
+<img src="DDO_Launcher.png">
+</div>
 </div>
 
-<!-- STEP 4 -->
 <div class="section">
-<h2><span class="step-box">4</span> Configuring the Launcher</h2>
-
-
-<p>Check that server settings match:</p>
-
-<div class="box">
-Server: ddon.org<br>
-Lobby IP: ddon.org — Port 52100<br>
-DL IP: ddon.org — Port 52099
-</div>
-</div>
+<h2><span class="step-box">4</span> <span id="step4Title"></span></h2>
+<p id="step4Text1"></p>
+<div class="box" id="serverBox"></div>
 <div class="howto-image">
-    <img src="connection.png" alt="Server Configuration">
+<img src="connection.png">
+</div>
 </div>
 
-<!-- STEP 5 -->
 <div class="section">
-<h2><span class="step-box">5</span> Registering an Account</h2>
-
-<p>Register inside the launcher using Register button.</p>
-
-<p>Choose any account ID and password. Write them down.</p>
+<h2><span class="step-box">5</span> <span id="step5Title"></span></h2>
+<p id="step5Text1"></p>
+<p id="step5Text2"></p>
 </div>
 
-<!-- STEP 6 -->
 <div class="section">
-<h2><span class="step-box">6</span> Starting the Game & Update Translation</h2>
-
-<p>You can click Login and start playing.</p>
-
-<p>Or press the small translation icon inside launcher to install English patch.</p>
-
-<p>Keep in mind some UI parts remain Japanese.</p>
+<h2><span class="step-box">6</span> <span id="step6Title"></span></h2>
+<p id="step6Text1"></p>
+<p id="step6Text2"></p>
+<p id="step6Text3"></p>
 <div class="howto-image small">
-    <img src="click.png" alt="Translation Button">
+<img src="click.png">
+</div>
 </div>
 
-<!-- STEP 7 -->
 <div class="section">
-<h2><span class="step-box">7</span> Beginning the Game</h2>
-
-<p>After character creation you enter the tutorial.</p>
-
-<p>Complete the Green Tutorial quests to unlock features.</p>
-
-<p>Follow red quest markers for main story.</p>
-
-<p>Use borderless window mode for best experience.</p>
-
-<p>If you need help, visit tech-support channel.</p>
-
-<p><strong>Have fun and enjoy Lestania, Arisen!</strong></p>
+<h2><span class="step-box">7</span> <span id="step7Title"></span></h2>
+<p id="step7Text1"></p>
+<p id="step7Text2"></p>
+<p id="step7Text3"></p>
+<p id="step7Text4"></p>
+<p id="step7Text5"></p>
+<p><strong id="step7Final"></strong></p>
 </div>
 
 </div>
+
+<script>
+const selector = document.getElementById("languageSelector");
+
+window.languages.forEach(lang=>{
+    const opt=document.createElement("option");
+    opt.value=lang.code;
+    opt.textContent=lang.flag+" "+lang.name;
+    selector.appendChild(opt);
+});
+
+function setLanguage(code){
+    const t = window.translations[code];
+
+    document.getElementById("howTitle").innerText = t.howTitle || t.howToPlay;
+
+    [
+    "step1Title","step1Text1",
+    "step2Title","step2Text1","step2Text2","step2Text3",
+    "step3Title","step3Text1","step3Text2","step3Text3",
+    "step4Title","step4Text1",
+    "step5Title","step5Text1","step5Text2",
+    "step6Title","step6Text1","step6Text2","step6Text3",
+    "step7Title","step7Text1","step7Text2","step7Text3","step7Text4","step7Text5","step7Final"
+    ].forEach(id=>{
+        if(t[id]) document.getElementById(id).innerText=t[id];
+    });
+
+    if(t.serverBox) document.getElementById("serverBox").innerText=t.serverBox;
+    if(t.oneDriveWarning) document.getElementById("oneDriveWarning").innerText=t.oneDriveWarning;
+
+    document.getElementById("fullClientLabel").innerText="Full Client";
+    document.getElementById("multiClientLabel").innerText="Multipart";
+
+    document.getElementById("fullClientLink").innerText="Download";
+    document.getElementById("multiClientLink").innerText="Download";
+
+    document.getElementById("fullClientLink").href=t.downloadLinks.full;
+    if(t.downloadLinks.multi)
+        document.getElementById("multiClientLink").href=t.downloadLinks.multi;
+}
+
+selector.addEventListener("change",e=>{
+    localStorage.setItem("lang",e.target.value);
+    setLanguage(e.target.value);
+});
+
+const savedLang=localStorage.getItem("lang")||"en";
+selector.value=savedLang;
+setLanguage(savedLang);
+</script>
 
 </body>
 </html>

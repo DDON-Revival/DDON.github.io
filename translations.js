@@ -61,6 +61,39 @@ noPlayersFound:"No players found",
 howToPlay:"How To Play",
 wiki:"Wiki",
 
+howto:{
+step1Title:"1️⃣ Downloading",
+step1Text:"First of all you have to load the main game (~36GB). Just use one of these links:",
+fullClient:"Download Full Client",
+multiClient:"Download Multipart Version",
+quotaInfo:"If you get a 'download quota exceeded' error, add the shortcut to your Drive and download the folder.",
+
+step2Title:"2️⃣ Unzipping",
+step2Text:"After downloading, unzip the files using WinRAR or 7Zip. Windows default unpacking does NOT work.",
+unzipWarning:"OneDrive does NOT count as a real drive and will not work as install location.",
+
+step3Title:"3️⃣ Starting the Launcher",
+step3Text:"Run ddo_launcher.exe as Administrator. Install .NET 9.0 and DirectX if prompted.",
+
+step4Title:"4️⃣ Configuring the Launcher",
+step4Text:"Check that the server settings match ddon.org with the correct ports.",
+
+step5Title:"5️⃣ Registering an Account",
+step5Text:"Register inside the launcher and choose any account ID and password.",
+
+step6Title:"6️⃣ Starting the Game & Translation",
+step6Text:"Click Login to start playing or press the translation icon to install the English patch.",
+
+step7Title:"7️⃣ Beginning the Game",
+step7Text:"Complete the tutorial quests to unlock features and follow red markers for the main story."
+},
+
+
+downloadLinks:{
+    full:"https://onedrive.live.com/?cid=d03bbc39b7e96cf2&id=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&resid=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&e=MOHgnr&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3UvYy9kMDNiYmMzOWI3ZTk2Y2YyL0VXWkp6a0YtbHBwQW84ZHNrV1ZzMF8wQnV3Yi02cDhJZUdFejduLW5zeWFxa1E%5FZT1NT0hnbnI&v=validatepermission",
+    multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
+ },
+
 jobs:{
 "Fighter":"Fighter",
 "Seeker":"Seeker",
@@ -116,6 +149,36 @@ dead:"死亡",
 noPlayersFound:"プレイヤーが見つかりません",
 howToPlay:"遊び方",
 wiki:"ウィキ",
+howto:{
+step1Title:"1️⃣ ダウンロード",
+step1Text:"まずメインゲーム（約36GB）をダウンロードしてください。",
+fullClient:"フルクライアント",
+multiClient:"マルチパート版",
+quotaInfo:"Google Driveの制限エラーが出た場合は、ショートカットを作成してフォルダごとダウンロードしてください。",
+
+step2Title:"2️⃣ 解凍",
+step2Text:"WinRAR または 7Zip を使用してください。Windows標準機能は動作しません。",
+unzipWarning:"OneDriveはインストール先として使用できません。",
+
+step3Title:"3️⃣ ランチャー起動",
+step3Text:"ddo_launcher.exe を管理者として実行してください。",
+
+step4Title:"4️⃣ サーバー設定",
+step4Text:"サーバー設定が ddon.org になっていることを確認してください。",
+
+step5Title:"5️⃣ アカウント登録",
+step5Text:"ランチャー内でアカウントを登録してください。",
+
+step6Title:"6️⃣ ゲーム開始 & 翻訳",
+step6Text:"ログインしてプレイを開始するか、翻訳アイコンで英語パッチを適用してください。",
+
+step7Title:"7️⃣ ゲーム開始",
+step7Text:"チュートリアルクエストを完了して機能を解放してください。"
+},
+
+downloadLinks:{
+    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQA4WanxetY2SrY2msrcqtu4AVT84h0qRbCC-UoVEu3qAz0?e=D7wGLY",
+},
 
 jobs:{
 "Fighter":"ファイター",
@@ -173,6 +236,39 @@ noPlayersFound:"未找到玩家",
 howToPlay:"游戏指南",
 wiki:"维基",
 
+howto:{
+step1Title:"1️⃣ 下载",
+step1Text:"首先下载主游戏（约36GB）。使用以下链接：",
+fullClient:"下载完整客户端",
+multiClient:"下载分卷版本",
+quotaInfo:"如果出现下载限制错误，请将快捷方式添加到云端硬盘后下载文件夹。",
+
+step2Title:"2️⃣ 解压",
+step2Text:"下载完成后使用 WinRAR 或 7Zip 解压。Windows 默认解压无法使用。",
+unzipWarning:"OneDrive 不能作为安装路径使用。",
+
+step3Title:"3️⃣ 启动启动器",
+step3Text:"以管理员身份运行 ddo_launcher.exe。如提示安装 .NET 9.0 或 DirectX，请安装。",
+
+step4Title:"4️⃣ 配置启动器",
+step4Text:"确认服务器设置为 ddon.org 并使用正确端口。",
+
+step5Title:"5️⃣ 注册账号",
+step5Text:"在启动器内注册账号并设置密码。",
+
+step6Title:"6️⃣ 启动游戏与翻译",
+step6Text:"点击 Login 开始游戏，或点击翻译图标安装英文补丁。",
+
+step7Title:"7️⃣ 开始游戏",
+step7Text:"完成教程任务以解锁功能，并跟随红色主线标记。"
+},
+
+
+downloadLinks:{
+    full:"https://onedrive.live.com/?cid=d03bbc39b7e96cf2&id=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&resid=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&e=MOHgnr&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3UvYy9kMDNiYmMzOWI3ZTk2Y2YyL0VXWkp6a0YtbHBwQW84ZHNrV1ZzMF8wQnV3Yi02cDhJZUdFejduLW5zeWFxa1E%5FZT1NT0hnbnI&v=validatepermission",
+    multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
+},
+
 jobs:{
 "Fighter":"战士",
 "Seeker":"探索者",
@@ -228,6 +324,37 @@ dead:"Morto",
 noPlayersFound:"Nenhum jogador encontrado",
 howToPlay:"Como Jogar",
 wiki:"Wiki",
+howto:{
+step1Title:"1️⃣ Download",
+step1Text:"Primeiro baixe o jogo principal (~36GB).",
+fullClient:"Cliente Completo",
+multiClient:"Versão Multipart",
+quotaInfo:"Se aparecer erro de limite no Google Drive, crie um atalho e baixe a pasta.",
+
+step2Title:"2️⃣ Extração",
+step2Text:"Use WinRAR ou 7Zip. O extrator padrão do Windows não funciona.",
+unzipWarning:"OneDrive não funciona como local de instalação.",
+
+step3Title:"3️⃣ Iniciando Launcher",
+step3Text:"Execute ddo_launcher.exe como Administrador.",
+
+step4Title:"4️⃣ Configuração",
+step4Text:"Verifique se o servidor está configurado para ddon.org.",
+
+step5Title:"5️⃣ Registro",
+step5Text:"Crie uma conta dentro do launcher.",
+
+step6Title:"6️⃣ Iniciar Jogo",
+step6Text:"Faça login e inicie o jogo ou instale o patch de tradução.",
+
+step7Title:"7️⃣ Começando",
+step7Text:"Complete o tutorial para desbloquear recursos."
+},
+
+downloadLinks:{
+    full:"https://onedrive.live.com/?cid=d03bbc39b7e96cf2&id=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&resid=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&e=MOHgnr&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3UvYy9kMDNiYmMzOWI3ZTk2Y2YyL0VXWkp6a0YtbHBwQW84ZHNrV1ZzMF8wQnV3Yi02cDhJZUdFejduLW5zeWFxa1E%5FZT1NT0hnbnI&v=validatepermission",
+    multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
+},
 
 jobs:{
 "Fighter":"Guerreiro",
@@ -284,6 +411,37 @@ dead:"Muerto",
 noPlayersFound:"No se encontraron jugadores",
 howToPlay:"Cómo Jugar",
 wiki:"Wiki",
+howto:{
+step1Title:"1️⃣ Descarga",
+step1Text:"Descarga el cliente principal (~36GB).",
+fullClient:"Cliente Completo",
+multiClient:"Versión Multipart",
+quotaInfo:"Si aparece error de cuota, crea un acceso directo y descarga la carpeta.",
+
+step2Title:"2️⃣ Descomprimir",
+step2Text:"Usa WinRAR o 7Zip.",
+unzipWarning:"OneDrive no funciona como ubicación de instalación.",
+
+step3Title:"3️⃣ Lanzador",
+step3Text:"Ejecuta ddo_launcher.exe como administrador.",
+
+step4Title:"4️⃣ Configuración",
+step4Text:"Asegúrate que el servidor sea ddon.org.",
+
+step5Title:"5️⃣ Registro",
+step5Text:"Registra una cuenta en el launcher.",
+
+step6Title:"6️⃣ Iniciar Juego",
+step6Text:"Inicia sesión o instala el parche de traducción.",
+
+step7Title:"7️⃣ Comenzar",
+step7Text:"Completa el tutorial inicial."
+},
+
+downloadLinks:{
+    full:"https://onedrive.live.com/?cid=d03bbc39b7e96cf2&id=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&resid=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&e=MOHgnr&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3UvYy9kMDNiYmMzOWI3ZTk2Y2YyL0VXWkp6a0YtbHBwQW84ZHNrV1ZzMF8wQnV3Yi02cDhJZUdFejduLW5zeWFxa1E%5FZT1NT0hnbnI&v=validatepermission",
+    multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
+},
 
 jobs:{
 "Fighter":"Guerrero",
@@ -340,6 +498,37 @@ dead:"Мёртв",
 noPlayersFound:"Игроки не найдены",
 howToPlay:"Как Играть",
 wiki:"Вики",
+howto:{
+step1Title:"1️⃣ Загрузка",
+step1Text:"Скачайте основной клиент (~36GB).",
+fullClient:"Полный клиент",
+multiClient:"Многотомная версия",
+quotaInfo:"Если превышен лимит Google Drive, скачайте папку через ярлык.",
+
+step2Title:"2️⃣ Распаковка",
+step2Text:"Используйте WinRAR или 7Zip.",
+unzipWarning:"OneDrive не подходит для установки.",
+
+step3Title:"3️⃣ Запуск лаунчера",
+step3Text:"Запустите ddo_launcher.exe от имени администратора.",
+
+step4Title:"4️⃣ Настройки",
+step4Text:"Проверьте, что сервер ddon.org.",
+
+step5Title:"5️⃣ Регистрация",
+step5Text:"Создайте аккаунт в лаунчере.",
+
+step6Title:"6️⃣ Запуск игры",
+step6Text:"Войдите или установите перевод.",
+
+step7Title:"7️⃣ Начало игры",
+step7Text:"Пройдите обучающие задания."
+},
+
+downloadLinks:{
+    full:"https://onedrive.live.com/?cid=d03bbc39b7e96cf2&id=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&resid=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&e=MOHgnr&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3UvYy9kMDNiYmMzOWI3ZTk2Y2YyL0VXWkp6a0YtbHBwQW84ZHNrV1ZzMF8wQnV3Yi02cDhJZUdFejduLW5zeWFxa1E%5FZT1NT0hnbnI&v=validatepermission",
+    multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
+},
 
 jobs:{
 "Fighter":"Воин",
@@ -396,6 +585,37 @@ dead:"Ölü",
 noPlayersFound:"Oyuncu bulunamadı",
 howToPlay:"Nasıl Oynanır",
 wiki:"Wiki",
+howto:{
+step1Title:"1️⃣ İndirme",
+step1Text:"Ana istemciyi (~36GB) indirin.",
+fullClient:"Tam İstemci",
+multiClient:"Parçalı Sürüm",
+quotaInfo:"Google Drive kota hatasında klasör olarak indirin.",
+
+step2Title:"2️⃣ Çıkartma",
+step2Text:"WinRAR veya 7Zip kullanın.",
+unzipWarning:"OneDrive kurulum için uygun değildir.",
+
+step3Title:"3️⃣ Launcher",
+step3Text:"ddo_launcher.exe'yi yönetici olarak çalıştırın.",
+
+step4Title:"4️⃣ Ayarlar",
+step4Text:"Sunucunun ddon.org olduğundan emin olun.",
+
+step5Title:"5️⃣ Kayıt",
+step5Text:"Launcher üzerinden hesap oluşturun.",
+
+step6Title:"6️⃣ Oyunu Başlat",
+step6Text:"Giriş yapın veya çeviri paketini yükleyin.",
+
+step7Title:"7️⃣ Başlangıç",
+step7Text:"Eğitim görevlerini tamamlayın."
+},
+
+downloadLinks:{
+    full:"https://onedrive.live.com/?cid=d03bbc39b7e96cf2&id=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&resid=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&e=MOHgnr&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3UvYy9kMDNiYmMzOWI3ZTk2Y2YyL0VXWkp6a0YtbHBwQW84ZHNrV1ZzMF8wQnV3Yi02cDhJZUdFejduLW5zeWFxa1E%5FZT1NT0hnbnI&v=validatepermission",
+    multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
+},
 
 jobs:{
 "Fighter":"Savaşçı",
@@ -452,6 +672,37 @@ dead:"Martwy",
 noPlayersFound:"Nie znaleziono graczy",
 howToPlay:"Jak Grać",
 wiki:"Wiki",
+howto:{
+step1Title:"1️⃣ Pobieranie",
+step1Text:"Pobierz głównego klienta (~36GB).",
+fullClient:"Pełny Klient",
+multiClient:"Wersja Multipart",
+quotaInfo:"Przy błędzie limitu pobierz folder przez skrót.",
+
+step2Title:"2️⃣ Rozpakowanie",
+step2Text:"Użyj WinRAR lub 7Zip.",
+unzipWarning:"OneDrive nie nadaje się do instalacji.",
+
+step3Title:"3️⃣ Launcher",
+step3Text:"Uruchom ddo_launcher.exe jako administrator.",
+
+step4Title:"4️⃣ Konfiguracja",
+step4Text:"Sprawdź czy serwer to ddon.org.",
+
+step5Title:"5️⃣ Rejestracja",
+step5Text:"Zarejestruj konto w launcherze.",
+
+step6Title:"6️⃣ Start Gry",
+step6Text:"Zaloguj się lub zainstaluj tłumaczenie.",
+
+step7Title:"7️⃣ Początek",
+step7Text:"Ukończ samouczek."
+},
+
+downloadLinks:{
+    full:"https://onedrive.live.com/?cid=d03bbc39b7e96cf2&id=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&resid=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&e=MOHgnr&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3UvYy9kMDNiYmMzOWI3ZTk2Y2YyL0VXWkp6a0YtbHBwQW84ZHNrV1ZzMF8wQnV3Yi02cDhJZUdFejduLW5zeWFxa1E%5FZT1NT0hnbnI&v=validatepermission",
+    multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
+},
 
 jobs:{
 "Fighter":"Wojownik",
@@ -508,6 +759,37 @@ dead:"사망",
 noPlayersFound:"플레이어를 찾을 수 없습니다",
 howToPlay:"플레이 방법",
 wiki:"위키",
+howto:{
+step1Title:"1️⃣ 다운로드",
+step1Text:"메인 클라이언트(~36GB)를 다운로드하세요.",
+fullClient:"전체 클라이언트",
+multiClient:"분할 다운로드",
+quotaInfo:"Google Drive 제한 오류 시 폴더로 다운로드하세요.",
+
+step2Title:"2️⃣ 압축 해제",
+step2Text:"WinRAR 또는 7Zip 사용.",
+unzipWarning:"OneDrive는 설치 위치로 사용할 수 없습니다.",
+
+step3Title:"3️⃣ 런처 실행",
+step3Text:"ddo_launcher.exe를 관리자 권한으로 실행하세요.",
+
+step4Title:"4️⃣ 설정",
+step4Text:"서버가 ddon.org인지 확인하세요.",
+
+step5Title:"5️⃣ 계정 등록",
+step5Text:"런처에서 계정을 생성하세요.",
+
+step6Title:"6️⃣ 게임 시작",
+step6Text:"로그인하거나 번역 패치를 설치하세요.",
+
+step7Title:"7️⃣ 시작",
+step7Text:"튜토리얼을 완료하세요."
+},
+
+downloadLinks:{
+    full:"https://onedrive.live.com/?cid=d03bbc39b7e96cf2&id=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&resid=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&e=MOHgnr&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3UvYy9kMDNiYmMzOWI3ZTk2Y2YyL0VXWkp6a0YtbHBwQW84ZHNrV1ZzMF8wQnV3Yi02cDhJZUdFejduLW5zeWFxa1E%5FZT1NT0hnbnI&v=validatepermission",
+    multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
+},
 
 jobs:{
 "Fighter":"파이터",
@@ -564,6 +846,37 @@ dead:"Morto",
 noPlayersFound:"Nessun giocatore trovato",
 howToPlay:"Come Giocare",
 wiki:"Wiki",
+howto:{
+step1Title:"1️⃣ Download",
+step1Text:"Scarica il client principale (~36GB).",
+fullClient:"Client Completo",
+multiClient:"Versione Multipart",
+quotaInfo:"Se limite superato, scarica la cartella.",
+
+step2Title:"2️⃣ Estrazione",
+step2Text:"Usa WinRAR o 7Zip.",
+unzipWarning:"OneDrive non funziona come destinazione.",
+
+step3Title:"3️⃣ Launcher",
+step3Text:"Avvia ddo_launcher.exe come amministratore.",
+
+step4Title:"4️⃣ Configurazione",
+step4Text:"Controlla che il server sia ddon.org.",
+
+step5Title:"5️⃣ Registrazione",
+step5Text:"Registra un account nel launcher.",
+
+step6Title:"6️⃣ Avvio",
+step6Text:"Accedi o installa la patch inglese.",
+
+step7Title:"7️⃣ Inizio",
+step7Text:"Completa il tutorial."
+},
+
+downloadLinks:{
+    full:"https://onedrive.live.com/?cid=d03bbc39b7e96cf2&id=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&resid=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&e=MOHgnr&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3UvYy9kMDNiYmMzOWI3ZTk2Y2YyL0VXWkp6a0YtbHBwQW84ZHNrV1ZzMF8wQnV3Yi02cDhJZUdFejduLW5zeWFxa1E%5FZT1NT0hnbnI&v=validatepermission",
+    multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
+},
 
 jobs:{
 "Fighter":"Guerriero",
@@ -620,6 +933,37 @@ dead:"Mort",
 noPlayersFound:"Aucun joueur trouvé",
 howToPlay:"Comment Jouer",
 wiki:"Wiki",
+howto:{
+step1Title:"1️⃣ Téléchargement",
+step1Text:"Téléchargez le client principal (~36GB).",
+fullClient:"Client Complet",
+multiClient:"Version Multipart",
+quotaInfo:"En cas d'erreur de quota, téléchargez le dossier.",
+
+step2Title:"2️⃣ Extraction",
+step2Text:"Utilisez WinRAR ou 7Zip.",
+unzipWarning:"OneDrive ne fonctionne pas comme destination.",
+
+step3Title:"3️⃣ Launcher",
+step3Text:"Lancez ddo_launcher.exe en administrateur.",
+
+step4Title:"4️⃣ Configuration",
+step4Text:"Vérifiez que le serveur est ddon.org.",
+
+step5Title:"5️⃣ Inscription",
+step5Text:"Créez un compte dans le launcher.",
+
+step6Title:"6️⃣ Démarrage",
+step6Text:"Connectez-vous ou installez le patch anglais.",
+
+step7Title:"7️⃣ Début",
+step7Text:"Terminez le tutoriel."
+},
+
+downloadLinks:{
+    full:"https://onedrive.live.com/?cid=d03bbc39b7e96cf2&id=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&resid=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&e=MOHgnr&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3UvYy9kMDNiYmMzOWI3ZTk2Y2YyL0VXWkp6a0YtbHBwQW84ZHNrV1ZzMF8wQnV3Yi02cDhJZUdFejduLW5zeWFxa1E%5FZT1NT0hnbnI&v=validatepermission",
+    multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
+},
 
 jobs:{
 "Fighter":"Guerrier",
@@ -676,6 +1020,37 @@ dead:"Νεκρός",
 noPlayersFound:"Δεν βρέθηκαν παίκτες",
 howToPlay:"Πώς να Παίξεις",
 wiki:"Wiki",
+howto:{
+step1Title:"1️⃣ Λήψη",
+step1Text:"Κατεβάστε τον βασικό client (~36GB).",
+fullClient:"Πλήρης Client",
+multiClient:"Multipart Έκδοση",
+quotaInfo:"Σε περίπτωση ορίου Google Drive κατεβάστε τον φάκελο.",
+
+step2Title:"2️⃣ Αποσυμπίεση",
+step2Text:"Χρησιμοποιήστε WinRAR ή 7Zip.",
+unzipWarning:"Το OneDrive δεν λειτουργεί ως τοποθεσία εγκατάστασης.",
+
+step3Title:"3️⃣ Εκκίνηση Launcher",
+step3Text:"Τρέξτε το ddo_launcher.exe ως διαχειριστής.",
+
+step4Title:"4️⃣ Ρυθμίσεις",
+step4Text:"Βεβαιωθείτε ότι ο server είναι ddon.org.",
+
+step5Title:"5️⃣ Εγγραφή",
+step5Text:"Δημιουργήστε λογαριασμό στο launcher.",
+
+step6Title:"6️⃣ Έναρξη Παιχνιδιού",
+step6Text:"Συνδεθείτε ή εγκαταστήστε το αγγλικό patch.",
+
+step7Title:"7️⃣ Ξεκίνημα",
+step7Text:"Ολοκληρώστε το tutorial."
+},
+
+downloadLinks:{
+    full:"https://onedrive.live.com/?cid=d03bbc39b7e96cf2&id=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&resid=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&e=MOHgnr&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3UvYy9kMDNiYmMzOWI3ZTk2Y2YyL0VXWkp6a0YtbHBwQW84ZHNrV1ZzMF8wQnV3Yi02cDhJZUdFejduLW5zeWFxa1E%5FZT1NT0hnbnI&v=validatepermission",
+    multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
+},
 
 jobs:{
 "Fighter":"Πολεμιστής",
