@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Goblin",
+    "level": 5,
+    "spawns": ["Cassardis"],
+    "drops": ["Goblin Fang", "Cloth Scrap"]
+  },
+  {
+    "name": "Cyclops",
+    "level": 25,
+    "spawns": ["Gran Soren"],
+    "drops": ["Cyclops Tusk", "Ogre Bone"]
+  }
+]
