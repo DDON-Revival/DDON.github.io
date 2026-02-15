@@ -52,11 +52,6 @@ h1{
     font-family:'Cinzel', serif;
 }
 
-.search:focus{
-    outline:none;
-    border-color:#ffffff;
-}
-
 .grid{
     display:flex;
     flex-wrap:wrap;
@@ -78,16 +73,22 @@ h1{
     border-color:#c8a75d;
     transform:translateY(-5px);
 }
+
+ul{
+    list-style-type:disc;
+    text-align:left;
+    padding-left:20px;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>DDON Leaderboard</h1>
+<h1 data-key="leaderboardTitle">Leaderboard</h1>
 
-<button class="btn" onclick="switchTab('normal')">Normal</button>
-<button class="btn" onclick="switchTab('hc')">Hardcore</button>
+<button class="btn" id="btnNormal" onclick="switchTab('normal')">Normal</button>
+<button class="btn" id="btnHC" onclick="switchTab('hardcore')">Hardcore</button>
 
 <br>
 
@@ -99,10 +100,38 @@ h1{
 
 <div id="leaderboard" class="grid"></div>
 
+<!-- 🔥 translations FIRST -->
+<script src="translations.js"></script>
+
 <script>
 
 let leaderboardData = null;
 let currentTab = "normal";
+
+/* ===========================
+   LANGUAGE SYSTEM
+=========================== */
+
+function setLanguage(lang){
+    const t = translations[lang];
+    if(!t) return;
+
+    document.querySelectorAll("[data-key]").forEach(el=>{
+        const key = el.getAttribute("data-key");
+        if(t[key]) el.textContent = t[key];
+    });
+
+    document.getElementById("btnNormal").textContent = t.normalTab;
+    document.getElementById("btnHC").textContent = t.hcTab;
+    document.getElementById("search").placeholder = t.searchPlaceholder;
+
+    localStorage.setItem("lang", lang);
+
+    renderLeaderboard();
+}
+
+const savedLang = localStorage.getItem("lang") || "en";
+setLanguage(savedLang);
 
 /* ===========================
    LOAD DATA
@@ -114,7 +143,6 @@ async function loadLeaderboard(){
         leaderboardData = await res.json();
         renderLeaderboard();
     }catch(err){
-        console.error("Failed to load leaderboard:", err);
         document.getElementById("leaderboard").innerHTML =
             "<p>Failed to load leaderboard.</p>";
     }
@@ -127,13 +155,14 @@ async function loadLeaderboard(){
 function renderLeaderboard(){
     if(!leaderboardData) return;
 
+    const t = translations[localStorage.getItem("lang") || "en"];
     const container = document.getElementById("leaderboard");
     container.innerHTML = "";
 
     const players = leaderboardData[currentTab];
 
     if(!players || players.length === 0){
-        container.innerHTML = "<p>No players found.</p>";
+        container.innerHTML = `<p>${t.noPlayersFound}</p>`;
         return;
     }
 
@@ -142,24 +171,26 @@ function renderLeaderboard(){
         const div = document.createElement("div");
         div.className = "card";
 
+        const highestLevel = Math.max(...player.classes.map(c => c.level));
+
         let extra = "";
 
-        if(currentTab === "hc"){
+        if(currentTab === "hardcore"){
             extra = `
-                <p>HC Since: ${player.hc_since || "-"}</p>
-                <p>Status: ${player.dead ? "💀 Dead" : "🟢 Alive"}</p>
+                <p>${t.hcSince}: ${player.hardcore_since || "-"}</p>
+                <p>${t.hcStatus}: ${player.dead ? "💀 " + t.dead : "🟢 " + t.alive}</p>
             `;
         }
 
         div.innerHTML = `
             <h3>${player.name}</h3>
-			<p>Level: ${Math.max(...player.classes.map(c => c.level))}</p>
-<p><strong>Classes:</strong></p>
-<ul>
-${player.classes.map(c => 
-    `<li>${c.class} (Lv.${c.level})</li>`
-).join("")}
-</ul>
+            <p>${t.level}: ${highestLevel}</p>
+            <p><strong>${t.classes}:</strong></p>
+            <ul>
+                ${player.classes.map(c => 
+                    `<li>${c.class} (Lv.${c.level})</li>`
+                ).join("")}
+            </ul>
             ${extra}
         `;
 
@@ -183,13 +214,14 @@ function switchTab(tab){
 function searchPlayer(){
     if(!leaderboardData) return;
 
+    const t = translations[localStorage.getItem("lang") || "en"];
     const value = document.getElementById("search").value.toLowerCase();
     const container = document.getElementById("leaderboard");
     container.innerHTML = "";
 
     const allPlayers = [
         ...(leaderboardData.normal || []),
-        ...(leaderboardData.hc || [])
+        ...(leaderboardData.hardcore || [])
     ];
 
     const results = allPlayers.filter(p =>
@@ -197,7 +229,7 @@ function searchPlayer(){
     );
 
     if(results.length === 0){
-        container.innerHTML = "<p>No players found.</p>";
+        container.innerHTML = `<p>${t.noPlayersFound}</p>`;
         return;
     }
 
@@ -205,16 +237,17 @@ function searchPlayer(){
         const div = document.createElement("div");
         div.className = "card";
 
+        const highestLevel = Math.max(...player.classes.map(c => c.level));
+
         div.innerHTML = `
             <h3>${player.name}</h3>
-            <p>Level: ${Math.max(...player.classes.map(c => c.level))}</p>
-<p><strong>Classes:</strong></p>
-<ul>
-${player.classes.map(c => 
-    `<li>${c.class} (Lv.${c.level})</li>`
-).join("")}
-</ul>
-
+            <p>${t.level}: ${highestLevel}</p>
+            <p><strong>${t.classes}:</strong></p>
+            <ul>
+                ${player.classes.map(c => 
+                    `<li>${c.class} (Lv.${c.level})</li>`
+                ).join("")}
+            </ul>
         `;
 
         container.appendChild(div);
