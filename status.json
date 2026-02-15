@@ -37,7 +37,7 @@
     {
         "name": "Channel 8",
         "online": true,
-        "players": 6
+        "players": 5
     },
     {
         "name": "Collab",
@@ -52,6 +52,6 @@
     {
         "name": "Boss Rush",
         "online": true,
-        "players": 1
+        "players": 2
     }
 ]
