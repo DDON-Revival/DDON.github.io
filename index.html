@@ -13,35 +13,6 @@ body {
     font-family:'Cinzel', serif;
     background:#0f0f14;
     color:#e6e6e6;
-    overflow-x:hidden;
-}
-
-/* 🔥 Animated Spark Background */
-#particles {
-    position:fixed;
-    width:100%;
-    height:100%;
-    top:0;
-    left:0;
-    z-index:-1;
-    background:#0f0f14;
-    overflow:hidden;
-}
-
-.spark {
-    position:absolute;
-    width:4px;
-    height:4px;
-    background:#c8a75d;
-    border-radius:50%;
-    opacity:0.7;
-    animation:float 8s linear infinite;
-}
-
-@keyframes float {
-    0% { transform: translateY(100vh); opacity:0; }
-    20% { opacity:1; }
-    100% { transform: translateY(-10vh); opacity:0; }
 }
 
 header {
@@ -51,53 +22,17 @@ header {
     justify-content:space-between;
     align-items:center;
     border-bottom:2px solid #c8a75d;
-    position:relative;
-    z-index:10;
 }
 
 nav a {
     color:#e6e6e6;
     text-decoration:none;
     margin:0 15px;
-    transition:0.3s;
 }
 
-nav a:hover { color:#c8a75d; }
-
-.lang-selector { position:relative; display:inline-block; }
-
-.lang-btn {
-    background:#1b1b25;
-    border:1px solid #c8a75d;
+nav a:hover {
     color:#c8a75d;
-    padding:8px 12px;
-    cursor:pointer;
 }
-
-.lang-dropdown {
-    display:none;
-    position:absolute;
-    right:0;
-    background:#1b1b25;
-    border:1px solid #c8a75d;
-    min-width:220px;
-    max-height:400px;
-    overflow-y:auto;
-}
-
-.lang-dropdown div {
-    padding:8px;
-    cursor:pointer;
-    display:flex;
-    align-items:center;
-    gap:8px;
-}
-
-.lang-dropdown div:hover { background:#2a2a35; }
-
-.lang-selector:hover .lang-dropdown { display:block; }
-
-.lang-flag { width:20px; height:14px; }
 
 .hero {
     text-align:center;
@@ -105,25 +40,15 @@ nav a:hover { color:#c8a75d; }
     background:linear-gradient(to bottom, #1b1b25, #0f0f14);
 }
 
-.hero h1 { font-size:60px; color:#c8a75d; }
-.hero p { font-size:20px; color:#9a9a9a; }
-
-.btn {
-    display:inline-block;
-    margin:20px;
-    padding:15px 30px;
-    border:2px solid #c8a75d;
+.hero h1 {
+    font-size:60px;
     color:#c8a75d;
-    text-decoration:none;
-    transition:0.3s;
 }
 
-.btn:hover { background:#c8a75d; color:#0f0f14; }
-
-.discord { border-color:#8b1e1e; color:#8b1e1e; }
-.discord:hover { background:#8b1e1e; color:#fff; }
-
-.section { padding:80px 20px; text-align:center; }
+.section {
+    padding:80px 20px;
+    text-align:center;
+}
 
 .card {
     background:#1b1b25;
@@ -132,72 +57,37 @@ nav a:hover { color:#c8a75d; }
     display:inline-block;
     width:300px;
     border:1px solid #2a2a35;
-    transition:0.3s;
-}
-
-.card:hover {
-    border-color:#c8a75d;
-    transform:translateY(-5px);
 }
 
 footer {
     text-align:center;
     padding:20px;
     background:#1b1b25;
-    border-top:1px solid #2a2a35;
 }
 </style>
 </head>
-<body>
 
-<div id="particles"></div>
+<body>
 
 <header>
     <h2>DDON Revival</h2>
 
-	<div id="totalPlayersBox" style="color:#c8a75d; font-weight:bold; margin-left:20px;">
-		Total Players Online: 0
-	</div>
+    <div id="totalPlayersBox" style="color:#c8a75d;font-weight:bold;">
+        Total Players Online: 0
+    </div>
 
     <nav>
         <a href="#home" data-key="home">Home</a>
         <a href="#news" data-key="news">News</a>
         <a href="#status" data-key="status">Server Status</a>
-		<a href="leaderboard.html" data-key="leaderboard">Leaderboard</a>
-        <a href="#wiki" data-key="wiki">Wiki</a>
+        <a href="leaderboard.html" data-key="leaderboard">Leaderboard</a>
         <a href="#download" data-key="download">Download</a>
-        <a href="#info" data-key="info">Info</a>
     </nav>
-
-    <div class="lang-selector">
-        <button class="lang-btn">🌍 Language</button>
-        <div class="lang-dropdown" id="languageList"></div>
-    </div>
 </header>
 
 <section id="home" class="hero">
     <h1 data-key="title">Dragon's Dogma Online</h1>
-    <p data-key="subtitle">Biggest Server • Custom Content • Hardcore & BBM</p>
-    <a href="#download" class="btn" data-key="downloadBtn">Download & Play</a>
-    <a href="https://discord.gg/ub8Newzh95" class="btn discord">Join Discord</a>
-</section>
-
-<section id="news" class="section">
-    <h2 data-key="newsTitle">Latest News</h2>
-
-    <div class="card">
-        <h3 data-key="news1Title">Server Opening</h3>
-        <p data-key="news1Text">
-            DDON is now live! Join the adventure.
-        </p>
-    </div>
-
-    <div class="card">
-        <h3 data-key="news2Title">Hardcore Mode</h3>
-        <p data-key="news2Text">
-            Hardcore Mode our Second Custom Content is now Live! Compete for glory!
-        </p>
-    </div>
+    <p data-key="subtitle">Biggest Server • Custom Content • Hardcore</p>
 </section>
 
 <section id="status" class="section">
@@ -206,514 +96,15 @@ footer {
 </section>
 
 <footer>
-    2023 DDON Revival • Unofficial Fan Project
+2023 DDON Revival • Unofficial Fan Project
 </footer>
 
+
+<!-- 🔥 1️⃣ TRANSLATIONS FILE FIRST -->
+<script src="translations.js"></script>
+
+<!-- 🔥 2️⃣ MAIN SCRIPT -->
 <script>
-
-/* ===========================
-   🔥 Spark Generator
-=========================== */
-const container = document.getElementById("particles");
-for(let i=0;i<40;i++){
-    let spark=document.createElement("div");
-    spark.classList.add("spark");
-    spark.style.left=Math.random()*100+"vw";
-    spark.style.animationDuration=(5+Math.random()*5)+"s";
-    spark.style.animationDelay=Math.random()*5+"s";
-    container.appendChild(spark);
-}
-
-/* ===========================
-   🌍 LANGUAGE SYSTEM
-=========================== */
-
-const languages = [
-    {code:"en", name:"English", flag:"🇺🇸"},
-    {code:"jp", name:"Japanese", flag:"🇯🇵"},
-    {code:"zh", name:"Chinese", flag:"🇨🇳"},
-    {code:"pt", name:"Portuguese", flag:"🇵🇹"},
-    {code:"es", name:"Spanish", flag:"🇪🇸"},
-    {code:"ru", name:"Russian", flag:"🇷🇺"},
-    {code:"tr", name:"Turkish", flag:"🇹🇷"},
-    {code:"pl", name:"Polish", flag:"🇵🇱"},
-    {code:"kr", name:"Korean", flag:"🇰🇷"},
-    {code:"it", name:"Italian", flag:"🇮🇹"},
-    {code:"fr", name:"French", flag:"🇫🇷"},
-    {code:"gr", name:"Greek", flag:"🇬🇷"}
-];
-
-const translations = {
-
-en:{
-home:"Home",
-news:"News",
-status:"Server Status",
-leaderboard:"Leaderboard",
-wiki:"Wiki",
-download:"Download",
-info:"Info",
-title:"Dragon's Dogma Online",
-subtitle:"Biggest Server • Custom Content • Hardcore & BBM",
-downloadBtn:"Download & Play",
-
-newsTitle:"Latest News",
-news1Title:"Server Opening",
-news1Text:"DDON is now live! Join the adventure.",
-news2Title:"Hardcore Mode",
-news2Text:"Hardcore Mode our Second Custom Content is now Live! Compete for glory.",
-
-serverStatusTitle:"Server Status",
-statusLabel:"Status",
-playersLabel:"Players",
-online:"Online",
-offline:"Offline",
-totalPlayers:"Total Players Online",
-
-leaderboardTitle:"Leaderboard",
-hcTab:"Hardcore",
-normalTab:"Normal",
-searchPlaceholder:"Search player...",
-playerName:"Player Name",
-level:"Level",
-classes:"Classes",
-hcSince:"Hardcore Since",
-hcStatus:"Status",
-alive:"Alive",
-dead:"Dead",
-noPlayersFound:"No players found"
-},
-
-jp:{
-home:"ホーム",
-news:"ニュース",
-status:"サーバー状況",
-leaderboard:"ランキング",
-wiki:"ウィキ",
-download:"ダウンロード",
-info:"情報",
-title:"ドラゴンズドグマオンライン",
-subtitle:"最大サーバー • カスタムコンテンツ • ハードコア & BBM",
-downloadBtn:"ダウンロード",
-
-newsTitle:"最新ニュース",
-news1Title:"サーバーオープン",
-news1Text:"DDONが正式に開始しました！冒険に参加しよう。",
-news2Title:"ハードコアモード",
-news2Text:"第2のカスタムコンテンツが開始！",
-
-serverStatusTitle:"サーバー状況",
-statusLabel:"状態",
-playersLabel:"プレイヤー数",
-online:"オンライン",
-offline:"オフライン",
-totalPlayers:"総オンラインプレイヤー数",
-
-leaderboardTitle:"ランキング",
-hcTab:"ハードコア",
-normalTab:"通常",
-searchPlaceholder:"プレイヤー検索...",
-playerName:"プレイヤー名",
-level:"レベル",
-classes:"クラス",
-hcSince:"HC開始日",
-hcStatus:"状態",
-alive:"生存",
-dead:"死亡",
-noPlayersFound:"プレイヤーが見つかりません"
-},
-
-zh:{
-home:"首页",
-news:"新闻",
-status:"服务器状态",
-leaderboard:"排行榜",
-wiki:"维基",
-download:"下载",
-info:"信息",
-title:"龙之信条 Online",
-subtitle:"最大服务器 • 自定义内容 • 硬核 & BBM",
-downloadBtn:"下载游戏",
-
-newsTitle:"最新消息",
-news1Title:"服务器开启",
-news1Text:"DDON 已上线！",
-news2Title:"硬核模式",
-news2Text:"新内容已上线。",
-
-serverStatusTitle:"服务器状态",
-statusLabel:"状态",
-playersLabel:"玩家数",
-online:"在线",
-offline:"离线",
-totalPlayers:"当前在线总人数",
-
-leaderboardTitle:"排行榜",
-hcTab:"硬核",
-normalTab:"普通",
-searchPlaceholder:"搜索玩家...",
-playerName:"玩家名称",
-level:"等级",
-classes:"职业",
-hcSince:"成为HC时间",
-hcStatus:"状态",
-alive:"存活",
-dead:"死亡",
-noPlayersFound:"未找到玩家"
-},
-
-pt:{
-home:"Início",
-news:"Notícias",
-status:"Status do Servidor",
-leaderboard:"Classificação",
-wiki:"Wiki",
-download:"Download",
-info:"Info",
-title:"Dragon's Dogma Online",
-subtitle:"Maior Servidor • Conteúdo Custom • Hardcore & BBM",
-downloadBtn:"Baixar & Jogar",
-
-newsTitle:"Últimas Notícias",
-news1Title:"Abertura do Servidor",
-news1Text:"DDON está online!",
-news2Title:"Modo Hardcore",
-news2Text:"Novo conteúdo disponível.",
-
-serverStatusTitle:"Status do Servidor",
-statusLabel:"Status",
-playersLabel:"Jogadores",
-online:"Online",
-offline:"Offline",
-totalPlayers:"Total de Jogadores Online",
-
-leaderboardTitle:"Classificação",
-hcTab:"Hardcore",
-normalTab:"Normal",
-searchPlaceholder:"Pesquisar jogador...",
-playerName:"Nome do Jogador",
-level:"Nível",
-classes:"Classes",
-hcSince:"Hardcore Desde",
-hcStatus:"Status",
-alive:"Vivo",
-dead:"Morto",
-noPlayersFound:"Nenhum jogador encontrado"
-},
-
-es:{
-home:"Inicio",
-news:"Noticias",
-status:"Estado del Servidor",
-leaderboard:"Clasificación",
-wiki:"Wiki",
-download:"Descargar",
-info:"Info",
-title:"Dragon's Dogma Online",
-subtitle:"Servidor Más Grande • Hardcore & BBM",
-downloadBtn:"Descargar & Jugar",
-
-newsTitle:"Últimas Noticias",
-news1Title:"Apertura del Servidor",
-news1Text:"¡DDON ya está en línea!",
-news2Title:"Modo Hardcore",
-news2Text:"Nuevo contenido disponible.",
-
-serverStatusTitle:"Estado del Servidor",
-statusLabel:"Estado",
-playersLabel:"Jugadores",
-online:"En línea",
-offline:"Fuera de línea",
-totalPlayers:"Total de Jugadores en Línea",
-
-leaderboardTitle:"Clasificación",
-hcTab:"Hardcore",
-normalTab:"Normal",
-searchPlaceholder:"Buscar jugador...",
-playerName:"Nombre del Jugador",
-level:"Nivel",
-classes:"Clases",
-hcSince:"Hardcore Desde",
-hcStatus:"Estado",
-alive:"Vivo",
-dead:"Muerto",
-noPlayersFound:"No se encontraron jugadores"
-},
-
-ru:{
-home:"Главная",
-news:"Новости",
-status:"Статус Сервера",
-leaderboard:"Таблица лидеров",
-wiki:"Wiki",
-download:"Скачать",
-info:"Инфо",
-title:"Dragon's Dogma Online",
-subtitle:"Крупнейший сервер",
-downloadBtn:"Скачать",
-
-newsTitle:"Последние новости",
-news1Title:"Открытие сервера",
-news1Text:"DDON теперь доступен!",
-news2Title:"Hardcore режим",
-news2Text:"Новый контент доступен.",
-
-serverStatusTitle:"Статус Сервера",
-statusLabel:"Статус",
-playersLabel:"Игроки",
-online:"Онлайн",
-offline:"Оффлайн",
-totalPlayers:"Всего игроков онлайн",
-
-leaderboardTitle:"Таблица лидеров",
-hcTab:"Хардкор",
-normalTab:"Обычный",
-searchPlaceholder:"Поиск игрока...",
-playerName:"Имя игрока",
-level:"Уровень",
-classes:"Классы",
-hcSince:"Хардкор с",
-hcStatus:"Статус",
-alive:"Жив",
-dead:"Мёртв",
-noPlayersFound:"Игроки не найдены"
-},
-
-tr:{
-home:"Ana Sayfa",
-news:"Haberler",
-status:"Sunucu Durumu",
-leaderboard:"Lider Tablosu",
-wiki:"Wiki",
-download:"İndir",
-info:"Bilgi",
-title:"Dragon's Dogma Online",
-subtitle:"En Büyük Sunucu",
-downloadBtn:"İndir",
-
-newsTitle:"Son Haberler",
-news1Title:"Sunucu Açılışı",
-news1Text:"DDON yayında!",
-news2Title:"Hardcore Modu",
-news2Text:"Yeni içerik mevcut.",
-
-serverStatusTitle:"Sunucu Durumu",
-statusLabel:"Durum",
-playersLabel:"Oyuncular",
-online:"Çevrimiçi",
-offline:"Çevrimdışı",
-totalPlayers:"Toplam Çevrimiçi Oyuncu",
-
-leaderboardTitle:"Lider Tablosu",
-hcTab:"Hardcore",
-normalTab:"Normal",
-searchPlaceholder:"Oyuncu ara...",
-playerName:"Oyuncu Adı",
-level:"Seviye",
-classes:"Sınıflar",
-hcSince:"Hardcore Başlangıç",
-hcStatus:"Durum",
-alive:"Hayatta",
-dead:"Ölü",
-noPlayersFound:"Oyuncu bulunamadı"
-},
-
-pl:{
-home:"Strona Główna",
-news:"Aktualności",
-status:"Status Serwera",
-leaderboard:"Ranking",
-wiki:"Wiki",
-download:"Pobierz",
-info:"Info",
-title:"Dragon's Dogma Online",
-subtitle:"Największy Serwer",
-downloadBtn:"Pobierz",
-
-newsTitle:"Najnowsze Wiadomości",
-news1Title:"Otwarcie Serwera",
-news1Text:"DDON jest online!",
-news2Title:"Tryb Hardcore",
-news2Text:"Nowa zawartość dostępna.",
-
-serverStatusTitle:"Status Serwera",
-statusLabel:"Status",
-playersLabel:"Gracze",
-online:"Online",
-offline:"Offline",
-totalPlayers:"Łączna liczba graczy online",
-
-leaderboardTitle:"Ranking",
-hcTab:"Hardcore",
-normalTab:"Normalny",
-searchPlaceholder:"Szukaj gracza...",
-playerName:"Nazwa Gracza",
-level:"Poziom",
-classes:"Klasy",
-hcSince:"Hardcore od",
-hcStatus:"Status",
-alive:"Żyje",
-dead:"Martwy",
-noPlayersFound:"Nie znaleziono graczy"
-},
-
-kr:{
-home:"홈",
-news:"뉴스",
-status:"서버 상태",
-leaderboard:"리더보드",
-wiki:"위키",
-download:"다운로드",
-info:"정보",
-title:"드래곤즈 도그마 온라인",
-subtitle:"최대 서버",
-downloadBtn:"다운로드",
-
-newsTitle:"최신 뉴스",
-news1Title:"서버 오픈",
-news1Text:"DDON 라이브!",
-news2Title:"하드코어 모드",
-news2Text:"새 콘텐츠 출시!",
-
-serverStatusTitle:"서버 상태",
-statusLabel:"상태",
-playersLabel:"플레이어 수",
-online:"온라인",
-offline:"오프라인",
-totalPlayers:"총 온라인 플레이어",
-
-leaderboardTitle:"리더보드",
-hcTab:"하드코어",
-normalTab:"일반",
-searchPlaceholder:"플레이어 검색...",
-playerName:"플레이어 이름",
-level:"레벨",
-classes:"직업",
-hcSince:"하드코어 시작일",
-hcStatus:"상태",
-alive:"생존",
-dead:"사망",
-noPlayersFound:"플레이어를 찾을 수 없습니다"
-},
-
-it:{
-home:"Home",
-news:"Notizie",
-status:"Stato Server",
-leaderboard:"Classifica",
-wiki:"Wiki",
-download:"Download",
-info:"Info",
-title:"Dragon's Dogma Online",
-subtitle:"Server Più Grande",
-downloadBtn:"Scarica",
-
-newsTitle:"Ultime Notizie",
-news1Title:"Apertura Server",
-news1Text:"DDON è online!",
-news2Title:"Modalità Hardcore",
-news2Text:"Nuovo contenuto disponibile.",
-
-serverStatusTitle:"Stato Server",
-statusLabel:"Stato",
-playersLabel:"Giocatori",
-online:"Online",
-offline:"Offline",
-totalPlayers:"Totale Giocatori Online",
-
-leaderboardTitle:"Classifica",
-hcTab:"Hardcore",
-normalTab:"Normale",
-searchPlaceholder:"Cerca giocatore...",
-playerName:"Nome Giocatore",
-level:"Livello",
-classes:"Classi",
-hcSince:"Hardcore Dal",
-hcStatus:"Stato",
-alive:"Vivo",
-dead:"Morto",
-noPlayersFound:"Nessun giocatore trovato"
-},
-
-fr:{
-home:"Accueil",
-news:"Actualités",
-status:"Statut du Serveur",
-leaderboard:"Classement",
-wiki:"Wiki",
-download:"Télécharger",
-info:"Info",
-title:"Dragon's Dogma Online",
-subtitle:"Plus Grand Serveur",
-downloadBtn:"Télécharger",
-
-newsTitle:"Dernières Actualités",
-news1Title:"Ouverture du Serveur",
-news1Text:"DDON est en ligne!",
-news2Title:"Mode Hardcore",
-news2Text:"Nouveau contenu disponible.",
-
-serverStatusTitle:"Statut du Serveur",
-statusLabel:"Statut",
-playersLabel:"Joueurs",
-online:"En ligne",
-offline:"Hors ligne",
-totalPlayers:"Total des Joueurs en Ligne",
-
-leaderboardTitle:"Classement",
-hcTab:"Hardcore",
-normalTab:"Normal",
-searchPlaceholder:"Rechercher joueur...",
-playerName:"Nom du Joueur",
-level:"Niveau",
-classes:"Classes",
-hcSince:"Hardcore Depuis",
-hcStatus:"Statut",
-alive:"Vivant",
-dead:"Mort",
-noPlayersFound:"Aucun joueur trouvé"
-},
-
-gr:{
-home:"Αρχική",
-news:"Νέα",
-status:"Κατάσταση Διακομιστή",
-leaderboard:"Πίνακας Κατάταξης",
-wiki:"Wiki",
-download:"Λήψη",
-info:"Πληροφορίες",
-title:"Dragon's Dogma Online",
-subtitle:"Μεγαλύτερος Server",
-downloadBtn:"Λήψη",
-
-newsTitle:"Τελευταία Νέα",
-news1Title:"Άνοιγμα Διακομιστή",
-news1Text:"Το DDON είναι online!",
-news2Title:"Hardcore Mode",
-news2Text:"Νέο περιεχόμενο διαθέσιμο.",
-
-serverStatusTitle:"Κατάσταση Διακομιστή",
-statusLabel:"Κατάσταση",
-playersLabel:"Παίκτες",
-online:"Online",
-offline:"Offline",
-totalPlayers:"Σύνολο Παικτών Online",
-
-leaderboardTitle:"Πίνακας Κατάταξης",
-hcTab:"Hardcore",
-normalTab:"Κανονικό",
-searchPlaceholder:"Αναζήτηση παίκτη...",
-playerName:"Όνομα Παίκτη",
-level:"Επίπεδο",
-classes:"Κλάσεις",
-hcSince:"Hardcore Από",
-hcStatus:"Κατάσταση",
-alive:"Ζωντανός",
-dead:"Νεκρός",
-noPlayersFound:"Δεν βρέθηκαν παίκτες"
-}
-
-};
 
 /* ===========================
    LANGUAGE SWITCH
@@ -723,36 +114,17 @@ function setLanguage(lang){
     const t = translations[lang];
     if(!t) return;
 
-    // 🔥 Automatisch alle data-key Elemente übersetzen
-    document.querySelectorAll("[data-key]").forEach(el => {
+    document.querySelectorAll("[data-key]").forEach(el=>{
         const key = el.getAttribute("data-key");
         if(t[key]) el.textContent = t[key];
     });
 
-    // 🔎 Search Placeholder
-    const search = document.getElementById("playerSearch");
-    if(search && t.searchPlaceholder){
-        search.placeholder = t.searchPlaceholder;
-    }
-
     loadServerStatus();
-    renderLeaderboard();
 }
-
-const list = document.getElementById("languageList");
-
-languages.forEach(lang=>{
-    const div = document.createElement("div");
-    div.innerHTML = `${lang.flag} ${lang.name}`;
-    div.onclick = () => {
-        setLanguage(lang.code);
-        localStorage.setItem("lang", lang.code);
-    };
-    list.appendChild(div);
-});
 
 const saved = localStorage.getItem("lang") || "en";
 setLanguage(saved);
+
 
 /* ===========================
    SERVER STATUS
@@ -760,7 +132,7 @@ setLanguage(saved);
 
 async function loadServerStatus(){
     try{
-        const response = await fetch("status.json?nocache=" + new Date().getTime());
+        const response = await fetch("status.json?nocache=" + Date.now());
         const data = await response.json();
 
         const currentLang = localStorage.getItem("lang") || "en";
@@ -786,20 +158,17 @@ async function loadServerStatus(){
             container.appendChild(div);
         });
 
-        // 🔥 Update Top Right Counter
         document.getElementById("totalPlayersBox").textContent =
             `${t.totalPlayers}: ${totalPlayers}`;
 
     }catch(err){
-        console.error("Status load failed", err);
+        console.error("Status load failed:", err);
     }
 }
 
-<script src="translations.js"></script>
-
-<script>
 loadServerStatus();
 setInterval(loadServerStatus, 15000);
+
 </script>
 
 </body>
