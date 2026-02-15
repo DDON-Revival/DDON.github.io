@@ -8,14 +8,43 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-body {
+body{
     margin:0;
     font-family:'Cinzel', serif;
     background:#0f0f14;
     color:#e6e6e6;
+    overflow-x:hidden;
 }
 
-header {
+/* 🔥 Spark Background */
+#particles{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    z-index:-1;
+    background:#0f0f14;
+    overflow:hidden;
+}
+
+.spark{
+    position:absolute;
+    width:4px;
+    height:4px;
+    background:#c8a75d;
+    border-radius:50%;
+    opacity:0.7;
+    animation:float 8s linear infinite;
+}
+
+@keyframes float{
+    0%{transform:translateY(100vh);opacity:0;}
+    20%{opacity:1;}
+    100%{transform:translateY(-10vh);opacity:0;}
+}
+
+header{
     background:#1b1b25;
     padding:20px;
     display:flex;
@@ -24,42 +53,81 @@ header {
     border-bottom:2px solid #c8a75d;
 }
 
-nav a {
+nav a{
     color:#e6e6e6;
     text-decoration:none;
     margin:0 15px;
 }
 
-nav a:hover {
+nav a:hover{
     color:#c8a75d;
 }
 
-.hero {
+.hero{
     text-align:center;
     padding:120px 20px;
-    background:linear-gradient(to bottom, #1b1b25, #0f0f14);
+    background:linear-gradient(to bottom,#1b1b25,#0f0f14);
 }
 
-.hero h1 {
+.hero h1{
     font-size:60px;
     color:#c8a75d;
 }
 
-.section {
+.section{
     padding:80px 20px;
     text-align:center;
 }
 
-.card {
+.card{
     background:#1b1b25;
     padding:30px;
     margin:20px;
     display:inline-block;
     width:300px;
     border:1px solid #2a2a35;
+    transition:0.3s;
 }
 
-footer {
+.card:hover{
+    border-color:#c8a75d;
+    transform:translateY(-5px);
+}
+
+.lang-selector{
+    position:relative;
+}
+
+.lang-btn{
+    background:#1b1b25;
+    border:1px solid #c8a75d;
+    color:#c8a75d;
+    padding:6px 12px;
+    cursor:pointer;
+}
+
+.lang-dropdown{
+    display:none;
+    position:absolute;
+    right:0;
+    background:#1b1b25;
+    border:1px solid #c8a75d;
+}
+
+.lang-dropdown div{
+    padding:6px 12px;
+    cursor:pointer;
+}
+
+.lang-dropdown div:hover{
+    background:#2a2a35;
+}
+
+.lang-selector:hover .lang-dropdown{
+    display:block;
+}
+
+footer{
     text-align:center;
     padding:20px;
     background:#1b1b25;
@@ -68,6 +136,8 @@ footer {
 </head>
 
 <body>
+
+<div id="particles"></div>
 
 <header>
     <h2>DDON Revival</h2>
@@ -83,11 +153,30 @@ footer {
         <a href="leaderboard.html" data-key="leaderboard">Leaderboard</a>
         <a href="#download" data-key="download">Download</a>
     </nav>
+
+    <div class="lang-selector">
+        <button class="lang-btn">🌍</button>
+        <div class="lang-dropdown" id="languageList"></div>
+    </div>
 </header>
 
 <section id="home" class="hero">
     <h1 data-key="title">Dragon's Dogma Online</h1>
     <p data-key="subtitle">Biggest Server • Custom Content • Hardcore</p>
+</section>
+
+<section id="news" class="section">
+    <h2 data-key="newsTitle">Latest News</h2>
+
+    <div class="card">
+        <h3 data-key="news1Title">Server Opening</h3>
+        <p data-key="news1Text">DDON is now live!</p>
+    </div>
+
+    <div class="card">
+        <h3 data-key="news2Title">Hardcore Mode</h3>
+        <p data-key="news2Text">Hardcore Mode is now live!</p>
+    </div>
 </section>
 
 <section id="status" class="section">
@@ -99,15 +188,26 @@ footer {
 2023 DDON Revival • Unofficial Fan Project
 </footer>
 
-
-<!-- 🔥 1️⃣ TRANSLATIONS FILE FIRST -->
+<!-- 🔥 translations FIRST -->
 <script src="translations.js"></script>
 
-<!-- 🔥 2️⃣ MAIN SCRIPT -->
 <script>
 
 /* ===========================
-   LANGUAGE SWITCH
+   🔥 Spark Generator
+=========================== */
+const container = document.getElementById("particles");
+for(let i=0;i<40;i++){
+    let spark=document.createElement("div");
+    spark.classList.add("spark");
+    spark.style.left=Math.random()*100+"vw";
+    spark.style.animationDuration=(5+Math.random()*5)+"s";
+    spark.style.animationDelay=Math.random()*5+"s";
+    container.appendChild(spark);
+}
+
+/* ===========================
+   LANGUAGE SYSTEM
 =========================== */
 
 function setLanguage(lang){
@@ -119,12 +219,19 @@ function setLanguage(lang){
         if(t[key]) el.textContent = t[key];
     });
 
+    localStorage.setItem("lang", lang);
     loadServerStatus();
 }
 
+languages.forEach(lang=>{
+    const div=document.createElement("div");
+    div.innerHTML=`${lang.flag} ${lang.name}`;
+    div.onclick=()=>setLanguage(lang.code);
+    document.getElementById("languageList").appendChild(div);
+});
+
 const saved = localStorage.getItem("lang") || "en";
 setLanguage(saved);
-
 
 /* ===========================
    SERVER STATUS
@@ -132,47 +239,39 @@ setLanguage(saved);
 
 async function loadServerStatus(){
     try{
-        const response = await fetch("status.json?nocache=" + Date.now());
-        const data = await response.json();
+        const res = await fetch("status.json?nocache="+Date.now());
+        const data = await res.json();
 
-        const currentLang = localStorage.getItem("lang") || "en";
-        const t = translations[currentLang];
-
+        const t = translations[localStorage.getItem("lang") || "en"];
         const container = document.getElementById("serverStatusContainer");
-        container.innerHTML = "";
-
-        let totalPlayers = 0;
+        container.innerHTML="";
+        let total=0;
 
         data.forEach(server=>{
-            totalPlayers += server.players;
+            total+=server.players;
 
-            const div = document.createElement("div");
-            div.className = "card";
-
-            div.innerHTML = `
+            const div=document.createElement("div");
+            div.className="card";
+            div.innerHTML=`
                 <h3>${server.name}</h3>
-                <p>${t.statusLabel}: ${server.online ? "🟢 " + t.online : "🔴 " + t.offline}</p>
+                <p>${t.statusLabel}: ${server.online ? "🟢 "+t.online : "🔴 "+t.offline}</p>
                 <p>${t.playersLabel}: ${server.players}</p>
             `;
-
             container.appendChild(div);
         });
 
-        document.getElementById("totalPlayersBox").textContent =
-            `${t.totalPlayers}: ${totalPlayers}`;
+        document.getElementById("totalPlayersBox").textContent=
+            `${t.totalPlayers}: ${total}`;
 
     }catch(err){
-        console.error("Status load failed:", err);
+        console.error("Status load failed",err);
     }
 }
 
 loadServerStatus();
-setInterval(loadServerStatus, 15000);
+setInterval(loadServerStatus,15000);
 
 </script>
-<script src="translations.js"></script>
-<script>
-/* Deine setLanguage() Funktion hier */
-</script>
+
 </body>
 </html>
