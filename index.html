@@ -531,7 +531,7 @@ setLanguage(saved);
 
 async function loadServerStatus(){
     try{
-        const response = await fetch("http://94.16.31.224:5000/status");
+        const response = await fetch("http://94.16.31.224:5080/status.json");
         const data = await response.json();
 
         const container = document.getElementById("serverStatusContainer");
