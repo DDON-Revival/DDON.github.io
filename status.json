@@ -22,17 +22,17 @@
     {
         "name": "Channel 5",
         "online": true,
-        "players": 5
+        "players": 3
     },
     {
         "name": "Channel 6",
         "online": true,
-        "players": 6
+        "players": 4
     },
     {
         "name": "Channel 7",
         "online": true,
-        "players": 6
+        "players": 7
     },
     {
         "name": "Channel 8",
