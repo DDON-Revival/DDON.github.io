@@ -196,6 +196,11 @@ footer {
     </div>
 </section>
 
+<section id="status" class="section">
+    <h2 data-key="serverStatusTitle">Server Status</h2>
+    <div id="serverStatusContainer"></div>
+</section>
+
 
 <section id="leaderboard" class="section">
     <h2 data-key="features">Server Features</h2>
@@ -523,5 +528,34 @@ languages.forEach(lang=>{
 /* Load saved language */
 const saved = localStorage.getItem("lang") || "en";
 setLanguage(saved);
+
+async function loadServerStatus(){
+    try{
+        const response = await fetch("http://94.16.31.224:5000/status");
+        const data = await response.json();
+
+        const container = document.getElementById("serverStatusContainer");
+        container.innerHTML = "";
+
+        data.forEach(server=>{
+            const div = document.createElement("div");
+            div.className = "card";
+
+            div.innerHTML = `
+                <h3>${server.name}</h3>
+                <p>Status: ${server.online ? "🟢 Online" : "🔴 Offline"}</p>
+                <p>Players: ${server.players}</p>
+            `;
+
+            container.appendChild(div);
+        });
+
+    }catch(err){
+        console.error("Status load failed", err);
+    }
+}
+
+loadServerStatus();
+setInterval(loadServerStatus, 15000);
 
 </script>
