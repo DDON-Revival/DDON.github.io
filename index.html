@@ -163,7 +163,7 @@ footer {
         <a href="#home" data-key="home">Home</a>
         <a href="#news" data-key="news">News</a>
         <a href="#status" data-key="status">Server Status</a>
-        <a href="#leaderboard" data-key="leaderboard">HC Leaderboard</a>
+        <a href="#leaderboard" data-key="leaderboard">Leaderboard</a>
         <a href="#wiki" data-key="wiki">Wiki</a>
         <a href="#download" data-key="download">Download</a>
         <a href="#info" data-key="info">Info</a>
@@ -207,7 +207,19 @@ footer {
 
 
 <section id="leaderboard" class="section">
-    <h2 data-key="features">Server Features</h2>
+    <h2 data-key="leaderboard">Leaderboard</h2>
+
+    <div style="margin-bottom:20px;">
+        <button class="btn" onclick="switchTab('non_hc')">Non-HC</button>
+        <button class="btn" onclick="switchTab('hc')">Hardcore</button>
+    </div>
+
+    <input id="playerSearch" type="text" placeholder="Search Player..." 
+        onkeyup="searchPlayer()" 
+        style="padding:10px; width:300px; margin-bottom:20px;">
+
+    <div id="leaderboardContainer"></div>
+</section>
 
     <div class="card">
         <h3 data-key="hc">Hardcore Mode</h3>
@@ -269,7 +281,7 @@ en:{
 home:"Home",
 news:"News",
 status:"Server Status",
-leaderboard:"HC Leaderboard",
+leaderboard:"Leaderboard",
 wiki:"Wiki",
 download:"Download",
 info:"Info",
@@ -288,14 +300,27 @@ statusLabel:"Status",
 playersLabel:"Players",
 online:"Online",
 offline:"Offline",
-totalPlayers:"Total Players Online"
+totalPlayers:"Total Players Online",
+
+leaderboardTitle:"Leaderboard",
+hcTab:"Hardcore",
+normalTab:"Normal",
+searchPlaceholder:"Search player...",
+playerName:"Player Name",
+level:"Level",
+classes:"Classes",
+hcSince:"Hardcore Since",
+hcStatus:"Status",
+alive:"Alive",
+dead:"Dead",
+noPlayersFound:"No players found"
 },
 
 jp:{
 home:"ホーム",
 news:"ニュース",
 status:"サーバー状況",
-leaderboard:"HCランキング",
+leaderboard:"ランキング",
 wiki:"ウィキ",
 download:"ダウンロード",
 info:"情報",
@@ -314,14 +339,27 @@ statusLabel:"状態",
 playersLabel:"プレイヤー数",
 online:"オンライン",
 offline:"オフライン",
-totalPlayers:"総オンラインプレイヤー数"
+totalPlayers:"総オンラインプレイヤー数",
+
+leaderboardTitle:"ランキング",
+hcTab:"ハードコア",
+normalTab:"通常",
+searchPlaceholder:"プレイヤー検索...",
+playerName:"プレイヤー名",
+level:"レベル",
+classes:"クラス",
+hcSince:"HC開始日",
+hcStatus:"状態",
+alive:"生存",
+dead:"死亡",
+noPlayersFound:"プレイヤーが見つかりません"
 },
 
 zh:{
 home:"首页",
 news:"新闻",
 status:"服务器状态",
-leaderboard:"硬核排行",
+leaderboard:"排行榜",
 wiki:"维基",
 download:"下载",
 info:"信息",
@@ -340,14 +378,27 @@ statusLabel:"状态",
 playersLabel:"玩家数",
 online:"在线",
 offline:"离线",
-totalPlayers:"当前在线总人数"
+totalPlayers:"当前在线总人数",
+
+leaderboardTitle:"排行榜",
+hcTab:"硬核",
+normalTab:"普通",
+searchPlaceholder:"搜索玩家...",
+playerName:"玩家名称",
+level:"等级",
+classes:"职业",
+hcSince:"成为HC时间",
+hcStatus:"状态",
+alive:"存活",
+dead:"死亡",
+noPlayersFound:"未找到玩家"
 },
 
 pt:{
 home:"Início",
 news:"Notícias",
 status:"Status do Servidor",
-leaderboard:"Ranking HC",
+leaderboard:"Classificação",
 wiki:"Wiki",
 download:"Download",
 info:"Info",
@@ -366,14 +417,27 @@ statusLabel:"Status",
 playersLabel:"Jogadores",
 online:"Online",
 offline:"Offline",
-totalPlayers:"Total de Jogadores Online"
+totalPlayers:"Total de Jogadores Online",
+
+leaderboardTitle:"Classificação",
+hcTab:"Hardcore",
+normalTab:"Normal",
+searchPlaceholder:"Pesquisar jogador...",
+playerName:"Nome do Jogador",
+level:"Nível",
+classes:"Classes",
+hcSince:"Hardcore Desde",
+hcStatus:"Status",
+alive:"Vivo",
+dead:"Morto",
+noPlayersFound:"Nenhum jogador encontrado"
 },
 
 es:{
 home:"Inicio",
 news:"Noticias",
 status:"Estado del Servidor",
-leaderboard:"Ranking HC",
+leaderboard:"Clasificación",
 wiki:"Wiki",
 download:"Descargar",
 info:"Info",
@@ -392,14 +456,27 @@ statusLabel:"Estado",
 playersLabel:"Jugadores",
 online:"En línea",
 offline:"Fuera de línea",
-totalPlayers:"Total de Jugadores en Línea"
+totalPlayers:"Total de Jugadores en Línea",
+
+leaderboardTitle:"Clasificación",
+hcTab:"Hardcore",
+normalTab:"Normal",
+searchPlaceholder:"Buscar jugador...",
+playerName:"Nombre del Jugador",
+level:"Nivel",
+classes:"Clases",
+hcSince:"Hardcore Desde",
+hcStatus:"Estado",
+alive:"Vivo",
+dead:"Muerto",
+noPlayersFound:"No se encontraron jugadores"
 },
 
 ru:{
 home:"Главная",
 news:"Новости",
 status:"Статус Сервера",
-leaderboard:"HC Рейтинг",
+leaderboard:"Таблица лидеров",
 wiki:"Wiki",
 download:"Скачать",
 info:"Инфо",
@@ -418,14 +495,27 @@ statusLabel:"Статус",
 playersLabel:"Игроки",
 online:"Онлайн",
 offline:"Оффлайн",
-totalPlayers:"Всего игроков онлайн"
+totalPlayers:"Всего игроков онлайн",
+
+leaderboardTitle:"Таблица лидеров",
+hcTab:"Хардкор",
+normalTab:"Обычный",
+searchPlaceholder:"Поиск игрока...",
+playerName:"Имя игрока",
+level:"Уровень",
+classes:"Классы",
+hcSince:"Хардкор с",
+hcStatus:"Статус",
+alive:"Жив",
+dead:"Мёртв",
+noPlayersFound:"Игроки не найдены"
 },
 
 tr:{
 home:"Ana Sayfa",
 news:"Haberler",
 status:"Sunucu Durumu",
-leaderboard:"HC Sıralama",
+leaderboard:"Lider Tablosu",
 wiki:"Wiki",
 download:"İndir",
 info:"Bilgi",
@@ -444,14 +534,27 @@ statusLabel:"Durum",
 playersLabel:"Oyuncular",
 online:"Çevrimiçi",
 offline:"Çevrimdışı",
-totalPlayers:"Toplam Çevrimiçi Oyuncu"
+totalPlayers:"Toplam Çevrimiçi Oyuncu",
+
+leaderboardTitle:"Lider Tablosu",
+hcTab:"Hardcore",
+normalTab:"Normal",
+searchPlaceholder:"Oyuncu ara...",
+playerName:"Oyuncu Adı",
+level:"Seviye",
+classes:"Sınıflar",
+hcSince:"Hardcore Başlangıç",
+hcStatus:"Durum",
+alive:"Hayatta",
+dead:"Ölü",
+noPlayersFound:"Oyuncu bulunamadı"
 },
 
 pl:{
 home:"Strona Główna",
 news:"Aktualności",
 status:"Status Serwera",
-leaderboard:"Ranking HC",
+leaderboard:"Ranking",
 wiki:"Wiki",
 download:"Pobierz",
 info:"Info",
@@ -470,14 +573,27 @@ statusLabel:"Status",
 playersLabel:"Gracze",
 online:"Online",
 offline:"Offline",
-totalPlayers:"Łączna liczba graczy online"
+totalPlayers:"Łączna liczba graczy online",
+
+leaderboardTitle:"Ranking",
+hcTab:"Hardcore",
+normalTab:"Normalny",
+searchPlaceholder:"Szukaj gracza...",
+playerName:"Nazwa Gracza",
+level:"Poziom",
+classes:"Klasy",
+hcSince:"Hardcore od",
+hcStatus:"Status",
+alive:"Żyje",
+dead:"Martwy",
+noPlayersFound:"Nie znaleziono graczy"
 },
 
 kr:{
 home:"홈",
 news:"뉴스",
 status:"서버 상태",
-leaderboard:"하드코어 순위",
+leaderboard:"리더보드",
 wiki:"위키",
 download:"다운로드",
 info:"정보",
@@ -496,14 +612,27 @@ statusLabel:"상태",
 playersLabel:"플레이어 수",
 online:"온라인",
 offline:"오프라인",
-totalPlayers:"총 온라인 플레이어"
+totalPlayers:"총 온라인 플레이어",
+
+leaderboardTitle:"리더보드",
+hcTab:"하드코어",
+normalTab:"일반",
+searchPlaceholder:"플레이어 검색...",
+playerName:"플레이어 이름",
+level:"레벨",
+classes:"직업",
+hcSince:"하드코어 시작일",
+hcStatus:"상태",
+alive:"생존",
+dead:"사망",
+noPlayersFound:"플레이어를 찾을 수 없습니다"
 },
 
 it:{
 home:"Home",
 news:"Notizie",
 status:"Stato Server",
-leaderboard:"Classifica HC",
+leaderboard:"Classifica",
 wiki:"Wiki",
 download:"Download",
 info:"Info",
@@ -522,14 +651,27 @@ statusLabel:"Stato",
 playersLabel:"Giocatori",
 online:"Online",
 offline:"Offline",
-totalPlayers:"Totale Giocatori Online"
+totalPlayers:"Totale Giocatori Online",
+
+leaderboardTitle:"Classifica",
+hcTab:"Hardcore",
+normalTab:"Normale",
+searchPlaceholder:"Cerca giocatore...",
+playerName:"Nome Giocatore",
+level:"Livello",
+classes:"Classi",
+hcSince:"Hardcore Dal",
+hcStatus:"Stato",
+alive:"Vivo",
+dead:"Morto",
+noPlayersFound:"Nessun giocatore trovato"
 },
 
 fr:{
 home:"Accueil",
 news:"Actualités",
 status:"Statut du Serveur",
-leaderboard:"Classement HC",
+leaderboard:"Classement",
 wiki:"Wiki",
 download:"Télécharger",
 info:"Info",
@@ -548,14 +690,27 @@ statusLabel:"Statut",
 playersLabel:"Joueurs",
 online:"En ligne",
 offline:"Hors ligne",
-totalPlayers:"Total des Joueurs en Ligne"
+totalPlayers:"Total des Joueurs en Ligne",
+
+leaderboardTitle:"Classement",
+hcTab:"Hardcore",
+normalTab:"Normal",
+searchPlaceholder:"Rechercher joueur...",
+playerName:"Nom du Joueur",
+level:"Niveau",
+classes:"Classes",
+hcSince:"Hardcore Depuis",
+hcStatus:"Statut",
+alive:"Vivant",
+dead:"Mort",
+noPlayersFound:"Aucun joueur trouvé"
 },
 
 gr:{
 home:"Αρχική",
 news:"Νέα",
 status:"Κατάσταση Διακομιστή",
-leaderboard:"Κατάταξη HC",
+leaderboard:"Πίνακας Κατάταξης",
 wiki:"Wiki",
 download:"Λήψη",
 info:"Πληροφορίες",
@@ -574,7 +729,20 @@ statusLabel:"Κατάσταση",
 playersLabel:"Παίκτες",
 online:"Online",
 offline:"Offline",
-totalPlayers:"Σύνολο Παικτών Online"
+totalPlayers:"Σύνολο Παικτών Online",
+
+leaderboardTitle:"Πίνακας Κατάταξης",
+hcTab:"Hardcore",
+normalTab:"Κανονικό",
+searchPlaceholder:"Αναζήτηση παίκτη...",
+playerName:"Όνομα Παίκτη",
+level:"Επίπεδο",
+classes:"Κλάσεις",
+hcSince:"Hardcore Από",
+hcStatus:"Κατάσταση",
+alive:"Ζωντανός",
+dead:"Νεκρός",
+noPlayersFound:"Δεν βρέθηκαν παίκτες"
 }
 
 };
@@ -603,6 +771,11 @@ function setLanguage(lang){
     document.querySelector('[data-key="news1Text"]').textContent = t.news1Text;
     document.querySelector('[data-key="news2Title"]').textContent = t.news2Title;
     document.querySelector('[data-key="news2Text"]').textContent = t.news2Text;
+
+	document.querySelector('[data-key="leaderboardTitle"]').textContent = t.leaderboardTitle;
+	document.querySelector('[data-key="tabNormal"]').textContent = t.tabNormal;
+	document.querySelector('[data-key="tabHardcore"]').textContent = t.tabHardcore;
+	document.querySelector('[data-key="searchPlayer"]').placeholder = t.searchPlayer;	
 
     document.querySelector('[data-key="serverStatusTitle"]').textContent = t.serverStatusTitle;
 
@@ -665,7 +838,101 @@ async function loadServerStatus(){
     }
 }
 
+/* ===========================
+   🏆 LEADERBOARD SYSTEM
+=========================== */
+
+let leaderboardData = null;
+let currentTab = "non_hc";
+
+const jobNames = {
+    1:"Fighter",
+    2:"Seeker",
+    3:"Hunter",
+    4:"Priest",
+    5:"Shield Sage",
+    6:"Sorcerer",
+    7:"Warrior",
+    8:"Element Archer",
+    9:"Alchemist",
+    10:"Spirit Lancer",
+    11:"High Scepter"
+};
+
+async function loadLeaderboard(){
+    const response = await fetch("leaderboard.json?nocache=" + new Date().getTime());
+    leaderboardData = await response.json();
+    renderLeaderboard();
+}
+
+function renderLeaderboard(){
+    const container = document.getElementById("leaderboardContainer");
+    container.innerHTML = "";
+
+    const data = leaderboardData[currentTab];
+
+    data.forEach(player => {
+        const div = document.createElement("div");
+        div.className = "card";
+
+        let extra = "";
+
+        if(currentTab === "hc"){
+            extra = `
+                <p>HC Since: ${player.hc_since || "-"}</p>
+                <p>Status: ${player.dead ? "💀 Dead" : "🟢 Alive"}</p>
+            `;
+        }
+
+        div.innerHTML = `
+            <h3>${player.name}</h3>
+            <p>Level: ${player.level}</p>
+            <p>Class: ${jobNames[player.job]}</p>
+            ${extra}
+        `;
+
+        container.appendChild(div);
+    });
+}
+
+function switchTab(tab){
+    currentTab = tab;
+    renderLeaderboard();
+}
+
+function searchPlayer(){
+    const input = document.getElementById("playerSearch").value.toLowerCase();
+    const container = document.getElementById("leaderboardContainer");
+    container.innerHTML = "";
+
+    const allPlayers = [
+        ...leaderboardData.non_hc,
+        ...leaderboardData.hc
+    ];
+
+    const results = allPlayers.filter(p =>
+        p.name.toLowerCase().includes(input)
+    );
+
+    results.forEach(player => {
+        const div = document.createElement("div");
+        div.className = "card";
+        div.innerHTML = `
+            <h3>${player.name}</h3>
+            <p>Level: ${player.level}</p>
+            <p>Class: ${jobNames[player.job]}</p>
+        `;
+        container.appendChild(div);
+    });
+}
+
+loadLeaderboard();
+
+    }
+}
+
 loadServerStatus();
 setInterval(loadServerStatus, 15000);
+loadLeaderboard();
 
 </script>
