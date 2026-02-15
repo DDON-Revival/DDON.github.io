@@ -9,6 +9,7 @@
 <script src="translations.js"></script>
 
 <style>
+/* --- DEIN CSS BLEIBT --- */
 body{
     margin:0;
     font-family:'Cinzel', serif;
@@ -26,28 +27,20 @@ header{
     text-align:center;
 }
 
-h1{ color:#c8a75d; }
-
 select{
-    margin-top:10px;
-    padding:6px;
+    padding:8px 15px;
     background:#1b1b25;
     color:#c8a75d;
     border:1px solid #c8a75d;
 }
 
-.container{ max-width:1000px; margin:60px auto; padding:20px; }
+.container{
+    max-width:1000px;
+    margin:60px auto;
+    padding:20px;
+}
 
 .section{ margin-bottom:80px; }
-
-.section h2{
-    display:flex;
-    align-items:center;
-    gap:15px;
-    font-size:22px;
-    border-bottom:1px solid #2a2a35;
-    padding-bottom:15px;
-}
 
 .step-box{
     background:#c8a75d;
@@ -63,32 +56,13 @@ select{
     border:2px solid #c8a75d;
     color:#c8a75d;
     margin:10px 0;
-    transition:0.3s;
+    transition:all .3s ease;
 }
-
 .download-btn:hover{
     background:#c8a75d;
     color:#0f0f14;
-    box-shadow:0 0 20px rgba(200,167,93,0.6);
+    transform:translateY(-3px);
 }
-
-.box{
-    background:#1b1b25;
-    padding:20px;
-    border:1px solid #2a2a35;
-    border-radius:6px;
-}
-
-.notice{
-    background:#2a1a1a;
-    border-left:4px solid #c8a75d;
-    padding:15px;
-    margin:20px 0;
-}
-
-.howto-image{ text-align:center; margin:30px 0; }
-.howto-image img{ max-width:100%; border:1px solid #2a2a35; }
-.small img{ max-width:220px; }
 </style>
 </head>
 
@@ -96,22 +70,22 @@ select{
 
 <header>
     <h1 id="howTitle"></h1>
-    <select id="languageSelector"></select>
+    <div style="margin-top:15px;">
+        <select id="languageSelector"></select>
+    </div>
 </header>
 
 <div class="container">
 
 <div class="section">
 <h2><span class="step-box">1</span> <span id="step1Title"></span></h2>
-<p id="step1Text1"></p>
+<p id="step1Text"></p>
 
-<div class="box">
-    <strong id="fullClientLabel"></strong><br>
-    <a id="fullClientLink" target="_blank" class="download-btn"></a><br>
+<strong id="fullClientText"></strong><br>
+<a id="fullClientLink" class="download-btn" target="_blank"></a><br>
 
-    <strong id="multiClientLabel"></strong><br>
-    <a id="multiClientLink" target="_blank" class="download-btn"></a>
-</div>
+<strong id="multipartText"></strong><br>
+<a id="multipartLink" class="download-btn" target="_blank"></a>
 </div>
 
 <div class="section">
@@ -119,7 +93,7 @@ select{
 <p id="step2Text1"></p>
 <p id="step2Text2"></p>
 <p id="step2Text3"></p>
-<div class="notice" id="oneDriveWarning"></div>
+<p id="oneDriveWarning"></p>
 </div>
 
 <div class="section">
@@ -127,18 +101,12 @@ select{
 <p id="step3Text1"></p>
 <p id="step3Text2"></p>
 <p id="step3Text3"></p>
-<div class="howto-image">
-<img src="DDO_Launcher.png">
-</div>
 </div>
 
 <div class="section">
 <h2><span class="step-box">4</span> <span id="step4Title"></span></h2>
 <p id="step4Text1"></p>
-<div class="box" id="serverBox"></div>
-<div class="howto-image">
-<img src="connection.png">
-</div>
+<p id="serverBox"></p>
 </div>
 
 <div class="section">
@@ -152,9 +120,6 @@ select{
 <p id="step6Text1"></p>
 <p id="step6Text2"></p>
 <p id="step6Text3"></p>
-<div class="howto-image small">
-<img src="click.png">
-</div>
 </div>
 
 <div class="section">
@@ -164,7 +129,7 @@ select{
 <p id="step7Text3"></p>
 <p id="step7Text4"></p>
 <p id="step7Text5"></p>
-<p><strong id="step7Final"></strong></p>
+<strong id="step7Final"></strong>
 </div>
 
 </div>
@@ -173,51 +138,38 @@ select{
 const selector = document.getElementById("languageSelector");
 
 window.languages.forEach(lang=>{
-    const opt=document.createElement("option");
-    opt.value=lang.code;
-    opt.textContent=lang.flag+" "+lang.name;
-    selector.appendChild(opt);
+    const option=document.createElement("option");
+    option.value=lang.code;
+    option.textContent=lang.flag+" "+lang.name;
+    selector.appendChild(option);
 });
 
-function setLanguage(code){
+function applyLanguage(code){
     const t = window.translations[code];
+    if(!t) return;
 
-    document.getElementById("howTitle").innerText = t.howTitle || t.howToPlay;
+    localStorage.setItem("ddon_lang", code);
 
-    [
-    "step1Title","step1Text1",
-    "step2Title","step2Text1","step2Text2","step2Text3",
-    "step3Title","step3Text1","step3Text2","step3Text3",
-    "step4Title","step4Text1",
-    "step5Title","step5Text1","step5Text2",
-    "step6Title","step6Text1","step6Text2","step6Text3",
-    "step7Title","step7Text1","step7Text2","step7Text3","step7Text4","step7Text5","step7Final"
-    ].forEach(id=>{
-        if(t[id]) document.getElementById(id).innerText=t[id];
-    });
+    for(const key in t){
+        if(typeof t[key] === "string"){
+            const el = document.getElementById(key);
+            if(el) el.innerText = t[key];
+        }
+    }
 
-    if(t.serverBox) document.getElementById("serverBox").innerText=t.serverBox;
-    if(t.oneDriveWarning) document.getElementById("oneDriveWarning").innerText=t.oneDriveWarning;
-
-    document.getElementById("fullClientLabel").innerText="Full Client";
-    document.getElementById("multiClientLabel").innerText="Multipart";
-
-    document.getElementById("fullClientLink").innerText="Download";
-    document.getElementById("multiClientLink").innerText="Download";
-
-    document.getElementById("fullClientLink").href=t.downloadLinks.full;
-    if(t.downloadLinks.multi)
-        document.getElementById("multiClientLink").href=t.downloadLinks.multi;
+    if(t.downloadLinks){
+        document.getElementById("fullClientLink").href = t.downloadLinks.full || "#";
+        document.getElementById("multipartLink").href = t.downloadLinks.multi || "#";
+    }
 }
 
-selector.addEventListener("change",e=>{
-    localStorage.setItem("lang",e.target.value);
-    setLanguage(e.target.value);
+selector.addEventListener("change", e=>{
+    applyLanguage(e.target.value);
 });
 
-const savedLang=localStorage.getItem("lang")||"en";
-selector.value=savedLang;
-setLanguage(savedLang);
+const saved = localStorage.getItem("ddon_lang") || "en";
+selector.value = saved;
+applyLanguage(saved);
 </script>
 
 </body>
