@@ -154,7 +154,12 @@ function renderLeaderboard(){
         div.innerHTML = `
             <h3>${player.name}</h3>
             <p>Level: ${player.level}</p>
-            <p>Class: ${player.class}</p>
+<p><strong>Classes:</strong></p>
+<ul>
+    ${player.classes.map(c => 
+        `<li>${c.job} (Lv.${c.level})</li>`
+    ).join("")}
+</ul>
             ${extra}
         `;
 
@@ -203,7 +208,13 @@ function searchPlayer(){
         div.innerHTML = `
             <h3>${player.name}</h3>
             <p>Level: ${player.level}</p>
-            <p>Class: ${player.class}</p>
+<p><strong>Classes:</strong></p>
+<ul>
+    ${player.classes.map(c => 
+        `<li>${c.job} (Lv.${c.level})</li>`
+    ).join("")}
+</ul>
+
         `;
 
         container.appendChild(div);
