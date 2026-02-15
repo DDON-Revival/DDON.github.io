@@ -202,7 +202,10 @@ footer {
 </footer>
 
 <script>
-/* 🔥 Spark Animation */
+
+/* ===========================
+   🔥 Spark Generator
+=========================== */
 const container = document.getElementById("particles");
 for(let i=0;i<40;i++){
     let spark=document.createElement("div");
@@ -213,74 +216,199 @@ for(let i=0;i<40;i++){
     container.appendChild(spark);
 }
 
-/* 🌍 Language System */
-const languages = {
-    en:{flag:"us"},
-    ja:{flag:"jp"},
-    zh:{flag:"cn"},
-    pt:{flag:"pt"},
-    es:{flag:"es"},
-    ru:{flag:"ru"},
-    tr:{flag:"tr"},
-    pl:{flag:"pl"},
-    ko:{flag:"kr"},
-    it:{flag:"it"},
-    fr:{flag:"fr"},
-    el:{flag:"gr"}
-};
+/* ===========================
+   🌍 LANGUAGE SYSTEM
+=========================== */
 
 const translations = {
-    en:{
-        home:"Home",news:"News",status:"Server Status",
-        leaderboard:"HC Leaderboard",wiki:"Wiki",
-        download:"Download",info:"Info",
-        title:"Dragon's Dogma Online",
-        subtitle:"Biggest Server • Custom Content • Hardcore & BBM",
-        downloadBtn:"Download & Play",
-        features:"Server Features",
-        hc:"Hardcore Mode",
-        hcDesc:"Permadeath • Milestones • Ladder",
-        bbm:"Bitterblack Maze 2.0",
-        bbmDesc:"Roguelite System • NEW Balancing!",
-        community:"Community Driven",
-        communityDesc:"Events • Updates • Active Dev"
+
+    en: {
+        nav_home: "Home",
+        nav_news: "News",
+        nav_status: "Server Status",
+        nav_leaderboard: "HC Leaderboard",
+        nav_wiki: "Wiki",
+        nav_download: "Download",
+        nav_info: "Info",
+        hero_title: "Dragon's Dogma Online",
+        hero_sub: "Biggest Server • Custom Content • Hardcore & BBM",
+        download_btn: "Download & Play",
+        discord_btn: "Join Discord"
     },
-    ja:{home:"ホーム",news:"ニュース",status:"サーバー状況",
-        leaderboard:"HCランキング",wiki:"ウィキ",
-        download:"ダウンロード",info:"情報",
-        title:"ドラゴンズドグマオンライン",
-        subtitle:"最大サーバー • カスタムコンテンツ • HC & BBM",
-        downloadBtn:"ダウンロード",
-        features:"サーバー機能",
-        hc:"ハードコアモード",
-        hcDesc:"パーマデス • マイルストーン • ラダー",
-        bbm:"ビターブラックメイズ 2.0",
-        bbmDesc:"ローグライト • 新バランス",
-        community:"コミュニティ主導",
-        communityDesc:"イベント • アップデート • 開発中"},
+
+    jp: {
+        nav_home: "ホーム",
+        nav_news: "ニュース",
+        nav_status: "サーバー状況",
+        nav_leaderboard: "HCランキング",
+        nav_wiki: "ウィキ",
+        nav_download: "ダウンロード",
+        nav_info: "情報",
+        hero_title: "ドラゴンズドグマオンライン",
+        hero_sub: "最大サーバー • カスタムコンテンツ • ハードコア & BBM",
+        download_btn: "ダウンロード",
+        discord_btn: "ディスコード参加"
+    },
+
+    zh: {
+        nav_home: "首页",
+        nav_news: "新闻",
+        nav_status: "服务器状态",
+        nav_leaderboard: "硬核排行",
+        nav_wiki: "维基",
+        nav_download: "下载",
+        nav_info: "信息",
+        hero_title: "龙之信条Online",
+        hero_sub: "最大服务器 • 自定义内容 • 硬核 & BBM",
+        download_btn: "下载游戏",
+        discord_btn: "加入Discord"
+    },
+
+    pt: {
+        nav_home: "Início",
+        nav_news: "Notícias",
+        nav_status: "Status do Servidor",
+        nav_leaderboard: "Ranking HC",
+        nav_wiki: "Wiki",
+        nav_download: "Download",
+        nav_info: "Info",
+        hero_title: "Dragon's Dogma Online",
+        hero_sub: "Maior Servidor • Conteúdo Custom • Hardcore & BBM",
+        download_btn: "Baixar & Jogar",
+        discord_btn: "Entrar no Discord"
+    },
+
+    es: {
+        nav_home: "Inicio",
+        nav_news: "Noticias",
+        nav_status: "Estado del Servidor",
+        nav_leaderboard: "Ranking HC",
+        nav_wiki: "Wiki",
+        nav_download: "Descargar",
+        nav_info: "Info",
+        hero_title: "Dragon's Dogma Online",
+        hero_sub: "Servidor Más Grande • Contenido Personalizado • Hardcore & BBM",
+        download_btn: "Descargar & Jugar",
+        discord_btn: "Unirse a Discord"
+    },
+
+    ru: {
+        nav_home: "Главная",
+        nav_news: "Новости",
+        nav_status: "Статус Сервера",
+        nav_leaderboard: "HC Рейтинг",
+        nav_wiki: "Вики",
+        nav_download: "Скачать",
+        nav_info: "Инфо",
+        hero_title: "Dragon's Dogma Online",
+        hero_sub: "Крупнейший сервер • Кастом контент • Hardcore & BBM",
+        download_btn: "Скачать и играть",
+        discord_btn: "Присоединиться к Discord"
+    },
+
+    tr: {
+        nav_home: "Ana Sayfa",
+        nav_news: "Haberler",
+        nav_status: "Sunucu Durumu",
+        nav_leaderboard: "HC Sıralama",
+        nav_wiki: "Wiki",
+        nav_download: "İndir",
+        nav_info: "Bilgi",
+        hero_title: "Dragon's Dogma Online",
+        hero_sub: "En Büyük Sunucu • Özel İçerik • Hardcore & BBM",
+        download_btn: "İndir & Oyna",
+        discord_btn: "Discord'a Katıl"
+    },
+
+    pl: {
+        nav_home: "Strona Główna",
+        nav_news: "Aktualności",
+        nav_status: "Status Serwera",
+        nav_leaderboard: "Ranking HC",
+        nav_wiki: "Wiki",
+        nav_download: "Pobierz",
+        nav_info: "Info",
+        hero_title: "Dragon's Dogma Online",
+        hero_sub: "Największy Serwer • Własna Zawartość • Hardcore & BBM",
+        download_btn: "Pobierz i Graj",
+        discord_btn: "Dołącz do Discord"
+    },
+
+    kr: {
+        nav_home: "홈",
+        nav_news: "뉴스",
+        nav_status: "서버 상태",
+        nav_leaderboard: "하드코어 순위",
+        nav_wiki: "위키",
+        nav_download: "다운로드",
+        nav_info: "정보",
+        hero_title: "드래곤즈 도그마 온라인",
+        hero_sub: "최대 서버 • 커스텀 콘텐츠 • 하드코어 & BBM",
+        download_btn: "다운로드",
+        discord_btn: "디스코드 참여"
+    },
+
+    it: {
+        nav_home: "Home",
+        nav_news: "Notizie",
+        nav_status: "Stato Server",
+        nav_leaderboard: "Classifica HC",
+        nav_wiki: "Wiki",
+        nav_download: "Download",
+        nav_info: "Info",
+        hero_title: "Dragon's Dogma Online",
+        hero_sub: "Server Più Grande • Contenuti Custom • Hardcore & BBM",
+        download_btn: "Scarica & Gioca",
+        discord_btn: "Unisciti a Discord"
+    },
+
+    fr: {
+        nav_home: "Accueil",
+        nav_news: "Actualités",
+        nav_status: "Statut du Serveur",
+        nav_leaderboard: "Classement HC",
+        nav_wiki: "Wiki",
+        nav_download: "Télécharger",
+        nav_info: "Info",
+        hero_title: "Dragon's Dogma Online",
+        hero_sub: "Plus Grand Serveur • Contenu Custom • Hardcore & BBM",
+        download_btn: "Télécharger & Jouer",
+        discord_btn: "Rejoindre Discord"
+    },
+
+    gr: {
+        nav_home: "Αρχική",
+        nav_news: "Νέα",
+        nav_status: "Κατάσταση Διακομιστή",
+        nav_leaderboard: "Κατάταξη HC",
+        nav_wiki: "Wiki",
+        nav_download: "Λήψη",
+        nav_info: "Πληροφορίες",
+        hero_title: "Dragon's Dogma Online",
+        hero_sub: "Μεγαλύτερος Server • Custom Περιεχόμενο • Hardcore & BBM",
+        download_btn: "Λήψη & Παιχνίδι",
+        discord_btn: "Σύνδεση στο Discord"
+    }
+
 };
 
-/* Auto generate language list */
-const langList=document.getElementById("languageList");
-Object.keys(languages).forEach(code=>{
-    const item=document.createElement("div");
-    item.innerHTML=`<img class="lang-flag" src="https://flagcdn.com/w20/${languages[code].flag}.png"> ${code.toUpperCase()}`;
-    item.onclick=()=>setLanguage(code);
-    langList.appendChild(item);
-});
-
 function setLanguage(lang){
-    if(!translations[lang]) return;
-    localStorage.setItem("ddonLang",lang);
-    document.querySelectorAll("[data-key]").forEach(el=>{
-        const key=el.getAttribute("data-key");
-        if(translations[lang][key])
-            el.innerText=translations[lang][key];
-    });
+    const t = translations[lang];
+    if(!t) return;
+
+    document.querySelector('a[href="#home"]').textContent = t.nav_home;
+    document.querySelector('a[href="#news"]').textContent = t.nav_news;
+    document.querySelector('a[href="#status"]').textContent = t.nav_status;
+    document.querySelector('a[href="#leaderboard"]').textContent = t.nav_leaderboard;
+    document.querySelector('a[href="#wiki"]').textContent = t.nav_wiki;
+    document.querySelector('a[href="#download"]').textContent = t.nav_download;
+    document.querySelector('a[href="#info"]').textContent = t.nav_info;
+
+    document.querySelector("#home h1").textContent = t.hero_title;
+    document.querySelector("#home p").textContent = t.hero_sub;
+
+    document.querySelector('.btn').textContent = t.download_btn;
+    document.querySelector('.btn.discord').textContent = t.discord_btn;
 }
 
-setLanguage(localStorage.getItem("ddonLang")||"en");
 </script>
-
-</body>
-</html>
