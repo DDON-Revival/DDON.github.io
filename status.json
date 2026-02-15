@@ -1,62 +1,57 @@
 [
     {
-        "name": "Login Queue",
-        "online": false,
-        "players": 0
-    },
-    {
         "name": "Channel 1",
-        "online": false,
-        "players": 0
+        "online": true,
+        "players": 17
     },
     {
         "name": "Channel 2",
-        "online": false,
-        "players": 0
+        "online": true,
+        "players": 7
     },
     {
         "name": "Channel 3",
-        "online": false,
-        "players": 0
+        "online": true,
+        "players": 2
     },
     {
         "name": "Channel 4",
-        "online": false,
-        "players": 0
+        "online": true,
+        "players": 2
     },
     {
         "name": "Channel 5",
-        "online": false,
-        "players": 0
+        "online": true,
+        "players": 4
     },
     {
         "name": "Channel 6",
-        "online": false,
-        "players": 0
+        "online": true,
+        "players": 3
     },
     {
         "name": "Channel 7",
-        "online": false,
-        "players": 0
+        "online": true,
+        "players": 8
     },
     {
         "name": "Channel 8",
-        "online": false,
-        "players": 0
+        "online": true,
+        "players": 4
     },
     {
         "name": "Collab",
-        "online": false,
-        "players": 0
+        "online": true,
+        "players": 2
     },
     {
         "name": "Custom Enemy",
-        "online": false,
-        "players": 0
+        "online": true,
+        "players": 3
     },
     {
         "name": "Boss Rush",
-        "online": false,
-        "players": 0
+        "online": true,
+        "players": 3
     }
 ]
