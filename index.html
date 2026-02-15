@@ -868,24 +868,14 @@ async function loadServerStatus(){
 let leaderboardData = null;
 let currentTab = "normal";
 
-const jobNames = {
-    1:"Fighter",
-    2:"Seeker",
-    3:"Hunter",
-    4:"Priest",
-    5:"Shield Sage",
-    6:"Sorcerer",
-    7:"Warrior",
-    8:"Element Archer",
-    9:"Alchemist",
-    10:"Spirit Lancer",
-    11:"High Scepter"
-};
-
 async function loadLeaderboard(){
-    const response = await fetch("leaderboard.json?nocache=" + new Date().getTime());
-    leaderboardData = await response.json();
-    renderLeaderboard();
+    try{
+        const response = await fetch("leaderboard.json?nocache=" + new Date().getTime());
+        leaderboardData = await response.json();
+        renderLeaderboard();
+    }catch(err){
+        console.error("Leaderboard load failed", err);
+    }
 }
 
 function renderLeaderboard(){
@@ -895,7 +885,11 @@ function renderLeaderboard(){
     container.innerHTML = "";
 
     const data = leaderboardData[currentTab];
-    if(!data) return;
+
+    if(!data || data.length === 0){
+        container.innerHTML = "<p>No players found.</p>";
+        return;
+    }
 
     data.forEach(player => {
         const div = document.createElement("div");
@@ -934,22 +928,29 @@ function searchPlayer(){
     container.innerHTML = "";
 
     const allPlayers = [
-        ...(leaderboardData.normal || []),
-        ...(leaderboardData.hc || [])
+        ...leaderboardData.normal,
+        ...leaderboardData.hc
     ];
 
     const results = allPlayers.filter(p =>
         p.name.toLowerCase().includes(input)
     );
 
+    if(results.length === 0){
+        container.innerHTML = "<p>No players found.</p>";
+        return;
+    }
+
     results.forEach(player => {
         const div = document.createElement("div");
         div.className = "card";
+
         div.innerHTML = `
             <h3>${player.name}</h3>
             <p>Level: ${player.level}</p>
             <p>Class: ${player.class}</p>
         `;
+
         container.appendChild(div);
     });
 }
