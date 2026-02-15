@@ -1,55 +1,147 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>DDON Homepage</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DDON Revival</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body {
+    margin:0;
+    font-family: 'Cinzel', serif;
+    background:#0f0f14;
+    color:#e6e6e6;
+}
 
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/theme.js" defer></script>
+header {
+    background:#1b1b25;
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:2px solid #c8a75d;
+}
+
+nav a {
+    color:#e6e6e6;
+    text-decoration:none;
+    margin:0 15px;
+    transition:0.3s;
+}
+
+nav a:hover {
+    color:#c8a75d;
+}
+
+.hero {
+    text-align:center;
+    padding:120px 20px;
+    background:linear-gradient(to bottom, #1b1b25, #0f0f14);
+}
+
+.hero h1 {
+    font-size:60px;
+    color:#c8a75d;
+}
+
+.hero p {
+    font-size:20px;
+    color:#9a9a9a;
+}
+
+.btn {
+    display:inline-block;
+    margin:20px;
+    padding:15px 30px;
+    border:2px solid #c8a75d;
+    color:#c8a75d;
+    text-decoration:none;
+    transition:0.3s;
+}
+
+.btn:hover {
+    background:#c8a75d;
+    color:#0f0f14;
+}
+
+.discord {
+    border-color:#8b1e1e;
+    color:#8b1e1e;
+}
+
+.discord:hover {
+    background:#8b1e1e;
+    color:#fff;
+}
+
+.section {
+    padding:80px 20px;
+    text-align:center;
+}
+
+.card {
+    background:#1b1b25;
+    padding:30px;
+    margin:20px;
+    display:inline-block;
+    width:300px;
+    border:1px solid #2a2a35;
+    transition:0.3s;
+}
+
+.card:hover {
+    border-color:#c8a75d;
+}
+
+footer {
+    text-align:center;
+    padding:20px;
+    background:#1b1b25;
+    border-top:1px solid #2a2a35;
+}
+</style>
 </head>
 <body>
 
-<div class="layout">
+<header>
+    <h2>DDON Revival</h2>
+    <nav>
+        <a href="#">Startseite</a>
+        <a href="#">News</a>
+        <a href="#">Server Status</a>
+        <a href="#">HC Leaderboard</a>
+        <a href="#">Wiki</a>
+        <a href="#">Download</a>
+        <a href="#">Info</a>
+    </nav>
+</header>
 
-  <!-- SIDEBAR -->
-<aside class="sidebar">
-  <h2>DDON</h2>
+<section class="hero">
+    <h1>Dragons Dogma Online</h1>
+    <p>Revival Server • Hardcore Mode • BBM • Classic Experience</p>
+    <a href="#" class="btn">Download & Play</a>
+    <a href="#" class="btn discord">Join Discord</a>
+</section>
 
-  <a href="index.html">Home</a>
-  <a href="monster-search.html">Monsters</a>
-  <a href="item-search.html">Items</a>
-  <a href="stage-search.html">Stages</a>
-
-  <hr>
-
-  <strong>Language</strong>
-  <a href="#" onclick="setLang('en')">EN</a>
-  <a href="#" onclick="setLang('jp')">JP</a>
-</aside>
-
-
-  <!-- CONTENT -->
-  <main class="content">
-    <header style="display:flex;justify-content:space-between;align-items:center">
-      <h1>DDON Infos</h1>
-      <button onclick="toggleTheme()">🌙</button>
-    </header>
-
-    <div class="box">
-      <h2>Server Info</h2>
-      <p>Infos about our Server.</p>
-      <a href="server.html">Open →</a>
+<section class="section">
+    <h2>Features</h2>
+    <div class="card">
+        <h3>Hardcore Mode</h3>
+        <p>Permadeath • Milestones • Ladder System</p>
     </div>
-
-    <div class="box">
-      <h2>Monster Wiki</h2>
-      <p>Search monsters, loot and spawn data.</p>
-      <a href="monster-search.html">Open →</a>
+    <div class="card">
+        <h3>Bitterblack Maze</h3>
+        <p>Roguelite Mode • Unique Rewards</p>
     </div>
-  </main>
+    <div class="card">
+        <h3>Community Driven</h3>
+        <p>Events • Updates • Active Development</p>
+    </div>
+</section>
 
-</div>
+<footer>
+    © 2026 DDON Revival • Unofficial Fan Project
+</footer>
 
 </body>
 </html>
