@@ -20,21 +20,6 @@ window.languages = [
 window.translations = {
 
 en:{
-home:"Home",
-news:"News",
-status:"Server Status",
-leaderboard:"Leaderboard",
-download:"Download",
-title:"Dragon's Dogma Online",
-subtitle:"Biggest Server • Custom Content • Hardcore",
-
-serverStatusTitle:"Server Status",
-statusLabel:"Status",
-playersLabel:"Players",
-online:"Online",
-offline:"Offline",
-totalPlayers:"Total Players Online",
-
 leaderboardTitle:"Leaderboard",
 normalTab:"Normal",
 hcTab:"Hardcore",
@@ -45,25 +30,23 @@ hcSince:"Hardcore Since",
 hcStatus:"Status",
 alive:"Alive",
 dead:"Dead",
-noPlayersFound:"No players found"
+noPlayersFound:"No players found",
+jobs:{
+"Fighter":"Fighter",
+"Seeker":"Seeker",
+"Hunter":"Hunter",
+"Priest":"Priest",
+"Shield Sage":"Shield Sage",
+"Sorcerer":"Sorcerer",
+"Warrior":"Warrior",
+"Element Archer":"Element Archer",
+"Alchemist":"Alchemist",
+"Spirit Lancer":"Spirit Lancer",
+"High Scepter":"High Scepter"
+}
 },
 
 jp:{
-home:"ホーム",
-news:"ニュース",
-status:"サーバー状況",
-leaderboard:"ランキング",
-download:"ダウンロード",
-title:"ドラゴンズドグマオンライン",
-subtitle:"最大サーバー • カスタムコンテンツ • ハードコア",
-
-serverStatusTitle:"サーバー状況",
-statusLabel:"状態",
-playersLabel:"プレイヤー数",
-online:"オンライン",
-offline:"オフライン",
-totalPlayers:"総オンライン人数",
-
 leaderboardTitle:"ランキング",
 normalTab:"通常",
 hcTab:"ハードコア",
@@ -74,25 +57,23 @@ hcSince:"HC開始日",
 hcStatus:"状態",
 alive:"生存",
 dead:"死亡",
-noPlayersFound:"プレイヤーが見つかりません"
+noPlayersFound:"プレイヤーが見つかりません",
+jobs:{
+"Fighter":"ファイター",
+"Seeker":"シーカー",
+"Hunter":"ハンター",
+"Priest":"プリースト",
+"Shield Sage":"シールドセージ",
+"Sorcerer":"ソーサラー",
+"Warrior":"ウォリアー",
+"Element Archer":"エレメントアーチャー",
+"Alchemist":"アルケミスト",
+"Spirit Lancer":"スピリットランサー",
+"High Scepter":"ハイセプター"
+}
 },
 
 zh:{
-home:"首页",
-news:"新闻",
-status:"服务器状态",
-leaderboard:"排行榜",
-download:"下载",
-title:"龙之信条 Online",
-subtitle:"最大服务器 • 自定义内容 • 硬核",
-
-serverStatusTitle:"服务器状态",
-statusLabel:"状态",
-playersLabel:"玩家数",
-online:"在线",
-offline:"离线",
-totalPlayers:"当前在线人数",
-
 leaderboardTitle:"排行榜",
 normalTab:"普通",
 hcTab:"硬核",
@@ -103,25 +84,23 @@ hcSince:"成为HC时间",
 hcStatus:"状态",
 alive:"存活",
 dead:"死亡",
-noPlayersFound:"未找到玩家"
+noPlayersFound:"未找到玩家",
+jobs:{
+"Fighter":"战士",
+"Seeker":"探索者",
+"Hunter":"猎人",
+"Priest":"祭司",
+"Shield Sage":"盾贤者",
+"Sorcerer":"术士",
+"Warrior":"狂战士",
+"Element Archer":"元素弓手",
+"Alchemist":"炼金术士",
+"Spirit Lancer":"灵枪手",
+"High Scepter":"高阶权杖"
+}
 },
 
 pt:{
-home:"Início",
-news:"Notícias",
-status:"Status do Servidor",
-leaderboard:"Classificação",
-download:"Download",
-title:"Dragon's Dogma Online",
-subtitle:"Maior Servidor • Hardcore",
-
-serverStatusTitle:"Status do Servidor",
-statusLabel:"Status",
-playersLabel:"Jogadores",
-online:"Online",
-offline:"Offline",
-totalPlayers:"Total de Jogadores Online",
-
 leaderboardTitle:"Classificação",
 normalTab:"Normal",
 hcTab:"Hardcore",
@@ -132,25 +111,23 @@ hcSince:"Hardcore Desde",
 hcStatus:"Status",
 alive:"Vivo",
 dead:"Morto",
-noPlayersFound:"Nenhum jogador encontrado"
+noPlayersFound:"Nenhum jogador encontrado",
+jobs:{
+"Fighter":"Guerreiro",
+"Seeker":"Explorador",
+"Hunter":"Caçador",
+"Priest":"Sacerdote",
+"Shield Sage":"Sábio Escudo",
+"Sorcerer":"Feiticeiro",
+"Warrior":"Berserker",
+"Element Archer":"Arqueiro Elemental",
+"Alchemist":"Alquimista",
+"Spirit Lancer":"Lanceiro Espiritual",
+"High Scepter":"Alto Cetro"
+}
 },
 
 es:{
-home:"Inicio",
-news:"Noticias",
-status:"Estado del Servidor",
-leaderboard:"Clasificación",
-download:"Descargar",
-title:"Dragon's Dogma Online",
-subtitle:"Servidor Más Grande • Hardcore",
-
-serverStatusTitle:"Estado del Servidor",
-statusLabel:"Estado",
-playersLabel:"Jugadores",
-online:"En línea",
-offline:"Fuera de línea",
-totalPlayers:"Total de Jugadores en Línea",
-
 leaderboardTitle:"Clasificación",
 normalTab:"Normal",
 hcTab:"Hardcore",
@@ -161,25 +138,23 @@ hcSince:"Hardcore Desde",
 hcStatus:"Estado",
 alive:"Vivo",
 dead:"Muerto",
-noPlayersFound:"No se encontraron jugadores"
+noPlayersFound:"No se encontraron jugadores",
+jobs:{
+"Fighter":"Guerrero",
+"Seeker":"Explorador",
+"Hunter":"Cazador",
+"Priest":"Sacerdote",
+"Shield Sage":"Sabio del Escudo",
+"Sorcerer":"Hechicero",
+"Warrior":"Berserker",
+"Element Archer":"Arquero Elemental",
+"Alchemist":"Alquimista",
+"Spirit Lancer":"Lancero Espiritual",
+"High Scepter":"Gran Cetro"
+}
 },
 
 ru:{
-home:"Главная",
-news:"Новости",
-status:"Статус Сервера",
-leaderboard:"Таблица лидеров",
-download:"Скачать",
-title:"Dragon's Dogma Online",
-subtitle:"Крупнейший сервер • Hardcore",
-
-serverStatusTitle:"Статус Сервера",
-statusLabel:"Статус",
-playersLabel:"Игроки",
-online:"Онлайн",
-offline:"Оффлайн",
-totalPlayers:"Всего игроков онлайн",
-
 leaderboardTitle:"Таблица лидеров",
 normalTab:"Обычный",
 hcTab:"Хардкор",
@@ -190,25 +165,23 @@ hcSince:"Хардкор с",
 hcStatus:"Статус",
 alive:"Жив",
 dead:"Мёртв",
-noPlayersFound:"Игроки не найдены"
+noPlayersFound:"Игроки не найдены",
+jobs:{
+"Fighter":"Воин",
+"Seeker":"Искатель",
+"Hunter":"Охотник",
+"Priest":"Жрец",
+"Shield Sage":"Мудрец Щита",
+"Sorcerer":"Чародей",
+"Warrior":"Берсерк",
+"Element Archer":"Элементальный Лучник",
+"Alchemist":"Алхимик",
+"Spirit Lancer":"Копейщик Духа",
+"High Scepter":"Высший Скипетр"
+}
 },
 
 tr:{
-home:"Ana Sayfa",
-news:"Haberler",
-status:"Sunucu Durumu",
-leaderboard:"Lider Tablosu",
-download:"İndir",
-title:"Dragon's Dogma Online",
-subtitle:"En Büyük Sunucu • Hardcore",
-
-serverStatusTitle:"Sunucu Durumu",
-statusLabel:"Durum",
-playersLabel:"Oyuncular",
-online:"Çevrimiçi",
-offline:"Çevrimdışı",
-totalPlayers:"Toplam Oyuncu",
-
 leaderboardTitle:"Lider Tablosu",
 normalTab:"Normal",
 hcTab:"Hardcore",
@@ -219,25 +192,23 @@ hcSince:"Hardcore Başlangıç",
 hcStatus:"Durum",
 alive:"Hayatta",
 dead:"Ölü",
-noPlayersFound:"Oyuncu bulunamadı"
+noPlayersFound:"Oyuncu bulunamadı",
+jobs:{
+"Fighter":"Savaşçı",
+"Seeker":"Kaşif",
+"Hunter":"Avcı",
+"Priest":"Rahip",
+"Shield Sage":"Kalkan Bilgesi",
+"Sorcerer":"Büyücü",
+"Warrior":"Berserker",
+"Element Archer":"Element Okçusu",
+"Alchemist":"Simyacı",
+"Spirit Lancer":"Ruh Mızrakçısı",
+"High Scepter":"Yüksek Asa"
+}
 },
 
 pl:{
-home:"Strona Główna",
-news:"Aktualności",
-status:"Status Serwera",
-leaderboard:"Ranking",
-download:"Pobierz",
-title:"Dragon's Dogma Online",
-subtitle:"Największy Serwer • Hardcore",
-
-serverStatusTitle:"Status Serwera",
-statusLabel:"Status",
-playersLabel:"Gracze",
-online:"Online",
-offline:"Offline",
-totalPlayers:"Łączna liczba graczy",
-
 leaderboardTitle:"Ranking",
 normalTab:"Normalny",
 hcTab:"Hardcore",
@@ -248,25 +219,23 @@ hcSince:"Hardcore od",
 hcStatus:"Status",
 alive:"Żyje",
 dead:"Martwy",
-noPlayersFound:"Nie znaleziono graczy"
+noPlayersFound:"Nie znaleziono graczy",
+jobs:{
+"Fighter":"Wojownik",
+"Seeker":"Poszukiwacz",
+"Hunter":"Łowca",
+"Priest":"Kapłan",
+"Shield Sage":"Mędrzec Tarczy",
+"Sorcerer":"Czarodziej",
+"Warrior":"Berserker",
+"Element Archer":"Łucznik Żywiołów",
+"Alchemist":"Alchemik",
+"Spirit Lancer":"Włócznik Duchów",
+"High Scepter":"Wielkie Berło"
+}
 },
 
 kr:{
-home:"홈",
-news:"뉴스",
-status:"서버 상태",
-leaderboard:"리더보드",
-download:"다운로드",
-title:"드래곤즈 도그마 온라인",
-subtitle:"최대 서버 • 하드코어",
-
-serverStatusTitle:"서버 상태",
-statusLabel:"상태",
-playersLabel:"플레이어 수",
-online:"온라인",
-offline:"오프라인",
-totalPlayers:"총 온라인 플레이어",
-
 leaderboardTitle:"리더보드",
 normalTab:"일반",
 hcTab:"하드코어",
@@ -277,25 +246,23 @@ hcSince:"하드코어 시작일",
 hcStatus:"상태",
 alive:"생존",
 dead:"사망",
-noPlayersFound:"플레이어를 찾을 수 없습니다"
+noPlayersFound:"플레이어를 찾을 수 없습니다",
+jobs:{
+"Fighter":"파이터",
+"Seeker":"시커",
+"Hunter":"헌터",
+"Priest":"프리스트",
+"Shield Sage":"실드 세이지",
+"Sorcerer":"소서러",
+"Warrior":"워리어",
+"Element Archer":"엘리먼트 아처",
+"Alchemist":"알케미스트",
+"Spirit Lancer":"스피릿 랜서",
+"High Scepter":"하이 셉터"
+}
 },
 
 it:{
-home:"Home",
-news:"Notizie",
-status:"Stato Server",
-leaderboard:"Classifica",
-download:"Scarica",
-title:"Dragon's Dogma Online",
-subtitle:"Server Più Grande • Hardcore",
-
-serverStatusTitle:"Stato Server",
-statusLabel:"Stato",
-playersLabel:"Giocatori",
-online:"Online",
-offline:"Offline",
-totalPlayers:"Totale Giocatori Online",
-
 leaderboardTitle:"Classifica",
 normalTab:"Normale",
 hcTab:"Hardcore",
@@ -306,25 +273,23 @@ hcSince:"Hardcore Dal",
 hcStatus:"Stato",
 alive:"Vivo",
 dead:"Morto",
-noPlayersFound:"Nessun giocatore trovato"
+noPlayersFound:"Nessun giocatore trovato",
+jobs:{
+"Fighter":"Guerriero",
+"Seeker":"Esploratore",
+"Hunter":"Cacciatore",
+"Priest":"Sacerdote",
+"Shield Sage":"Saggio dello Scudo",
+"Sorcerer":"Stregone",
+"Warrior":"Berserker",
+"Element Archer":"Arciere Elementale",
+"Alchemist":"Alchimista",
+"Spirit Lancer":"Lanciere Spirituale",
+"High Scepter":"Alto Scettro"
+}
 },
 
 fr:{
-home:"Accueil",
-news:"Actualités",
-status:"Statut du Serveur",
-leaderboard:"Classement",
-download:"Télécharger",
-title:"Dragon's Dogma Online",
-subtitle:"Plus Grand Serveur • Hardcore",
-
-serverStatusTitle:"Statut du Serveur",
-statusLabel:"Statut",
-playersLabel:"Joueurs",
-online:"En ligne",
-offline:"Hors ligne",
-totalPlayers:"Total des Joueurs en Ligne",
-
 leaderboardTitle:"Classement",
 normalTab:"Normal",
 hcTab:"Hardcore",
@@ -335,25 +300,23 @@ hcSince:"Hardcore Depuis",
 hcStatus:"Statut",
 alive:"Vivant",
 dead:"Mort",
-noPlayersFound:"Aucun joueur trouvé"
+noPlayersFound:"Aucun joueur trouvé",
+jobs:{
+"Fighter":"Guerrier",
+"Seeker":"Éclaireur",
+"Hunter":"Chasseur",
+"Priest":"Prêtre",
+"Shield Sage":"Sage du Bouclier",
+"Sorcerer":"Sorcier",
+"Warrior":"Berserker",
+"Element Archer":"Archer Élémentaire",
+"Alchemist":"Alchimiste",
+"Spirit Lancer":"Lancier Spirituel",
+"High Scepter":"Grand Sceptre"
+}
 },
 
 gr:{
-home:"Αρχική",
-news:"Νέα",
-status:"Κατάσταση Διακομιστή",
-leaderboard:"Πίνακας Κατάταξης",
-download:"Λήψη",
-title:"Dragon's Dogma Online",
-subtitle:"Μεγαλύτερος Server • Hardcore",
-
-serverStatusTitle:"Κατάσταση Διακομιστή",
-statusLabel:"Κατάσταση",
-playersLabel:"Παίκτες",
-online:"Online",
-offline:"Offline",
-totalPlayers:"Σύνολο Παικτών Online",
-
 leaderboardTitle:"Πίνακας Κατάταξης",
 normalTab:"Κανονικό",
 hcTab:"Hardcore",
@@ -364,7 +327,20 @@ hcSince:"Hardcore Από",
 hcStatus:"Κατάσταση",
 alive:"Ζωντανός",
 dead:"Νεκρός",
-noPlayersFound:"Δεν βρέθηκαν παίκτες"
+noPlayersFound:"Δεν βρέθηκαν παίκτες",
+jobs:{
+"Fighter":"Πολεμιστής",
+"Seeker":"Εξερευνητής",
+"Hunter":"Κυνηγός",
+"Priest":"Ιερέας",
+"Shield Sage":"Σοφός Ασπίδας",
+"Sorcerer":"Μάγος",
+"Warrior":"Βάρβαρος",
+"Element Archer":"Τοξότης Στοιχείων",
+"Alchemist":"Αλχημιστής",
+"Spirit Lancer":"Λογχοφόρος Πνεύματος",
+"High Scepter":"Ύπατος Σκήπτρο"
+}
 }
 
 };
