@@ -111,74 +111,49 @@ h1{
 
 <script src="translations.js"></script>
 <script>
+
 const selector = document.getElementById("languageSelector");
-const content = document.getElementById("content");
 
 window.languages.forEach(lang=>{
-    const option=document.createElement("option");
-    option.value=lang.code;
-    option.textContent=lang.flag+" "+lang.name;
+    const option = document.createElement("option");
+    option.value = lang.code;
+    option.textContent = `${lang.flag} ${lang.name}`;
     selector.appendChild(option);
 });
 
-function render(langCode){
-    const t = window.translations[langCode];
+function setLanguage(code){
+
+    const t = window.translations[code];
+    const ht = t.howto || t; // 🔥 MAGIC FIX
 
     document.getElementById("howTitle").textContent = t.howTitle || t.howToPlay;
 
-    content.innerHTML = `
-    <div class="section">
-        <h2><span class="step-box">1</span> ${t.step1Title}</h2>
-        <p>${t.step1Text1 || t.howto?.step1Text || ""}</p>
-        <div class="box">
-            <p><strong>${t.downloadFull || t.howto?.fullClient || "Full Client"}</strong><br>
-            <a class="download-btn" href="${t.downloadLinks.full}" target="_blank">Download</a></p>
+    // STEP TITLES
+    document.getElementById("step1Title").textContent = ht.step1Title || "";
+    document.getElementById("step2Title").textContent = ht.step2Title || "";
+    document.getElementById("step3Title").textContent = ht.step3Title || "";
+    document.getElementById("step4Title").textContent = ht.step4Title || "";
+    document.getElementById("step5Title").textContent = ht.step5Title || "";
+    document.getElementById("step6Title").textContent = ht.step6Title || "";
+    document.getElementById("step7Title").textContent = ht.step7Title || "";
 
-            ${t.downloadLinks.multi ? `
-            <p><strong>${t.downloadMulti || t.howto?.multiClient || "Multipart Version"}</strong><br>
-            <a class="download-btn" href="${t.downloadLinks.multi}" target="_blank">Download</a></p>
-            ` : ``}
-        </div>
-    </div>
+    // DOWNLOAD BUTTONS
+    document.getElementById("fullClientText").textContent = ht.fullClient || t.downloadFull || "Full Client";
+    document.getElementById("multipartText").textContent = ht.multiClient || t.downloadMulti || "Multipart";
 
-    <div class="section">
-        <h2><span class="step-box">2</span> ${t.step2Title}</h2>
-        <p>${t.step2Text1 || t.howto?.step2Text || ""}</p>
-    </div>
+    document.getElementById("fullClientLink").textContent = "Download";
+    document.getElementById("multipartLink").textContent = "Download";
 
-    <div class="section">
-        <h2><span class="step-box">3</span> ${t.step3Title}</h2>
-        <p>${t.step3Text1 || t.howto?.step3Text || ""}</p>
-    </div>
-
-    <div class="section">
-        <h2><span class="step-box">4</span> ${t.step4Title}</h2>
-        <p>${t.step4Text1 || t.howto?.step4Text || ""}</p>
-    </div>
-
-    <div class="section">
-        <h2><span class="step-box">5</span> ${t.step5Title}</h2>
-        <p>${t.step5Text1 || t.howto?.step5Text || ""}</p>
-    </div>
-
-    <div class="section">
-        <h2><span class="step-box">6</span> ${t.step6Title}</h2>
-        <p>${t.step6Text1 || t.howto?.step6Text || ""}</p>
-    </div>
-
-    <div class="section">
-        <h2><span class="step-box">7</span> ${t.step7Title}</h2>
-        <p>${t.step7Text1 || t.howto?.step7Text || ""}</p>
-    </div>
-    `;
+    document.getElementById("fullClientLink").href = t.downloadLinks.full;
+    document.getElementById("multipartLink").href = t.downloadLinks.multi;
 }
 
-selector.addEventListener("change",()=>{
-    render(selector.value);
+selector.addEventListener("change", e=>{
+    setLanguage(e.target.value);
 });
 
-render("en");
-</script>
+setLanguage("en");
 
+</script>
 </body>
 </html>
