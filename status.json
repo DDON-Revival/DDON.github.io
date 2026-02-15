@@ -22,12 +22,12 @@
     {
         "name": "Channel 5",
         "online": true,
-        "players": 6
+        "players": 4
     },
     {
         "name": "Channel 6",
         "online": true,
-        "players": 5
+        "players": 6
     },
     {
         "name": "Channel 7",
@@ -47,7 +47,7 @@
     {
         "name": "Custom Enemy",
         "online": true,
-        "players": 5
+        "players": 4
     },
     {
         "name": "Boss Rush",
