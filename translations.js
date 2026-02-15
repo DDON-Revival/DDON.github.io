@@ -58,6 +58,8 @@ hcStatus:"Status",
 alive:"Alive",
 dead:"Dead",
 noPlayersFound:"No players found",
+howToPlay:"How To Play",
+wiki:"Wiki",
 
 jobs:{
 "Fighter":"Fighter",
@@ -112,6 +114,8 @@ hcStatus:"状態",
 alive:"生存",
 dead:"死亡",
 noPlayersFound:"プレイヤーが見つかりません",
+howToPlay:"遊び方",
+wiki:"ウィキ",
 
 jobs:{
 "Fighter":"ファイター",
@@ -166,6 +170,8 @@ hcStatus:"状态",
 alive:"存活",
 dead:"死亡",
 noPlayersFound:"未找到玩家",
+howToPlay:"游戏指南",
+wiki:"维基",
 
 jobs:{
 "Fighter":"战士",
@@ -220,6 +226,8 @@ hcStatus:"Status",
 alive:"Vivo",
 dead:"Morto",
 noPlayersFound:"Nenhum jogador encontrado",
+howToPlay:"Como Jogar",
+wiki:"Wiki",
 
 jobs:{
 "Fighter":"Guerreiro",
@@ -274,6 +282,8 @@ hcStatus:"Estado",
 alive:"Vivo",
 dead:"Muerto",
 noPlayersFound:"No se encontraron jugadores",
+howToPlay:"Cómo Jugar",
+wiki:"Wiki",
 
 jobs:{
 "Fighter":"Guerrero",
@@ -328,6 +338,8 @@ hcStatus:"Статус",
 alive:"Жив",
 dead:"Мёртв",
 noPlayersFound:"Игроки не найдены",
+howToPlay:"Как Играть",
+wiki:"Вики",
 
 jobs:{
 "Fighter":"Воин",
@@ -382,6 +394,8 @@ hcStatus:"Durum",
 alive:"Hayatta",
 dead:"Ölü",
 noPlayersFound:"Oyuncu bulunamadı",
+howToPlay:"Nasıl Oynanır",
+wiki:"Wiki",
 
 jobs:{
 "Fighter":"Savaşçı",
@@ -436,6 +450,8 @@ hcStatus:"Status",
 alive:"Żyje",
 dead:"Martwy",
 noPlayersFound:"Nie znaleziono graczy",
+howToPlay:"Jak Grać",
+wiki:"Wiki",
 
 jobs:{
 "Fighter":"Wojownik",
@@ -490,6 +506,8 @@ hcStatus:"상태",
 alive:"생존",
 dead:"사망",
 noPlayersFound:"플레이어를 찾을 수 없습니다",
+howToPlay:"플레이 방법",
+wiki:"위키",
 
 jobs:{
 "Fighter":"파이터",
@@ -544,6 +562,8 @@ hcStatus:"Stato",
 alive:"Vivo",
 dead:"Morto",
 noPlayersFound:"Nessun giocatore trovato",
+howToPlay:"Come Giocare",
+wiki:"Wiki",
 
 jobs:{
 "Fighter":"Guerriero",
@@ -598,6 +618,8 @@ hcStatus:"Statut",
 alive:"Vivant",
 dead:"Mort",
 noPlayersFound:"Aucun joueur trouvé",
+howToPlay:"Comment Jouer",
+wiki:"Wiki",
 
 jobs:{
 "Fighter":"Guerrier",
@@ -652,6 +674,8 @@ hcStatus:"Κατάσταση",
 alive:"Ζωντανός",
 dead:"Νεκρός",
 noPlayersFound:"Δεν βρέθηκαν παίκτες",
+howToPlay:"Πώς να Παίξεις",
+wiki:"Wiki",
 
 jobs:{
 "Fighter":"Πολεμιστής",
