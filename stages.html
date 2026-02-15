@@ -2,95 +2,83 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>DDON Wiki - Stages</title>
+<title>DDON Wiki – Stages</title>
 
 <style>
 body{
     margin:0;
-    background:#0f0f14;
-    color:#e6e6e6;
     font-family:Arial;
+    background:#0f0f14;
+    color:#eee;
 }
-
 header{
     background:#1b1b25;
     padding:20px;
     border-bottom:2px solid #c8a75d;
+    text-align:center;
 }
-
-h1{
-    margin:0;
-    color:#c8a75d;
-}
-
+h1{color:#c8a75d;}
 .container{
-    max-width:1200px;
+    max-width:1000px;
     margin:40px auto;
     padding:20px;
 }
-
 input{
+    width:100%;
     padding:10px;
-    width:300px;
+    margin-bottom:20px;
     background:#111;
-    color:white;
+    color:#c8a75d;
     border:1px solid #c8a75d;
 }
-
 .stage{
-    background:#1b1b25;
-    padding:15px;
-    margin-top:10px;
-    border:1px solid #2a2a35;
+    padding:10px;
+    border-bottom:1px solid #2a2a35;
+}
+.stage:hover{
+    background:#1a1a22;
 }
 </style>
 </head>
+
 <body>
 
 <header>
-<h1>Stage Wiki</h1>
+<h1>Stages</h1>
 </header>
 
 <div class="container">
+
 <input type="text" id="search" placeholder="Search stage...">
 <div id="stageList"></div>
+
 </div>
 
 <script>
 
-let stages = {};
+async function loadStages(){
 
-fetch("datas/stage-names.json")
-.then(r=>r.json())
-.then(data=>{
-    stages = data;
-    renderStages();
-});
-
-function renderStages(filter=""){
+    const res = await fetch("datas/stage-names.json");
+    const data = await res.json();
 
     const list = document.getElementById("stageList");
-    list.innerHTML="";
 
-    Object.entries(stages).forEach(([id, stage])=>{
-
-        if(!stage.en) return;
-
-        if(filter && !stage.en.toLowerCase().includes(filter.toLowerCase()))
-            return;
-
-        list.innerHTML += `
-        <div class="stage">
-            <strong>ID:</strong> ${id}<br>
-            <strong>Name:</strong> ${stage.en}
-        </div>
-        `;
+    Object.keys(data).forEach(id=>{
+        const div = document.createElement("div");
+        div.className = "stage";
+        div.innerHTML = `<strong>${id}</strong> – ${data[id].en}`;
+        list.appendChild(div);
     });
 }
 
-document.getElementById("search").addEventListener("input",e=>{
-    renderStages(e.target.value);
+document.getElementById("search").addEventListener("input", function(){
+    const val = this.value.toLowerCase();
+    document.querySelectorAll(".stage").forEach(d=>{
+        d.style.display = d.innerText.toLowerCase().includes(val) ? "" : "none";
+    });
 });
+
+loadStages();
 
 </script>
 

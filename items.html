@@ -2,26 +2,24 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>DDON Wiki - Items</title>
+<title>DDON Wiki – Items</title>
 
 <style>
 body{
     margin:0;
-    background:#0f0f14;
-    color:#e6e6e6;
     font-family:Arial;
+    background:#0f0f14;
+    color:#eee;
 }
 
 header{
     background:#1b1b25;
     padding:20px;
     border-bottom:2px solid #c8a75d;
+    text-align:center;
 }
 
-h1{
-    margin:0;
-    color:#c8a75d;
-}
+h1{color:#c8a75d;}
 
 .container{
     max-width:1200px;
@@ -30,70 +28,90 @@ h1{
 }
 
 input{
+    width:100%;
     padding:10px;
-    width:300px;
+    margin-bottom:20px;
     background:#111;
-    color:white;
+    color:#c8a75d;
     border:1px solid #c8a75d;
 }
 
-.item{
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:8px;
+    border-bottom:1px solid #2a2a35;
+}
+
+th{
     background:#1b1b25;
-    padding:15px;
-    margin-top:10px;
-    border:1px solid #2a2a35;
+    color:#c8a75d;
+    text-align:left;
+}
+
+tr:hover{
+    background:#1a1a22;
 }
 </style>
 </head>
+
 <body>
 
 <header>
-<h1>Item Wiki</h1>
+<h1>Items</h1>
 </header>
 
 <div class="container">
+
 <input type="text" id="search" placeholder="Search item...">
-<div id="itemList"></div>
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody id="itemTable"></tbody>
+</table>
+
 </div>
 
 <script>
 
-let items = [];
+async function loadItems(){
 
-fetch("datas/itemlist.csv")
-.then(r=>r.text())
-.then(text=>{
-    const rows = text.split("\n");
+    const res = await fetch("datas/itemlist.csv");
+    const text = await res.text();
+
+    const rows = text.split("\n").slice(1);
+
+    const table = document.getElementById("itemTable");
+
     rows.forEach(r=>{
         const cols = r.split(",");
-        if(cols[1])
-            items.push({ id:cols[0], name:cols[1] });
-    });
-    renderItems();
-});
+        if(cols.length < 2) return;
 
-function renderItems(filter=""){
-
-    const list = document.getElementById("itemList");
-    list.innerHTML="";
-
-    items.forEach(item=>{
-
-        if(filter && !item.name.toLowerCase().includes(filter.toLowerCase()))
-            return;
-
-        list.innerHTML += `
-        <div class="item">
-            <strong>ID:</strong> ${item.id}<br>
-            <strong>Name:</strong> ${item.name}
-        </div>
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${cols[0]}</td>
+            <td>${cols[1]}</td>
         `;
+        table.appendChild(tr);
     });
 }
 
-document.getElementById("search").addEventListener("input",e=>{
-    renderItems(e.target.value);
+document.getElementById("search").addEventListener("input", function(){
+    const val = this.value.toLowerCase();
+    document.querySelectorAll("#itemTable tr").forEach(tr=>{
+        tr.style.display = tr.innerText.toLowerCase().includes(val) ? "" : "none";
+    });
 });
+
+loadItems();
 
 </script>
 
