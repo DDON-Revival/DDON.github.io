@@ -2,82 +2,97 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Monsters - DDON Wiki</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<title>DDON Wiki - Monsters</title>
+
 <style>
 body{
     margin:0;
-    font-family:'Cinzel', serif;
-    background:
-        linear-gradient(rgba(15,15,20,0.95), rgba(15,15,20,0.95)),
-        url("ddon-bg.jpg") center/cover no-repeat fixed;
+    background:#0f0f14;
     color:#e6e6e6;
+    font-family:Arial;
 }
 
 header{
     background:#1b1b25;
     padding:20px;
-    text-align:center;
     border-bottom:2px solid #c8a75d;
 }
 
-.container{
-    max-width:1100px;
-    margin:50px auto;
-    padding:20px;
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(220px,1fr));
-    gap:25px;
-}
-
-.monster-card{
-    background:#1b1b25;
-    border:1px solid #2a2a35;
-    padding:15px;
-    border-radius:6px;
-    text-align:center;
-    transition:0.3s;
-}
-
-.monster-card:hover{
-    border-color:#c8a75d;
-    transform:translateY(-4px);
-}
-
-.monster-card img{
-    max-width:100%;
-    height:150px;
-    object-fit:cover;
-}
-
-.monster-card a{
+h1{
+    margin:0;
     color:#c8a75d;
-    text-decoration:none;
-    display:block;
+}
+
+.container{
+    max-width:1200px;
+    margin:40px auto;
+    padding:20px;
+}
+
+input{
+    padding:10px;
+    width:300px;
+    background:#111;
+    color:white;
+    border:1px solid #c8a75d;
+}
+
+.monster{
+    background:#1b1b25;
+    padding:15px;
     margin-top:10px;
+    border:1px solid #2a2a35;
 }
 </style>
 </head>
-
 <body>
 
 <header>
-<h1>Monsters</h1>
+<h1>Monster Wiki</h1>
 </header>
 
 <div class="container">
-
-<div class="monster-card">
-<img src="assets/images/monsters/goblin.jpg">
-<a href="wiki/monster-detail.html">Goblin</a>
+<input type="text" id="search" placeholder="Search monster...">
+<div id="monsterList"></div>
 </div>
 
-<div class="monster-card">
-<img src="assets/images/monsters/cyclops.jpg">
-<a href="wiki/monster-detail.html">Cyclops</a>
-</div>
+<script>
 
-</div>
+let monsters = {};
+
+fetch("datas/enemy-names.json")
+.then(r=>r.json())
+.then(data=>{
+    monsters = data;
+    renderMonsters();
+});
+
+function renderMonsters(filter=""){
+
+    const list = document.getElementById("monsterList");
+    list.innerHTML="";
+
+    Object.entries(monsters).forEach(([id, name])=>{
+
+        if(name === "None") return;
+
+        if(filter && !name.toLowerCase().includes(filter.toLowerCase()))
+            return;
+
+        list.innerHTML += `
+        <div class="monster">
+            <strong>ID:</strong> ${id}<br>
+            <strong>Name:</strong> ${name}
+        </div>
+        `;
+    });
+}
+
+document.getElementById("search").addEventListener("input",e=>{
+    renderMonsters(e.target.value);
+});
+
+</script>
 
 </body>
 </html>

@@ -1,100 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Items - DDON Wiki</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<title>DDON Wiki - Items</title>
 
 <style>
 body{
     margin:0;
-    font-family:'Cinzel', serif;
+    background:#0f0f14;
     color:#e6e6e6;
-    background:
-        linear-gradient(rgba(15,15,20,0.95), rgba(15,15,20,0.95)),
-        url("ddon-bg.jpg") center/cover no-repeat fixed;
+    font-family:Arial;
 }
 
 header{
     background:#1b1b25;
-    padding:25px;
+    padding:20px;
     border-bottom:2px solid #c8a75d;
-    text-align:center;
 }
 
 h1{
-    color:#c8a75d;
     margin:0;
+    color:#c8a75d;
 }
 
 .container{
     max-width:1200px;
-    margin:60px auto;
+    margin:40px auto;
     padding:20px;
 }
 
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
-    gap:25px;
+input{
+    padding:10px;
+    width:300px;
+    background:#111;
+    color:white;
+    border:1px solid #c8a75d;
 }
 
-.card{
+.item{
     background:#1b1b25;
+    padding:15px;
+    margin-top:10px;
     border:1px solid #2a2a35;
-    padding:20px;
-    border-radius:6px;
-    transition:0.3s;
-}
-
-.card:hover{
-    border-color:#c8a75d;
-    box-shadow:0 0 15px rgba(200,167,93,0.4);
-    transform:translateY(-5px);
-}
-
-.card h3{
-    margin-top:0;
-    color:#c8a75d;
 }
 </style>
 </head>
-
 <body>
 
 <header>
-<h1>Items</h1>
+<h1>Item Wiki</h1>
 </header>
 
 <div class="container">
-
-<div class="grid">
-
-<div class="card">
-<h3>Weapons</h3>
-<p>Swords, bows, staffs and more.</p>
+<input type="text" id="search" placeholder="Search item...">
+<div id="itemList"></div>
 </div>
 
-<div class="card">
-<h3>Armor</h3>
-<p>Helmets, chest pieces and full sets.</p>
-</div>
+<script>
 
-<div class="card">
-<h3>Materials</h3>
-<p>Crafting items and monster drops.</p>
-</div>
+let items = [];
 
-<div class="card">
-<h3>Consumables</h3>
-<p>Healing, buffs and special items.</p>
-</div>
+fetch("datas/itemlist.csv")
+.then(r=>r.text())
+.then(text=>{
+    const rows = text.split("\n");
+    rows.forEach(r=>{
+        const cols = r.split(",");
+        if(cols[1])
+            items.push({ id:cols[0], name:cols[1] });
+    });
+    renderItems();
+});
 
-</div>
+function renderItems(filter=""){
 
-</div>
+    const list = document.getElementById("itemList");
+    list.innerHTML="";
+
+    items.forEach(item=>{
+
+        if(filter && !item.name.toLowerCase().includes(filter.toLowerCase()))
+            return;
+
+        list.innerHTML += `
+        <div class="item">
+            <strong>ID:</strong> ${item.id}<br>
+            <strong>Name:</strong> ${item.name}
+        </div>
+        `;
+    });
+}
+
+document.getElementById("search").addEventListener("input",e=>{
+    renderItems(e.target.value);
+});
+
+</script>
 
 </body>
 </html>

@@ -1,85 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stages - DDON Wiki</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<title>DDON Wiki - Stages</title>
 
 <style>
 body{
     margin:0;
-    font-family:'Cinzel', serif;
+    background:#0f0f14;
     color:#e6e6e6;
-    background:
-        linear-gradient(rgba(15,15,20,0.95), rgba(15,15,20,0.95)),
-        url("ddon-bg.jpg") center/cover no-repeat fixed;
+    font-family:Arial;
 }
 
 header{
     background:#1b1b25;
-    padding:25px;
+    padding:20px;
     border-bottom:2px solid #c8a75d;
-    text-align:center;
 }
 
 h1{
-    color:#c8a75d;
     margin:0;
+    color:#c8a75d;
 }
 
 .container{
     max-width:1200px;
-    margin:60px auto;
+    margin:40px auto;
     padding:20px;
+}
+
+input{
+    padding:10px;
+    width:300px;
+    background:#111;
+    color:white;
+    border:1px solid #c8a75d;
 }
 
 .stage{
     background:#1b1b25;
+    padding:15px;
+    margin-top:10px;
     border:1px solid #2a2a35;
-    padding:25px;
-    margin-bottom:30px;
-    border-radius:6px;
-    transition:0.3s;
-}
-
-.stage:hover{
-    border-color:#c8a75d;
-    box-shadow:0 0 15px rgba(200,167,93,0.4);
-}
-
-.stage h2{
-    margin-top:0;
-    color:#c8a75d;
 }
 </style>
 </head>
-
 <body>
 
 <header>
-<h1>Stages</h1>
+<h1>Stage Wiki</h1>
 </header>
 
 <div class="container">
-
-<div class="stage">
-<h2>White Dragon Temple</h2>
-<p>Starting area and central hub of Lestania.</p>
+<input type="text" id="search" placeholder="Search stage...">
+<div id="stageList"></div>
 </div>
 
-<div class="stage">
-<h2>Barta Crags</h2>
-<p>Rocky desert area filled with powerful enemies.</p>
-</div>
+<script>
 
-<div class="stage">
-<h2>Mysree Forest</h2>
-<p>Dense forest region with hidden ruins and monsters.</p>
-</div>
+let stages = {};
 
-</div>
+fetch("datas/stage-names.json")
+.then(r=>r.json())
+.then(data=>{
+    stages = data;
+    renderStages();
+});
+
+function renderStages(filter=""){
+
+    const list = document.getElementById("stageList");
+    list.innerHTML="";
+
+    Object.entries(stages).forEach(([id, stage])=>{
+
+        if(!stage.en) return;
+
+        if(filter && !stage.en.toLowerCase().includes(filter.toLowerCase()))
+            return;
+
+        list.innerHTML += `
+        <div class="stage">
+            <strong>ID:</strong> ${id}<br>
+            <strong>Name:</strong> ${stage.en}
+        </div>
+        `;
+    });
+}
+
+document.getElementById("search").addEventListener("input",e=>{
+    renderStages(e.target.value);
+});
+
+</script>
 
 </body>
 </html>
