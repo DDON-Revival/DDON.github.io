@@ -795,50 +795,12 @@ async function loadServerStatus(){
     }
 }
 
-function switchTab(tab){
-    currentTab = tab;
-    renderLeaderboard();
-}
+<script src="translations.js"></script>
 
-function searchPlayer(){
-    if(!leaderboardData) return;
-
-    const input = document.getElementById("playerSearch").value.toLowerCase();
-    const container = document.getElementById("leaderboardContainer");
-    container.innerHTML = "";
-
-    const allPlayers = [
-        ...leaderboardData.normal,
-        ...leaderboardData.hc
-    ];
-
-    const results = allPlayers.filter(p =>
-        p.name.toLowerCase().includes(input)
-    );
-
-    if(results.length === 0){
-        container.innerHTML = "<p>No players found.</p>";
-        return;
-    }
-
-    results.forEach(player => {
-        const div = document.createElement("div");
-        div.className = "card";
-
-        div.innerHTML = `
-            <h3>${player.name}</h3>
-            <p>Level: ${player.level}</p>
-            <p>Class: ${player.class}</p>
-        `;
-
-        container.appendChild(div);
-    });
-}
-
+<script>
 loadServerStatus();
 setInterval(loadServerStatus, 15000);
-loadLeaderboard();
-
 </script>
+
 </body>
 </html>
