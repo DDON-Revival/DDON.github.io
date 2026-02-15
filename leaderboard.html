@@ -20,6 +20,7 @@ header{
     background:#1b1b25;
     padding:25px;
     border-bottom:2px solid #c8a75d;
+    position:relative;
 }
 
 h1{
@@ -34,6 +35,7 @@ h1{
     background:none;
     color:#c8a75d;
     cursor:pointer;
+    font-family:'Cinzel', serif;
 }
 
 .btn:hover{
@@ -72,10 +74,11 @@ h1{
     transform:translateY(-5px);
 }
 
-/* 🌍 Language Dropdown */
+/* LANGUAGE DROPDOWN */
 .lang-selector{
-    position:relative;
-    display:inline-block;
+    position:absolute;
+    right:20px;
+    top:25px;
 }
 
 .lang-btn{
@@ -92,6 +95,8 @@ h1{
     right:0;
     background:#1b1b25;
     border:1px solid #c8a75d;
+    max-height:300px;
+    overflow-y:auto;
 }
 
 .lang-dropdown div{
@@ -112,20 +117,19 @@ h1{
 <body>
 
 <header>
-<h1 data-key="leaderboardTitle">Leaderboard</h1>
+
+<h1 data-key="leaderboard">Leaderboard</h1>
 
 <button class="btn" onclick="switchTab('normal')" data-key="normalTab">Normal</button>
 <button class="btn" onclick="switchTab('hc')" data-key="hcTab">Hardcore</button>
 
 <br>
 
-<input id="search"
-       class="search"
-       data-placeholder="searchPlaceholder"
-       placeholder="Search player..."
+<input id="search" 
+       class="search" 
+       data-key-placeholder="searchPlaceholder"
+       placeholder="Search player..." 
        onkeyup="searchPlayer()">
-
-<br><br>
 
 <div class="lang-selector">
     <button class="lang-btn">🌍</button>
@@ -136,7 +140,7 @@ h1{
 
 <div id="leaderboard" class="grid"></div>
 
-<!-- 🔥 translations.js FIRST -->
+<!-- TRANSLATIONS -->
 <script src="translations.js"></script>
 
 <script>
@@ -145,10 +149,11 @@ let leaderboardData = null;
 let currentTab = "normal";
 
 /* ===========================
-   🌍 LANGUAGE SYSTEM
+   LANGUAGE SYSTEM
 =========================== */
 
-function setLanguage(lang){
+function applyTranslations(){
+    const lang = localStorage.getItem("lang") || "en";
     const t = translations[lang];
     if(!t) return;
 
@@ -157,12 +162,15 @@ function setLanguage(lang){
         if(t[key]) el.textContent = t[key];
     });
 
-    document.querySelectorAll("[data-placeholder]").forEach(el=>{
-        const key = el.getAttribute("data-placeholder");
+    document.querySelectorAll("[data-key-placeholder]").forEach(el=>{
+        const key = el.getAttribute("data-key-placeholder");
         if(t[key]) el.placeholder = t[key];
     });
+}
 
+function setLanguage(lang){
     localStorage.setItem("lang", lang);
+    applyTranslations();
     renderLeaderboard();
 }
 
@@ -173,8 +181,7 @@ languages.forEach(lang=>{
     document.getElementById("languageList").appendChild(div);
 });
 
-const saved = localStorage.getItem("lang") || "en";
-setLanguage(saved);
+applyTranslations();
 
 /* ===========================
    LOAD DATA
@@ -186,8 +193,7 @@ async function loadLeaderboard(){
         leaderboardData = await res.json();
         renderLeaderboard();
     }catch(err){
-        document.getElementById("leaderboard").innerHTML =
-            "<p>Failed to load leaderboard.</p>";
+        console.error("Failed to load leaderboard:", err);
     }
 }
 
@@ -198,7 +204,9 @@ async function loadLeaderboard(){
 function renderLeaderboard(){
     if(!leaderboardData) return;
 
-    const t = translations[localStorage.getItem("lang") || "en"];
+    const lang = localStorage.getItem("lang") || "en";
+    const t = translations[lang];
+
     const container = document.getElementById("leaderboard");
     container.innerHTML = "";
 
@@ -214,7 +222,7 @@ function renderLeaderboard(){
         const div = document.createElement("div");
         div.className = "card";
 
-        let highestLevel = Math.max(...player.classes.map(c => c.level));
+        const highestLevel = Math.max(...player.classes.map(c => c.level));
 
         let extra = "";
 
@@ -230,9 +238,9 @@ function renderLeaderboard(){
             <p>${t.level}: ${highestLevel}</p>
             <p><strong>${t.classes}:</strong></p>
             <ul>
-            ${player.classes.map(c =>
-                `<li>${c.class} (Lv.${c.level})</li>`
-            ).join("")}
+                ${player.classes.map(c => 
+                    `<li>${c.class} (Lv.${c.level})</li>`
+                ).join("")}
             </ul>
             ${extra}
         `;
@@ -257,10 +265,12 @@ function switchTab(tab){
 function searchPlayer(){
     if(!leaderboardData) return;
 
-    const t = translations[localStorage.getItem("lang") || "en"];
     const value = document.getElementById("search").value.toLowerCase();
     const container = document.getElementById("leaderboard");
     container.innerHTML = "";
+
+    const lang = localStorage.getItem("lang") || "en";
+    const t = translations[lang];
 
     const allPlayers = [
         ...(leaderboardData.normal || []),
@@ -276,31 +286,27 @@ function searchPlayer(){
         return;
     }
 
-    results.forEach(player => {
-        const div = document.createElement("div");
-        div.className = "card";
+    results.forEach(player=>{
+        const div=document.createElement("div");
+        div.className="card";
 
-        let highestLevel = Math.max(...player.classes.map(c => c.level));
+        const highestLevel = Math.max(...player.classes.map(c => c.level));
 
-        div.innerHTML = `
+        div.innerHTML=`
             <h3>${player.name}</h3>
             <p>${t.level}: ${highestLevel}</p>
             <p><strong>${t.classes}:</strong></p>
             <ul>
-            ${player.classes.map(c =>
-                `<li>${c.class} (Lv.${c.level})</li>`
-            ).join("")}
+                ${player.classes.map(c =>
+                    `<li>${c.class} (Lv.${c.level})</li>`
+                ).join("")}
             </ul>
         `;
-
         container.appendChild(div);
     });
 }
 
-/* ===========================
-   INIT
-=========================== */
-
+/* INIT */
 loadLeaderboard();
 
 </script>
