@@ -16,16 +16,13 @@ body{
     text-align:center;
 }
 
-/* Header */
 header{
     background:#1b1b25;
     padding:25px;
     border-bottom:2px solid #c8a75d;
 }
 
-h1{
-    color:#c8a75d;
-}
+h1{ color:#c8a75d; }
 
 .btn{
     padding:10px 20px;
@@ -64,6 +61,10 @@ h1{
     width:280px;
     padding:20px;
     margin:15px;
+}
+
+.pagination{
+    margin:30px;
 }
 
 /* 🌍 Language */
@@ -131,15 +132,24 @@ h1{
 
 <div id="leaderboard" class="grid"></div>
 
+<div class="pagination">
+    <button class="btn" onclick="prevPage()">◀ Prev</button>
+    <span id="pageInfo"></span>
+    <button class="btn" onclick="nextPage()">Next ▶</button>
+</div>
+
 <script src="translations.js"></script>
 
 <script>
 
 let leaderboardData = null;
 let currentTab = "normal";
+let currentPage = 1;
+const playersPerPage = 100;
+let filteredPlayers = [];
 
 /* ===========================
-   🌍 LANGUAGE SYSTEM
+   🌍 LANGUAGE
 =========================== */
 
 function setLanguage(lang){
@@ -170,12 +180,13 @@ languages.forEach(lang=>{
 setLanguage(localStorage.getItem("lang") || "en");
 
 /* ===========================
-   LOAD DATA
+   LOAD
 =========================== */
 
 async function loadLeaderboard(){
     const res = await fetch("leaderboard.json?nocache="+Date.now());
     leaderboardData = await res.json();
+    filteredPlayers = leaderboardData[currentTab];
     renderLeaderboard();
 }
 
@@ -184,22 +195,29 @@ async function loadLeaderboard(){
 =========================== */
 
 function renderLeaderboard(){
+
     if(!leaderboardData) return;
 
-    const currentLang = localStorage.getItem("lang") || "en";
-    const t = translations[currentLang];
-
+    const t = translations[localStorage.getItem("lang") || "en"];
     const container=document.getElementById("leaderboard");
     container.innerHTML="";
 
-    const players=leaderboardData[currentTab];
-
-    if(!players || players.length===0){
+    if(!filteredPlayers || filteredPlayers.length===0){
         container.innerHTML=`<p>${t.noPlayersFound}</p>`;
         return;
     }
 
-    players.forEach(player=>{
+    const totalPages = Math.ceil(filteredPlayers.length / playersPerPage);
+
+    if(currentPage > totalPages) currentPage = totalPages;
+    if(currentPage < 1) currentPage = 1;
+
+    const start = (currentPage-1) * playersPerPage;
+    const end = start + playersPerPage;
+
+    const playersToShow = filteredPlayers.slice(start, end);
+
+    playersToShow.forEach(player=>{
 
         const div=document.createElement("div");
         div.className="card";
@@ -229,6 +247,23 @@ function renderLeaderboard(){
 
         container.appendChild(div);
     });
+
+    document.getElementById("pageInfo").innerText =
+        `Page ${currentPage} / ${totalPages}`;
+}
+
+/* ===========================
+   PAGINATION
+=========================== */
+
+function nextPage(){
+    currentPage++;
+    renderLeaderboard();
+}
+
+function prevPage(){
+    currentPage--;
+    renderLeaderboard();
 }
 
 /* ===========================
@@ -236,7 +271,9 @@ function renderLeaderboard(){
 =========================== */
 
 function switchTab(tab){
-    currentTab=tab;
+    currentTab = tab;
+    currentPage = 1;
+    filteredPlayers = leaderboardData[currentTab];
     renderLeaderboard();
 }
 
@@ -245,44 +282,20 @@ function switchTab(tab){
 =========================== */
 
 function searchPlayer(){
-    if(!leaderboardData) return;
-
-    const currentLang = localStorage.getItem("lang") || "en";
-    const t = translations[currentLang];
 
     const value=document.getElementById("search").value.toLowerCase();
-    const container=document.getElementById("leaderboard");
-    container.innerHTML="";
 
-    const all=[...(leaderboardData.normal||[]),...(leaderboardData.hc||[])];
-
-    const results=all.filter(p=>p.name.toLowerCase().includes(value));
-
-    if(results.length===0){
-        container.innerHTML=`<p>${t.noPlayersFound}</p>`;
-        return;
+    if(value === ""){
+        filteredPlayers = leaderboardData[currentTab];
+    }else{
+        const all=[...(leaderboardData.normal||[]),...(leaderboardData.hc||[])];
+        filteredPlayers = all.filter(p =>
+            p.name.toLowerCase().includes(value)
+        );
     }
 
-    results.forEach(player=>{
-        const div=document.createElement("div");
-        div.className="card";
-
-        const highestLevel=Math.max(...player.classes.map(c=>c.level));
-
-        div.innerHTML=`
-            <h3>${player.name}</h3>
-            <p>${t.level}: ${highestLevel}</p>
-            <p><strong>${t.classes}:</strong></p>
-            <ul>
-                ${player.classes.map(c=>{
-                    const jobName = t.jobs?.[c.class] || c.class;
-                    return `<li>${jobName} (${t.level} ${c.level})</li>`;
-                }).join("")}
-            </ul>
-        `;
-
-        container.appendChild(div);
-    });
+    currentPage = 1;
+    renderLeaderboard();
 }
 
 loadLeaderboard();
