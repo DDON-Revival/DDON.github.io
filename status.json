@@ -7,12 +7,12 @@
     {
         "name": "Channel 1",
         "online": true,
-        "players": 32
+        "players": 29
     },
     {
         "name": "Channel 2",
         "online": true,
-        "players": 9
+        "players": 7
     },
     {
         "name": "Channel 3",
@@ -22,17 +22,17 @@
     {
         "name": "Channel 4",
         "online": true,
-        "players": 2
+        "players": 4
     },
     {
         "name": "Channel 5",
         "online": true,
-        "players": 6
+        "players": 5
     },
     {
         "name": "Channel 6",
         "online": true,
-        "players": 2
+        "players": 4
     },
     {
         "name": "Channel 7",
@@ -47,7 +47,7 @@
     {
         "name": "Collab",
         "online": true,
-        "players": 4
+        "players": 2
     },
     {
         "name": "Custom Enemy",
