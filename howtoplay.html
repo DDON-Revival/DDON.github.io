@@ -133,69 +133,48 @@ select{
 <script src="translations.js"></script>
 
 <script>
-
 const selector = document.getElementById("languageSelector");
 
-window.languages.forEach(lang=>{
-    const option=document.createElement("option");
-    option.value=lang.code;
-    option.textContent=lang.flag+" "+lang.name;
+window.languages.forEach(lang => {
+    const option = document.createElement("option");
+    option.value = lang.code;
+    option.textContent = `${lang.flag} ${lang.name}`;
     selector.appendChild(option);
 });
 
-function applyLanguage(code){
-    const t = window.translations[code];
+function applyLanguage(langCode){
+    const t = window.translations[langCode];
+
     if(!t) return;
 
-    document.getElementById("howTitle").textContent=t.howTitle || "How To Play";
+    document.getElementById("howTitle").textContent = t.howTitle || t.howToPlay;
 
-    document.getElementById("step1Title").textContent=t.step1Title;
-    document.getElementById("step1Text").textContent=t.step1Text1 || t.step1Text;
+    document.getElementById("step1Title").textContent = t.step1Title || t.howto?.step1Title;
 
-    document.getElementById("fullClientText").textContent=t.downloadFull || "Full Client";
-    document.getElementById("multipartText").textContent=t.downloadMulti || "Multipart";
+    document.getElementById("fullClientText").textContent = t.downloadFull || t.howto?.fullClient || "Full Client";
+    document.getElementById("multipartText").textContent = t.downloadMulti || t.howto?.multiClient || "Multipart";
 
-    document.getElementById("fullClientLink").textContent="Download";
-    document.getElementById("multipartLink").textContent="Download";
+    const fullLink = document.getElementById("fullClientLink");
+    const multiLink = document.getElementById("multipartLink");
 
-    document.getElementById("fullClientLink").href=t.downloadLinks.full;
+    fullLink.textContent = t.downloadFull || "Download";
+    multiLink.textContent = t.downloadMulti || "Download";
 
-    if(t.downloadLinks.multi){
-        document.getElementById("multipartLink").href=t.downloadLinks.multi;
-    }else{
-        document.getElementById("multipartLink").style.display="none";
-        document.getElementById("multipartText").style.display="none";
-    }
+    if(t.downloadLinks?.full)
+        fullLink.href = t.downloadLinks.full;
 
-    document.getElementById("step2Title").textContent=t.step2Title;
-    document.getElementById("step2Text").textContent=t.step2Text1 || t.step2Text;
-
-    document.getElementById("step3Title").textContent=t.step3Title;
-    document.getElementById("step3Text").textContent=t.step3Text1 || t.step3Text;
-
-    document.getElementById("step4Title").textContent=t.step4Title;
-    document.getElementById("step4Text").textContent=t.step4Text1 || t.step4Text;
-
-    document.getElementById("step5Title").textContent=t.step5Title;
-    document.getElementById("step5Text").textContent=t.step5Text1 || t.step5Text;
-
-    document.getElementById("step6Title").textContent=t.step6Title;
-    document.getElementById("step6Text").textContent=t.step6Text1 || t.step6Text;
-
-    document.getElementById("step7Title").textContent=t.step7Title;
-    document.getElementById("step7Text").textContent=t.step7Text1 || t.step7Text;
+    if(t.downloadLinks?.multi)
+        multiLink.href = t.downloadLinks.multi;
 }
 
-selector.addEventListener("change", e=>{
-    localStorage.setItem("language", e.target.value);
+selector.addEventListener("change", e => {
     applyLanguage(e.target.value);
+    localStorage.setItem("lang", e.target.value);
 });
 
-const savedLang = localStorage.getItem("language") || "en";
-selector.value=savedLang;
+const savedLang = localStorage.getItem("lang") || "en";
+selector.value = savedLang;
 applyLanguage(savedLang);
-
 </script>
-
 </body>
 </html>
