@@ -16,6 +16,7 @@ body{
     text-align:center;
 }
 
+/* Header */
 header{
     background:#1b1b25;
     padding:25px;
@@ -23,13 +24,12 @@ header{
 }
 
 h1{
-    margin-bottom:15px;
     color:#c8a75d;
 }
 
 .btn{
     padding:10px 20px;
-    margin:5px;
+    margin:10px;
     border:2px solid #c8a75d;
     background:none;
     color:#c8a75d;
@@ -43,13 +43,11 @@ h1{
 }
 
 .search{
-    padding:12px;
-    width:320px;
-    margin:20px;
+    padding:10px;
+    width:300px;
     background:#1b1b25;
     border:1px solid #c8a75d;
-    color:#fff;
-    font-family:'Cinzel', serif;
+    color:white;
 }
 
 .grid{
@@ -57,7 +55,7 @@ h1{
     flex-wrap:wrap;
     justify-content:center;
     max-width:1200px;
-    margin:0 auto;
+    margin:40px auto;
 }
 
 .card{
@@ -68,6 +66,7 @@ h1{
     margin:15px;
 }
 
+/* 🌍 Language */
 .lang-selector{
     position:relative;
     display:inline-block;
@@ -136,28 +135,28 @@ h1{
 
 <script>
 
-let leaderboardData=null;
-let currentTab="normal";
-let currentLang=localStorage.getItem("lang")||"en";
+let leaderboardData = null;
+let currentTab = "normal";
 
-/* LANGUAGE SYSTEM */
+/* ===========================
+   🌍 LANGUAGE SYSTEM
+=========================== */
 
 function setLanguage(lang){
-    currentLang=lang;
-    const t=translations[lang];
+    const t = translations[lang];
     if(!t) return;
 
     document.querySelectorAll("[data-key]").forEach(el=>{
-        const key=el.getAttribute("data-key");
-        if(t[key]) el.textContent=t[key];
+        const key = el.getAttribute("data-key");
+        if(t[key]) el.textContent = t[key];
     });
 
     document.querySelectorAll("[data-key-placeholder]").forEach(el=>{
-        const key=el.getAttribute("data-key-placeholder");
-        if(t[key]) el.placeholder=t[key];
+        const key = el.getAttribute("data-key-placeholder");
+        if(t[key]) el.placeholder = t[key];
     });
 
-    localStorage.setItem("lang",lang);
+    localStorage.setItem("lang", lang);
     renderLeaderboard();
 }
 
@@ -168,28 +167,34 @@ languages.forEach(lang=>{
     document.getElementById("languageList").appendChild(div);
 });
 
-setLanguage(currentLang);
+setLanguage(localStorage.getItem("lang") || "en");
 
-/* LOAD DATA */
+/* ===========================
+   LOAD DATA
+=========================== */
 
 async function loadLeaderboard(){
-    const res=await fetch("leaderboard.json?nocache="+Date.now());
-    leaderboardData=await res.json();
+    const res = await fetch("leaderboard.json?nocache="+Date.now());
+    leaderboardData = await res.json();
     renderLeaderboard();
 }
 
-/* RENDER */
+/* ===========================
+   RENDER
+=========================== */
 
 function renderLeaderboard(){
     if(!leaderboardData) return;
 
-    const t=translations[currentLang];
+    const currentLang = localStorage.getItem("lang") || "en";
+    const t = translations[currentLang];
+
     const container=document.getElementById("leaderboard");
     container.innerHTML="";
 
     const players=leaderboardData[currentTab];
 
-    if(!players||players.length===0){
+    if(!players || players.length===0){
         container.innerHTML=`<p>${t.noPlayersFound}</p>`;
         return;
     }
@@ -199,24 +204,25 @@ function renderLeaderboard(){
         const div=document.createElement("div");
         div.className="card";
 
-        const highest=Math.max(...player.classes.map(c=>c.level));
+        const highestLevel=Math.max(...player.classes.map(c=>c.level));
 
         let extra="";
         if(currentTab==="hc"){
             extra=`
-                <p>${t.hcSince}: ${player.hardcore_since||"-"}</p>
-                <p>${t.hcStatus}: ${player.dead?t.dead:t.alive}</p>
+                <p>${t.hcSince}: ${player.hardcore_since || "-"}</p>
+                <p>${t.hcStatus}: ${player.dead ? t.dead : t.alive}</p>
             `;
         }
 
         div.innerHTML=`
             <h3>${player.name}</h3>
-            <p>${t.level}: ${highest}</p>
+            <p>${t.level}: ${highestLevel}</p>
             <p><strong>${t.classes}:</strong></p>
             <ul>
-                ${player.classes.map(c=>
-                    `<li>${t.jobs?.[c.class]||c.class} (${t.level} ${c.level})</li>`
-                ).join("")}
+                ${player.classes.map(c=>{
+                    const jobName = t.jobs?.[c.class] || c.class;
+                    return `<li>${jobName} (${t.level} ${c.level})</li>`;
+                }).join("")}
             </ul>
             ${extra}
         `;
@@ -225,24 +231,31 @@ function renderLeaderboard(){
     });
 }
 
-/* TAB SWITCH */
+/* ===========================
+   TAB SWITCH
+=========================== */
 
 function switchTab(tab){
     currentTab=tab;
     renderLeaderboard();
 }
 
-/* SEARCH */
+/* ===========================
+   SEARCH
+=========================== */
 
 function searchPlayer(){
     if(!leaderboardData) return;
 
-    const t=translations[currentLang];
+    const currentLang = localStorage.getItem("lang") || "en";
+    const t = translations[currentLang];
+
     const value=document.getElementById("search").value.toLowerCase();
     const container=document.getElementById("leaderboard");
     container.innerHTML="";
 
     const all=[...(leaderboardData.normal||[]),...(leaderboardData.hc||[])];
+
     const results=all.filter(p=>p.name.toLowerCase().includes(value));
 
     if(results.length===0){
@@ -254,16 +267,17 @@ function searchPlayer(){
         const div=document.createElement("div");
         div.className="card";
 
-        const highest=Math.max(...player.classes.map(c=>c.level));
+        const highestLevel=Math.max(...player.classes.map(c=>c.level));
 
         div.innerHTML=`
             <h3>${player.name}</h3>
-            <p>${t.level}: ${highest}</p>
+            <p>${t.level}: ${highestLevel}</p>
             <p><strong>${t.classes}:</strong></p>
             <ul>
-                ${player.classes.map(c=>
-                    `<li>${t.jobs?.[c.class]||c.class} (${t.level} ${c.level})</li>`
-                ).join("")}
+                ${player.classes.map(c=>{
+                    const jobName = t.jobs?.[c.class] || c.class;
+                    return `<li>${jobName} (${t.level} ${c.level})</li>`;
+                }).join("")}
             </ul>
         `;
 
