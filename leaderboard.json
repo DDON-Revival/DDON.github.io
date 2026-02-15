@@ -7,76 +7,76 @@
             "class": "Fighter"
         },
         {
-            "id": 35861,
-            "name": "The Rift",
+            "id": 53475,
+            "name": "Joe Gillian",
             "level": 95,
-            "class": "Hunter"
+            "class": "Spirit Lancer"
         },
         {
-            "id": 37128,
-            "name": "Quiet Hydra",
+            "id": 49204,
+            "name": "Aruba Doguma",
             "level": 95,
-            "class": "Element Archer"
+            "class": "High Scepter"
         },
         {
-            "id": 722,
-            "name": "Tenma Dp",
+            "id": 51261,
+            "name": "Hant Neftis",
+            "level": 95,
+            "class": "Warrior"
+        },
+        {
+            "id": 12576,
+            "name": "Mar Fee",
             "level": 95,
             "class": "Alchemist"
         },
         {
-            "id": 10795,
-            "name": "Dan Spiegel",
+            "id": 53475,
+            "name": "Joe Gillian",
             "level": 95,
-            "class": "High Scepter"
+            "class": "Alchemist"
         },
         {
-            "id": 51643,
-            "name": "Kokko Here",
+            "id": 47774,
+            "name": "Gyomann Ghost",
             "level": 95,
-            "class": "High Scepter"
+            "class": "Seeker"
         },
         {
-            "id": 49379,
-            "name": "Ant Ares",
+            "id": 35597,
+            "name": "Andros Astora",
             "level": 95,
-            "class": "Fighter"
+            "class": "Element Archer"
+        },
+        {
+            "id": 52401,
+            "name": "Chimera Mofu",
+            "level": 95,
+            "class": "Seeker"
+        },
+        {
+            "id": 53475,
+            "name": "Joe Gillian",
+            "level": 95,
+            "class": "Element Archer"
+        },
+        {
+            "id": 13718,
+            "name": "Oparlin Onigashi",
+            "level": 95,
+            "class": "Seeker"
         },
         {
             "id": 4249,
             "name": "Shizuna Misurugi",
             "level": 95,
-            "class": "Hunter"
+            "class": "Alchemist"
         },
         {
-            "id": 722,
-            "name": "Tenma Dp",
-            "level": 95,
-            "class": "Spirit Lancer"
-        },
-        {
-            "id": 51133,
-            "name": "Connie Almond",
-            "level": 95,
-            "class": "High Scepter"
-        },
-        {
-            "id": 10151,
-            "name": "Destine Crow",
+            "id": 42980,
+            "name": "Ichi Xen",
             "level": 95,
             "class": "Sorcerer"
-        },
-        {
-            "id": 5141,
-            "name": "Ardyn Wesker",
-            "level": 95,
-            "class": "Seeker"
-        },
-        {
-            "id": 51030,
-            "name": "Arlinn Godsbane",
-            "level": 95,
-            "class": "Priest"
         },
         {
             "id": 1149,
@@ -85,376 +85,94 @@
             "class": "High Scepter"
         },
         {
-            "id": 13325,
-            "name": "Flynt Felwind",
+            "id": 7585,
+            "name": "Jack Black",
             "level": 95,
-            "class": "High Scepter"
+            "class": "Spirit Lancer"
+        },
+        {
+            "id": 10151,
+            "name": "Destine Crow",
+            "level": 95,
+            "class": "Element Archer"
         },
         {
             "id": 42980,
             "name": "Ichi Xen",
             "level": 95,
-            "class": "Hunter"
+            "class": "Spirit Lancer"
         },
         {
             "id": 41897,
             "name": "Veraeuz D'vyrm",
             "level": 95,
-            "class": "Priest"
+            "class": "High Scepter"
         },
         {
-            "id": 10200,
-            "name": "Jyoel Maisen",
-            "level": 95,
-            "class": "Hunter"
-        },
-        {
-            "id": 12367,
-            "name": "Raiens Arisen",
-            "level": 95,
-            "class": "Seeker"
-        },
-        {
-            "id": 45095,
-            "name": "Golliwogg Musica",
-            "level": 95,
-            "class": "Alchemist"
-        },
-        {
-            "id": 49370,
-            "name": "Die Hard",
-            "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 50132,
-            "name": "Lemon Squeezer",
-            "level": 95,
-            "class": "Alchemist"
-        },
-        {
-            "id": 48984,
-            "name": "Nigel Cabourn",
-            "level": 95,
-            "class": "Alchemist"
-        },
-        {
-            "id": 48984,
-            "name": "Nigel Cabourn",
-            "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 4249,
-            "name": "Shizuna Misurugi",
-            "level": 95,
-            "class": "Alchemist"
-        },
-        {
-            "id": 48984,
-            "name": "Nigel Cabourn",
-            "level": 95,
-            "class": "Seeker"
-        },
-        {
-            "id": 35861,
-            "name": "The Rift",
-            "level": 95,
-            "class": "Fighter"
-        },
-        {
-            "id": 5022,
-            "name": "Zenith Flamez",
+            "id": 35517,
+            "name": "Eruto Skp",
             "level": 95,
             "class": "Warrior"
-        },
-        {
-            "id": 41283,
-            "name": "Nero Sbada",
-            "level": 95,
-            "class": "High Scepter"
-        },
-        {
-            "id": 4011,
-            "name": "Rin Einhorn",
-            "level": 95,
-            "class": "Sorcerer"
-        },
-        {
-            "id": 35811,
-            "name": "Ayaka Kagari",
-            "level": 95,
-            "class": "Sorcerer"
-        },
-        {
-            "id": 10200,
-            "name": "Jyoel Maisen",
-            "level": 95,
-            "class": "Warrior"
-        },
-        {
-            "id": 35708,
-            "name": "Grant Thorlund",
-            "level": 95,
-            "class": "Hunter"
-        },
-        {
-            "id": 43221,
-            "name": "Ciza R'bahra",
-            "level": 95,
-            "class": "Spirit Lancer"
-        },
-        {
-            "id": 47660,
-            "name": "Ebimi Dayo",
-            "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 51642,
-            "name": "Yui Kiri",
-            "level": 95,
-            "class": "Alchemist"
-        },
-        {
-            "id": 9824,
-            "name": "Xstatic As",
-            "level": 95,
-            "class": "High Scepter"
-        },
-        {
-            "id": 49030,
-            "name": "Omi Falcon",
-            "level": 95,
-            "class": "High Scepter"
-        },
-        {
-            "id": 45708,
-            "name": "Junior Dadefier",
-            "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 49739,
-            "name": "Lux Xiao",
-            "level": 95,
-            "class": "Seeker"
-        },
-        {
-            "id": 47636,
-            "name": "Buriko Taroyama",
-            "level": 95,
-            "class": "Fighter"
-        },
-        {
-            "id": 8508,
-            "name": "Unko Mori",
-            "level": 95,
-            "class": "Spirit Lancer"
-        },
-        {
-            "id": 12576,
-            "name": "Mar Fee",
-            "level": 95,
-            "class": "High Scepter"
-        },
-        {
-            "id": 51261,
-            "name": "Hant Neftis",
-            "level": 95,
-            "class": "Alchemist"
         },
         {
             "id": 52401,
             "name": "Chimera Mofu",
             "level": 95,
-            "class": "Hunter"
+            "class": "Sorcerer"
         },
         {
-            "id": 35861,
-            "name": "The Rift",
-            "level": 95,
-            "class": "Priest"
-        },
-        {
-            "id": 50724,
-            "name": "Me Me",
-            "level": 95,
-            "class": "Alchemist"
-        },
-        {
-            "id": 49993,
-            "name": "Velphan Five",
+            "id": 53239,
+            "name": "Noah Feb",
             "level": 95,
             "class": "High Scepter"
         },
         {
-            "id": 49379,
-            "name": "Ant Ares",
+            "id": 883,
+            "name": "Han Shun",
             "level": 95,
-            "class": "Element Archer"
+            "class": "Hunter"
         },
         {
-            "id": 47774,
-            "name": "Gyomann Ghost",
-            "level": 95,
-            "class": "Element Archer"
-        },
-        {
-            "id": 44947,
-            "name": "Ruin To",
-            "level": 95,
-            "class": "Alchemist"
-        },
-        {
-            "id": 47660,
-            "name": "Ebimi Dayo",
+            "id": 46507,
+            "name": "Radania Varganas",
             "level": 95,
             "class": "Warrior"
         },
         {
-            "id": 48989,
-            "name": "Robin Revie",
-            "level": 95,
-            "class": "Warrior"
-        },
-        {
-            "id": 12576,
-            "name": "Mar Fee",
-            "level": 95,
-            "class": "Hunter"
-        },
-        {
-            "id": 48989,
-            "name": "Robin Revie",
-            "level": 95,
-            "class": "Hunter"
-        },
-        {
-            "id": 35861,
-            "name": "The Rift",
-            "level": 95,
-            "class": "Alchemist"
-        },
-        {
-            "id": 45155,
-            "name": "Shionne Kisaragi",
-            "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 49379,
-            "name": "Ant Ares",
-            "level": 95,
-            "class": "High Scepter"
-        },
-        {
-            "id": 52847,
-            "name": "Burro Dovin",
-            "level": 95,
-            "class": "High Scepter"
-        },
-        {
-            "id": 54368,
-            "name": "Runa Moon",
-            "level": 95,
-            "class": "Alchemist"
-        },
-        {
-            "id": 49370,
-            "name": "Die Hard",
-            "level": 95,
-            "class": "Spirit Lancer"
-        },
-        {
-            "id": 38867,
-            "name": "Acantha Amos",
-            "level": 95,
-            "class": "Hunter"
-        },
-        {
-            "id": 42980,
-            "name": "Ichi Xen",
-            "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 10588,
-            "name": "Tamekake Pnk",
-            "level": 95,
-            "class": "Alchemist"
-        },
-        {
-            "id": 8377,
-            "name": "Xstatik As",
-            "level": 95,
-            "class": "High Scepter"
-        },
-        {
-            "id": 47774,
-            "name": "Gyomann Ghost",
-            "level": 95,
-            "class": "Alchemist"
-        },
-        {
-            "id": 51642,
-            "name": "Yui Kiri",
-            "level": 95,
-            "class": "Seeker"
-        },
-        {
-            "id": 47636,
-            "name": "Buriko Taroyama",
+            "id": 41897,
+            "name": "Veraeuz D'vyrm",
             "level": 95,
             "class": "Sorcerer"
         },
         {
-            "id": 4011,
-            "name": "Rin Einhorn",
+            "id": 4249,
+            "name": "Shizuna Misurugi",
             "level": 95,
-            "class": "Element Archer"
-        },
-        {
-            "id": 35651,
-            "name": "Lei Ky",
-            "level": 95,
-            "class": "High Scepter"
-        },
-        {
-            "id": 48989,
-            "name": "Robin Revie",
-            "level": 95,
-            "class": "Spirit Lancer"
-        },
-        {
-            "id": 9822,
-            "name": "Xstatik Ass",
-            "level": 95,
-            "class": "High Scepter"
-        },
-        {
-            "id": 45708,
-            "name": "Junior Dadefier",
-            "level": 95,
-            "class": "Seeker"
+            "class": "Hunter"
         },
         {
             "id": 45022,
             "name": "Root Xs",
             "level": 95,
-            "class": "Fighter"
+            "class": "Priest"
         },
         {
-            "id": 47660,
-            "name": "Ebimi Dayo",
+            "id": 5022,
+            "name": "Zenith Flamez",
             "level": 95,
             "class": "Seeker"
         },
         {
-            "id": 47660,
-            "name": "Ebimi Dayo",
+            "id": 9686,
+            "name": "Caghewd Ayufa",
             "level": 95,
-            "class": "Element Archer"
+            "class": "Shield Sage"
+        },
+        {
+            "id": 52847,
+            "name": "Burro Dovin",
+            "level": 95,
+            "class": "Sorcerer"
         },
         {
             "id": 52173,
@@ -463,62 +181,164 @@
             "class": "Warrior"
         },
         {
-            "id": 45033,
-            "name": "Rika Akizuki",
+            "id": 47774,
+            "name": "Gyomann Ghost",
             "level": 95,
-            "class": "Hunter"
+            "class": "Alchemist"
         },
         {
-            "id": 10151,
-            "name": "Destine Crow",
+            "id": 47660,
+            "name": "Ebimi Dayo",
             "level": 95,
-            "class": "Priest"
+            "class": "Seeker"
         },
         {
-            "id": 39678,
-            "name": "Brogus Starcrod",
+            "id": 4249,
+            "name": "Shizuna Misurugi",
+            "level": 95,
+            "class": "Fighter"
+        },
+        {
+            "id": 6974,
+            "name": "Iam Setdol",
             "level": 95,
             "class": "Warrior"
         },
         {
-            "id": 49379,
-            "name": "Ant Ares",
+            "id": 35811,
+            "name": "Ayaka Kagari",
             "level": 95,
-            "class": "Priest"
-        },
-        {
-            "id": 51642,
-            "name": "Yui Kiri",
-            "level": 95,
-            "class": "Priest"
+            "class": "Shield Sage"
         },
         {
             "id": 9686,
             "name": "Caghewd Ayufa",
             "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 722,
+            "name": "Tenma Dp",
+            "level": 95,
             "class": "Alchemist"
+        },
+        {
+            "id": 35329,
+            "name": "Hayden Tenno",
+            "level": 95,
+            "class": "Element Archer"
+        },
+        {
+            "id": 35811,
+            "name": "Ayaka Kagari",
+            "level": 95,
+            "class": "Fighter"
+        },
+        {
+            "id": 883,
+            "name": "Han Shun",
+            "level": 95,
+            "class": "Element Archer"
         },
         {
             "id": 13718,
             "name": "Oparlin Onigashi",
             "level": 95,
-            "class": "Shield Sage"
+            "class": "Spirit Lancer"
         },
         {
-            "id": 47184,
-            "name": "Dragon Born",
+            "id": 41897,
+            "name": "Veraeuz D'vyrm",
             "level": 95,
-            "class": "Seeker"
+            "class": "Alchemist"
         },
         {
-            "id": 51863,
-            "name": "Yura Kokago",
+            "id": 9686,
+            "name": "Caghewd Ayufa",
+            "level": 95,
+            "class": "Warrior"
+        },
+        {
+            "id": 48742,
+            "name": "Tatsu Ford",
+            "level": 95,
+            "class": "Spirit Lancer"
+        },
+        {
+            "id": 48989,
+            "name": "Robin Revie",
+            "level": 95,
+            "class": "Warrior"
+        },
+        {
+            "id": 51643,
+            "name": "Kokko Here",
+            "level": 95,
+            "class": "Priest"
+        },
+        {
+            "id": 10624,
+            "name": "Astray Kay",
             "level": 95,
             "class": "High Scepter"
         },
         {
-            "id": 10200,
-            "name": "Jyoel Maisen",
+            "id": 51643,
+            "name": "Kokko Here",
+            "level": 95,
+            "class": "Spirit Lancer"
+        },
+        {
+            "id": 45022,
+            "name": "Root Xs",
+            "level": 95,
+            "class": "Warrior"
+        },
+        {
+            "id": 722,
+            "name": "Tenma Dp",
+            "level": 95,
+            "class": "Element Archer"
+        },
+        {
+            "id": 38406,
+            "name": "Hyrul Weewee",
+            "level": 95,
+            "class": "Fighter"
+        },
+        {
+            "id": 51108,
+            "name": "Bnn Man",
+            "level": 95,
+            "class": "Seeker"
+        },
+        {
+            "id": 49379,
+            "name": "Ant Ares",
+            "level": 95,
+            "class": "Hunter"
+        },
+        {
+            "id": 47660,
+            "name": "Ebimi Dayo",
+            "level": 95,
+            "class": "Hunter"
+        },
+        {
+            "id": 5022,
+            "name": "Zenith Flamez",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 53812,
+            "name": "Yuu Tukinami",
+            "level": 95,
+            "class": "Warrior"
+        },
+        {
+            "id": 54357,
+            "name": "Rin Suruga",
             "level": 95,
             "class": "High Scepter"
         },
@@ -529,16 +349,40 @@
             "class": "High Scepter"
         },
         {
-            "id": 12367,
-            "name": "Raiens Arisen",
+            "id": 722,
+            "name": "Tenma Dp",
             "level": 95,
             "class": "High Scepter"
         },
         {
-            "id": 35861,
-            "name": "The Rift",
+            "id": 38867,
+            "name": "Acantha Amos",
             "level": 95,
-            "class": "Shield Sage"
+            "class": "Hunter"
+        },
+        {
+            "id": 13718,
+            "name": "Oparlin Onigashi",
+            "level": 95,
+            "class": "Warrior"
+        },
+        {
+            "id": 52338,
+            "name": "Dark Ice",
+            "level": 95,
+            "class": "Fighter"
+        },
+        {
+            "id": 4249,
+            "name": "Shizuna Misurugi",
+            "level": 95,
+            "class": "Warrior"
+        },
+        {
+            "id": 45022,
+            "name": "Root Xs",
+            "level": 95,
+            "class": "Hunter"
         },
         {
             "id": 1292,
@@ -550,43 +394,61 @@
             "id": 9686,
             "name": "Caghewd Ayufa",
             "level": 95,
+            "class": "Spirit Lancer"
+        },
+        {
+            "id": 51133,
+            "name": "Connie Almond",
+            "level": 95,
             "class": "Fighter"
         },
         {
-            "id": 53644,
-            "name": "Tsury Stryder",
-            "level": 95,
-            "class": "Spirit Lancer"
-        },
-        {
-            "id": 44078,
-            "name": "Aquamarine Almila",
-            "level": 95,
-            "class": "Sorcerer"
-        },
-        {
-            "id": 47660,
-            "name": "Ebimi Dayo",
-            "level": 95,
-            "class": "Spirit Lancer"
-        },
-        {
-            "id": 49370,
-            "name": "Die Hard",
+            "id": 9686,
+            "name": "Caghewd Ayufa",
             "level": 95,
             "class": "Priest"
         },
         {
-            "id": 40557,
-            "name": "Beefalo Carryall",
+            "id": 722,
+            "name": "Tenma Dp",
             "level": 95,
-            "class": "Spirit Lancer"
+            "class": "Shield Sage"
         },
         {
-            "id": 53063,
-            "name": "Oyassan Com",
+            "id": 13372,
+            "name": "Tomeko Fukuyoka",
             "level": 95,
-            "class": "Fighter"
+            "class": "Shield Sage"
+        },
+        {
+            "id": 268,
+            "name": "Sera Eidolon",
+            "level": 95,
+            "class": "Seeker"
+        },
+        {
+            "id": 47184,
+            "name": "Dragon Born",
+            "level": 95,
+            "class": "Hunter"
+        },
+        {
+            "id": 4249,
+            "name": "Shizuna Misurugi",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 9686,
+            "name": "Caghewd Ayufa",
+            "level": 95,
+            "class": "Sorcerer"
+        },
+        {
+            "id": 10200,
+            "name": "Jyoel Maisen",
+            "level": 95,
+            "class": "Alchemist"
         },
         {
             "id": 883,
@@ -595,46 +457,16 @@
             "class": "Sorcerer"
         },
         {
-            "id": 35651,
-            "name": "Lei Ky",
+            "id": 51643,
+            "name": "Kokko Here",
             "level": 95,
-            "class": "Hunter"
+            "class": "Fighter"
         },
         {
-            "id": 47774,
-            "name": "Gyomann Ghost",
+            "id": 10151,
+            "name": "Destine Crow",
             "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 51642,
-            "name": "Yui Kiri",
-            "level": 95,
-            "class": "Hunter"
-        },
-        {
-            "id": 54357,
-            "name": "Rin Suruga",
-            "level": 95,
-            "class": "Spirit Lancer"
-        },
-        {
-            "id": 9955,
-            "name": "Xstatics Ad",
-            "level": 95,
-            "class": "High Scepter"
-        },
-        {
-            "id": 5141,
-            "name": "Ardyn Wesker",
-            "level": 95,
-            "class": "Alchemist"
-        },
-        {
-            "id": 5141,
-            "name": "Ardyn Wesker",
-            "level": 95,
-            "class": "High Scepter"
+            "class": "Warrior"
         },
         {
             "id": 48198,
@@ -643,28 +475,178 @@
             "class": "Alchemist"
         },
         {
-            "id": 45708,
-            "name": "Junior Dadefier",
+            "id": 44947,
+            "name": "Ruin To",
+            "level": 95,
+            "class": "Warrior"
+        },
+        {
+            "id": 8627,
+            "name": "Cold Blood",
             "level": 95,
             "class": "Fighter"
         },
         {
-            "id": 722,
-            "name": "Tenma Dp",
+            "id": 48989,
+            "name": "Robin Revie",
             "level": 95,
-            "class": "Hunter"
+            "class": "Spirit Lancer"
         },
         {
-            "id": 6974,
-            "name": "Iam Setdol",
+            "id": 48989,
+            "name": "Robin Revie",
+            "level": 95,
+            "class": "Alchemist"
+        },
+        {
+            "id": 47851,
+            "name": "Xain Tears",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 2241,
+            "name": "Taron Irkus",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 35597,
+            "name": "Andros Astora",
+            "level": 95,
+            "class": "Shield Sage"
+        },
+        {
+            "id": 42980,
+            "name": "Ichi Xen",
+            "level": 95,
+            "class": "Warrior"
+        },
+        {
+            "id": 53812,
+            "name": "Yuu Tukinami",
+            "level": 95,
+            "class": "Alchemist"
+        },
+        {
+            "id": 51642,
+            "name": "Yui Kiri",
+            "level": 95,
+            "class": "Element Archer"
+        },
+        {
+            "id": 35811,
+            "name": "Ayaka Kagari",
+            "level": 95,
+            "class": "Sorcerer"
+        },
+        {
+            "id": 13718,
+            "name": "Oparlin Onigashi",
+            "level": 95,
+            "class": "Fighter"
+        },
+        {
+            "id": 49936,
+            "name": "Evil Star",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 50132,
+            "name": "Lemon Squeezer",
+            "level": 95,
+            "class": "Warrior"
+        },
+        {
+            "id": 47660,
+            "name": "Ebimi Dayo",
+            "level": 95,
+            "class": "Fighter"
+        },
+        {
+            "id": 51642,
+            "name": "Yui Kiri",
             "level": 95,
             "class": "Priest"
         },
         {
-            "id": 8377,
-            "name": "Xstatik As",
+            "id": 44947,
+            "name": "Ruin To",
+            "level": 95,
+            "class": "Seeker"
+        },
+        {
+            "id": 47636,
+            "name": "Buriko Taroyama",
+            "level": 95,
+            "class": "Shield Sage"
+        },
+        {
+            "id": 51642,
+            "name": "Yui Kiri",
+            "level": 95,
+            "class": "Shield Sage"
+        },
+        {
+            "id": 45033,
+            "name": "Rika Akizuki",
+            "level": 95,
+            "class": "Hunter"
+        },
+        {
+            "id": 49739,
+            "name": "Lux Xiao",
+            "level": 95,
+            "class": "Hunter"
+        },
+        {
+            "id": 53475,
+            "name": "Joe Gillian",
+            "level": 95,
+            "class": "Hunter"
+        },
+        {
+            "id": 45022,
+            "name": "Root Xs",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 10200,
+            "name": "Jyoel Maisen",
             "level": 95,
             "class": "Fighter"
+        },
+        {
+            "id": 43145,
+            "name": "Onigawara Gonzo",
+            "level": 95,
+            "class": "Spirit Lancer"
+        },
+        {
+            "id": 4011,
+            "name": "Rin Einhorn",
+            "level": 95,
+            "class": "Element Archer"
+        },
+        {
+            "id": 51108,
+            "name": "Bnn Man",
+            "level": 95,
+            "class": "Fighter"
+        },
+        {
+            "id": 883,
+            "name": "Han Shun",
+            "level": 95,
+            "class": "Spirit Lancer"
+        },
+        {
+            "id": 55257,
+            "name": "Coral Almila",
+            "level": 95,
+            "class": "Element Archer"
         },
         {
             "id": 50724,
@@ -673,242 +655,152 @@
             "class": "Sorcerer"
         },
         {
+            "id": 49360,
+            "name": "Osushi Asamiya",
+            "level": 95,
+            "class": "Warrior"
+        },
+        {
+            "id": 5141,
+            "name": "Ardyn Wesker",
+            "level": 95,
+            "class": "Hunter"
+        },
+        {
+            "id": 5141,
+            "name": "Ardyn Wesker",
+            "level": 95,
+            "class": "Fighter"
+        },
+        {
             "id": 55257,
             "name": "Coral Almila",
-            "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 52531,
-            "name": "Chrisalves Op",
-            "level": 95,
-            "class": "Fighter"
-        },
-        {
-            "id": 41897,
-            "name": "Veraeuz D'vyrm",
-            "level": 95,
-            "class": "Seeker"
-        },
-        {
-            "id": 50435,
-            "name": "Dutch Lagoon",
-            "level": 95,
-            "class": "Fighter"
-        },
-        {
-            "id": 5141,
-            "name": "Ardyn Wesker",
-            "level": 95,
-            "class": "Hunter"
-        },
-        {
-            "id": 41283,
-            "name": "Nero Sbada",
-            "level": 95,
-            "class": "Seeker"
-        },
-        {
-            "id": 41283,
-            "name": "Nero Sbada",
-            "level": 95,
-            "class": "Spirit Lancer"
-        },
-        {
-            "id": 722,
-            "name": "Tenma Dp",
-            "level": 95,
-            "class": "Seeker"
-        },
-        {
-            "id": 47636,
-            "name": "Buriko Taroyama",
-            "level": 95,
-            "class": "Hunter"
-        },
-        {
-            "id": 5141,
-            "name": "Ardyn Wesker",
-            "level": 95,
-            "class": "Priest"
-        },
-        {
-            "id": 5022,
-            "name": "Zenith Flamez",
-            "level": 95,
-            "class": "Seeker"
-        },
-        {
-            "id": 41283,
-            "name": "Nero Sbada",
             "level": 95,
             "class": "Alchemist"
         },
         {
-            "id": 52932,
-            "name": "Erian Keeper",
+            "id": 48984,
+            "name": "Nigel Cabourn",
             "level": 95,
-            "class": "Element Archer"
+            "class": "High Scepter"
         },
         {
-            "id": 53220,
-            "name": "Raeon Khane",
+            "id": 49379,
+            "name": "Ant Ares",
+            "level": 95,
+            "class": "Sorcerer"
+        },
+        {
+            "id": 51030,
+            "name": "Arlinn Godsbane",
             "level": 95,
             "class": "Seeker"
         },
         {
-            "id": 722,
-            "name": "Tenma Dp",
+            "id": 51261,
+            "name": "Hant Neftis",
+            "level": 95,
+            "class": "Priest"
+        },
+        {
+            "id": 6974,
+            "name": "Iam Setdol",
+            "level": 95,
+            "class": "Spirit Lancer"
+        },
+        {
+            "id": 12576,
+            "name": "Mar Fee",
+            "level": 95,
+            "class": "Fighter"
+        },
+        {
+            "id": 53475,
+            "name": "Joe Gillian",
+            "level": 95,
+            "class": "Warrior"
+        },
+        {
+            "id": 35329,
+            "name": "Hayden Tenno",
+            "level": 95,
+            "class": "Alchemist"
+        },
+        {
+            "id": 4011,
+            "name": "Rin Einhorn",
+            "level": 95,
+            "class": "Sorcerer"
+        },
+        {
+            "id": 51261,
+            "name": "Hant Neftis",
+            "level": 95,
+            "class": "Sorcerer"
+        },
+        {
+            "id": 9955,
+            "name": "Xstatics Ad",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 42980,
+            "name": "Ichi Xen",
             "level": 95,
             "class": "Element Archer"
+        },
+        {
+            "id": 42980,
+            "name": "Ichi Xen",
+            "level": 95,
+            "class": "Seeker"
+        },
+        {
+            "id": 2387,
+            "name": "Bradani Runescap",
+            "level": 95,
+            "class": "Warrior"
+        },
+        {
+            "id": 51863,
+            "name": "Yura Kokago",
+            "level": 95,
+            "class": "Spirit Lancer"
+        },
+        {
+            "id": 8508,
+            "name": "Unko Mori",
+            "level": 95,
+            "class": "Seeker"
+        },
+        {
+            "id": 5141,
+            "name": "Ardyn Wesker",
+            "level": 95,
+            "class": "Warrior"
+        },
+        {
+            "id": 43145,
+            "name": "Onigawara Gonzo",
+            "level": 95,
+            "class": "High Scepter"
         },
         {
             "id": 12367,
             "name": "Raiens Arisen",
             "level": 95,
-            "class": "Hunter"
-        },
-        {
-            "id": 8513,
-            "name": "Raisu Field",
-            "level": 95,
-            "class": "Sorcerer"
-        },
-        {
-            "id": 5141,
-            "name": "Ardyn Wesker",
-            "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 12576,
-            "name": "Mar Fee",
-            "level": 95,
-            "class": "Sorcerer"
-        },
-        {
-            "id": 883,
-            "name": "Han Shun",
-            "level": 95,
-            "class": "Priest"
-        },
-        {
-            "id": 8627,
-            "name": "Cold Blood",
-            "level": 95,
-            "class": "High Scepter"
-        },
-        {
-            "id": 41897,
-            "name": "Veraeuz D'vyrm",
-            "level": 95,
-            "class": "Spirit Lancer"
-        },
-        {
-            "id": 44947,
-            "name": "Ruin To",
-            "level": 95,
-            "class": "Element Archer"
-        },
-        {
-            "id": 883,
-            "name": "Han Shun",
-            "level": 95,
             "class": "Warrior"
         },
         {
-            "id": 51643,
-            "name": "Kokko Here",
-            "level": 95,
-            "class": "Warrior"
-        },
-        {
-            "id": 48989,
-            "name": "Robin Revie",
-            "level": 95,
-            "class": "Fighter"
-        },
-        {
-            "id": 883,
-            "name": "Han Shun",
-            "level": 95,
-            "class": "High Scepter"
-        },
-        {
-            "id": 49370,
-            "name": "Die Hard",
-            "level": 95,
-            "class": "Fighter"
-        },
-        {
-            "id": 48742,
-            "name": "Tatsu Ford",
-            "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 42563,
-            "name": "Gugong Miri",
-            "level": 95,
-            "class": "High Scepter"
-        },
-        {
-            "id": 47774,
-            "name": "Gyomann Ghost",
-            "level": 95,
-            "class": "Hunter"
-        },
-        {
-            "id": 48742,
-            "name": "Tatsu Ford",
-            "level": 95,
-            "class": "Warrior"
-        },
-        {
-            "id": 49739,
-            "name": "Lux Xiao",
-            "level": 95,
-            "class": "Spirit Lancer"
-        },
-        {
-            "id": 12576,
-            "name": "Mar Fee",
-            "level": 95,
-            "class": "Warrior"
-        },
-        {
-            "id": 35861,
-            "name": "The Rift",
-            "level": 95,
-            "class": "Seeker"
-        },
-        {
-            "id": 50132,
-            "name": "Lemon Squeezer",
-            "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 10200,
-            "name": "Jyoel Maisen",
-            "level": 95,
-            "class": "Seeker"
-        },
-        {
-            "id": 35547,
-            "name": "L'arc Sunhawk",
-            "level": 95,
-            "class": "Seeker"
-        },
-        {
-            "id": 47660,
-            "name": "Ebimi Dayo",
+            "id": 47184,
+            "name": "Dragon Born",
             "level": 95,
             "class": "Alchemist"
         },
         {
-            "id": 49708,
-            "name": "Yapi Chan",
+            "id": 45022,
+            "name": "Root Xs",
             "level": 95,
             "class": "Seeker"
         },
@@ -916,91 +808,13 @@
             "id": 52028,
             "name": "Ange Nk",
             "level": 95,
-            "class": "Sorcerer"
-        },
-        {
-            "id": 47774,
-            "name": "Gyomann Ghost",
-            "level": 95,
-            "class": "Sorcerer"
-        },
-        {
-            "id": 47660,
-            "name": "Ebimi Dayo",
-            "level": 95,
-            "class": "Sorcerer"
-        },
-        {
-            "id": 6127,
-            "name": "Spirit Fox",
-            "level": 95,
-            "class": "High Scepter"
-        },
-        {
-            "id": 812,
-            "name": "Xuy Pizda",
-            "level": 95,
-            "class": "Warrior"
-        },
-        {
-            "id": 722,
-            "name": "Tenma Dp",
-            "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 35861,
-            "name": "The Rift",
-            "level": 95,
-            "class": "Element Archer"
-        },
-        {
-            "id": 44078,
-            "name": "Aquamarine Almila",
-            "level": 95,
-            "class": "Warrior"
-        },
-        {
-            "id": 4249,
-            "name": "Shizuna Misurugi",
-            "level": 95,
-            "class": "Sorcerer"
-        },
-        {
-            "id": 35597,
-            "name": "Andros Astora",
-            "level": 95,
-            "class": "Warrior"
-        },
-        {
-            "id": 51030,
-            "name": "Arlinn Godsbane",
-            "level": 95,
-            "class": "Sorcerer"
+            "class": "Fighter"
         },
         {
             "id": 44947,
             "name": "Ruin To",
             "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 51643,
-            "name": "Kokko Here",
-            "level": 95,
-            "class": "Fighter"
-        },
-        {
-            "id": 51642,
-            "name": "Yui Kiri",
-            "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 4249,
-            "name": "Shizuna Misurugi",
-            "level": 95,
-            "class": "Element Archer"
+            "class": "Alchemist"
         },
         {
             "id": 47184,
@@ -1009,10 +823,10 @@
             "class": "Priest"
         },
         {
-            "id": 47184,
-            "name": "Dragon Born",
+            "id": 47636,
+            "name": "Buriko Taroyama",
             "level": 95,
-            "class": "High Scepter"
+            "class": "Seeker"
         },
         {
             "id": 9686,
@@ -1021,34 +835,190 @@
             "class": "Seeker"
         },
         {
+            "id": 9686,
+            "name": "Caghewd Ayufa",
+            "level": 95,
+            "class": "Element Archer"
+        },
+        {
+            "id": 38406,
+            "name": "Hyrul Weewee",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 13718,
+            "name": "Oparlin Onigashi",
+            "level": 95,
+            "class": "Priest"
+        },
+        {
+            "id": 51642,
+            "name": "Yui Kiri",
+            "level": 95,
+            "class": "Seeker"
+        },
+        {
+            "id": 51030,
+            "name": "Arlinn Godsbane",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 51442,
+            "name": "Doa Leon",
+            "level": 95,
+            "class": "Element Archer"
+        },
+        {
+            "id": 50158,
+            "name": "Fio Lina",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 37549,
+            "name": "Yasu Desu",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 35513,
+            "name": "Setsuna Yuki",
+            "level": 95,
+            "class": "Seeker"
+        },
+        {
+            "id": 6974,
+            "name": "Iam Setdol",
+            "level": 95,
+            "class": "Seeker"
+        },
+        {
+            "id": 10107,
+            "name": "Xstatics As",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 8508,
+            "name": "Unko Mori",
+            "level": 95,
+            "class": "Sorcerer"
+        },
+        {
+            "id": 51030,
+            "name": "Arlinn Godsbane",
+            "level": 95,
+            "class": "Spirit Lancer"
+        },
+        {
+            "id": 49360,
+            "name": "Osushi Asamiya",
+            "level": 95,
+            "class": "Seeker"
+        },
+        {
+            "id": 48198,
+            "name": "Akirason Sinapon",
+            "level": 95,
+            "class": "Element Archer"
+        },
+        {
+            "id": 35811,
+            "name": "Ayaka Kagari",
+            "level": 95,
+            "class": "Spirit Lancer"
+        },
+        {
+            "id": 12367,
+            "name": "Raiens Arisen",
+            "level": 95,
+            "class": "Priest"
+        },
+        {
+            "id": 35788,
+            "name": "Ekin Sethia",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 51030,
+            "name": "Arlinn Godsbane",
+            "level": 95,
+            "class": "Alchemist"
+        },
+        {
+            "id": 51642,
+            "name": "Yui Kiri",
+            "level": 95,
+            "class": "Hunter"
+        },
+        {
+            "id": 4249,
+            "name": "Shizuna Misurugi",
+            "level": 95,
+            "class": "Sorcerer"
+        },
+        {
+            "id": 4249,
+            "name": "Shizuna Misurugi",
+            "level": 95,
+            "class": "Seeker"
+        },
+        {
+            "id": 35811,
+            "name": "Ayaka Kagari",
+            "level": 95,
+            "class": "Hunter"
+        },
+        {
+            "id": 13718,
+            "name": "Oparlin Onigashi",
+            "level": 95,
+            "class": "Shield Sage"
+        },
+        {
+            "id": 49379,
+            "name": "Ant Ares",
+            "level": 95,
+            "class": "Fighter"
+        },
+        {
+            "id": 44078,
+            "name": "Aquamarine Almila",
+            "level": 95,
+            "class": "Warrior"
+        },
+        {
             "id": 8627,
             "name": "Cold Blood",
             "level": 95,
             "class": "Seeker"
         },
         {
-            "id": 8627,
-            "name": "Cold Blood",
+            "id": 10151,
+            "name": "Destine Crow",
             "level": 95,
-            "class": "Fighter"
+            "class": "High Scepter"
         },
         {
-            "id": 51817,
-            "name": "Drake Mark",
+            "id": 47636,
+            "name": "Buriko Taroyama",
             "level": 95,
-            "class": "Hunter"
+            "class": "High Scepter"
         },
         {
-            "id": 50158,
-            "name": "Fio Lina",
+            "id": 41475,
+            "name": "Aika Nora",
             "level": 95,
             "class": "Alchemist"
         },
         {
-            "id": 51685,
-            "name": "Coco Eastwell",
+            "id": 47184,
+            "name": "Dragon Born",
             "level": 95,
-            "class": "Shield Sage"
+            "class": "Element Archer"
         },
         {
             "id": 7935,
@@ -1057,58 +1027,10 @@
             "class": "Warrior"
         },
         {
-            "id": 52932,
-            "name": "Erian Keeper",
-            "level": 95,
-            "class": "Spirit Lancer"
-        },
-        {
-            "id": 52028,
-            "name": "Ange Nk",
-            "level": 95,
-            "class": "Element Archer"
-        },
-        {
-            "id": 52847,
-            "name": "Burro Dovin",
-            "level": 95,
-            "class": "Seeker"
-        },
-        {
-            "id": 4011,
-            "name": "Rin Einhorn",
+            "id": 42563,
+            "name": "Gugong Miri",
             "level": 95,
             "class": "Priest"
-        },
-        {
-            "id": 49936,
-            "name": "Evil Star",
-            "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 41475,
-            "name": "Aika Nora",
-            "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 53010,
-            "name": "Hakua Azoth",
-            "level": 95,
-            "class": "Alchemist"
-        },
-        {
-            "id": 53172,
-            "name": "Girumin Mars",
-            "level": 95,
-            "class": "High Scepter"
-        },
-        {
-            "id": 35811,
-            "name": "Ayaka Kagari",
-            "level": 95,
-            "class": "High Scepter"
         },
         {
             "id": 10716,
@@ -1117,16 +1039,106 @@
             "class": "Alchemist"
         },
         {
-            "id": 883,
-            "name": "Han Shun",
+            "id": 49936,
+            "name": "Evil Star",
             "level": 95,
             "class": "Fighter"
         },
         {
-            "id": 35811,
-            "name": "Ayaka Kagari",
+            "id": 40557,
+            "name": "Beefalo Carryall",
             "level": 95,
-            "class": "Fighter"
+            "class": "Priest"
+        },
+        {
+            "id": 48198,
+            "name": "Akirason Sinapon",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 52401,
+            "name": "Chimera Mofu",
+            "level": 95,
+            "class": "Element Archer"
+        },
+        {
+            "id": 52401,
+            "name": "Chimera Mofu",
+            "level": 95,
+            "class": "Spirit Lancer"
+        },
+        {
+            "id": 44947,
+            "name": "Ruin To",
+            "level": 95,
+            "class": "Priest"
+        },
+        {
+            "id": 44078,
+            "name": "Aquamarine Almila",
+            "level": 95,
+            "class": "Seeker"
+        },
+        {
+            "id": 51643,
+            "name": "Kokko Here",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 50555,
+            "name": "Daikiti Omkz",
+            "level": 95,
+            "class": "Seeker"
+        },
+        {
+            "id": 53010,
+            "name": "Hakua Azoth",
+            "level": 95,
+            "class": "Alchemist"
+        },
+        {
+            "id": 9686,
+            "name": "Caghewd Ayufa",
+            "level": 95,
+            "class": "Hunter"
+        },
+        {
+            "id": 47774,
+            "name": "Gyomann Ghost",
+            "level": 95,
+            "class": "Priest"
+        },
+        {
+            "id": 48984,
+            "name": "Nigel Cabourn",
+            "level": 95,
+            "class": "Element Archer"
+        },
+        {
+            "id": 53475,
+            "name": "Joe Gillian",
+            "level": 95,
+            "class": "Sorcerer"
+        },
+        {
+            "id": 39063,
+            "name": "Kate Worm",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 37128,
+            "name": "Quiet Hydra",
+            "level": 95,
+            "class": "Alchemist"
+        },
+        {
+            "id": 41333,
+            "name": "Iriya Adler",
+            "level": 95,
+            "class": "Sorcerer"
         },
         {
             "id": 51261,
@@ -1135,28 +1147,28 @@
             "class": "Seeker"
         },
         {
-            "id": 53644,
-            "name": "Tsury Stryder",
+            "id": 52091,
+            "name": "Tab Gon",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 10200,
+            "name": "Jyoel Maisen",
+            "level": 95,
+            "class": "High Scepter"
+        },
+        {
+            "id": 6110,
+            "name": "Lawrence Silver",
             "level": 95,
             "class": "Alchemist"
         },
         {
-            "id": 41283,
-            "name": "Nero Sbada",
+            "id": 47636,
+            "name": "Buriko Taroyama",
             "level": 95,
-            "class": "Warrior"
-        },
-        {
-            "id": 48989,
-            "name": "Robin Revie",
-            "level": 95,
-            "class": "Sorcerer"
-        },
-        {
-            "id": 52401,
-            "name": "Chimera Mofu",
-            "level": 95,
-            "class": "Fighter"
+            "class": "Hunter"
         },
         {
             "id": 51685,
@@ -1165,42 +1177,30 @@
             "class": "High Scepter"
         },
         {
-            "id": 51642,
-            "name": "Yui Kiri",
+            "id": 47184,
+            "name": "Dragon Born",
+            "level": 95,
+            "class": "Warrior"
+        },
+        {
+            "id": 44947,
+            "name": "Ruin To",
             "level": 95,
             "class": "Element Archer"
         },
         {
-            "id": 5022,
-            "name": "Zenith Flamez",
+            "id": 50435,
+            "name": "Dutch Lagoon",
             "level": 95,
-            "class": "High Scepter"
+            "class": "Fighter"
         },
         {
-            "id": 48984,
-            "name": "Nigel Cabourn",
+            "id": 734,
+            "name": "Turtle Chan",
             "level": 95,
-            "class": "Priest"
-        },
-        {
-            "id": 35666,
-            "name": "Garo Ddon",
-            "level": 95,
-            "class": "Element Archer"
-        },
-        {
-            "id": 10151,
-            "name": "Destine Crow",
-            "level": 95,
-            "class": "Shield Sage"
-        },
-        {
-            "id": 45155,
-            "name": "Shionne Kisaragi",
-            "level": 95,
-            "class": "Alchemist"
+            "class": "Warrior"
         }
     ],
     "hardcore": [],
-    "updated": "2026-02-15T16:11:49.897690+00:00"
+    "updated": "2026-02-15T16:16:51.672927+00:00"
 }
