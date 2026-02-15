@@ -145,6 +145,35 @@ footer {
     padding:20px;
     background:#1b1b25;
     border-top:1px solid #2a2a35;
+	
+.leaderboard-wrapper {
+    max-width:1100px;
+    margin:0 auto;
+}
+
+.leaderboard-tabs {
+    margin-bottom:25px;
+}
+
+.search-box {
+    width:400px;
+    padding:12px;
+    background:#1b1b25;
+    border:1px solid #c8a75d;
+    color:#e6e6e6;
+    font-family:'Cinzel', serif;
+    margin-bottom:40px;
+}
+
+.search-box:focus {
+    outline:none;
+    border-color:#fff;
+}
+
+.leaderboard-grid {
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
 }
 </style>
 </head>
@@ -207,18 +236,27 @@ footer {
 
 
 <section id="leaderboard" class="section">
-    <h2 data-key="leaderboard">Leaderboard</h2>
+    <h2 data-key="leaderboardTitle">Leaderboard</h2>
 
-    <div style="margin-bottom:20px;">
-<button class="btn" data-key="normalTab" onclick="switchTab('non_hc')">Normal</button>
-<button class="btn" data-key="hcTab" onclick="switchTab('hc')">Hardcore</button>
+    <div class="leaderboard-wrapper">
+
+        <div class="leaderboard-tabs">
+            <button class="btn" onclick="switchTab('non_hc')" id="tabNormalBtn">Normal</button>
+            <button class="btn" onclick="switchTab('hc')" id="tabHardcoreBtn">Hardcore</button>
+        </div>
+
+        <input 
+            id="playerSearch" 
+            type="text" 
+            data-key-placeholder="searchPlaceholder"
+            placeholder="Search player..." 
+            onkeyup="searchPlayer()" 
+            class="search-box"
+        >
+
+        <div id="leaderboardContainer" class="leaderboard-grid"></div>
+
     </div>
-
-<input id="playerSearch" data-key="searchPlaceholder" type="text"
-        onkeyup="searchPlayer()" 
-        style="padding:10px; width:300px; margin-bottom:20px;">
-
-    <div id="leaderboardContainer"></div>
 </section>
 
 <footer>
@@ -757,10 +795,10 @@ function setLanguage(lang){
     document.querySelector('[data-key="news2Text"]').textContent = t.news2Text;
 
 	document.querySelector('[data-key="leaderboardTitle"]').textContent = t.leaderboardTitle;
-	document.querySelector('[data-key="tabNormal"]').textContent = t.tabNormal;
-	document.querySelector('[data-key="tabHardcore"]').textContent = t.tabHardcore;
-	document.querySelector('[data-key="searchPlayer"]').placeholder = t.searchPlayer;
+	document.getElementById("tabNormalBtn").textContent = t.normalTab;
+	document.getElementById("tabHardcoreBtn").textContent = t.hcTab;
 	document.getElementById("playerSearch").placeholder = t.searchPlaceholder;
+
 
     document.querySelector('[data-key="serverStatusTitle"]').textContent = t.serverStatusTitle;
 
