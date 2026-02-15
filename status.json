@@ -2,12 +2,12 @@
     {
         "name": "Channel 1",
         "online": true,
-        "players": 25
+        "players": 26
     },
     {
         "name": "Channel 2",
         "online": true,
-        "players": 12
+        "players": 10
     },
     {
         "name": "Channel 3",
@@ -47,11 +47,11 @@
     {
         "name": "Custom Enemy",
         "online": true,
-        "players": 4
+        "players": 2
     },
     {
         "name": "Boss Rush",
         "online": true,
-        "players": 5
+        "players": 1
     }
 ]
