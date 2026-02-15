@@ -20,7 +20,6 @@ header{
     background:#1b1b25;
     padding:25px;
     border-bottom:2px solid #c8a75d;
-    position:relative;
 }
 
 h1{
@@ -50,6 +49,7 @@ h1{
     background:#1b1b25;
     border:1px solid #c8a75d;
     color:#fff;
+    font-family:'Cinzel', serif;
 }
 
 .grid{
@@ -66,50 +66,6 @@ h1{
     width:280px;
     padding:20px;
     margin:15px;
-    transition:0.3s;
-}
-
-.card:hover{
-    border-color:#c8a75d;
-    transform:translateY(-5px);
-}
-
-/* LANGUAGE DROPDOWN */
-.lang-selector{
-    position:absolute;
-    right:20px;
-    top:25px;
-}
-
-.lang-btn{
-    background:#1b1b25;
-    border:1px solid #c8a75d;
-    color:#c8a75d;
-    padding:6px 12px;
-    cursor:pointer;
-}
-
-.lang-dropdown{
-    display:none;
-    position:absolute;
-    right:0;
-    background:#1b1b25;
-    border:1px solid #c8a75d;
-    max-height:300px;
-    overflow-y:auto;
-}
-
-.lang-dropdown div{
-    padding:6px 12px;
-    cursor:pointer;
-}
-
-.lang-dropdown div:hover{
-    background:#2a2a35;
-}
-
-.lang-selector:hover .lang-dropdown{
-    display:block;
 }
 </style>
 </head>
@@ -118,29 +74,28 @@ h1{
 
 <header>
 
-<h1 data-key="leaderboard">Leaderboard</h1>
+<h1 data-key="leaderboardTitle">Leaderboard</h1>
 
 <button class="btn" onclick="switchTab('normal')" data-key="normalTab">Normal</button>
 <button class="btn" onclick="switchTab('hc')" data-key="hcTab">Hardcore</button>
 
 <br>
 
-<input id="search" 
-       class="search" 
+<input id="search"
+       class="search"
        data-key-placeholder="searchPlaceholder"
-       placeholder="Search player..." 
+       placeholder="Search player..."
        onkeyup="searchPlayer()">
 
-<div class="lang-selector">
-    <button class="lang-btn">🌍</button>
-    <div class="lang-dropdown" id="languageList"></div>
-</div>
+<br><br>
+
+<div id="languageList"></div>
 
 </header>
 
 <div id="leaderboard" class="grid"></div>
 
-<!-- TRANSLATIONS -->
+<!-- 🔥 translations FIRST -->
 <script src="translations.js"></script>
 
 <script>
@@ -152,8 +107,7 @@ let currentTab = "normal";
    LANGUAGE SYSTEM
 =========================== */
 
-function applyTranslations(){
-    const lang = localStorage.getItem("lang") || "en";
+function setLanguage(lang){
     const t = translations[lang];
     if(!t) return;
 
@@ -166,35 +120,29 @@ function applyTranslations(){
         const key = el.getAttribute("data-key-placeholder");
         if(t[key]) el.placeholder = t[key];
     });
-}
 
-function setLanguage(lang){
     localStorage.setItem("lang", lang);
-    applyTranslations();
     renderLeaderboard();
 }
 
 languages.forEach(lang=>{
-    const div=document.createElement("div");
-    div.innerHTML=`${lang.flag} ${lang.name}`;
-    div.onclick=()=>setLanguage(lang.code);
-    document.getElementById("languageList").appendChild(div);
+    const btn = document.createElement("button");
+    btn.className="btn";
+    btn.textContent = lang.flag;
+    btn.onclick = ()=> setLanguage(lang.code);
+    document.getElementById("languageList").appendChild(btn);
 });
 
-applyTranslations();
+setLanguage(localStorage.getItem("lang") || "en");
 
 /* ===========================
    LOAD DATA
 =========================== */
 
 async function loadLeaderboard(){
-    try{
-        const res = await fetch("leaderboard.json?nocache=" + Date.now());
-        leaderboardData = await res.json();
-        renderLeaderboard();
-    }catch(err){
-        console.error("Failed to load leaderboard:", err);
-    }
+    const res = await fetch("leaderboard.json?nocache="+Date.now());
+    leaderboardData = await res.json();
+    renderLeaderboard();
 }
 
 /* ===========================
@@ -204,41 +152,38 @@ async function loadLeaderboard(){
 function renderLeaderboard(){
     if(!leaderboardData) return;
 
-    const lang = localStorage.getItem("lang") || "en";
-    const t = translations[lang];
-
+    const t = translations[localStorage.getItem("lang") || "en"];
     const container = document.getElementById("leaderboard");
-    container.innerHTML = "";
+    container.innerHTML="";
 
     const players = leaderboardData[currentTab];
 
-    if(!players || players.length === 0){
-        container.innerHTML = `<p>${t.noPlayersFound}</p>`;
+    if(!players || players.length===0){
+        container.innerHTML=`<p>${t.noPlayersFound}</p>`;
         return;
     }
 
-    players.forEach(player => {
+    players.forEach(player=>{
 
-        const div = document.createElement("div");
-        div.className = "card";
+        const div=document.createElement("div");
+        div.className="card";
 
-        const highestLevel = Math.max(...player.classes.map(c => c.level));
+        const highestLevel = Math.max(...player.classes.map(c=>c.level));
 
-        let extra = "";
-
-        if(currentTab === "hc"){
-            extra = `
+        let extra="";
+        if(currentTab==="hc"){
+            extra=`
                 <p>${t.hcSince}: ${player.hardcore_since || "-"}</p>
-                <p>${t.hcStatus}: ${player.dead ? "💀 "+t.dead : "🟢 "+t.alive}</p>
+                <p>${t.hcStatus}: ${player.dead ? t.dead : t.alive}</p>
             `;
         }
 
-        div.innerHTML = `
+        div.innerHTML=`
             <h3>${player.name}</h3>
             <p>${t.level}: ${highestLevel}</p>
             <p><strong>${t.classes}:</strong></p>
             <ul>
-                ${player.classes.map(c => 
+                ${player.classes.map(c=>
                     `<li>${c.class} (Lv.${c.level})</li>`
                 ).join("")}
             </ul>
@@ -254,7 +199,7 @@ function renderLeaderboard(){
 =========================== */
 
 function switchTab(tab){
-    currentTab = tab;
+    currentTab=tab;
     renderLeaderboard();
 }
 
@@ -265,24 +210,17 @@ function switchTab(tab){
 function searchPlayer(){
     if(!leaderboardData) return;
 
-    const value = document.getElementById("search").value.toLowerCase();
-    const container = document.getElementById("leaderboard");
-    container.innerHTML = "";
+    const t = translations[localStorage.getItem("lang") || "en"];
+    const value=document.getElementById("search").value.toLowerCase();
+    const container=document.getElementById("leaderboard");
+    container.innerHTML="";
 
-    const lang = localStorage.getItem("lang") || "en";
-    const t = translations[lang];
+    const all=[...(leaderboardData.normal||[]),...(leaderboardData.hc||[])];
 
-    const allPlayers = [
-        ...(leaderboardData.normal || []),
-        ...(leaderboardData.hc || [])
-    ];
+    const results=all.filter(p=>p.name.toLowerCase().includes(value));
 
-    const results = allPlayers.filter(p =>
-        p.name.toLowerCase().includes(value)
-    );
-
-    if(results.length === 0){
-        container.innerHTML = `<p>${t.noPlayersFound}</p>`;
+    if(results.length===0){
+        container.innerHTML=`<p>${t.noPlayersFound}</p>`;
         return;
     }
 
@@ -290,23 +228,23 @@ function searchPlayer(){
         const div=document.createElement("div");
         div.className="card";
 
-        const highestLevel = Math.max(...player.classes.map(c => c.level));
+        const highestLevel = Math.max(...player.classes.map(c=>c.level));
 
         div.innerHTML=`
             <h3>${player.name}</h3>
             <p>${t.level}: ${highestLevel}</p>
             <p><strong>${t.classes}:</strong></p>
             <ul>
-                ${player.classes.map(c =>
+                ${player.classes.map(c=>
                     `<li>${c.class} (Lv.${c.level})</li>`
                 ).join("")}
             </ul>
         `;
+
         container.appendChild(div);
     });
 }
 
-/* INIT */
 loadLeaderboard();
 
 </script>
