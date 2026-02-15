@@ -12,13 +12,11 @@ body{
     margin:0;
     font-family:'Cinzel', serif;
     color:#e6e6e6;
-    line-height:1.7;
     background:
         linear-gradient(rgba(15,15,20,0.95), rgba(15,15,20,0.95)),
         url("ddon-bg.jpg") center/cover no-repeat fixed;
 }
 
-/* HEADER */
 header{
     background:#1b1b25;
     padding:20px;
@@ -28,10 +26,8 @@ header{
 
 h1{
     color:#c8a75d;
-    letter-spacing:2px;
 }
 
-/* LANGUAGE SELECTOR */
 #languageSelector{
     margin-top:15px;
     padding:6px 10px;
@@ -40,48 +36,38 @@ h1{
     border:1px solid #c8a75d;
 }
 
-/* CONTAINER */
 .container{
-    max-width:1000px;
+    max-width:900px;
     margin:60px auto;
     padding:20px;
 }
 
-/* SECTION */
 .section{
-    margin-bottom:80px;
+    margin-bottom:60px;
 }
 
 .section h2{
     display:flex;
     align-items:center;
-    gap:15px;
+    gap:10px;
     font-size:22px;
-    color:#ffffff;
-    border-bottom:1px solid #2a2a35;
-    padding-bottom:15px;
 }
 
-/* GOLD STEP BOX */
 .step-box{
     background:#c8a75d;
     color:#0f0f14;
-    padding:8px 14px;
+    padding:6px 12px;
     font-weight:bold;
     border-radius:4px;
-    font-size:16px;
 }
 
-/* BOX */
 .box{
     background:#1b1b25;
     padding:20px;
     border:1px solid #2a2a35;
     margin-top:15px;
-    border-radius:6px;
 }
 
-/* DOWNLOAD BUTTON */
 .download-btn{
     display:inline-block;
     padding:10px 20px;
@@ -89,13 +75,11 @@ h1{
     color:#c8a75d;
     text-decoration:none;
     transition:all 0.3s ease;
-    margin-top:8px;
 }
 
 .download-btn:hover{
     background:#c8a75d;
     color:#0f0f14;
-    transform:translateY(-2px);
 }
 </style>
 </head>
@@ -103,11 +87,26 @@ h1{
 <body>
 
 <header>
-    <h1 id="howTitle"></h1>
-    <select id="languageSelector"></select>
+<h1 id="howTitle"></h1>
+<select id="languageSelector"></select>
 </header>
 
-<div class="container" id="content"></div>
+<div class="container">
+
+<div class="section">
+<h2><span class="step-box">1</span> <span id="step1Title"></span></h2>
+<p id="step1Text"></p>
+
+<div class="box">
+<strong id="fullClientText"></strong><br>
+<a id="fullClientLink" class="download-btn" target="_blank">Download</a>
+<br><br>
+<strong id="multipartText"></strong><br>
+<a id="multipartLink" class="download-btn" target="_blank">Download</a>
+</div>
+</div>
+
+</div>
 
 <script src="translations.js"></script>
 <script>
@@ -124,25 +123,15 @@ window.languages.forEach(lang=>{
 function setLanguage(code){
 
     const t = window.translations[code];
-    const ht = t.howto || t; // 🔥 MAGIC FIX
+    const ht = t.howto;
 
-    document.getElementById("howTitle").textContent = t.howTitle || t.howToPlay;
+    document.getElementById("howTitle").textContent = t.howToPlay;
 
-    // STEP TITLES
-    document.getElementById("step1Title").textContent = ht.step1Title || "";
-    document.getElementById("step2Title").textContent = ht.step2Title || "";
-    document.getElementById("step3Title").textContent = ht.step3Title || "";
-    document.getElementById("step4Title").textContent = ht.step4Title || "";
-    document.getElementById("step5Title").textContent = ht.step5Title || "";
-    document.getElementById("step6Title").textContent = ht.step6Title || "";
-    document.getElementById("step7Title").textContent = ht.step7Title || "";
+    document.getElementById("step1Title").textContent = ht.step1Title;
+    document.getElementById("step1Text").textContent = ht.step1Text;
 
-    // DOWNLOAD BUTTONS
-    document.getElementById("fullClientText").textContent = ht.fullClient || t.downloadFull || "Full Client";
-    document.getElementById("multipartText").textContent = ht.multiClient || t.downloadMulti || "Multipart";
-
-    document.getElementById("fullClientLink").textContent = "Download";
-    document.getElementById("multipartLink").textContent = "Download";
+    document.getElementById("fullClientText").textContent = ht.fullClient;
+    document.getElementById("multipartText").textContent = ht.multiClient;
 
     document.getElementById("fullClientLink").href = t.downloadLinks.full;
     document.getElementById("multipartLink").href = t.downloadLinks.multi;
