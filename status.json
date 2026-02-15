@@ -17,17 +17,17 @@
     {
         "name": "Channel 3",
         "online": true,
-        "players": 5
+        "players": 8
     },
     {
         "name": "Channel 4",
         "online": true,
-        "players": 1
+        "players": 2
     },
     {
         "name": "Channel 5",
         "online": true,
-        "players": 5
+        "players": 6
     },
     {
         "name": "Channel 6",
@@ -42,7 +42,7 @@
     {
         "name": "Channel 8",
         "online": true,
-        "players": 3
+        "players": 4
     },
     {
         "name": "Collab",
