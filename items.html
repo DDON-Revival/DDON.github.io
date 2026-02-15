@@ -1,63 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>DDON Wiki – Items</title>
-
-<style>
-body{
-    margin:0;
-    font-family:Arial;
-    background:#0f0f14;
-    color:#eee;
-}
-
-header{
-    background:#1b1b25;
-    padding:20px;
-    border-bottom:2px solid #c8a75d;
-    text-align:center;
-}
-
-h1{color:#c8a75d;}
-
-.container{
-    max-width:1200px;
-    margin:40px auto;
-    padding:20px;
-}
-
-input{
-    width:100%;
-    padding:10px;
-    margin-bottom:20px;
-    background:#111;
-    color:#c8a75d;
-    border:1px solid #c8a75d;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-th,td{
-    padding:8px;
-    border-bottom:1px solid #2a2a35;
-}
-
-th{
-    background:#1b1b25;
-    color:#c8a75d;
-    text-align:left;
-}
-
-tr:hover{
-    background:#1a1a22;
-}
-</style>
+<title>Items - DDON Wiki</title>
+<link rel="stylesheet" href="wiki.css">
 </head>
-
 <body>
 
 <header>
@@ -65,54 +11,33 @@ tr:hover{
 </header>
 
 <div class="container">
-
-<input type="text" id="search" placeholder="Search item...">
-
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>Name</th>
-</tr>
-</thead>
-<tbody id="itemTable"></tbody>
-</table>
-
+<input class="search-bar" id="search" placeholder="Search item...">
+<div class="grid" id="itemGrid"></div>
 </div>
 
+<script src="wiki.js"></script>
 <script>
 
-async function loadItems(){
+(async ()=>{
 
-    const res = await fetch("datas/itemlist.csv");
-    const text = await res.text();
+    const items = await fetchCSV("../datas/itemlist.csv");
 
-    const rows = text.split("\n").slice(1);
+    const grid = document.getElementById("itemGrid");
 
-    const table = document.getElementById("itemTable");
-
-    rows.forEach(r=>{
-        const cols = r.split(",");
-        if(cols.length < 2) return;
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${cols[0]}</td>
-            <td>${cols[1]}</td>
-        `;
-        table.appendChild(tr);
+    items.slice(1).forEach(row=>{
+        if(row[1]){
+            grid.appendChild(createCard(row[1],"Item"));
+        }
     });
-}
 
-document.getElementById("search").addEventListener("input", function(){
-    const val = this.value.toLowerCase();
-    document.querySelectorAll("#itemTable tr").forEach(tr=>{
-        tr.style.display = tr.innerText.toLowerCase().includes(val) ? "" : "none";
+    document.getElementById("search").addEventListener("input",e=>{
+        const val = e.target.value.toLowerCase();
+        [...grid.children].forEach(card=>{
+            card.style.display = card.innerText.toLowerCase().includes(val) ? "block":"none";
+        });
     });
-});
 
-loadItems();
-
+})();
 </script>
 
 </body>
