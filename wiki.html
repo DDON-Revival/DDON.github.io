@@ -2,82 +2,167 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DDON Wiki</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<title>DDON Ultra Wiki</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-body{
-    margin:0;
-    font-family:'Cinzel', serif;
-    color:#e6e6e6;
-    background:
-        linear-gradient(rgba(15,15,20,0.95), rgba(15,15,20,0.95)),
-        url("ddon-bg.jpg") center/cover no-repeat fixed;
+body {
+    font-family: Arial, sans-serif;
+    background: #0f1115;
+    color: #e4e6eb;
+    margin: 0;
 }
 
-header{
-    background:#1b1b25;
-    padding:30px;
-    text-align:center;
-    border-bottom:2px solid #c8a75d;
+header {
+    background: #161a22;
+    padding: 20px;
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
 }
 
-h1{
-    color:#c8a75d;
-    margin:0;
+.controls {
+    padding: 15px;
+    background: #1c212b;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-.container{
-    max-width:1000px;
-    margin:60px auto;
-    padding:20px;
+input, select {
+    padding: 8px;
+    background: #11151c;
+    border: 1px solid #2a2f3a;
+    color: white;
+    border-radius: 4px;
 }
 
-.card{
-    background:#1b1b25;
-    padding:30px;
-    margin-bottom:30px;
-    border:1px solid #2a2a35;
-    border-radius:8px;
-    transition:0.3s;
+button {
+    padding: 8px 14px;
+    background: #2962ff;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
 }
 
-.card:hover{
-    border-color:#c8a75d;
-    transform:translateY(-4px);
+button:hover {
+    background: #0039cb;
 }
 
-.card a{
-    color:#c8a75d;
-    font-size:22px;
-    text-decoration:none;
+#results {
+    padding: 20px;
+}
+
+.card {
+    background: #1a1f29;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border-left: 4px solid #2962ff;
+}
+
+.small {
+    font-size: 13px;
+    opacity: 0.7;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>DDON Wiki</h1>
-</header>
+<header>DDON Ultra Wiki v4</header>
 
-<div class="container">
-
-<div class="card">
-<a href="monsters.html">Monsters</a>
+<div class="controls">
+    <input type="text" id="search" placeholder="Search enemy or stage...">
+    <select id="stageFilter">
+        <option value="">All Stages</option>
+    </select>
+    <button onclick="loadData()">Reload Data</button>
 </div>
 
-<div class="card">
-<a href="items.html">Items</a>
-</div>
+<div id="results">Loading...</div>
 
-<div class="card">
-<a href="stages.html">Stages</a>
-</div>
+<script>
+let enemyNames = {};
+let stageNames = {};
+let spawnData = [];
 
-</div>
+async function loadData() {
+    document.getElementById("results").innerHTML = "Loading data...";
+
+    const [enemyRes, stageRes, spawnRes] = await Promise.all([
+        fetch("datas/enemy-names.json"),
+        fetch("datas/stage-names.json"),
+        fetch("datas/EnemySpawn.json")
+    ]);
+
+    enemyNames = await enemyRes.json();
+    stageNames = await stageRes.json();
+    spawnData = await spawnRes.json();
+
+    populateStageFilter();
+    render();
+}
+
+function populateStageFilter() {
+    const select = document.getElementById("stageFilter");
+    select.innerHTML = '<option value="">All Stages</option>';
+
+    Object.keys(stageNames).forEach(id => {
+        const option = document.createElement("option");
+        option.value = id;
+        option.textContent = `${stageNames[id].en} (ID: ${id})`;
+        select.appendChild(option);
+    });
+}
+
+function render() {
+    const search = document.getElementById("search").value.toLowerCase();
+    const stageFilter = document.getElementById("stageFilter").value;
+    const container = document.getElementById("results");
+
+    container.innerHTML = "";
+
+    let count = 0;
+
+    spawnData.forEach(spawn => {
+
+        const stageId = spawn.stageId?.toString() || "";
+        const enemyId = spawn.enemyId;
+        const enemyName = enemyNames[enemyId] || enemyId;
+        const stageName = stageNames[stageId]?.en || stageId;
+
+        if (stageFilter && stageFilter !== stageId) return;
+
+        if (search &&
+            !enemyName.toLowerCase().includes(search) &&
+            !stageName.toLowerCase().includes(search)) return;
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <div><strong>${enemyName}</strong></div>
+            <div class="small">Enemy ID: ${enemyId}</div>
+            <div>Stage: ${stageName}</div>
+            <div class="small">Stage ID: ${stageId}</div>
+        `;
+
+        container.appendChild(card);
+        count++;
+    });
+
+    if (count === 0) {
+        container.innerHTML = "No results found.";
+    }
+}
+
+document.getElementById("search").addEventListener("input", render);
+document.getElementById("stageFilter").addEventListener("change", render);
+
+loadData();
+</script>
 
 </body>
 </html>
