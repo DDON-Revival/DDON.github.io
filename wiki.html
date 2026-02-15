@@ -1,160 +1,183 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>DDON Ultra Wiki</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 body{
     margin:0;
+    font-family:Segoe UI, sans-serif;
     background:#0f1117;
     color:#e6e6e6;
-    font-family:Arial, sans-serif;
 }
+
 header{
+    background:#151823;
     padding:20px;
-    background:#161b22;
-    text-align:center;
-    font-size:28px;
-    font-weight:bold;
     border-bottom:2px solid #c8a75d;
 }
-.tabs{
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    margin:20px 0;
+
+h1{
+    margin:0;
+    color:#c8a75d;
 }
-.tab{
-    padding:10px 20px;
-    background:#1c2128;
-    cursor:pointer;
-    border:1px solid #30363d;
+
+.container{
+    padding:30px;
+    max-width:1400px;
+    margin:auto;
 }
-.tab.active{
-    background:#c8a75d;
-    color:#000;
+
+.search{
+    margin-bottom:30px;
 }
-#search{
-    display:block;
-    margin:20px auto;
-    padding:10px;
-    width:300px;
-    background:#161b22;
-    border:1px solid #30363d;
+
+input{
+    width:100%;
+    padding:12px;
+    background:#1b1f2b;
+    border:1px solid #333;
     color:white;
 }
-.content{
-    max-width:1000px;
-    margin:0 auto 50px auto;
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+    gap:15px;
 }
+
 .card{
-    background:#161b22;
+    background:#1b1f2b;
     padding:15px;
-    margin:10px 0;
-    border:1px solid #30363d;
+    border-radius:6px;
+    cursor:pointer;
+    transition:0.2s;
+    border:1px solid #222;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+    border-color:#c8a75d;
+}
+
+.detail{
+    margin-top:40px;
+    background:#1b1f2b;
+    padding:25px;
+    border-radius:8px;
 }
 </style>
 </head>
 
 <body>
 
-<header>DDON Ultra Wiki</header>
+<header>
+<h1>DDON Ultra Wiki</h1>
+</header>
 
-<div class="tabs">
-    <div class="tab active" data-tab="monsters">Monsters</div>
-    <div class="tab" data-tab="items">Items</div>
-    <div class="tab" data-tab="stages">Stages</div>
+<div class="container">
+
+<div class="search">
+<input type="text" id="search" placeholder="Search...">
 </div>
 
-<input type="text" id="search" placeholder="Search...">
+<div class="grid" id="grid"></div>
 
-<div class="content" id="content"></div>
+<div class="detail" id="detail" style="display:none;"></div>
+
+</div>
 
 <script>
 
-let currentTab = "monsters"
-let monsters = {}
-let stages = {}
-let items = []
+const grid = document.getElementById("grid");
+const detail = document.getElementById("detail");
+const searchInput = document.getElementById("search");
+
+let monsters = {};
+let stages = {};
+let items = [];
 
 async function loadData(){
 
-    const enemyNames = await fetch("datas/enemy-names.json").then(r=>r.json())
-    const stageNames = await fetch("datas/stage-names.json").then(r=>r.json())
-    const itemCSV = await fetch("datas/itemlist.csv").then(r=>r.text())
+    const enemyNames = await fetch("datas/enemy-names.json").then(r=>r.json());
+    const stageNames = await fetch("datas/stage-names.json").then(r=>r.json());
+    const itemCSV = await fetch("datas/itemlist.csv").then(r=>r.text());
 
-    monsters = enemyNames
-    stages = stageNames
+    monsters = enemyNames;
+    stages = stageNames;
 
-    items = parseCSV(itemCSV)
-
-    render()
+    // parse CSV
+    const rows = itemCSV.split("\n");
+    items = rows.map(r=>r.split(","));
 }
 
-function parseCSV(text){
-    const rows = text.split("\n")
-    return rows.map(r => r.split(","))
+function renderMonsters(){
+
+    grid.innerHTML = "";
+    Object.entries(monsters).forEach(([id,name])=>{
+        createCard("monster", id, name);
+    });
 }
 
-function render(){
+function renderStages(){
 
-    const content = document.getElementById("content")
-    const searchValue = document.getElementById("search").value.toLowerCase()
-    content.innerHTML = ""
-
-    if(currentTab === "monsters"){
-
-        Object.entries(monsters).forEach(([id,name])=>{
-            if(!name.toLowerCase().includes(searchValue)) return
-            content.innerHTML += `
-                <div class="card">
-                    <b>${name}</b><br>
-                    ID: ${id}
-                </div>
-            `
-        })
-    }
-
-    if(currentTab === "stages"){
-
-        Object.entries(stages).forEach(([id,data])=>{
-            const name = data.en
-            if(!name.toLowerCase().includes(searchValue)) return
-            content.innerHTML += `
-                <div class="card">
-                    <b>${name}</b><br>
-                    Stage ID: ${id}
-                </div>
-            `
-        })
-    }
-
-    if(currentTab === "items"){
-
-        items.forEach(row=>{
-            if(!row[0]) return
-            if(!row.join(" ").toLowerCase().includes(searchValue)) return
-            content.innerHTML += `
-                <div class="card">
-                    ${row.join(" | ")}
-                </div>
-            `
-        })
-    }
+    grid.innerHTML = "";
+    Object.entries(stages).forEach(([id,data])=>{
+        createCard("stage", id, data.en);
+    });
 }
 
-document.querySelectorAll(".tab").forEach(tab=>{
-    tab.addEventListener("click",()=>{
-        document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"))
-        tab.classList.add("active")
-        currentTab = tab.dataset.tab
-        render()
-    })
-})
+function renderItems(){
 
-document.getElementById("search").addEventListener("input",render)
+    grid.innerHTML = "";
+    items.forEach(row=>{
+        if(row[1]){
+            createCard("item", row[0], row[1]);
+        }
+    });
+}
 
-loadData()
+function createCard(type,id,name){
+
+    const card = document.createElement("div");
+    card.className="card";
+    card.innerHTML = `<strong>${name}</strong><br>ID: ${id}`;
+
+    card.onclick=()=>{
+        showDetail(type,id,name);
+    };
+
+    grid.appendChild(card);
+}
+
+function showDetail(type,id,name){
+
+    detail.style.display="block";
+    detail.innerHTML = `
+        <h2>${name}</h2>
+        <p><strong>Type:</strong> ${type}</p>
+        <p><strong>ID:</strong> ${id}</p>
+    `;
+
+    window.history.pushState({}, "", `?type=${type}&id=${id}`);
+}
+
+function searchFilter(){
+
+    const term = searchInput.value.toLowerCase();
+    document.querySelectorAll(".card").forEach(card=>{
+        card.style.display = card.innerText.toLowerCase().includes(term)
+            ? "block" : "none";
+    });
+}
+
+searchInput.addEventListener("input", searchFilter);
+
+loadData().then(()=>{
+    renderMonsters();
+});
 
 </script>
 
