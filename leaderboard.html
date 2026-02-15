@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DDON Leaderboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    font-family:'Cinzel', serif;
+    background:#0f0f14;
+    color:#e6e6e6;
+    text-align:center;
+}
+
+header{
+    background:#1b1b25;
+    padding:20px;
+    border-bottom:2px solid #c8a75d;
+}
+
+.btn{
+    padding:12px 25px;
+    margin:10px;
+    border:2px solid #c8a75d;
+    background:none;
+    color:#c8a75d;
+    cursor:pointer;
+}
+
+.btn:hover{
+    background:#c8a75d;
+    color:#0f0f14;
+}
+
+.search{
+    padding:12px;
+    width:300px;
+    margin:20px;
+    background:#1b1b25;
+    border:1px solid #c8a75d;
+    color:#fff;
+}
+
+.grid{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.card{
+    background:#1b1b25;
+    border:1px solid #2a2a35;
+    width:280px;
+    padding:20px;
+    margin:15px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Leaderboard</h1>
+<button class="btn" onclick="switchTab('normal')">Normal</button>
+<button class="btn" onclick="switchTab('hc')">Hardcore</button>
+<br>
+<input id="search" class="search" placeholder="Search player..." onkeyup="searchPlayer()">
+</header>
+
+<div id="leaderboard" class="grid"></div>
+
+<script>
+
+let data = null;
+let current = "normal";
+
+async function load(){
+    const res = await fetch("leaderboard.json?nocache=" + Date.now());
+    data = await res.json();
+    render();
+}
+
+function render(){
+    if(!data) return;
+
+    const container = document.getElementById("leaderboard");
+    container.innerHTML = "";
+
+    const players = data[current];
+
+    if(!players || players.length === 0){
+        container.innerHTML = "<p>No players found.</p>";
+        return;
+    }
+
+    players.forEach(p=>{
+        const div = document.createElement("div");
+        div.className="card";
+
+        let extra="";
+        if(current==="hc"){
+            extra = `
+                <p>HC Since: ${p.hc_since || "-"}</p>
+                <p>Status: ${p.dead ? "💀 Dead" : "🟢 Alive"}</p>
+            `;
+        }
+
+        div.innerHTML=`
+            <h3>${p.name}</h3>
+            <p>Level: ${p.level}</p>
+            <p>Class: ${p.class}</p>
+            ${extra}
+        `;
+
+        container.appendChild(div);
+    });
+}
+
+function switchTab(tab){
+    current=tab;
+    render();
+}
+
+function searchPlayer(){
+    if(!data) return;
+
+    const value=document.getElementById("search").value.toLowerCase();
+    const container=document.getElementById("leaderboard");
+    container.innerHTML="";
+
+    const all=[...data.normal,...data.hc];
+
+    const result=all.filter(p=>p.name.toLowerCase().includes(value));
+
+    if(result.length===0){
+        container.innerHTML="<p>No players found.</p>";
+        return;
+    }
+
+    result.forEach(p=>{
+        const div=document.createElement("div");
+        div.className="card";
+        div.innerHTML=`
+            <h3>${p.name}</h3>
+            <p>Level: ${p.level}</p>
+            <p>Class: ${p.class}</p>
+        `;
+        container.appendChild(div);
+    });
+}
+
+load();
+
+</script>
+
+</body>
+</html>
