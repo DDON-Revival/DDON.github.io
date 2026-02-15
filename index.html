@@ -5,260 +5,263 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DDON Revival</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-:root{
-    --bg:#0f0f14;
-    --bg2:#1b1b25;
-    --accent:#c8a75d;
-    --red:#8b1e1e;
-    --text:#e6e6e6;
-    --muted:#9a9a9a;
-}
-
-body{
+body {
     margin:0;
-    font-family:'Inter',sans-serif;
-    background:var(--bg);
-    color:var(--text);
+    font-family:'Cinzel', serif;
+    background:#0f0f14;
+    color:#e6e6e6;
+    overflow-x:hidden;
 }
 
-/* ================= HEADER ================= */
+/* ===============================
+   🔥 Animated Spark Background
+================================ */
+#particles {
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    z-index:-1;
+    background:#0f0f14;
+    overflow:hidden;
+}
 
-header{
-    background:var(--bg2);
-    padding:15px 40px;
+.spark {
+    position:absolute;
+    width:4px;
+    height:4px;
+    background:#c8a75d;
+    border-radius:50%;
+    opacity:0.7;
+    animation:float 8s linear infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(100vh); opacity:0; }
+    20% { opacity:1; }
+    100% { transform: translateY(-10vh); opacity:0; }
+}
+
+/* ===============================
+   HEADER
+================================ */
+header {
+    background:#1b1b25;
+    padding:20px;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    border-bottom:2px solid var(--accent);
-}
-
-.logo{
-    font-family:'Cinzel',serif;
-    font-size:22px;
-    color:var(--accent);
-}
-
-nav a{
-    margin:0 12px;
-    text-decoration:none;
-    color:var(--text);
-    font-weight:500;
-    transition:0.3s;
-}
-
-nav a:hover{
-    color:var(--accent);
-}
-
-/* ================= LANGUAGE SELECTOR ================= */
-
-.language-selector{
+    border-bottom:2px solid #c8a75d;
     position:relative;
-}
-
-.lang-btn{
-    background:none;
-    border:1px solid var(--accent);
-    color:var(--accent);
-    padding:6px 12px;
-    cursor:pointer;
-}
-
-.lang-menu{
-    display:none;
-    position:absolute;
-    right:0;
-    background:var(--bg2);
-    border:1px solid var(--accent);
-    margin-top:5px;
-    width:180px;
     z-index:10;
 }
 
-.lang-menu div{
-    padding:8px 10px;
+nav a {
+    color:#e6e6e6;
+    text-decoration:none;
+    margin:0 15px;
+    transition:0.3s;
+}
+
+nav a:hover {
+    color:#c8a75d;
+}
+
+/* ===============================
+   LANGUAGE SELECTOR
+================================ */
+.lang-selector {
+    position:relative;
+    display:inline-block;
+}
+
+.lang-btn {
+    background:#1b1b25;
+    border:1px solid #c8a75d;
+    color:#c8a75d;
+    padding:8px 12px;
     cursor:pointer;
 }
 
-.lang-menu div:hover{
+.lang-dropdown {
+    display:none;
+    position:absolute;
+    right:0;
+    background:#1b1b25;
+    border:1px solid #c8a75d;
+    min-width:180px;
+}
+
+.lang-dropdown a {
+    display:block;
+    padding:8px;
+    color:#e6e6e6;
+    text-decoration:none;
+}
+
+.lang-dropdown a:hover {
     background:#2a2a35;
 }
 
-.language-selector:hover .lang-menu{
+.lang-selector:hover .lang-dropdown {
     display:block;
 }
 
-/* ================= HERO ================= */
-
-.hero{
+/* ===============================
+   HERO
+================================ */
+.hero {
     text-align:center;
     padding:120px 20px;
-    background:linear-gradient(to bottom,var(--bg2),var(--bg));
+    background:linear-gradient(to bottom, #1b1b25, #0f0f14);
 }
 
-.hero h1{
-    font-family:'Cinzel',serif;
+.hero h1 {
     font-size:60px;
-    color:var(--accent);
-    margin:0;
+    color:#c8a75d;
 }
 
-.hero p{
-    color:var(--muted);
+.hero p {
     font-size:20px;
-    margin-top:15px;
+    color:#9a9a9a;
 }
 
-.btn{
+.btn {
     display:inline-block;
-    margin:20px 10px;
-    padding:14px 30px;
-    border:2px solid var(--accent);
-    color:var(--accent);
+    margin:20px;
+    padding:15px 30px;
+    border:2px solid #c8a75d;
+    color:#c8a75d;
     text-decoration:none;
     transition:0.3s;
 }
 
-.btn:hover{
-    background:var(--accent);
-    color:#000;
+.btn:hover {
+    background:#c8a75d;
+    color:#0f0f14;
 }
 
-.discord{
-    border-color:var(--red);
-    color:var(--red);
+.discord {
+    border-color:#8b1e1e;
+    color:#8b1e1e;
 }
 
-.discord:hover{
-    background:var(--red);
-    color:white;
+.discord:hover {
+    background:#8b1e1e;
+    color:#fff;
 }
 
-/* ================= SECTIONS ================= */
-
-.section{
+/* ===============================
+   SECTIONS
+================================ */
+.section {
     padding:80px 20px;
     text-align:center;
 }
 
-.section h2{
-    font-family:'Cinzel',serif;
-    color:var(--accent);
-    margin-bottom:40px;
-}
-
-.card{
-    background:var(--bg2);
+.card {
+    background:#1b1b25;
     padding:30px;
-    margin:15px;
+    margin:20px;
     display:inline-block;
-    width:280px;
+    width:300px;
     border:1px solid #2a2a35;
     transition:0.3s;
 }
 
-.card:hover{
-    border-color:var(--accent);
+.card:hover {
+    border-color:#c8a75d;
     transform:translateY(-5px);
 }
 
-/* ================= FOOTER ================= */
-
-footer{
-    background:var(--bg2);
+footer {
     text-align:center;
-    padding:25px;
+    padding:20px;
+    background:#1b1b25;
     border-top:1px solid #2a2a35;
-    margin-top:60px;
 }
 </style>
 </head>
-
 <body>
 
+<div id="particles"></div>
+
 <header>
-    <div class="logo">DDON Revival</div>
+    <h2>DDON Revival</h2>
 
     <nav>
-        <a href="#">Home</a>
-        <a href="#">News</a>
-        <a href="#">Server Status</a>
-        <a href="#">HC Leaderboard</a>
-        <a href="#">Wiki</a>
-        <a href="#">Download</a>
-        <a href="#">Info</a>
+        <a href="#home">Home</a>
+        <a href="#news">News</a>
+        <a href="#status">Server Status</a>
+        <a href="#leaderboard">HC Leaderboard</a>
+        <a href="#wiki">Wiki</a>
+        <a href="#download">Download</a>
+        <a href="#info">Info</a>
     </nav>
 
-    <div class="language-selector">
-        <button class="lang-btn">Language</button>
-        <div class="lang-menu">
-            <div>🇺🇸 English</div>
-            <div>🇯🇵 Japanese</div>
-            <div>🇨🇳 Chinese</div>
-            <div>🇵🇹 Portuguese</div>
-            <div>🇪🇸 Spanish</div>
-            <div>🇷🇺 Russian</div>
-            <div>🇹🇷 Turkish</div>
-            <div>🇵🇱 Polish</div>
-            <div>🇰🇷 Korean</div>
-            <div>🇮🇹 Italian</div>
-            <div>🇫🇷 French</div>
-            <div>🇬🇷 Greek</div>
+    <!-- 🌍 Language Selector -->
+    <div class="lang-selector">
+        <button class="lang-btn">🌍 Language</button>
+        <div class="lang-dropdown">
+            <a href="#">🇺🇸 English</a>
+            <a href="#">🇯🇵 Japanese</a>
+            <a href="#">🇨🇳 Chinese</a>
+            <a href="#">🇵🇹 Portuguese</a>
+            <a href="#">🇪🇸 Spanish</a>
+            <a href="#">🇷🇺 Russian</a>
+            <a href="#">🇹🇷 Turkish</a>
+            <a href="#">🇵🇱 Polish</a>
+            <a href="#">🇰🇷 Korean</a>
+            <a href="#">🇮🇹 Italian</a>
+            <a href="#">🇫🇷 French</a>
+            <a href="#">🇬🇷 Greek</a>
         </div>
     </div>
 </header>
 
-<section class="hero">
-    <h1>Dragons Dogma Online</h1>
-    <p>Biggest Revival Server • Hardcore Mode • Bitterblack Maze 2.0</p>
-    <a href="#" class="btn">Download & Play</a>
-    <a href="#" class="btn discord">Join Discord</a>
+<section id="home" class="hero">
+    <h1>Dragon's Dogma Online</h1>
+    <p>Biggest Server • Custom Content • Hardcore & BBM</p>
+    <a href="#download" class="btn">Download & Play</a>
+    <a href="https://discord.gg/ub8Newzh95" class="btn discord">Join Discord</a>
 </section>
 
-<section class="section">
-    <h2>Game Features</h2>
-
+<section id="leaderboard" class="section">
+    <h2>Server Features</h2>
     <div class="card">
         <h3>Hardcore Mode</h3>
-        <p>Permadeath • Milestones • Global Ladder</p>
+        <p>Permadeath • Milestones • Ladder</p>
     </div>
-
     <div class="card">
         <h3>Bitterblack Maze 2.0</h3>
-        <p>Roguelite Mode • Scaling Difficulty • Unique Drops</p>
+        <p>Roguelite System • NEW Balancing!</p>
     </div>
-
     <div class="card">
         <h3>Community Driven</h3>
-        <p>Active Development • Events • Player Feedback</p>
-    </div>
-</section>
-
-<section class="section">
-    <h2>Wiki</h2>
-
-    <div class="card">
-        <h3>Monster Database</h3>
-        <p>All enemies, stats & weaknesses</p>
-    </div>
-
-    <div class="card">
-        <h3>Item Database</h3>
-        <p>Weapons, armor, materials & rare items</p>
-    </div>
-
-    <div class="card">
-        <h3>Stage Database</h3>
-        <p>Maps, dungeons & locations</p>
+        <p>Events • Updates • Active Dev</p>
     </div>
 </section>
 
 <footer>
     2023 DDON Revival • Unofficial Fan Project
 </footer>
+
+<script>
+/* Generate Sparks */
+const container = document.getElementById("particles");
+for(let i=0;i<40;i++){
+    let spark=document.createElement("div");
+    spark.classList.add("spark");
+    spark.style.left=Math.random()*100+"vw";
+    spark.style.animationDuration=(5+Math.random()*5)+"s";
+    spark.style.animationDelay=Math.random()*5+"s";
+    container.appendChild(spark);
+}
+</script>
 
 </body>
 </html>
