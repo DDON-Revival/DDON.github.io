@@ -210,31 +210,15 @@ footer {
     <h2 data-key="leaderboard">Leaderboard</h2>
 
     <div style="margin-bottom:20px;">
-        <button class="btn" onclick="switchTab('non_hc')">Non-HC</button>
-        <button class="btn" onclick="switchTab('hc')">Hardcore</button>
+<button class="btn" data-key="normalTab" onclick="switchTab('non_hc')">Normal</button>
+<button class="btn" data-key="hcTab" onclick="switchTab('hc')">Hardcore</button>
     </div>
 
-    <input id="playerSearch" type="text" placeholder="Search Player..." 
+<input id="playerSearch" data-key="searchPlaceholder" type="text"
         onkeyup="searchPlayer()" 
         style="padding:10px; width:300px; margin-bottom:20px;">
 
     <div id="leaderboardContainer"></div>
-</section>
-
-    <div class="card">
-        <h3 data-key="hc">Hardcore Mode</h3>
-        <p data-key="hcDesc">Permadeath • Milestones • Ladder</p>
-    </div>
-
-    <div class="card">
-        <h3 data-key="bbm">Bitterblack Maze 2.0</h3>
-        <p data-key="bbmDesc">Roguelite System • NEW Balancing!</p>
-    </div>
-
-    <div class="card">
-        <h3 data-key="community">Community Driven</h3>
-        <p data-key="communityDesc">Events • Updates • Active Dev</p>
-    </div>
 </section>
 
 <footer>
@@ -775,7 +759,8 @@ function setLanguage(lang){
 	document.querySelector('[data-key="leaderboardTitle"]').textContent = t.leaderboardTitle;
 	document.querySelector('[data-key="tabNormal"]').textContent = t.tabNormal;
 	document.querySelector('[data-key="tabHardcore"]').textContent = t.tabHardcore;
-	document.querySelector('[data-key="searchPlayer"]').placeholder = t.searchPlayer;	
+	document.querySelector('[data-key="searchPlayer"]').placeholder = t.searchPlayer;
+	document.getElementById("playerSearch").placeholder = t.searchPlaceholder;
 
     document.querySelector('[data-key="serverStatusTitle"]').textContent = t.serverStatusTitle;
 
@@ -924,11 +909,6 @@ function searchPlayer(){
         `;
         container.appendChild(div);
     });
-}
-
-loadLeaderboard();
-
-    }
 }
 
 loadServerStatus();
