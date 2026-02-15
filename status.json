@@ -2,7 +2,7 @@
     {
         "name": "Channel 1",
         "online": true,
-        "players": 37
+        "players": 38
     },
     {
         "name": "Channel 2",
@@ -47,7 +47,7 @@
     {
         "name": "Custom Enemy",
         "online": true,
-        "players": 3
+        "players": 4
     },
     {
         "name": "Boss Rush",
