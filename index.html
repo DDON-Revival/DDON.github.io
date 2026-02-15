@@ -630,7 +630,7 @@ setLanguage(saved);
 
 async function loadServerStatus(){
     try{
-        const response = await fetch("status.json");
+        const response = await fetch("status.json?nocache=" + new Date().getTime());
         const data = await response.json();
 
         const currentLang = localStorage.getItem("lang") || "en";
