@@ -2,7 +2,7 @@
     {
         "name": "Channel 1",
         "online": true,
-        "players": 50
+        "players": 51
     },
     {
         "name": "Channel 2",
@@ -27,7 +27,7 @@
     {
         "name": "Channel 6",
         "online": true,
-        "players": 2
+        "players": 3
     },
     {
         "name": "Channel 7",
