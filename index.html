@@ -260,282 +260,48 @@ const languages = [
 ];
 
 const translations = {
-    en: {
-        home:"Home",
-        news:"News",
-        status:"Server Status",
-        leaderboard:"HC Leaderboard",
-        wiki:"Wiki",
-        download:"Download",
-        info:"Info",
-        title:"Dragon's Dogma Online",
-        subtitle:"Biggest Server • Custom Content • Hardcore & BBM",
-        downloadBtn:"Download & Play",
-        discordBtn:"Join Discord",
-		newsTitle: "Latest News",
-		news1Title: "Server Opening",
-		news1Text: "DDON is now live! Join the adventure.",
-		news2Title: "Hardcore Mode",
-		news2Text: "Hardcore Mode our Second Custom Content is now Live! Compete for glory."
-
-    },
-    jp: {
-        home:"ホーム",
-        news:"ニュース",
-        status:"サーバー状況",
-        leaderboard:"HCランキング",
-        wiki:"ウィキ",
-        download:"ダウンロード",
-        info:"情報",
-        title:"ドラゴンズドグマオンライン",
-        subtitle:"最大サーバー • カスタムコンテンツ • ハードコア & BBM",
-        downloadBtn:"ダウンロード",
-        discordBtn:"ディスコード参加",
-		newsTitle: "最新ニュース",
-		news1Title: "サーバーオープン",
-		news1Text: "DDONが正式に開始しました！冒険に参加しよう。",
-		news2Title: "ハードコアモード",
-		news2Text: "第2のカスタムコンテンツ「ハードコアモード」が開始！栄光を目指せ。"
-
-    },
-    zh: {
-        home:"首页",
-        news:"新闻",
-        status:"服务器状态",
-        leaderboard:"硬核排行",
-        wiki:"维基",
-        download:"下载",
-        info:"信息",
-        title:"龙之信条 Online",
-        subtitle:"最大服务器 • 自定义内容 • 硬核 & BBM",
-        downloadBtn:"下载游戏",
-        discordBtn:"加入 Discord",
-		newsTitle: "最新消息",
-		news1Title: "服务器开启",
-		news1Text: "DDON 已正式上线！加入冒险吧。",
-		news2Title: "硬核模式",
-		news2Text: "第二个自定义内容“硬核模式”已上线！争夺荣耀。"
-
-    },
-    pt: {
-        home:"Início",
-        news:"Notícias",
-        status:"Status do Servidor",
-        leaderboard:"Ranking HC",
-        wiki:"Wiki",
-        download:"Download",
-        info:"Info",
-        title:"Dragon's Dogma Online",
-        subtitle:"Maior Servidor • Conteúdo Custom • Hardcore & BBM",
-        downloadBtn:"Baixar & Jogar",
-        discordBtn:"Entrar no Discord",
-		newsTitle: "Últimas Notícias",
-		news1Title: "Abertura do Servidor",
-		news1Text: "DDON está agora online! Junte-se à aventura.",
-		news2Title: "Modo Hardcore",
-		news2Text: "Nosso segundo conteúdo customizado já está ativo! Compita pela glória."
-
-    },
-    es: {
-        home:"Inicio",
-        news:"Noticias",
-        status:"Estado del Servidor",
-        leaderboard:"Ranking HC",
-        wiki:"Wiki",
-        download:"Descargar",
-        info:"Info",
-        title:"Dragon's Dogma Online",
-        subtitle:"Servidor Más Grande • Contenido Personalizado • Hardcore & BBM",
-        downloadBtn:"Descargar & Jugar",
-        discordBtn:"Unirse a Discord",
-		newsTitle: "Últimas Noticias",
-		news1Title: "Apertura del Servidor",
-		news1Text: "¡DDON ya está en línea! Únete a la aventura.",
-		news2Title: "Modo Hardcore",
-		news2Text: "Nuestro segundo contenido personalizado ya está disponible. Compite por la gloria."
-
-    },
-    ru: {
-        home:"Главная",
-        news:"Новости",
-        status:"Статус Сервера",
-        leaderboard:"HC Рейтинг",
-        wiki:"Wiki",
-        download:"Скачать",
-        info:"Инфо",
-        title:"Dragon's Dogma Online",
-        subtitle:"Крупнейший сервер • Кастом контент • Hardcore & BBM",
-        downloadBtn:"Скачать и играть",
-        discordBtn:"Присоединиться к Discord",
-		newsTitle: "Последние новости",
-		news1Title: "Открытие сервера",
-		news1Text: "DDON теперь доступен! Присоединяйтесь к приключению.",
-		news2Title: "Режим Hardcore",
-		news2Text: "Второй кастомный режим уже доступен! Соревнуйтесь за славу."
-
-    },
-    tr: {
-        home:"Ana Sayfa",
-        news:"Haberler",
-        status:"Sunucu Durumu",
-        leaderboard:"HC Sıralama",
-        wiki:"Wiki",
-        download:"İndir",
-        info:"Bilgi",
-        title:"Dragon's Dogma Online",
-        subtitle:"En Büyük Sunucu • Özel İçerik • Hardcore & BBM",
-        downloadBtn:"İndir & Oyna",
-        discordBtn:"Discord'a Katıl",
-		newsTitle: "Son Haberler",
-		news1Title: "Sunucu Açılışı",
-		news1Text: "DDON artık yayında! Maceraya katıl.",
-		news2Title: "Hardcore Modu",
-		news2Text: "İkinci özel içerik artık yayında! Zafer için yarış."
-
-    },
-    pl: {
-        home:"Strona Główna",
-        news:"Aktualności",
-        status:"Status Serwera",
-        leaderboard:"Ranking HC",
-        wiki:"Wiki",
-        download:"Pobierz",
-        info:"Info",
-        title:"Dragon's Dogma Online",
-        subtitle:"Największy Serwer • Własna Zawartość • Hardcore & BBM",
-        downloadBtn:"Pobierz i Graj",
-        discordBtn:"Dołącz do Discord",
-		newsTitle: "Najnowsze Wiadomości",
-		news1Title: "Otwarcie Serwera",
-		news1Text: "DDON jest już online! Dołącz do przygody.",
-		news2Title: "Tryb Hardcore",
-		news2Text: "Druga niestandardowa zawartość jest już dostępna! Rywalizuj o chwałę."
-
-    },
-    kr: {
-        home:"홈",
-        news:"뉴스",
-        status:"서버 상태",
-        leaderboard:"하드코어 순위",
-        wiki:"위키",
-        download:"다운로드",
-        info:"정보",
-        title:"드래곤즈 도그마 온라인",
-        subtitle:"최대 서버 • 커스텀 콘텐츠 • 하드코어 & BBM",
-        downloadBtn:"다운로드",
-        discordBtn:"디스코드 참여",
-		newsTitle: "최신 뉴스",
-		news1Title: "서버 오픈",
-		news1Text: "DDON이 이제 라이브입니다! 모험에 참여하세요.",
-		news2Title: "하드코어 모드",
-		news2Text: "두 번째 커스텀 콘텐츠가 출시되었습니다! 영광을 위해 경쟁하세요."
-
-    },
-    it: {
-        home:"Home",
-        news:"Notizie",
-        status:"Stato Server",
-        leaderboard:"Classifica HC",
-        wiki:"Wiki",
-        download:"Download",
-        info:"Info",
-        title:"Dragon's Dogma Online",
-        subtitle:"Server Più Grande • Contenuti Custom • Hardcore & BBM",
-        downloadBtn:"Scarica & Gioca",
-        discordBtn:"Unisciti a Discord",
-		newsTitle: "Ultime Notizie",
-		news1Title: "Apertura Server",
-		news1Text: "DDON è ora online! Unisciti all'avventura.",
-		news2Title: "Modalità Hardcore",
-		news2Text: "Il nostro secondo contenuto personalizzato è ora disponibile! Competi per la gloria."
-
-    },
-    fr: {
-        home:"Accueil",
-        news:"Actualités",
-        status:"Statut du Serveur",
-        leaderboard:"Classement HC",
-        wiki:"Wiki",
-        download:"Télécharger",
-        info:"Info",
-        title:"Dragon's Dogma Online",
-        subtitle:"Plus Grand Serveur • Contenu Custom • Hardcore & BBM",
-        downloadBtn:"Télécharger & Jouer",
-        discordBtn:"Rejoindre Discord",
-		newsTitle: "Dernières Actualités",
-		news1Title: "Ouverture du Serveur",
-		news1Text: "DDON est maintenant en ligne ! Rejoignez l'aventure.",
-		news2Title: "Mode Hardcore",
-		news2Text: "Notre deuxième contenu personnalisé est maintenant disponible ! Rivalisez pour la gloire."
-
-    },
-    gr: {
-        home:"Αρχική",
-        news:"Νέα",
-        status:"Κατάσταση Διακομιστή",
-        leaderboard:"Κατάταξη HC",
-        wiki:"Wiki",
-        download:"Λήψη",
-        info:"Πληροφορίες",
-        title:"Dragon's Dogma Online",
-        subtitle:"Μεγαλύτερος Server • Custom Περιεχόμενο • Hardcore & BBM",
-        downloadBtn:"Λήψη & Παιχνίδι",
-        discordBtn:"Σύνδεση στο Discord",
-		newsTitle: "Τελευταία Νέα",
-		news1Title: "Άνοιγμα Διακομιστή",
-		news1Text: "Το DDON είναι πλέον online! Μπείτε στην περιπέτεια.",
-		news2Title: "Hardcore Mode",
-		news2Text: "Το δεύτερο custom περιεχόμενο είναι διαθέσιμο! Ανταγωνιστείτε για δόξα."
-
-    }
+    en:{ statusLabel:"Status", playersLabel:"Players", online:"Online", offline:"Offline"},
+    jp:{ statusLabel:"状態", playersLabel:"プレイヤー数", online:"オンライン", offline:"オフライン"},
+    zh:{ statusLabel:"状态", playersLabel:"玩家数", online:"在线", offline:"离线"},
+    pt:{ statusLabel:"Status", playersLabel:"Jogadores", online:"Online", offline:"Offline"},
+    es:{ statusLabel:"Estado", playersLabel:"Jugadores", online:"En línea", offline:"Desconectado"},
+    ru:{ statusLabel:"Статус", playersLabel:"Игроки", online:"Онлайн", offline:"Оффлайн"},
+    tr:{ statusLabel:"Durum", playersLabel:"Oyuncular", online:"Çevrimiçi", offline:"Çevrimdışı"},
+    pl:{ statusLabel:"Status", playersLabel:"Gracze", online:"Online", offline:"Offline"},
+    kr:{ statusLabel:"상태", playersLabel:"플레이어", online:"온라인", offline:"오프라인"},
+    it:{ statusLabel:"Stato", playersLabel:"Giocatori", online:"Online", offline:"Offline"},
+    fr:{ statusLabel:"Statut", playersLabel:"Joueurs", online:"En ligne", offline:"Hors ligne"},
+    gr:{ statusLabel:"Κατάσταση", playersLabel:"Παίκτες", online:"Online", offline:"Offline"}
 };
 
 function setLanguage(lang){
-    const t = translations[lang];
-    if(!t) return;
-
-    document.querySelector('[data-key="home"]').textContent = t.home;
-    document.querySelector('[data-key="news"]').textContent = t.news;
-    document.querySelector('[data-key="status"]').textContent = t.status;
-    document.querySelector('[data-key="leaderboard"]').textContent = t.leaderboard;
-    document.querySelector('[data-key="wiki"]').textContent = t.wiki;
-    document.querySelector('[data-key="download"]').textContent = t.download;
-    document.querySelector('[data-key="info"]').textContent = t.info;
-    document.querySelector('[data-key="title"]').textContent = t.title;
-    document.querySelector('[data-key="subtitle"]').textContent = t.subtitle;
-    document.querySelector('[data-key="downloadBtn"]').textContent = t.downloadBtn;
-	document.querySelector('[data-key="newsTitle"]').textContent = t.newsTitle;
-	document.querySelector('[data-key="news1Title"]').textContent = t.news1Title;
-	document.querySelector('[data-key="news1Text"]').textContent = t.news1Text;
-	document.querySelector('[data-key="news2Title"]').textContent = t.news2Title;
-	document.querySelector('[data-key="news2Text"]').textContent = t.news2Text;
-	
+    localStorage.setItem("lang", lang);
+    loadServerStatus(); // 🔥 wichtig: Status neu rendern
 }
 
-/* Build Dropdown */
+/* Dropdown */
 const list = document.getElementById("languageList");
-
 languages.forEach(lang=>{
     const div = document.createElement("div");
     div.innerHTML = `${lang.flag} ${lang.name}`;
-    div.onclick = () => {
-        setLanguage(lang.code);
-        localStorage.setItem("lang", lang.code);
-    };
+    div.onclick = () => setLanguage(lang.code);
     list.appendChild(div);
 });
 
-/* Load saved language */
-const saved = localStorage.getItem("lang") || "en";
-setLanguage(saved);
+/* ===========================
+   🟢 SERVER STATUS
+=========================== */
 
 async function loadServerStatus(){
     try{
-        const response = await fetch("status.json")
+        const response = await fetch("status.json?cache=" + new Date().getTime());
         const data = await response.json();
 
         const container = document.getElementById("serverStatusContainer");
         container.innerHTML = "";
+
+        const currentLang = localStorage.getItem("lang") || "en";
+        const t = translations[currentLang];
 
         data.forEach(server=>{
             const div = document.createElement("div");
@@ -543,8 +309,8 @@ async function loadServerStatus(){
 
             div.innerHTML = `
                 <h3>${server.name}</h3>
-                <p>Status: ${server.online ? "🟢 Online" : "🔴 Offline"}</p>
-                <p>Players: ${server.players}</p>
+                <p>${t.statusLabel}: ${server.online ? "🟢 " + t.online : "🔴 " + t.offline}</p>
+                <p>${t.playersLabel}: ${server.players}</p>
             `;
 
             container.appendChild(div);
