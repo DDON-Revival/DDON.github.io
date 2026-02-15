@@ -2,7 +2,7 @@
     {
         "name": "Channel 1",
         "online": true,
-        "players": 51
+        "players": 49
     },
     {
         "name": "Channel 2",
@@ -12,12 +12,12 @@
     {
         "name": "Channel 3",
         "online": true,
-        "players": 5
+        "players": 2
     },
     {
         "name": "Channel 4",
         "online": true,
-        "players": 5
+        "players": 3
     },
     {
         "name": "Channel 5",
@@ -42,7 +42,7 @@
     {
         "name": "Collab",
         "online": true,
-        "players": 2
+        "players": 1
     },
     {
         "name": "Custom Enemy",
