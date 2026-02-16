@@ -18,26 +18,30 @@ function renderMonsterList(filter = "") {
 
     const enemies = DATA["EnemySpawn.json"].enemies;
 
-    const uniqueEnemies = new Map();
+    const monsterMap = new Map();
 
     enemies.forEach(e => {
-        const enemyId = e[5];
         const stageId = e[0];
+        const enemyId = e[5];
         const level = e[9];
 
-        if (!uniqueEnemies.has(enemyId)) {
-            uniqueEnemies.set(enemyId, new Map());
+        if (!monsterMap.has(enemyId)) {
+            monsterMap.set(enemyId, new Map());
         }
 
-        const stageMap = uniqueEnemies.get(enemyId);
-        const key = stageId + "-" + level;
+        const stageMap = monsterMap.get(enemyId);
 
-        stageMap.set(key, { stageId, level });
+        if (!stageMap.has(stageId)) {
+            stageMap.set(stageId, new Set());
+        }
+
+        stageMap.get(stageId).add(level);
     });
 
-    uniqueEnemies.forEach((stageMap, enemyId) => {
+    monsterMap.forEach((stageMap, enemyId) => {
 
         const name = getEnemyName(enemyId);
+
         if (!name.toLowerCase().includes(filter.toLowerCase())) return;
 
         const card = document.createElement("div");
@@ -49,10 +53,14 @@ function renderMonsterList(filter = "") {
             <h3>Spawn Locations</h3>
         `;
 
-        stageMap.forEach(spawn => {
+        stageMap.forEach((levels, stageId) => {
+
+            const stageName = getStageName(stageId);
+            const levelList = [...levels].sort((a,b)=>a-b).join(", ");
+
             html += `
-                <div>
-                    ${getStageName(spawn.stageId)} (Lv ${spawn.level})
+                <div style="margin-bottom:6px;">
+                    ${stageName} (Lv ${levelList})
                 </div>
             `;
         });
@@ -62,11 +70,17 @@ function renderMonsterList(filter = "") {
     });
 }
 
-/* 🔥 WICHTIG: Erst rendern wenn Daten geladen sind */
+/* ---- Warten bis Daten geladen sind ---- */
+
+const waitForData = setInterval(() => {
+    if (window.dataLoaded) {
+        clearInterval(waitForData);
+        renderMonsterList();
+    }
+}, 100);
+
+/* ---- Search ---- */
+
 searchInput.addEventListener("input", (e) => {
     renderMonsterList(e.target.value);
 });
-
-setTimeout(() => {
-    renderMonsterList();
-}, 800);
