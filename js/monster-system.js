@@ -1,66 +1,78 @@
-const searchInput = document.getElementById("searchBox");
-const content = document.getElementById("content");
+function initMonsterSystem() {
 
-function getEnemyName(enemyId) {
-    return DATA["enemy-names.json"][enemyId] || enemyId;
-}
+    const searchInput = document.getElementById("searchBox");
+    const content = document.getElementById("content");
 
-function getStageName(stageId) {
-    const stage = DATA["stage-names.json"][stageId];
-    return stage ? stage.en : stageId;
-}
+    function getEnemyName(enemyId) {
+        return DATA["enemy-names.json"][enemyId] || enemyId;
+    }
 
-function getDropTable(tableId) {
-    return DATA["EnemySpawn.json"].dropsTables.find(d => d.id === tableId);
-}
+    function getStageName(stageId) {
+        const stage = DATA["stage-names.json"][stageId];
+        return stage ? stage.en : stageId;
+    }
 
-function renderMonsterList(filter = "") {
-    content.innerHTML = "";
+    function renderMonsterList(filter = "") {
 
-    const enemies = DATA["EnemySpawn.json"].enemies;
-    const uniqueEnemies = new Map();
+        content.innerHTML = "";
 
-    enemies.forEach(e => {
-        const enemyId = e[5]; // EnemyId
-        if (!uniqueEnemies.has(enemyId)) {
-            uniqueEnemies.set(enemyId, []);
-        }
-        uniqueEnemies.get(enemyId).push(e);
-    });
+        const enemies = DATA["EnemySpawn.json"].enemies;
 
-    uniqueEnemies.forEach((spawns, enemyId) => {
-        const name = getEnemyName(enemyId);
-        if (!name.toLowerCase().includes(filter.toLowerCase())) return;
+        const monsterMap = new Map();
 
-        const card = document.createElement("div");
-        card.className = "card";
+        enemies.forEach(spawn => {
 
-        // 🔥 DUPLICATE CLEANER
-        const uniqueSpawns = new Set();
-
-        spawns.forEach(spawn => {
             const stageId = spawn[0];
+            const enemyId = spawn[5];
             const level = spawn[9];
+
+            if (!monsterMap.has(enemyId)) {
+                monsterMap.set(enemyId, {});
+            }
 
             const stageName = getStageName(stageId);
 
-            uniqueSpawns.add(`${stageName} (Lv ${level})`);
+            if (!monsterMap.get(enemyId)[stageName]) {
+                monsterMap.get(enemyId)[stageName] = new Set();
+            }
+
+            monsterMap.get(enemyId)[stageName].add(level);
         });
 
-        // optional sort
-        const sortedSpawns = Array.from(uniqueSpawns).sort();
+        monsterMap.forEach((stages, enemyId) => {
 
-        let html = `
-            <h2>${name}</h2>
-            <p><strong>ID:</strong> ${enemyId}</p>
-            <h3>Spawn Locations</h3>
-        `;
+            const name = getEnemyName(enemyId);
 
-        sortedSpawns.forEach(entry => {
-            html += `<div>${entry}</div>`;
+            if (!name.toLowerCase().includes(filter.toLowerCase())) return;
+
+            const card = document.createElement("div");
+            card.className = "card";
+
+            let html = `
+                <h2>${name}</h2>
+                <p><strong>ID:</strong> ${enemyId}</p>
+                <h3>Spawn Locations</h3>
+            `;
+
+            Object.entries(stages).forEach(([stageName, levels]) => {
+
+                const levelArray = Array.from(levels).sort((a,b)=>a-b);
+
+                html += `
+                    <div style="margin-bottom:8px;">
+                        <strong>${stageName}</strong> — Lv ${levelArray.join(", ")}
+                    </div>
+                `;
+            });
+
+            card.innerHTML = html;
+            content.appendChild(card);
         });
+    }
 
-        card.innerHTML = html;
-        content.appendChild(card);
+    searchInput.addEventListener("input", e => {
+        renderMonsterList(e.target.value);
     });
+
+    renderMonsterList();
 }
