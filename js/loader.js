@@ -11,9 +11,8 @@ async function loadAll() {
     await loadJSON("stage-names.json");
 
     console.log("All data loaded.");
-
-    // 👉 Erst jetzt Monster System starten
-    initMonsterSystem();
+    window.dataLoaded = true;
 }
 
 loadAll();
+
