@@ -20,7 +20,10 @@ function renderMonsterList(filter = "") {
 
     const monsterMap = new Map();
 
+    /* -------- Build clean structure -------- */
+
     enemies.forEach(e => {
+
         const stageId = e[0];
         const enemyId = e[5];
         const level = e[9];
@@ -38,6 +41,8 @@ function renderMonsterList(filter = "") {
         stageMap.get(stageId).add(level);
     });
 
+    /* -------- Render -------- */
+
     monsterMap.forEach((stageMap, enemyId) => {
 
         const name = getEnemyName(enemyId);
@@ -53,31 +58,39 @@ function renderMonsterList(filter = "") {
             <h3>Spawn Locations</h3>
         `;
 
-stageMap.forEach((levels, stageId) => {
+        /* Sort stages alphabetically */
+        const sortedStages = [...stageMap.entries()].sort((a,b) => {
+            const nameA = getStageName(a[0]);
+            const nameB = getStageName(b[0]);
+            return nameA.localeCompare(nameB);
+        });
 
-    const stageName = getStageName(stageId);
-    const levelList = [...levels].sort((a,b)=>a-b).join(", ");
+        sortedStages.forEach(([stageId, levels]) => {
 
-    html += `
-        <div style="margin-bottom:8px;padding:8px;background:#0f172a;border-radius:6px;">
-            <strong>${stageName}</strong><br>
-            Stage ID: ${stageId}<br>
-            Levels: ${levelList}
-        </div>
-    `;
-});
+            const stageName = getStageName(stageId);
 
-/* ---- Warten bis Daten geladen sind ---- */
+            const sortedLevels = [...levels].sort((a,b)=>a-b);
 
-const waitForData = setInterval(() => {
-    if (window.dataLoaded) {
-        clearInterval(waitForData);
-        renderMonsterList();
-    }
-}, 100);
+            /* Convert levels to range */
+            const minLv = sortedLevels[0];
+            const maxLv = sortedLevels[sortedLevels.length - 1];
 
-/* ---- Search ---- */
+            let levelDisplay;
 
-searchInput.addEventListener("input", (e) => {
-    renderMonsterList(e.target.value);
-});
+            if (minLv === maxLv) {
+                levelDisplay = `Lv ${minLv}`;
+            } else {
+                levelDisplay = `Lv ${minLv} - ${maxLv}`;
+            }
+
+            html += `
+                <div style="margin-bottom:6px;">
+                    ${stageName} (${levelDisplay})
+                </div>
+            `;
+        });
+
+        card.innerHTML = html;
+        content.appendChild(card);
+    });
+}
