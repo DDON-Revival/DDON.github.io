@@ -99,5 +99,33 @@ const waitForData = setInterval(() => {
 
 /* Search */
 searchInput.addEventListener("input", (e) => {
-    renderMonsterList(e.target.value);
+
+    const value = e.target.value.toLowerCase();
+
+    if (!value) {
+        renderMonsterList();
+        return;
+    }
+
+    const items = DATA["item_name.toml"];
+    const stages = DATA["stage-names.json"];
+
+    // Item match
+    for (const id in items) {
+        if (items[id].toLowerCase().includes(value)) {
+            openItem(id);
+            return;
+        }
+    }
+
+    // Stage match
+    for (const id in stages) {
+        if (stages[id].en.toLowerCase().includes(value)) {
+            openStage(id);
+            return;
+        }
+    }
+
+    // Default = Monster search
+    renderMonsterList(value);
 });
