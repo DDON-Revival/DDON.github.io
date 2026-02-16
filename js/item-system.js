@@ -1,34 +1,48 @@
-function renderDrops(dropTableId) {
+function openItem(itemId) {
 
-    if (!DATA["EnemySpawn.json"]) return "";
+    const content = document.getElementById("content");
+    content.innerHTML = "";
 
+    const name = getItemName(itemId);
+
+    const enemies = DATA["EnemySpawn.json"].enemies;
     const dropTables = DATA["EnemySpawn.json"].dropsTables;
-    const table = dropTables.find(t => t.id === dropTableId);
 
-    if (!table) {
-        return `<div class="drop-item">No Drop Data</div>`;
-    }
+    const card = document.createElement("div");
+    card.className = "card";
 
-    let html = `<div style="margin-top:8px;">`;
+    let html = `
+        <h2>${name}</h2>
+        <p><strong>ID:</strong> ${itemId}</p>
+        <h3>Dropped By</h3>
+    `;
 
-    table.items.forEach(item => {
+    dropTables.forEach(table => {
 
-        const itemId = item[0];
-        const min = item[1];
-        const max = item[2];
-        const chance = Math.round(item[5] * 100);
-        const name = getItemName(itemId);
+        table.items.forEach(item => {
 
-        html += `
-            <a href="#" class="drop-item"
-               onclick="openItem('${itemId}'); return false;">
-                ${name} (${min}${max > 1 ? "-" + max : ""})
-                - ${chance}%
-            </a>
-        `;
+            if (item[0] != itemId) return;
+
+            const enemiesUsingTable = enemies.filter(e => e[27] == table.id);
+            const uniqueEnemies = new Set(enemiesUsingTable.map(e => e[5]));
+
+            uniqueEnemies.forEach(enemyId => {
+
+                const enemyName = getEnemyName(enemyId);
+
+                html += `
+                    <div>
+                        <a href="#" onclick="renderSingleMonster('${enemyId}')">
+                            ${enemyName}
+                        </a>
+                    </div>
+                `;
+            });
+
+        });
+
     });
 
-    html += `</div>`;
-
-    return html;
+    card.innerHTML = html;
+    content.appendChild(card);
 }

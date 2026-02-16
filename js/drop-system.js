@@ -1,139 +1,42 @@
-const searchInput = document.getElementById("searchBox");
-const content = document.getElementById("content");
-
-/* ---------------- HELPERS ---------------- */
-
-function getEnemyName(enemyId) {
-    return DATA["enemy-names.json"]?.[enemyId] || enemyId;
-}
-
-function getStageName(stageId) {
-    const stage = DATA["stage-names.json"]?.[stageId];
-    return stage ? stage.en : stageId;
-}
-
 function getItemName(itemId) {
-    return DATA["item-names.json"]?.[itemId] || `Item ${itemId}`;
+    if (!DATA["item_names.json"]) return "Item " + itemId;
+    return DATA["item_names.json"][itemId] || "Item " + itemId;
 }
 
-/* ---------------- MONSTER LIST ---------------- */
+function renderDrops(dropTableId) {
 
-function renderMonsterList(filter = "") {
+    if (!DATA["EnemySpawn.json"]) return "";
 
-    if (!DATA["EnemySpawn.json"]) return;
+    const dropTables = DATA["EnemySpawn.json"].dropsTables;
+    const table = dropTables.find(t => t.id === dropTableId);
 
-    content.innerHTML = "";
+    if (!table) {
+        return `<div style="opacity:0.6;">No Drop Data</div>`;
+    }
 
-    const enemies = DATA["EnemySpawn.json"].enemies;
-    const monsterMap = new Map();
+    let html = `<div style="margin-top:8px;">`;
 
-    enemies.forEach(e => {
+    table.items.forEach(item => {
 
-        const stageId = e[0];
-        const enemyId = e[5];
-        const level = e[9];
-        const dropTableId = e[27];
+        const itemId = item[0];
+        const min = item[1];
+        const max = item[2];
+        const chance = Math.round(item[5] * 100);
 
-        if (!monsterMap.has(enemyId)) {
-            monsterMap.set(enemyId, {
-                stages: new Map(),
-                dropTableId: dropTableId
-            });
-        }
+        const itemName = getItemName(itemId);
 
-        const monsterData = monsterMap.get(enemyId);
-
-        if (!monsterData.stages.has(stageId)) {
-            monsterData.stages.set(stageId, new Set());
-        }
-
-        monsterData.stages.get(stageId).add(level);
-    });
-
-    monsterMap.forEach((monsterData, enemyId) => {
-
-        const name = getEnemyName(enemyId);
-
-        if (!name.toLowerCase().includes(filter.toLowerCase())) return;
-
-        const card = document.createElement("div");
-        card.className = "card";
-
-        let html = `
-            <h2>${name}</h2>
-            <p><strong>ID:</strong> ${enemyId}</p>
-            <h3>Spawn Locations</h3>
-        `;
-
-        const sortedStages = [...monsterData.stages.entries()]
-            .sort((a,b) => getStageName(a[0]).localeCompare(getStageName(b[0])));
-
-        sortedStages.forEach(([stageId, levels]) => {
-
-            const stageName = getStageName(stageId);
-            const sortedLevels = [...levels].sort((a,b)=>a-b);
-
-            const minLv = sortedLevels[0];
-            const maxLv = sortedLevels[sortedLevels.length - 1];
-
-            const levelDisplay = minLv === maxLv
-                ? `Lv ${minLv}`
-                : `Lv ${minLv} - ${maxLv}`;
-
-            html += `
-                <a href="#" class="stage-link"
-                   onclick="openStage('${stageId}'); return false;">
-                    ${stageName} (${levelDisplay})
+        html += `
+            <div class="drop-item">
+                <a href="#" class="link" onclick="openItem('${itemId}')">
+                    ${itemName}
                 </a>
-            `;
-        });
-
-        html += `<h3>Drops</h3>`;
-        html += renderDrops(monsterData.dropTableId);
-
-        card.innerHTML = html;
-        content.appendChild(card);
+                (${min}${max > 1 ? "-" + max : ""})
+                - ${chance}%
+            </div>
+        `;
     });
+
+    html += `</div>`;
+
+    return html;
 }
-
-/* ---------------- WAIT FOR DATA ---------------- */
-
-const waitForData = setInterval(() => {
-    if (window.dataLoaded) {
-        clearInterval(waitForData);
-        renderMonsterList();
-    }
-}, 100);
-
-/* ---------------- SMART SEARCH ---------------- */
-
-searchInput.addEventListener("input", (e) => {
-
-    const value = e.target.value.toLowerCase();
-
-    if (!value) {
-        renderMonsterList();
-        return;
-    }
-
-    /* ITEM SEARCH */
-    const items = DATA["item-names.json"];
-    for (const id in items) {
-        if (items[id].toLowerCase().includes(value)) {
-            openItem(id);
-            return;
-        }
-    }
-
-    /* STAGE SEARCH */
-    const stages = DATA["stage-names.json"];
-    for (const id in stages) {
-        if (stages[id].en.toLowerCase().includes(value)) {
-            openStage(id);
-            return;
-        }
-    }
-
-    /* MONSTER SEARCH */
-    renderMonsterList(value);
-});

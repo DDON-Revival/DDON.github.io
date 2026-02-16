@@ -74,7 +74,7 @@ function renderMonsterList(filter = "") {
                 : `Lv ${minLv} - ${maxLv}`;
 
             html += `
-                <a href="#" class="stage-link" onclick="openStage('${stageId}')">
+                <a href="#" class="link" onclick="openStage('${stageId}')">
                     ${stageName} (${levelDisplay})
                 </a>
             `;
@@ -107,7 +107,7 @@ searchInput.addEventListener("input", (e) => {
         return;
     }
 
-    const items = DATA["item_name.toml"];
+    const items = DATA["item_names.json"];
     const stages = DATA["stage-names.json"];
 
     // Item match
