@@ -6,13 +6,18 @@ async function loadJSON(name) {
 }
 
 async function loadAll() {
-    await loadJSON("EnemySpawn.json");
-    await loadJSON("enemy-names.json");
-    await loadJSON("stage-names.json");
+    await Promise.all([
+        loadJSON("EnemySpawn.json"),
+        loadJSON("enemy-names.json"),
+        loadJSON("stage-names.json")
+    ]);
 
     console.log("All data loaded.");
-    window.dataLoaded = true;
+
+    // 🔥 WICHTIG:
+    if (window.initWiki) {
+        window.initWiki();
+    }
 }
 
 loadAll();
-
