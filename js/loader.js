@@ -1,26 +1,16 @@
-window.DATA = {};
+const DATA = {};
 
-async function loadAllData() {
-    const base = "datas/";
+async function loadJSON(name) {
+    const res = await fetch(`datas/${name}`);
+    DATA[name] = await res.json();
+}
 
-    const files = [
-        "EnemySpawn.json",
-        "enemy-names.json",
-        "stage-names.json",
-        "GatheringItem.csv",
-        "item_name.toml"
-    ];
-
-    for (const file of files) {
-        const res = await fetch(base + file);
-        if (file.endsWith(".json")) {
-            DATA[file] = await res.json();
-        } else {
-            DATA[file] = await res.text();
-        }
-    }
+async function loadAll() {
+    await loadJSON("EnemySpawn.json");
+    await loadJSON("enemy-names.json");
+    await loadJSON("stage-names.json");
 
     console.log("All data loaded.");
 }
 
-loadAllData();
+loadAll();
