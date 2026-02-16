@@ -53,22 +53,19 @@ function renderMonsterList(filter = "") {
             <h3>Spawn Locations</h3>
         `;
 
-        stageMap.forEach((levels, stageId) => {
+stageMap.forEach((levels, stageId) => {
 
-            const stageName = getStageName(stageId);
-            const levelList = [...levels].sort((a,b)=>a-b).join(", ");
+    const stageName = getStageName(stageId);
+    const levelList = [...levels].sort((a,b)=>a-b).join(", ");
 
-            html += `
-                <div style="margin-bottom:6px;">
-                    ${stageName} (Lv ${levelList})
-                </div>
-            `;
-        });
-
-        card.innerHTML = html;
-        content.appendChild(card);
-    });
-}
+    html += `
+        <div style="margin-bottom:8px;padding:8px;background:#0f172a;border-radius:6px;">
+            <strong>${stageName}</strong><br>
+            Stage ID: ${stageId}<br>
+            Levels: ${levelList}
+        </div>
+    `;
+});
 
 /* ---- Warten bis Daten geladen sind ---- */
 
