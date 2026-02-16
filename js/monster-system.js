@@ -20,30 +20,34 @@ function renderMonsterList(filter = "") {
 
     const monsterMap = new Map();
 
-    /* -------- Build clean structure -------- */
+    /* -------- Build structured data -------- */
 
     enemies.forEach(e => {
 
         const stageId = e[0];
         const enemyId = e[5];
         const level = e[9];
+        const dropTableId = e[27];
 
         if (!monsterMap.has(enemyId)) {
-            monsterMap.set(enemyId, new Map());
+            monsterMap.set(enemyId, {
+                stages: new Map(),
+                dropTableId: dropTableId
+            });
         }
 
-        const stageMap = monsterMap.get(enemyId);
+        const monsterData = monsterMap.get(enemyId);
 
-        if (!stageMap.has(stageId)) {
-            stageMap.set(stageId, new Set());
+        if (!monsterData.stages.has(stageId)) {
+            monsterData.stages.set(stageId, new Set());
         }
 
-        stageMap.get(stageId).add(level);
+        monsterData.stages.get(stageId).add(level);
     });
 
     /* -------- Render -------- */
 
-    monsterMap.forEach((stageMap, enemyId) => {
+    monsterMap.forEach((monsterData, enemyId) => {
 
         const name = getEnemyName(enemyId);
 
@@ -59,29 +63,21 @@ function renderMonsterList(filter = "") {
         `;
 
         /* Sort stages alphabetically */
-        const sortedStages = [...stageMap.entries()].sort((a,b) => {
-            const nameA = getStageName(a[0]);
-            const nameB = getStageName(b[0]);
-            return nameA.localeCompare(nameB);
+        const sortedStages = [...monsterData.stages.entries()].sort((a,b) => {
+            return getStageName(a[0]).localeCompare(getStageName(b[0]));
         });
 
         sortedStages.forEach(([stageId, levels]) => {
 
             const stageName = getStageName(stageId);
-
             const sortedLevels = [...levels].sort((a,b)=>a-b);
 
-            /* Convert levels to range */
             const minLv = sortedLevels[0];
             const maxLv = sortedLevels[sortedLevels.length - 1];
 
-            let levelDisplay;
-
-            if (minLv === maxLv) {
-                levelDisplay = `Lv ${minLv}`;
-            } else {
-                levelDisplay = `Lv ${minLv} - ${maxLv}`;
-            }
+            const levelDisplay = minLv === maxLv
+                ? `Lv ${minLv}`
+                : `Lv ${minLv} - ${maxLv}`;
 
             html += `
                 <div style="margin-bottom:6px;">
@@ -90,7 +86,27 @@ function renderMonsterList(filter = "") {
             `;
         });
 
+        /* DROPS */
+        html += `<h3>Drops</h3>`;
+        html += renderDrops(monsterData.dropTableId);
+
         card.innerHTML = html;
         content.appendChild(card);
     });
 }
+
+
+/* -------- Wait for loader -------- */
+
+const waitForData = setInterval(() => {
+    if (window.dataLoaded) {
+        clearInterval(waitForData);
+        renderMonsterList();
+    }
+}, 100);
+
+/* -------- Search -------- */
+
+searchInput.addEventListener("input", (e) => {
+    renderMonsterList(e.target.value);
+});

@@ -1,17 +1,6 @@
-function parseItemToml() {
-    const text = DATA["item_name.toml"];
-    const lines = text.split("\n");
+function getItemName(itemId) {
 
-    const map = {};
+    if (!DATA["item_name.toml"]) return itemId;
 
-    lines.forEach(line => {
-        if (line.includes("=")) {
-            const parts = line.split("=");
-            const id = parts[0].trim();
-            const name = parts[1].replace(/"/g,"").trim();
-            map[id] = name;
-        }
-    });
-
-    return map;
+    return DATA["item_name.toml"][itemId] || itemId;
 }
