@@ -8,19 +8,21 @@
 <style>
 body{
     background:#0f172a;
-    color:#f1f5f9;
-    font-family:Arial;
+    color:#e2e8f0;
+    font-family:Arial, sans-serif;
     margin:0;
 }
 
+/* Header */
 header{
     background:#111827;
     padding:20px;
     font-size:28px;
     font-weight:bold;
-    border-bottom:2px solid gold;
+    border-bottom:2px solid #facc15;
 }
 
+/* Search */
 #searchBox{
     width:100%;
     padding:15px;
@@ -28,17 +30,46 @@ header{
     background:#1e293b;
     border:none;
     color:white;
+    outline:none;
 }
 
-#results{
-    padding:30px;
-}
-
+/* Cards */
 .card{
     background:#1e293b;
-    padding:20px;
-    margin-bottom:20px;
-    border-radius:10px;
+    padding:25px;
+    margin:30px;
+    border-radius:12px;
+    box-shadow:0 0 25px rgba(0,0,0,0.3);
+}
+
+/* Headings */
+h2{
+    margin-top:0;
+    font-size:24px;
+}
+
+h3{
+    margin-top:20px;
+    color:#facc15;
+}
+
+/* Stage links */
+.stage-link{
+    display:block;
+    margin-bottom:6px;
+    color:#38bdf8;
+    text-decoration:none;
+    transition:0.2s;
+}
+
+.stage-link:hover{
+    color:#facc15;
+}
+
+/* Drops */
+.drop-item{
+    margin-bottom:4px;
+    color:#cbd5e1;
 }
 </style>
 </head>

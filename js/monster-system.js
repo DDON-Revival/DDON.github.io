@@ -1,114 +1,93 @@
-const searchInput = document.getElementById("searchBox");
-const content = document.getElementById("content");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DDON Wiki</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-function getEnemyName(enemyId) {
-    return DATA["enemy-names.json"][enemyId] || enemyId;
+<style>
+body{
+    background:#0f172a;
+    color:#e2e8f0;
+    font-family:Arial, sans-serif;
+    margin:0;
 }
 
-function getStageName(stageId) {
-    const stage = DATA["stage-names.json"][stageId];
-    return stage ? stage.en : stageId;
+/* Header */
+header{
+    background:#111827;
+    padding:20px;
+    font-size:28px;
+    font-weight:bold;
+    border-bottom:2px solid #facc15;
 }
 
-function renderMonsterList(filter = "") {
-
-    if (!DATA["EnemySpawn.json"]) return;
-
-    content.innerHTML = "";
-
-    const enemies = DATA["EnemySpawn.json"].enemies;
-
-    const monsterMap = new Map();
-
-    /* -------- Build structured data -------- */
-
-    enemies.forEach(e => {
-
-        const stageId = e[0];
-        const enemyId = e[5];
-        const level = e[9];
-        const dropTableId = e[27];
-
-        if (!monsterMap.has(enemyId)) {
-            monsterMap.set(enemyId, {
-                stages: new Map(),
-                dropTableId: dropTableId
-            });
-        }
-
-        const monsterData = monsterMap.get(enemyId);
-
-        if (!monsterData.stages.has(stageId)) {
-            monsterData.stages.set(stageId, new Set());
-        }
-
-        monsterData.stages.get(stageId).add(level);
-    });
-
-    /* -------- Render -------- */
-
-    monsterMap.forEach((monsterData, enemyId) => {
-
-        const name = getEnemyName(enemyId);
-
-        if (!name.toLowerCase().includes(filter.toLowerCase())) return;
-
-        const card = document.createElement("div");
-        card.className = "card";
-
-        let html = `
-            <h2>${name}</h2>
-            <p><strong>ID:</strong> ${enemyId}</p>
-            <h3>Spawn Locations</h3>
-        `;
-
-        /* Sort stages alphabetically */
-        const sortedStages = [...monsterData.stages.entries()].sort((a,b) => {
-            return getStageName(a[0]).localeCompare(getStageName(b[0]));
-        });
-
-        sortedStages.forEach(([stageId, levels]) => {
-
-            const stageName = getStageName(stageId);
-            const sortedLevels = [...levels].sort((a,b)=>a-b);
-
-            const minLv = sortedLevels[0];
-            const maxLv = sortedLevels[sortedLevels.length - 1];
-
-            const levelDisplay = minLv === maxLv
-                ? `Lv ${minLv}`
-                : `Lv ${minLv} - ${maxLv}`;
-
-            html += `
-                <div style="margin-bottom:6px;">
-<a href="#" onclick="openStage('${stageId}')">
-    ${stageName}
-</a> (${levelDisplay})
-                </div>
-            `;
-        });
-
-        /* DROPS */
-        html += `<h3>Drops</h3>`;
-        html += renderDrops(monsterData.dropTableId);
-
-        card.innerHTML = html;
-        content.appendChild(card);
-    });
+/* Search */
+#searchBox{
+    width:100%;
+    padding:15px;
+    font-size:18px;
+    background:#1e293b;
+    border:none;
+    color:white;
+    outline:none;
 }
 
+/* Cards */
+.card{
+    background:#1e293b;
+    padding:25px;
+    margin:30px;
+    border-radius:12px;
+    box-shadow:0 0 25px rgba(0,0,0,0.3);
+}
 
-/* -------- Wait for loader -------- */
+/* Headings */
+h2{
+    margin-top:0;
+    font-size:24px;
+}
 
-const waitForData = setInterval(() => {
-    if (window.dataLoaded) {
-        clearInterval(waitForData);
-        renderMonsterList();
-    }
-}, 100);
+h3{
+    margin-top:20px;
+    color:#facc15;
+}
 
-/* -------- Search -------- */
+/* Stage links */
+.stage-link{
+    display:block;
+    margin-bottom:6px;
+    color:#38bdf8;
+    text-decoration:none;
+    transition:0.2s;
+}
 
-searchInput.addEventListener("input", (e) => {
-    renderMonsterList(e.target.value);
-});
+.stage-link:hover{
+    color:#facc15;
+}
+
+/* Drops */
+.drop-item{
+    margin-bottom:4px;
+    color:#cbd5e1;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+DDON Wiki
+</header>
+
+<input id="searchBox" placeholder="Search monster...">
+
+<div id="content"></div>
+
+<script src="js/loader.js"></script>
+<script src="js/drop-system.js"></script>
+<script src="js/monster-system.js"></script>
+<script src="js/stage-system.js"></script>
+
+</body>
+</html>

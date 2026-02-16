@@ -1,10 +1,9 @@
 function openStage(stageId) {
 
-    const content = document.getElementById("results");
+    const content = document.getElementById("content");
     content.innerHTML = "";
 
     const enemies = DATA["EnemySpawn.json"].enemies;
-
     const stageName = getStageName(stageId);
 
     const card = document.createElement("div");
@@ -31,13 +30,18 @@ function openStage(stageId) {
         monsterMap.get(enemyId).add(level);
     });
 
-    monsterMap.forEach((levels, enemyId) => {
+    /* Sort monsters alphabetically */
+    const sortedMonsters = [...monsterMap.entries()].sort((a,b) => {
+        return getEnemyName(a[0]).localeCompare(getEnemyName(b[0]));
+    });
+
+    sortedMonsters.forEach(([enemyId, levels]) => {
 
         const name = getEnemyName(enemyId);
-        const sorted = [...levels].sort((a,b)=>a-b);
+        const sortedLevels = [...levels].sort((a,b)=>a-b);
 
-        const minLv = sorted[0];
-        const maxLv = sorted[sorted.length-1];
+        const minLv = sortedLevels[0];
+        const maxLv = sortedLevels[sortedLevels.length-1];
 
         const levelDisplay = minLv === maxLv
             ? `Lv ${minLv}`
@@ -49,6 +53,15 @@ function openStage(stageId) {
             </div>
         `;
     });
+
+    html += `
+        <div style="margin-top:20px;">
+            <button onclick="renderMonsterList()" 
+                style="padding:8px 14px; background:#facc15; border:none; border-radius:6px; cursor:pointer;">
+                ← Back to Monsters
+            </button>
+        </div>
+    `;
 
     card.innerHTML = html;
     content.appendChild(card);

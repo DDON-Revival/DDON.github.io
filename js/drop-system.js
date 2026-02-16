@@ -7,10 +7,10 @@ function renderDrops(dropTableId) {
     const table = dropTables.find(t => t.id === dropTableId);
 
     if (!table) {
-        return `<div style="opacity:0.6;">No Drop Data</div>`;
+        return `<div class="drop-item" style="opacity:0.5;">No Drop Data</div>`;
     }
 
-    let html = `<div style="margin-top:8px;">`;
+    let html = "";
 
     table.items.forEach(item => {
 
@@ -20,15 +20,13 @@ function renderDrops(dropTableId) {
         const chance = Math.round(item[5] * 100);
 
         html += `
-            <div style="margin-bottom:4px;">
-                Item ID ${itemId}
+            <div class="drop-item">
+                Item ${itemId}
                 (${min}${max > 1 ? "-" + max : ""})
-                - ${chance}%
+                — ${chance}%
             </div>
         `;
     });
-
-    html += `</div>`;
 
     return html;
 }
