@@ -81,7 +81,9 @@ function renderMonsterList(filter = "") {
 
             html += `
                 <div style="margin-bottom:6px;">
-                    ${stageName} (${levelDisplay})
+<a href="#" onclick="openStage('${stageId}')">
+    ${stageName}
+</a> (${levelDisplay})
                 </div>
             `;
         });
