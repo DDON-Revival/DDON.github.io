@@ -20,62 +20,44 @@ function renderMonsterList(filter = "") {
     const enemies = DATA["EnemySpawn.json"].enemies;
     const uniqueEnemies = new Map();
 
-    // 🔹 Alle Spawns pro Enemy sammeln
     enemies.forEach(e => {
-        const enemyId = e[5];
+        const enemyId = e[5]; // EnemyId
         if (!uniqueEnemies.has(enemyId)) {
             uniqueEnemies.set(enemyId, []);
         }
         uniqueEnemies.get(enemyId).push(e);
     });
 
-    // 🔹 Für jeden Monster-Typ
     uniqueEnemies.forEach((spawns, enemyId) => {
-
         const name = getEnemyName(enemyId);
         if (!name.toLowerCase().includes(filter.toLowerCase())) return;
 
         const card = document.createElement("div");
         card.className = "card";
 
-        // 🔹 Stage + Level gruppieren
-        const spawnMap = new Map();
+        // 🔥 DUPLICATE CLEANER
+        const uniqueSpawns = new Set();
 
         spawns.forEach(spawn => {
             const stageId = spawn[0];
             const level = spawn[9];
 
-            const key = stageId + "_" + level;
+            const stageName = getStageName(stageId);
 
-            if (!spawnMap.has(key)) {
-                spawnMap.set(key, {
-                    stageId,
-                    level,
-                    count: 0
-                });
-            }
-
-            spawnMap.get(key).count++;
+            uniqueSpawns.add(`${stageName} (Lv ${level})`);
         });
 
-        // 🔹 Sortieren nach Level
-        const sortedSpawns = Array.from(spawnMap.values())
-            .sort((a, b) => a.level - b.level);
+        // optional sort
+        const sortedSpawns = Array.from(uniqueSpawns).sort();
 
         let html = `
             <h2>${name}</h2>
             <p><strong>ID:</strong> ${enemyId}</p>
-            <h3>Spawn Locations:</h3>
+            <h3>Spawn Locations</h3>
         `;
 
-        sortedSpawns.forEach(s => {
-            const stageName = getStageName(s.stageId);
-
-            html += `
-                <div>
-                    ${stageName} (Lv ${s.level}) — ${s.count}x
-                </div>
-            `;
+        sortedSpawns.forEach(entry => {
+            html += `<div>${entry}</div>`;
         });
 
         card.innerHTML = html;
