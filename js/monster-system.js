@@ -14,11 +14,11 @@ function renderMonsterList(filter = "") {
     content.innerHTML = "";
 
     const enemies = DATA["EnemySpawn.json"].enemies;
-
     const uniqueEnemies = new Map();
 
+    // Gruppiere nach EnemyId
     enemies.forEach(e => {
-        const enemyId = e[5]; // EnemyId
+        const enemyId = e[5];
         if (!uniqueEnemies.has(enemyId)) {
             uniqueEnemies.set(enemyId, []);
         }
@@ -33,20 +33,33 @@ function renderMonsterList(filter = "") {
         const card = document.createElement("div");
         card.className = "card";
 
-        let html = `
-            <h2>${name}</h2>
-            <p><strong>ID:</strong> ${enemyId}</p>
-            <h3>Spawn Locations:</h3>
-        `;
+        // Gruppiere Spawn nach Stage + Level
+        const stageMap = new Map();
 
         spawns.forEach(spawn => {
             const stageId = spawn[0];
             const level = spawn[9];
+
+            if (!stageMap.has(stageId)) {
+                stageMap.set(stageId, new Set());
+            }
+
+            stageMap.get(stageId).add(level);
+        });
+
+        let html = `
+            <h2>${name}</h2>
+            <p><strong>ID:</strong> ${enemyId}</p>
+            <h3>Spawn Locations</h3>
+        `;
+
+        stageMap.forEach((levels, stageId) => {
             const stageName = getStageName(stageId);
+            const levelList = [...levels].sort((a,b)=>a-b).join(", ");
 
             html += `
                 <div style="margin-bottom:8px;">
-                    ${stageName} (Lv ${level})
+                    ${stageName} (Lv ${levelList})
                 </div>
             `;
         });
@@ -55,9 +68,3 @@ function renderMonsterList(filter = "") {
         content.appendChild(card);
     });
 }
-
-searchInput.addEventListener("input", (e) => {
-    renderMonsterList(e.target.value);
-});
-
-renderMonsterList();
