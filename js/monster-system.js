@@ -15,107 +15,70 @@ function getDropTable(tableId) {
 }
 
 function renderMonsterList(filter = "") {
-
     content.innerHTML = "";
 
     const enemies = DATA["EnemySpawn.json"].enemies;
+    const uniqueEnemies = new Map();
 
-    const grouped = new Map();
-
+    // 🔹 Alle Spawns pro Enemy sammeln
     enemies.forEach(e => {
         const enemyId = e[5];
-
-        if (!grouped.has(enemyId)) {
-            grouped.set(enemyId, []);
+        if (!uniqueEnemies.has(enemyId)) {
+            uniqueEnemies.set(enemyId, []);
         }
-
-        grouped.get(enemyId).push(e);
+        uniqueEnemies.get(enemyId).push(e);
     });
 
-    grouped.forEach((spawns, enemyId) => {
+    // 🔹 Für jeden Monster-Typ
+    uniqueEnemies.forEach((spawns, enemyId) => {
 
         const name = getEnemyName(enemyId);
-
         if (!name.toLowerCase().includes(filter.toLowerCase())) return;
 
         const card = document.createElement("div");
         card.className = "card";
 
-        // LEVEL RANGE
-        const levels = spawns.map(s => s[9]);
-        const minLv = Math.min(...levels);
-        const maxLv = Math.max(...levels);
+        // 🔹 Stage + Level gruppieren
+        const spawnMap = new Map();
 
-        // GROUP BY STAGE
-        const stageMap = new Map();
+        spawns.forEach(spawn => {
+            const stageId = spawn[0];
+            const level = spawn[9];
 
-        spawns.forEach(s => {
-            const stageId = s[0];
-            const level = s[9];
-            const dropId = s[27];
+            const key = stageId + "_" + level;
 
-            if (!stageMap.has(stageId)) {
-                stageMap.set(stageId, {
-                    levels: [],
-                    dropIds: new Set()
+            if (!spawnMap.has(key)) {
+                spawnMap.set(key, {
+                    stageId,
+                    level,
+                    count: 0
                 });
             }
 
-            stageMap.get(stageId).levels.push(level);
-            stageMap.get(stageId).dropIds.add(dropId);
+            spawnMap.get(key).count++;
         });
+
+        // 🔹 Sortieren nach Level
+        const sortedSpawns = Array.from(spawnMap.values())
+            .sort((a, b) => a.level - b.level);
 
         let html = `
             <h2>${name}</h2>
             <p><strong>ID:</strong> ${enemyId}</p>
-            <p><strong>Level Range:</strong> ${minLv} - ${maxLv}</p>
-            <h3>Spawn Locations</h3>
+            <h3>Spawn Locations:</h3>
         `;
 
-        stageMap.forEach((data, stageId) => {
-
-            const stageName = getStageName(stageId);
-            const stageMin = Math.min(...data.levels);
-            const stageMax = Math.max(...data.levels);
+        sortedSpawns.forEach(s => {
+            const stageName = getStageName(s.stageId);
 
             html += `
-                <div style="margin-bottom:15px;">
-                    <strong>${stageName}</strong>
-                    <div>Level: ${stageMin} - ${stageMax}</div>
+                <div>
+                    ${stageName} (Lv ${s.level}) — ${s.count}x
                 </div>
             `;
-
-            // DROPS
-            data.dropIds.forEach(dropId => {
-
-                const dropTable = getDropTable(dropId);
-                if (!dropTable) return;
-
-                html += `<div style="margin-left:20px;"><strong>Drops:</strong><ul>`;
-
-                dropTable.items.forEach(item => {
-                    const itemId = item[0];
-                    const dropChance = item[5] * 100;
-
-                    html += `
-                        <li>
-                            Item ID: ${itemId} — ${dropChance.toFixed(1)}%
-                        </li>
-                    `;
-                });
-
-                html += `</ul></div>`;
-            });
-
         });
 
         card.innerHTML = html;
         content.appendChild(card);
     });
 }
-
-searchInput.addEventListener("input", e => {
-    renderMonsterList(e.target.value);
-});
-
-renderMonsterList();
