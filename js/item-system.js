@@ -17,6 +17,8 @@ function openItem(itemId) {
         <h3>Dropped By</h3>
     `;
 
+    const monsterSet = new Set();
+
     dropTables.forEach(table => {
 
         table.items.forEach(item => {
@@ -24,23 +26,27 @@ function openItem(itemId) {
             if (item[0] != itemId) return;
 
             const enemiesUsingTable = enemies.filter(e => e[27] == table.id);
-            const uniqueEnemies = new Set(enemiesUsingTable.map(e => e[5]));
 
-            uniqueEnemies.forEach(enemyId => {
-
-                const enemyName = getEnemyName(enemyId);
-
-                html += `
-                    <div>
-                        <a href="#" onclick="renderSingleMonster('${enemyId}')">
-                            ${enemyName}
-                        </a>
-                    </div>
-                `;
+            enemiesUsingTable.forEach(e => {
+                monsterSet.add(e[5]);
             });
-
         });
+    });
 
+    const sortedMonsters = [...monsterSet].sort((a,b) => {
+        return getEnemyName(a).localeCompare(getEnemyName(b));
+    });
+
+    sortedMonsters.forEach(enemyId => {
+
+        const enemyName = getEnemyName(enemyId);
+
+        html += `
+            <a href="#" class="link"
+               onclick="renderSingleMonster('${enemyId}'); return false;">
+                ${enemyName}
+            </a>
+        `;
     });
 
     card.innerHTML = html;

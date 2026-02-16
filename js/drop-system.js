@@ -27,7 +27,8 @@ function renderDrops(dropTableId) {
 
         html += `
             <div class="drop-item">
-                <a href="#" class="link" onclick="openItem('${itemId}')">
+                <a href="#" class="link"
+                   onclick="openItem('${itemId}'); return false;">
                     ${itemName}
                 </a>
                 (${min}${max > 1 ? "-" + max : ""})
