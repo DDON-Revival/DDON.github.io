@@ -3,7 +3,7 @@ function openShop(shopId) {
     const content = document.getElementById("content");
     content.innerHTML = "";
 
-    const shops = DATA["shop.json"];
+    const shops = DATA["Shop.json"];
 
     const shop = shops.find(s => String(s.ShopId) === String(shopId));
 

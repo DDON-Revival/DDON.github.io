@@ -3,7 +3,7 @@ function openSpecialShop(shopType) {
     const content = document.getElementById("content");
     content.innerHTML = "";
 
-    const data = DATA["specialshop.json"];
+    const data = DATA["SpecialShops.json"];
     const shop = data.shops.find(s => s.shop_type === shopType);
 
     if (!shop) {
