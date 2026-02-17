@@ -23,6 +23,16 @@ function router() {
         openItem(params.get("item"));
         return;
     }
+	
+	if (params.has("shop")) {
+    openShop(params.get("shop"));
+    return;
+}
+
+if (params.has("specialshop")) {
+    openSpecialShop(params.get("specialshop"));
+    return;
+}
 
     renderMonsterList();
 }
