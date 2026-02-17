@@ -157,8 +157,6 @@ function renderMonsterList(filter = "") {
     });
 }
 
-/* -------------------- SEARCH SYSTEM -------------------- */
-
 searchInput.addEventListener("input", (e) => {
 
     const value = e.target.value.toLowerCase().trim();
@@ -168,51 +166,61 @@ searchInput.addEventListener("input", (e) => {
         return;
     }
 
-    /* ---- Item Search ---- */
-    const itemData = DATA["item_names.json"];
-    if (itemData?.item) {
-        for (const item of itemData.item) {
-            if (!item.new) continue;
+    /* =========================
+       ITEM SEARCH
+    ========================== */
 
-            if (item.new.toLowerCase().includes(value)) {
-                navigate(`?item=${item.id}`);
-                return;
-            }
+    const itemData = DATA["item_names.json"];
+    if (itemData && itemData.item) {
+
+        const foundItem = itemData.item.find(i =>
+            i.new && i.new.toLowerCase().includes(value)
+        );
+
+        if (foundItem) {
+            navigate(`?item=${foundItem.id}`);
+            return;
         }
     }
 
-    /* ---- Stage Search ---- */
-for (const id in stageData) {
+    /* =========================
+       STAGE SEARCH
+    ========================== */
 
-    const stage = stageData[id];
+    const stageData = DATA["stage-names.json"];
+    if (stageData) {
 
-    if (!stage || !stage.en) continue;
+        const stageMatch = Object.keys(stageData).find(id =>
+            stageData[id].en.toLowerCase().includes(value)
+        );
 
-    if (stage.en.toLowerCase().includes(value)) {
-        navigate(`?stage=${id}`);
-        return;
+        if (stageMatch) {
+            navigate(`?stage=${stageMatch}`);
+            return;
+        }
     }
-}
 
-    /* ---- Shop Search ---- */
+    /* =========================
+       SHOP SEARCH
+    ========================== */
+
     const shopData = DATA["Shop.json"];
     if (shopData) {
-        for (const shop of shopData) {
 
-            const goods = shop.Data?.GoodsParamList;
-            if (!goods) continue;
+        const shopMatch = shopData.find(shop =>
+            String(shop.ShopId).includes(value)
+        );
 
-            for (const g of goods) {
-                const name = getItemName(g.ItemId);
-                if (name.toLowerCase().includes(value)) {
-                    navigate(`?shop=${shop.ShopId}`);
-                    return;
-                }
-            }
+        if (shopMatch) {
+            navigate(`?shop=${shopMatch.ShopId}`);
+            return;
         }
     }
 
-    /* ---- Default Monster Search ---- */
+    /* =========================
+       MONSTER SEARCH (Fallback)
+    ========================== */
+
     renderMonsterList(value);
 });
 
