@@ -113,9 +113,9 @@ const stageData = DATA["stage-names.json"];
 if (itemData && itemData.item) {
     for (const item of itemData.item) {
 
-        if (!item.name) continue;
+        if (!item.new) continue;
 
-        if (item.name.toLowerCase().includes(value)) {
+        if (item.new.toLowerCase().includes(value)) {
             openItem(item.id);
             return;
         }

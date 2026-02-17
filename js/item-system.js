@@ -2,6 +2,11 @@ function openItem(itemId) {
 
     const content = document.getElementById("content");
     content.innerHTML = "";
+	let html = `
+    <a href="#" class="link" onclick="renderMonsterList(); return false;">
+        ← Back to Monsters
+    </a>
+`;
 
     const name = getItemName(itemId);
 

@@ -5,7 +5,7 @@ function getItemName(itemId) {
 
     const found = data.item.find(i => String(i.id) === String(itemId));
 
-    return found ? found.name : "Item " + itemId;
+    return found ? found.new : "Item " + itemId;
 }
 
 function renderDrops(dropTableId) {
