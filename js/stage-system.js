@@ -1,80 +1,53 @@
-function openStage(stageId) {
+function renderStageList(){
 
-    const content = document.getElementById("content");
+    const stageData = DATA["stage-names.json"];
+    if(!stageData) return;
+
     content.innerHTML = "";
 
-    const enemies = DATA["EnemySpawn.json"].enemies;
-    const stageName = getStageName(stageId);
+    for(const id in stageData){
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <a href="#" class="link"
+               onclick="navigate('?stage=${id}'); return false;">
+               ${stageData[id].en}
+            </a>
+        `;
+
+        content.appendChild(card);
+    }
+}
+
+function searchStages(value){
+
+    const stageData = DATA["stage-names.json"];
+    if(!stageData) return;
+
+    for(const id in stageData){
+        if(stageData[id].en.toLowerCase().includes(value)){
+            openStage(id);
+        }
+    }
+}
+
+function openStage(stageId){
+
+    content.innerHTML = "";
 
     const card = document.createElement("div");
     card.className = "card";
 
-    let html = `
-        <h2>${stageName}</h2>
-        <h3>Monsters</h3>
+    card.innerHTML = `
+        <h2>${getStageName(stageId)}</h2>
+        <br>
+        <a href="#" class="link"
+           onclick="showDefaultView(); return false;">
+           ← Back
+        </a>
     `;
 
-    const monsterMap = new Map();
-
-    /* -------- Build Monster Data for this Stage -------- */
-
-    enemies.forEach(e => {
-
-        if (String(e[0]) !== String(stageId)) return;
-
-        const enemyId = e[5];
-        const level = e[9];
-        const dropTableId = e[27];
-
-        if (!monsterMap.has(enemyId)) {
-            monsterMap.set(enemyId, {
-                levels: new Set(),
-                dropTableId: dropTableId
-            });
-        }
-
-        monsterMap.get(enemyId).levels.add(level);
-    });
-
-    /* -------- Sort Monsters Alphabetically -------- */
-
-    const sortedMonsters = [...monsterMap.entries()].sort((a,b) => {
-        return getEnemyName(a[0]).localeCompare(getEnemyName(b[0]));
-    });
-
-    /* -------- Render -------- */
-
-    sortedMonsters.forEach(([enemyId, data]) => {
-
-        const name = getEnemyName(enemyId);
-        const sortedLevels = [...data.levels].sort((a,b)=>a-b);
-
-        const minLv = sortedLevels[0];
-        const maxLv = sortedLevels[sortedLevels.length - 1];
-
-        const levelDisplay = minLv === maxLv
-            ? `Lv ${minLv}`
-            : `Lv ${minLv}-${maxLv}`;
-
-        html += `
-            <div style="margin-bottom:15px;">
-                <strong>${name}</strong> (${levelDisplay})
-                ${renderDrops(data.dropTableId)}
-            </div>
-        `;
-    });
-
-    /* -------- Back Button -------- */
-
-    html += `
-        <div style="margin-top:25px;">
-            <button onclick="navigate('?')" 
-                style="padding:8px 14px; background:#facc15; border:none; border-radius:6px; cursor:pointer;">
-                ← Back to Monsters
-            </button>
-        </div>
-    `;
-
-    card.innerHTML = html;
     content.appendChild(card);
 }

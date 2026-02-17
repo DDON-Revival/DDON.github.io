@@ -1,85 +1,53 @@
-/* ============================= */
-/* SHOP LIST */
-/* ============================= */
-
-function renderShopList() {
+function renderShopList(){
 
     const shopData = DATA["Shop.json"];
-    if (!shopData) return;
+    if(!shopData) return;
 
-    const content = document.getElementById("content");
     content.innerHTML = "";
 
-    const card = document.createElement("div");
-    card.className = "card";
+    shopData.forEach(shop=>{
 
-    let html = `<h2>Shops</h2>`;
+        const card = document.createElement("div");
+        card.className = "card";
 
-    shopData.forEach(shop => {
-
-        html += `
-            <div class="drop-item">
-                <a href="#" class="link"
-                   onclick="navigate('?shop=${shop.ShopId}'); return false;">
-                    Shop ${shop.ShopId}
-                </a>
-            </div>
+        card.innerHTML = `
+            <a href="#" class="link"
+               onclick="navigate('?shop=${shop.ShopId}'); return false;">
+               Shop ${shop.ShopId}
+            </a>
         `;
-    });
 
-    card.innerHTML = html;
-    content.appendChild(card);
+        content.appendChild(card);
+    });
 }
 
-
-/* ============================= */
-/* SINGLE SHOP DETAIL */
-/* ============================= */
-
-function openShop(shopId) {
+function searchShops(value){
 
     const shopData = DATA["Shop.json"];
-    if (!shopData) return;
+    if(!shopData) return;
 
-    const shop = shopData.find(s => String(s.ShopId) === String(shopId));
-    if (!shop) return;
+    shopData.forEach(shop=>{
+        if(String(shop.ShopId).includes(value)){
+            openShop(shop.ShopId);
+        }
+    });
+}
 
-    const content = document.getElementById("content");
+function openShop(shopId){
+
     content.innerHTML = "";
-
-    const goods = shop.Data.GoodsParamList;
 
     const card = document.createElement("div");
     card.className = "card";
 
-    let html = `
+    card.innerHTML = `
         <h2>Shop ${shopId}</h2>
-        <h3>Items</h3>
-    `;
-
-    goods.forEach(item => {
-
-        const name = getItemName(item.ItemId);
-
-        html += `
-            <div class="drop-item">
-                <a href="#" class="link"
-                   onclick="navigate('?item=${item.ItemId}'); return false;">
-                    ${name}
-                </a>
-                - ${item.Price} Gold
-            </div>
-        `;
-    });
-
-    html += `
         <br>
         <a href="#" class="link"
-           onclick="navigate('?shops'); return false;">
-           ← Back to Shops
+           onclick="showDefaultView(); return false;">
+           ← Back
         </a>
     `;
 
-    card.innerHTML = html;
     content.appendChild(card);
 }
