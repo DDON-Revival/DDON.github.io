@@ -122,8 +122,8 @@ function openItem(itemId) {
     html += `
         <br><br>
         <a href="#" class="link"
-           onclick="navigate('?'); return false;">
-            ← Back to Monster List
+           onclick="navigate('?'); return false;"
+            ← Back
         </a>
     `;
 
