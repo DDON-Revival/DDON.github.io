@@ -1,3 +1,41 @@
+/* ============================= */
+/* SHOP LIST */
+/* ============================= */
+
+function renderShopList() {
+
+    const shopData = DATA["Shop.json"];
+    if (!shopData) return;
+
+    const content = document.getElementById("content");
+    content.innerHTML = "";
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    let html = `<h2>Shops</h2>`;
+
+    shopData.forEach(shop => {
+
+        html += `
+            <div class="drop-item">
+                <a href="#" class="link"
+                   onclick="navigate('?shop=${shop.ShopId}'); return false;">
+                    Shop ${shop.ShopId}
+                </a>
+            </div>
+        `;
+    });
+
+    card.innerHTML = html;
+    content.appendChild(card);
+}
+
+
+/* ============================= */
+/* SINGLE SHOP DETAIL */
+/* ============================= */
+
 function openShop(shopId) {
 
     const shopData = DATA["Shop.json"];
@@ -30,54 +68,17 @@ function openShop(shopId) {
                     ${name}
                 </a>
                 - ${item.Price} Gold
+            </div>
         `;
-
-        // Crest Anzeige (falls vorhanden)
-        if (item.Crests && item.Crests.length > 0) {
-            item.Crests.forEach(crest => {
-                html += `
-                    <div style="margin-left:15px; font-size:13px; opacity:0.8;">
-                        Crest ID: ${crest.crest_id}
-                    </div>
-                `;
-            });
-        }
-
-        html += `</div>`;
     });
 
     html += `
         <br>
         <a href="#" class="link"
-           onclick="renderShopList(); return false;">
+           onclick="navigate('?shops'); return false;">
            ← Back to Shops
         </a>
     `;
-
-function renderShopList() {
-
-    const shopData = DATA["Shop.json"];
-    if (!shopData) return;
-
-    const content = document.getElementById("content");
-    content.innerHTML = "";
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    let html = `<h2>Shops</h2>`;
-
-    shopData.forEach(shop => {
-
-        html += `
-            <div class="drop-item">
-                <a href="#" class="link"
-                   onclick="navigate('?shop=${shop.ShopId}'); return false;">
-                    Shop ${shop.ShopId}
-                </a>
-            </div>
-        `;
-    });
 
     card.innerHTML = html;
     content.appendChild(card);

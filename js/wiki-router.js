@@ -34,11 +34,10 @@ if (params.has("shop")) {
     return;
 }
 
-if (params.has("special")) {
-    openSpecialShop(params.get("special"));
+if (params.has("shops")) {
+    renderShopList();
     return;
 }
-
 
     renderMonsterList();
 }
