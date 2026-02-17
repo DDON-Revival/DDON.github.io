@@ -2,11 +2,6 @@ function openItem(itemId) {
 
     const content = document.getElementById("content");
     content.innerHTML = "";
-	let html = `
-    <a href="#" class="link" onclick="renderMonsterList(); return false;">
-        ← Back to Monsters
-    </a>
-`;
 
     const name = getItemName(itemId);
 
@@ -28,7 +23,7 @@ function openItem(itemId) {
 
         table.items.forEach(item => {
 
-            if (item[0] != itemId) return;
+            if (String(item[0]) !== String(itemId)) return;
 
             const enemiesUsingTable = enemies.filter(e => e[27] == table.id);
 
@@ -38,21 +33,28 @@ function openItem(itemId) {
         });
     });
 
-    const sortedMonsters = [...monsterSet].sort((a,b) => {
-        return getEnemyName(a).localeCompare(getEnemyName(b));
-    });
+    const sortedMonsters = [...monsterSet].sort((a,b) =>
+        getEnemyName(a).localeCompare(getEnemyName(b))
+    );
 
     sortedMonsters.forEach(enemyId => {
-
-        const enemyName = getEnemyName(enemyId);
 
         html += `
             <a href="#" class="link"
                onclick="renderSingleMonster('${enemyId}'); return false;">
-                ${enemyName}
+                ${getEnemyName(enemyId)}
             </a>
         `;
     });
+
+    // BACK BUTTON
+    html += `
+        <br><br>
+        <a href="#" class="link"
+           onclick="renderMonsterList(); return false;">
+            ← Back to Monster List
+        </a>
+    `;
 
     card.innerHTML = html;
     content.appendChild(card);
