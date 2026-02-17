@@ -47,160 +47,123 @@ function performSearch(value){
     const card = document.createElement("div");
     card.className = "card";
 
-    let html = `<h2>Search Results for "${value}"</h2>`;
+    let html = `<h2>Search Results</h2>`;
 
     let foundSomething = false;
 
-    /* ================= ENEMIES ================= */
+    /* =========================
+       ENEMIES
+    ========================== */
 
     if (currentFilter === "all" || currentFilter === "enemy"){
 
-        let enemyMatches = [];
-
         for (const id in enemyData){
+
             if (enemyData[id].toLowerCase().includes(value)){
-                enemyMatches.push({id, name: enemyData[id]});
+
+                html += `
+                    <a href="#" class="link"
+                       onclick="navigate('?monster=${id}'); return false;">
+                       🐲 ${enemyData[id]}
+                    </a>
+                `;
+
+                foundSomething = true;
             }
-        }
-
-        if (enemyMatches.length){
-            foundSomething = true;
-            html += `<h3>Enemies</h3>`;
-
-            enemyMatches
-                .sort((a,b)=>a.name.localeCompare(b.name))
-                .forEach(e=>{
-                    html += `
-                        <a href="#" class="link"
-                           onclick="navigate('?monster=${e.id}'); return false;">
-                            ${e.name}
-                        </a>
-                    `;
-                });
         }
     }
 
-    /* ================= ITEMS ================= */
+    /* =========================
+       ITEMS
+    ========================== */
 
     if (currentFilter === "all" || currentFilter === "item"){
 
-        let itemMatches = [];
+        itemData?.item?.forEach(item => {
 
-        if (itemData?.item){
-            itemData.item.forEach(item=>{
-                if (item.new?.toLowerCase().includes(value)){
-                    itemMatches.push(item);
-                }
-            });
-        }
+            if (item.new?.toLowerCase().includes(value)){
 
-        if (itemMatches.length){
-            foundSomething = true;
-            html += `<h3>Items</h3>`;
+                html += `
+                    <a href="#" class="link"
+                       onclick="navigate('?item=${item.id}'); return false;">
+                       📦 ${item.new}
+                    </a>
+                `;
 
-            itemMatches
-                .sort((a,b)=>a.new.localeCompare(b.new))
-                .forEach(item=>{
-                    html += `
-                        <a href="#" class="link"
-                           onclick="navigate('?item=${item.id}'); return false;">
-                            ${item.new}
-                        </a>
-                    `;
-                });
-        }
+                foundSomething = true;
+            }
+
+        });
     }
 
-    /* ================= STAGES ================= */
+    /* =========================
+       STAGES
+    ========================== */
 
     if (currentFilter === "all" || currentFilter === "stage"){
 
-        let stageMatches = [];
-
         for (const id in stageData){
+
             if (stageData[id].en.toLowerCase().includes(value)){
-                stageMatches.push({id, name: stageData[id].en});
+
+                html += `
+                    <a href="#" class="link"
+                       onclick="navigate('?stage=${id}'); return false;">
+                       🗺 ${stageData[id].en}
+                    </a>
+                `;
+
+                foundSomething = true;
             }
-        }
-
-        if (stageMatches.length){
-            foundSomething = true;
-            html += `<h3>Stages</h3>`;
-
-            stageMatches
-                .sort((a,b)=>a.name.localeCompare(b.name))
-                .forEach(stage=>{
-                    html += `
-                        <a href="#" class="link"
-                           onclick="navigate('?stage=${stage.id}'); return false;">
-                            ${stage.name}
-                        </a>
-                    `;
-                });
         }
     }
 
-    /* ================= SHOPS ================= */
+    /* =========================
+       SHOPS
+    ========================== */
 
     if (currentFilter === "all" || currentFilter === "shop"){
 
-        let shopMatches = [];
+        shopData?.forEach(shop => {
 
-        if (shopData){
-            shopData.forEach(shop=>{
-                if (String(shop.ShopId).includes(value)){
-                    shopMatches.push(shop);
-                }
-            });
-        }
+            if (String(shop.ShopId).includes(value)){
 
-        if (shopMatches.length){
-            foundSomething = true;
-            html += `<h3>Shops</h3>`;
-
-            shopMatches.forEach(shop=>{
                 html += `
                     <a href="#" class="link"
                        onclick="navigate('?shop=${shop.ShopId}'); return false;">
-                        Shop ${shop.ShopId}
+                       🏪 Shop ${shop.ShopId}
                     </a>
                 `;
-            });
-        }
+
+                foundSomething = true;
+            }
+        });
     }
 
-    /* ================= SPECIAL ================= */
+    /* =========================
+       SPECIAL SHOPS
+    ========================== */
 
     if (currentFilter === "all" || currentFilter === "special"){
 
-        if (specialData?.shops){
+        specialData?.shops?.forEach((shop,index) => {
 
-            let specialMatches = [];
+            if (shop.shop_type.toLowerCase().includes(value)){
 
-            specialData.shops.forEach((shop,index)=>{
-                if (shop.shop_type.toLowerCase().includes(value)){
-                    specialMatches.push({index, name: shop.shop_type});
-                }
-            });
+                html += `
+                    <a href="#" class="link"
+                       onclick="navigate('?special=${index}'); return false;">
+                       ⭐ ${shop.shop_type}
+                    </a>
+                `;
 
-            if (specialMatches.length){
                 foundSomething = true;
-                html += `<h3>Special Shops</h3>`;
-
-                specialMatches.forEach(shop=>{
-                    html += `
-                        <a href="#" class="link"
-                           onclick="navigate('?special=${shop.index}'); return false;">
-                            ${shop.name}
-                        </a>
-                    `;
-                });
             }
-        }
+        });
     }
 
     if (!foundSomething){
-        html += `<p style="opacity:0.6;">No results found.</p>`;
+        html += `<div>No results found.</div>`;
     }
 
     card.innerHTML = html;
