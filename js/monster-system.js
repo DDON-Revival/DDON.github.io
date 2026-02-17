@@ -166,16 +166,18 @@ searchInput.addEventListener("input", (e) => {
         return;
     }
 
-    const enemies = DATA["enemy-names.json"];
     const itemData = DATA["item_names.json"];
     const stageData = DATA["stage-names.json"];
 
     /* =========================
-       1️⃣ MONSTER MATCH
+       1️⃣ EXACT MONSTER MATCH
+       (nur wenn exakt gleich)
     ========================== */
 
+    const enemies = DATA["enemy-names.json"];
+
     for (const id in enemies) {
-        if (enemies[id].toLowerCase().includes(value)) {
+        if (enemies[id].toLowerCase() === value) {
             navigate(`?monster=${id}`);
             return;
         }
@@ -189,7 +191,7 @@ searchInput.addEventListener("input", (e) => {
         for (const item of itemData.item) {
             if (!item.new) continue;
 
-            if (item.new.toLowerCase().includes(value)) {
+            if (item.new.toLowerCase() === value) {
                 navigate(`?item=${item.id}`);
                 return;
             }
@@ -201,14 +203,15 @@ searchInput.addEventListener("input", (e) => {
     ========================== */
 
     for (const id in stageData) {
-        if (stageData[id].en.toLowerCase().includes(value)) {
+        if (stageData[id].en.toLowerCase() === value) {
             navigate(`?stage=${id}`);
             return;
         }
     }
 
     /* =========================
-       FALLBACK → FILTER LIST
+       FALLBACK → FILTER MONSTER LIST
+       (Hier passiert dein Orc-Fall)
     ========================== */
 
     renderMonsterList(value);
