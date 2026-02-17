@@ -1,227 +1,169 @@
 const searchInput = document.getElementById("searchBox");
+const searchFilters = document.getElementById("searchFilters");
 const content = document.getElementById("content");
 
-/* -------------------- HELPERS -------------------- */
+let currentFilter = "all";
 
-function getEnemyName(enemyId) {
-    return DATA["enemy-names.json"]?.[enemyId] || enemyId;
-}
+/* ---------------- FILTER BUTTONS ---------------- */
 
-function getStageName(stageId) {
-    const stage = DATA["stage-names.json"]?.[stageId];
-    return stage ? stage.en : stageId;
-}
+searchFilters.querySelectorAll("button").forEach(btn => {
 
-/* -------------------- SINGLE MONSTER -------------------- */
+    btn.addEventListener("click", () => {
 
-function renderSingleMonster(enemyId) {
+        searchFilters.querySelectorAll("button")
+            .forEach(b => b.classList.remove("active"));
 
-    const enemies = DATA["EnemySpawn.json"].enemies;
+        btn.classList.add("active");
+        currentFilter = btn.dataset.type;
+
+        performSearch(searchInput.value.toLowerCase().trim());
+    });
+
+});
+
+/* ---------------- SEARCH INPUT ---------------- */
+
+searchInput.addEventListener("input", (e) => {
+    performSearch(e.target.value.toLowerCase().trim());
+});
+
+/* ---------------- MAIN SEARCH ---------------- */
+
+function performSearch(value){
+
+    if (!value){
+        navigate("?");
+        return;
+    }
+
+    const enemyData = DATA["enemy-names.json"];
+    const itemData = DATA["item_names.json"];
+    const stageData = DATA["stage-names.json"];
+    const shopData = DATA["Shop.json"];
+    const specialData = DATA["SpecialShops.json"];
+
     content.innerHTML = "";
-
-    const filtered = enemies.filter(e => String(e[5]) === String(enemyId));
-    if (!filtered.length) return;
-
     const card = document.createElement("div");
     card.className = "card";
 
-    const name = getEnemyName(enemyId);
+    let html = `<h2>Search Results</h2>`;
 
-    let html = `
-        <h2>${name}</h2>
-        <p><strong>ID:</strong> ${enemyId}</p>
-        <h3>Spawn Locations</h3>
-    `;
+    let foundSomething = false;
 
-    const stageMap = new Map();
+    /* ================= ENEMIES ================= */
 
-    filtered.forEach(e => {
-        const stageId = e[0];
-        const level = e[9];
+    if (currentFilter === "all" || currentFilter === "enemy"){
 
-        if (!stageMap.has(stageId)) stageMap.set(stageId, new Set());
-        stageMap.get(stageId).add(level);
-    });
+        for (const id in enemyData){
 
-    [...stageMap.entries()]
-        .sort((a,b) => getStageName(a[0]).localeCompare(getStageName(b[0])))
-        .forEach(([stageId, levels]) => {
+            if (enemyData[id].toLowerCase().includes(value)){
 
-            const sorted = [...levels].sort((a,b)=>a-b);
-            const min = sorted[0];
-            const max = sorted[sorted.length-1];
+                html += `
+                    <a href="#" class="link"
+                       onclick="navigate('?monster=${id}'); return false;">
+                        🐲 ${enemyData[id]}
+                    </a>
+                `;
+                foundSomething = true;
+            }
+        }
+    }
 
-            const levelDisplay = min === max ? `Lv ${min}` : `Lv ${min}-${max}`;
+    /* ================= ITEMS ================= */
 
-            html += `
-                <a href="#" class="link"
-                   onclick="navigate('?stage=${stageId}'); return false;">
-                    ${getStageName(stageId)} (${levelDisplay})
-                </a>
-            `;
-        });
+    if (currentFilter === "all" || currentFilter === "item"){
 
-    html += `<h3>Drops</h3>`;
-    html += renderDrops(filtered[0][27]);
+        if (itemData?.item){
+            itemData.item.forEach(item => {
 
-    html += `
-        <br><br>
-        <a href="#" class="link"
-           onclick="navigate('?'); return false;">
-            ← Back to Monsters
-        </a>
-    `;
+                if (item.new?.toLowerCase().includes(value)){
+                    html += `
+                        <a href="#" class="link"
+                           onclick="navigate('?item=${item.id}'); return false;">
+                            🧪 ${item.new}
+                        </a>
+                    `;
+                    foundSomething = true;
+                }
+            });
+        }
+    }
+
+    /* ================= STAGES ================= */
+
+    if (currentFilter === "all" || currentFilter === "stage"){
+
+        for (const id in stageData){
+
+            if (stageData[id].en.toLowerCase().includes(value)){
+                html += `
+                    <a href="#" class="link"
+                       onclick="navigate('?stage=${id}'); return false;">
+                        🗺 ${stageData[id].en}
+                    </a>
+                `;
+                foundSomething = true;
+            }
+        }
+    }
+
+    /* ================= SHOPS ================= */
+
+    if (currentFilter === "all" || currentFilter === "shop"){
+
+        if (shopData){
+
+            shopData.forEach(shop => {
+
+                if (String(shop.ShopId).includes(value)){
+                    html += `
+                        <a href="#" class="link"
+                           onclick="navigate('?shop=${shop.ShopId}'); return false;">
+                            🏪 Shop ${shop.ShopId}
+                        </a>
+                    `;
+                    foundSomething = true;
+                }
+
+            });
+        }
+    }
+
+    /* ================= SPECIAL SHOPS ================= */
+
+    if (currentFilter === "all" || currentFilter === "special"){
+
+        if (specialData?.shops){
+
+            specialData.shops.forEach((shop,index) => {
+
+                if (shop.shop_type.toLowerCase().includes(value)){
+                    html += `
+                        <a href="#" class="link"
+                           onclick="navigate('?special=${index}'); return false;">
+                            ⭐ ${shop.shop_type}
+                        </a>
+                    `;
+                    foundSomething = true;
+                }
+
+            });
+        }
+    }
+
+    if (!foundSomething){
+        html += `<div style="opacity:0.6;">No results found.</div>`;
+    }
 
     card.innerHTML = html;
     content.appendChild(card);
 }
 
-/* -------------------- MONSTER LIST -------------------- */
-
-function renderMonsterList(filter = "") {
-
-    if (!DATA["EnemySpawn.json"]) return;
-
-    content.innerHTML = "";
-
-    const enemies = DATA["EnemySpawn.json"].enemies;
-    const monsterMap = new Map();
-
-    enemies.forEach(e => {
-
-        const stageId = e[0];
-        const enemyId = e[5];
-        const level = e[9];
-        const dropTableId = e[27];
-
-        if (!monsterMap.has(enemyId)) {
-            monsterMap.set(enemyId, {
-                stages: new Map(),
-                dropTableId: dropTableId
-            });
-        }
-
-        const monsterData = monsterMap.get(enemyId);
-
-        if (!monsterData.stages.has(stageId)) {
-            monsterData.stages.set(stageId, new Set());
-        }
-
-        monsterData.stages.get(stageId).add(level);
-    });
-
-    monsterMap.forEach((monsterData, enemyId) => {
-
-        const name = getEnemyName(enemyId);
-
-        if (!name.toLowerCase().includes(filter.toLowerCase())) return;
-
-        const card = document.createElement("div");
-        card.className = "card";
-
-        let html = `
-            <h2>
-                <a href="#" class="link"
-                   onclick="navigate('?monster=${enemyId}'); return false;">
-                    ${name}
-                </a>
-            </h2>
-            <h3>Spawn Locations</h3>
-        `;
-
-        [...monsterData.stages.entries()]
-            .sort((a,b) => getStageName(a[0]).localeCompare(getStageName(b[0])))
-            .forEach(([stageId, levels]) => {
-
-                const sorted = [...levels].sort((a,b)=>a-b);
-                const min = sorted[0];
-                const max = sorted[sorted.length - 1];
-
-                const levelDisplay = min === max
-                    ? `Lv ${min}`
-                    : `Lv ${min}-${max}`;
-
-                html += `
-                    <a href="#" class="link"
-                       onclick="navigate('?stage=${stageId}'); return false;">
-                        ${getStageName(stageId)} (${levelDisplay})
-                    </a>
-                `;
-            });
-
-        html += `<h3>Drops</h3>`;
-        html += renderDrops(monsterData.dropTableId);
-
-        card.innerHTML = html;
-        content.appendChild(card);
-    });
-}
-
-searchInput.addEventListener("input", (e) => {
-
-    const value = e.target.value.toLowerCase().trim();
-
-    if (!value) {
-        navigate("?");
-        return;
-    }
-
-    const itemData = DATA["item_names.json"];
-    const stageData = DATA["stage-names.json"];
-
-    /* =========================
-       1️⃣ EXACT MONSTER MATCH
-       (nur wenn exakt gleich)
-    ========================== */
-
-    const enemies = DATA["enemy-names.json"];
-
-    for (const id in enemies) {
-        if (enemies[id].toLowerCase() === value) {
-            navigate(`?monster=${id}`);
-            return;
-        }
-    }
-
-    /* =========================
-       2️⃣ ITEM MATCH
-    ========================== */
-
-    if (itemData && itemData.item) {
-        for (const item of itemData.item) {
-            if (!item.new) continue;
-
-            if (item.new.toLowerCase() === value) {
-                navigate(`?item=${item.id}`);
-                return;
-            }
-        }
-    }
-
-    /* =========================
-       3️⃣ STAGE MATCH
-    ========================== */
-
-    for (const id in stageData) {
-        if (stageData[id].en.toLowerCase() === value) {
-            navigate(`?stage=${id}`);
-            return;
-        }
-    }
-
-    /* =========================
-       FALLBACK → FILTER MONSTER LIST
-       (Hier passiert dein Orc-Fall)
-    ========================== */
-
-    renderMonsterList(value);
-});
-
-/* -------------------- INIT -------------------- */
+/* ---------------- INIT ---------------- */
 
 const waitForData = setInterval(() => {
-    if (window.dataLoaded) {
+    if (window.dataLoaded){
         clearInterval(waitForData);
         router();
     }
-}, 100);
+},100);
