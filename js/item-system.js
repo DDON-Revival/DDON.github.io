@@ -5,17 +5,20 @@ function openItem(itemId) {
 
     const name = getItemName(itemId);
 
-    const enemies = DATA["EnemySpawn.json"].enemies;
-    const dropTables = DATA["EnemySpawn.json"].dropsTables;
-
     const card = document.createElement("div");
     card.className = "card";
 
     let html = `
         <h2>${name}</h2>
         <p><strong>ID:</strong> ${itemId}</p>
-        <h3>Dropped By</h3>
     `;
+
+    /* =========================
+       DROPPED BY (Monster)
+    ========================== */
+
+    const enemies = DATA["EnemySpawn.json"].enemies;
+    const dropTables = DATA["EnemySpawn.json"].dropsTables;
 
     const monsterSet = new Set();
 
@@ -32,6 +35,101 @@ function openItem(itemId) {
             });
         });
     });
+
+    if (monsterSet.size > 0) {
+
+        html += `<h3>Dropped By</h3>`;
+
+        [...monsterSet]
+            .sort((a,b)=>getEnemyName(a).localeCompare(getEnemyName(b)))
+            .forEach(enemyId => {
+
+                html += `
+                    <a href="#" class="link"
+                       onclick="navigate('?monster=${enemyId}'); return false;">
+                        ${getEnemyName(enemyId)}
+                    </a>
+                `;
+            });
+    }
+
+    /* =========================
+       NORMAL SHOPS
+    ========================== */
+
+    const shopData = DATA["Shop.json"];
+
+    if (shopData && Array.isArray(shopData)) {
+
+        const sellingShops = shopData.filter(shop =>
+            shop.Data.GoodsParamList.some(g =>
+                String(g.ItemId) === String(itemId)
+            )
+        );
+
+        if (sellingShops.length > 0) {
+
+            html += `<h3>Sold In Shops</h3>`;
+
+            sellingShops.forEach(shop => {
+
+                html += `
+                    <a href="#" class="link"
+                       onclick="navigate('?shop=${shop.ShopId}'); return false;">
+                        Shop ${shop.ShopId}
+                    </a>
+                `;
+            });
+        }
+    }
+
+    /* =========================
+       SPECIAL SHOPS
+    ========================== */
+
+    const specialData = DATA["SpecialShops.json"];
+
+    if (specialData && specialData.shops) {
+
+        specialData.shops.forEach((shop, index) => {
+
+            shop.categories.forEach(category => {
+
+                category.appraisals.forEach(app => {
+
+                    app.pool.forEach(item => {
+
+                        if (String(item.item_id) === String(itemId)) {
+
+                            html += `
+                                <h3>Available In Special Shop</h3>
+                                <a href="#" class="link"
+                                   onclick="navigate('?special=${index}'); return false;">
+                                    ${shop.shop_type}
+                                </a>
+                            `;
+                        }
+
+                    });
+
+                });
+
+            });
+
+        });
+    }
+
+    html += `
+        <br><br>
+        <a href="#" class="link"
+           onclick="navigate('?'); return false;">
+            ← Back to Monster List
+        </a>
+    `;
+
+    card.innerHTML = html;
+    content.appendChild(card);
+}
 
     const sortedMonsters = [...monsterSet].sort((a,b) =>
         getEnemyName(a).localeCompare(getEnemyName(b))
