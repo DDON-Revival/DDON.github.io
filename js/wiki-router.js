@@ -29,15 +29,16 @@ function router() {
         return;
     }
 
-    if (params.has("shop")) {
-        openShop(params.get("shop"));
-        return;
-    }
+if (params.has("shop")) {
+    openShop(params.get("shop"));
+    return;
+}
 
-    if (params.has("specialshop")) {
-        openSpecialShop(params.get("specialshop"));
-        return;
-    }
+if (params.has("special")) {
+    openSpecialShop(params.get("special"));
+    return;
+}
+
 
     renderMonsterList();
 }

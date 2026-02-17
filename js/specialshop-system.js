@@ -1,68 +1,85 @@
-function openSpecialShop(shopType) {
+function openSpecialShop(index) {
+
+    const data = DATA["SpecialShops.json"];
+    if (!data || !data.shops) return;
+
+    const shop = data.shops[index];
+    if (!shop) return;
 
     const content = document.getElementById("content");
     content.innerHTML = "";
-
-    const data = DATA["SpecialShops.json"];
-    const shop = data.shops.find(s => s.shop_type === shopType);
-
-    if (!shop) {
-        content.innerHTML = "<div class='card'>Special Shop not found</div>";
-        return;
-    }
 
     const card = document.createElement("div");
     card.className = "card";
 
     let html = `<h2>${shop.shop_type}</h2>`;
 
-    shop.categories.forEach(cat => {
+    shop.categories.forEach(category => {
 
-        html += `<h3>${cat.label}</h3>`;
+        html += `<h3>${category.label}</h3>`;
 
-        cat.appraisals.forEach(app => {
+        category.appraisals.forEach(app => {
 
-            html += `<div style="margin-bottom:12px;">`;
+            app.pool.forEach(item => {
 
-            html += `<strong>${app.label}</strong><br>`;
-
-            if (app.base_items) {
-                html += `Cost:<br>`;
-                app.base_items.forEach(b => {
-                    html += `
-                        - ${b.amount}x 
+                html += `
+                    <div class="drop-item">
                         <a href="#" class="link"
-                           onclick="navigate('?item=${b.item_id}'); return false;">
-                           ${getItemName(b.item_id)}
-                        </a><br>
-                    `;
-                });
-            }
+                           onclick="navigate('?item=${item.item_id}'); return false;">
+                            ${item.name}
+                        </a>
+                `;
 
-            if (app.pool) {
-                html += `Reward:<br>`;
-                app.pool.forEach(p => {
-                    html += `
-                        → ${p.amount}x 
-                        <a href="#" class="link"
-                           onclick="navigate('?item=${p.item_id}'); return false;">
-                           ${getItemName(p.item_id)}
-                        </a><br>
-                    `;
-                });
-            }
+                // Crest Anzeige
+                if (item.crests) {
+                    item.crests.forEach(crest => {
+                        html += `
+                            <div style="margin-left:15px; font-size:13px; opacity:0.8;">
+                                Crest ID: ${crest.crest_id}
+                            </div>
+                        `;
+                    });
+                }
 
-            html += `</div>`;
+                html += `</div>`;
+            });
+
         });
     });
 
     html += `
         <br>
         <a href="#" class="link"
-           onclick="renderMonsterList(); return false;">
-           ← Back
+           onclick="renderSpecialShopList(); return false;">
+           ← Back to Special Shops
         </a>
     `;
+
+	
+function renderSpecialShopList() {
+
+    const data = DATA["SpecialShops.json"];
+    if (!data || !data.shops) return;
+
+    const content = document.getElementById("content");
+    content.innerHTML = "";
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    let html = `<h2>Special Shops</h2>`;
+
+    data.shops.forEach((shop, index) => {
+
+        html += `
+            <div class="drop-item">
+                <a href="#" class="link"
+                   onclick="navigate('?special=${index}'); return false;">
+                    ${shop.shop_type}
+                </a>
+            </div>
+        `;
+    });
 
     card.innerHTML = html;
     content.appendChild(card);
