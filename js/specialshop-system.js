@@ -30,7 +30,6 @@ function openSpecialShop(index) {
                         </a>
                 `;
 
-                // Crest Anzeige
                 if (item.crests) {
                     item.crests.forEach(crest => {
                         html += `
@@ -55,10 +54,14 @@ function openSpecialShop(index) {
         </a>
     `;
 
+    card.innerHTML = html;
+    content.appendChild(card);
+}
 
-/* ======================================= */
+
+/* ============================= */
 /* LIST VIEW */
-/* ======================================= */
+/* ============================= */
 
 function renderSpecialShopList() {
 

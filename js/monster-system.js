@@ -166,59 +166,49 @@ searchInput.addEventListener("input", (e) => {
         return;
     }
 
-    /* =========================
-       ITEM SEARCH
-    ========================== */
-
+    const enemies = DATA["enemy-names.json"];
     const itemData = DATA["item_names.json"];
-    if (itemData && itemData.item) {
-
-        const foundItem = itemData.item.find(i =>
-            i.new && i.new.toLowerCase().includes(value)
-        );
-
-        if (foundItem) {
-            navigate(`?item=${foundItem.id}`);
-            return;
-        }
-    }
-
-    /* =========================
-       STAGE SEARCH
-    ========================== */
-
     const stageData = DATA["stage-names.json"];
-    if (stageData) {
-
-        const stageMatch = Object.keys(stageData).find(id =>
-            stageData[id].en.toLowerCase().includes(value)
-        );
-
-        if (stageMatch) {
-            navigate(`?stage=${stageMatch}`);
-            return;
-        }
-    }
 
     /* =========================
-       SHOP SEARCH
+       1️⃣ MONSTER MATCH
     ========================== */
 
-    const shopData = DATA["Shop.json"];
-    if (shopData) {
-
-        const shopMatch = shopData.find(shop =>
-            String(shop.ShopId).includes(value)
-        );
-
-        if (shopMatch) {
-            navigate(`?shop=${shopMatch.ShopId}`);
+    for (const id in enemies) {
+        if (enemies[id].toLowerCase().includes(value)) {
+            navigate(`?monster=${id}`);
             return;
         }
     }
 
     /* =========================
-       MONSTER SEARCH (Fallback)
+       2️⃣ ITEM MATCH
+    ========================== */
+
+    if (itemData && itemData.item) {
+        for (const item of itemData.item) {
+            if (!item.new) continue;
+
+            if (item.new.toLowerCase().includes(value)) {
+                navigate(`?item=${item.id}`);
+                return;
+            }
+        }
+    }
+
+    /* =========================
+       3️⃣ STAGE MATCH
+    ========================== */
+
+    for (const id in stageData) {
+        if (stageData[id].en.toLowerCase().includes(value)) {
+            navigate(`?stage=${id}`);
+            return;
+        }
+    }
+
+    /* =========================
+       FALLBACK → FILTER LIST
     ========================== */
 
     renderMonsterList(value);

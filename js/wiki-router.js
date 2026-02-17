@@ -40,12 +40,13 @@ if (params.has("shops")) {
 }
 
 if (params.has("special")) {
-    const value = params.get("special");
 
-    if (value === "" || value === null) {
+    const index = params.get("special");
+
+    if (index === "") {
         renderSpecialShopList();
     } else {
-        openSpecialShop(value);
+        openSpecialShop(index);
     }
 
     return;
