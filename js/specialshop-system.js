@@ -55,10 +55,6 @@ function openSpecialShop(index) {
         </a>
     `;
 
-    card.innerHTML = html;
-    content.appendChild(card);
-}
-
 
 /* ======================================= */
 /* LIST VIEW */
