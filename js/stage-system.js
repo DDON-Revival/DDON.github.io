@@ -54,14 +54,14 @@ function openStage(stageId) {
         `;
     });
 
-    html += `
-        <div style="margin-top:20px;">
-            <button onclick="renderMonsterList()" 
-                style="padding:8px 14px; background:#facc15; border:none; border-radius:6px; cursor:pointer;">
-                ← Back to Monsters
-            </button>
-        </div>
-    `;
+html += `
+    <div style="margin-top:20px;">
+        <button onclick="navigate('?')"
+            style="padding:8px 14px; background:#facc15; border:none; border-radius:6px; cursor:pointer;">
+            ← Back to Monsters
+        </button>
+    </div>
+`;
 
     card.innerHTML = html;
     content.appendChild(card);

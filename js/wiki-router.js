@@ -1,37 +1,28 @@
-function getQueryParam(name) {
-    const url = new URL(window.location.href);
-    return url.searchParams.get(name);
+function navigate(url) {
+    history.pushState({}, "", url);
+    router();
 }
 
-function handleRouting() {
+window.addEventListener("popstate", router);
 
-    const monsterId = getQueryParam("monster");
-    const stageId = getQueryParam("stage");
-    const itemId = getQueryParam("item");
+function router() {
 
-    if (monsterId) {
-        renderMonsterList(monsterId);
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.has("monster")) {
+        renderSingleMonster(params.get("monster"));
         return;
     }
 
-    if (stageId) {
-        openStage(stageId);
+    if (params.has("stage")) {
+        openStage(params.get("stage"));
         return;
     }
 
-    if (itemId) {
-        openItem(itemId);
+    if (params.has("item")) {
+        openItem(params.get("item"));
         return;
     }
 
     renderMonsterList();
 }
-
-window.addEventListener("load", () => {
-    const wait = setInterval(() => {
-        if (window.dataLoaded) {
-            clearInterval(wait);
-            handleRouting();
-        }
-    }, 100);
-});

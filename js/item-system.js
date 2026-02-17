@@ -37,24 +37,25 @@ function openItem(itemId) {
         getEnemyName(a).localeCompare(getEnemyName(b))
     );
 
-    sortedMonsters.forEach(enemyId => {
+sortedMonsters.forEach(enemyId => {
 
-        html += `
-            <a href="#" class="link"
-               onclick="renderSingleMonster('${enemyId}'); return false;">
-                ${getEnemyName(enemyId)}
-            </a>
-        `;
-    });
-
-    // BACK BUTTON
     html += `
-        <br><br>
         <a href="#" class="link"
-           onclick="renderMonsterList(); return false;">
-            ← Back to Monster List
+           onclick="navigate('?monster=${enemyId}'); return false;">
+            ${getEnemyName(enemyId)}
         </a>
     `;
+});
+
+
+html += `
+    <br><br>
+    <a href="#" class="link"
+       onclick="navigate('?'); return false;">
+        ← Back to Monster List
+    </a>
+`;
+
 
     card.innerHTML = html;
     content.appendChild(card);

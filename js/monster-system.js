@@ -10,14 +10,74 @@ function getStageName(stageId) {
     return stage ? stage.en : stageId;
 }
 
-function renderMonsterList(filter = "") {
+function renderSingleMonster(enemyId) {
+
+    const enemies = DATA["EnemySpawn.json"].enemies;
+    const content = document.getElementById("content");
+    content.innerHTML = "";
+
+    const filtered = enemies.filter(e => String(e[5]) === String(enemyId));
+    if (!filtered.length) return;
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const name = getEnemyName(enemyId);
+
+    let html = `
+        <h2>${name}</h2>
+        <p><strong>ID:</strong> ${enemyId}</p>
+        <h3>Spawn Locations</h3>
+    `;
+
+    const stageMap = new Map();
+
+    filtered.forEach(e => {
+        const stageId = e[0];
+        const level = e[9];
+
+        if (!stageMap.has(stageId)) stageMap.set(stageId, new Set());
+        stageMap.get(stageId).add(level);
+    });
+
+    stageMap.forEach((levels, stageId) => {
+
+        const sorted = [...levels].sort((a,b)=>a-b);
+        const min = sorted[0];
+        const max = sorted[sorted.length-1];
+
+        const levelDisplay = min === max ? `Lv ${min}` : `Lv ${min}-${max}`;
+
+        html += `
+            <a href="#" class="link"
+               onclick="navigate('?stage=${stageId}'); return false;">
+                ${getStageName(stageId)} (${levelDisplay})
+            </a>
+        `;
+    });
+
+    html += `<h3>Drops</h3>`;
+    html += renderDrops(filtered[0][27]);
+
+    html += `
+        <br><br>
+        <a href="#" class="link"
+           onclick="navigate('?'); return false;">
+            ← Back to Monsters
+        </a>
+    `;
+
+    card.innerHTML = html;
+    content.appendChild(card);
+}
+
+function renderMonsterList(filter = "", singleMonsterId = null) {
 
     if (!DATA["EnemySpawn.json"]) return;
 
     content.innerHTML = "";
 
     const enemies = DATA["EnemySpawn.json"].enemies;
-
     const monsterMap = new Map();
 
     enemies.forEach(e => {
@@ -45,9 +105,10 @@ function renderMonsterList(filter = "") {
 
     monsterMap.forEach((monsterData, enemyId) => {
 
-        const name = getEnemyName(enemyId);
+        if (singleMonsterId && enemyId != singleMonsterId) return;
 
-        if (!name.toLowerCase().includes(filter.toLowerCase())) return;
+        const name = getEnemyName(enemyId);
+        if (!singleMonsterId && !name.toLowerCase().includes(filter.toLowerCase())) return;
 
         const card = document.createElement("div");
         card.className = "card";
@@ -74,7 +135,8 @@ function renderMonsterList(filter = "") {
                 : `Lv ${minLv} - ${maxLv}`;
 
             html += `
-                <a href="#" class="link" onclick="openStage('${stageId}')">
+                <a href="?stage=${stageId}" class="link"
+                   onclick="navigate('?stage=${stageId}'); return false;">
                     ${stageName} (${levelDisplay})
                 </a>
             `;
@@ -88,12 +150,11 @@ function renderMonsterList(filter = "") {
     });
 }
 
-
 /* Wait for loader */
 const waitForData = setInterval(() => {
     if (window.dataLoaded) {
         clearInterval(waitForData);
-        renderMonsterList();
+        router(); // WICHTIG
     }
 }, 100);
 
@@ -101,33 +162,31 @@ const waitForData = setInterval(() => {
 searchInput.addEventListener("input", (e) => {
 
     const value = e.target.value.toLowerCase();
-
     if (!value) {
-        renderMonsterList();
+        navigate("?");
         return;
     }
 
-const itemData = DATA["item_names.json"];
-const stageData = DATA["stage-names.json"];
+    const itemData = DATA["item_names.json"];
+    const stageData = DATA["stage-names.json"];
 
-if (itemData && itemData.item) {
-    for (const item of itemData.item) {
+    if (itemData && itemData.item) {
+        for (const item of itemData.item) {
+            if (!item.new) continue;
 
-        if (!item.new) continue;
+            if (item.new.toLowerCase().includes(value)) {
+                navigate(`?item=${item.id}`);
+                return;
+            }
+        }
+    }
 
-        if (item.new.toLowerCase().includes(value)) {
-            openItem(item.id);
+    for (const id in stageData) {
+        if (stageData[id].en.toLowerCase().includes(value)) {
+            navigate(`?stage=${id}`);
             return;
         }
     }
-}
 
-for (const id in stageData) {
-    if (stageData[id].en.toLowerCase().includes(value)) {
-        openStage(id);
-        return;
-    }
-}
-
-renderMonsterList(value);
+    renderMonsterList(value);
 });
