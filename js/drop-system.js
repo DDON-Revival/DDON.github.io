@@ -1,6 +1,11 @@
 function getItemName(itemId) {
-    if (!DATA["item_names.json"]) return "Item " + itemId;
-    return DATA["item_names.json"][itemId] || "Item " + itemId;
+
+    const data = DATA["item_names.json"];
+    if (!data || !data.item) return "Item " + itemId;
+
+    const found = data.item.find(i => String(i.id) === String(itemId));
+
+    return found ? found.name : "Item " + itemId;
 }
 
 function renderDrops(dropTableId) {

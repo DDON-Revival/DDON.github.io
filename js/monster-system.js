@@ -107,25 +107,27 @@ searchInput.addEventListener("input", (e) => {
         return;
     }
 
-    const items = DATA["item_names.json"];
-    const stages = DATA["stage-names.json"];
+const itemData = DATA["item_names.json"];
+const stageData = DATA["stage-names.json"];
 
-    // Item match
-    for (const id in items) {
-        if (items[id].toLowerCase().includes(value)) {
-            openItem(id);
+if (itemData && itemData.item) {
+    for (const item of itemData.item) {
+
+        if (!item.name) continue;
+
+        if (item.name.toLowerCase().includes(value)) {
+            openItem(item.id);
             return;
         }
     }
+}
 
-    // Stage match
-    for (const id in stages) {
-        if (stages[id].en.toLowerCase().includes(value)) {
-            openStage(id);
-            return;
-        }
+for (const id in stageData) {
+    if (stageData[id].en.toLowerCase().includes(value)) {
+        openStage(id);
+        return;
     }
+}
 
-    // Default = Monster search
-    renderMonsterList(value);
+renderMonsterList(value);
 });
