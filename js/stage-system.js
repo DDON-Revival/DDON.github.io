@@ -16,52 +16,64 @@ function openStage(stageId) {
 
     const monsterMap = new Map();
 
+    /* -------- Build Monster Data for this Stage -------- */
+
     enemies.forEach(e => {
 
-        if (e[0] != stageId) return;
+        if (String(e[0]) !== String(stageId)) return;
 
         const enemyId = e[5];
         const level = e[9];
+        const dropTableId = e[27];
 
         if (!monsterMap.has(enemyId)) {
-            monsterMap.set(enemyId, new Set());
+            monsterMap.set(enemyId, {
+                levels: new Set(),
+                dropTableId: dropTableId
+            });
         }
 
-        monsterMap.get(enemyId).add(level);
+        monsterMap.get(enemyId).levels.add(level);
     });
 
-    /* Sort monsters alphabetically */
+    /* -------- Sort Monsters Alphabetically -------- */
+
     const sortedMonsters = [...monsterMap.entries()].sort((a,b) => {
         return getEnemyName(a[0]).localeCompare(getEnemyName(b[0]));
     });
 
-    sortedMonsters.forEach(([enemyId, levels]) => {
+    /* -------- Render -------- */
+
+    sortedMonsters.forEach(([enemyId, data]) => {
 
         const name = getEnemyName(enemyId);
-        const sortedLevels = [...levels].sort((a,b)=>a-b);
+        const sortedLevels = [...data.levels].sort((a,b)=>a-b);
 
         const minLv = sortedLevels[0];
-        const maxLv = sortedLevels[sortedLevels.length-1];
+        const maxLv = sortedLevels[sortedLevels.length - 1];
 
         const levelDisplay = minLv === maxLv
             ? `Lv ${minLv}`
             : `Lv ${minLv}-${maxLv}`;
 
         html += `
-            <div style="margin-bottom:6px;">
-                ${name} (${levelDisplay})
+            <div style="margin-bottom:15px;">
+                <strong>${name}</strong> (${levelDisplay})
+                ${renderDrops(data.dropTableId)}
             </div>
         `;
     });
 
-html += `
-    <div style="margin-top:20px;">
-        <button onclick="navigate('?')"
-            style="padding:8px 14px; background:#facc15; border:none; border-radius:6px; cursor:pointer;">
-            ← Back to Monsters
-        </button>
-    </div>
-`;
+    /* -------- Back Button -------- */
+
+    html += `
+        <div style="margin-top:25px;">
+            <button onclick="navigate('?')" 
+                style="padding:8px 14px; background:#facc15; border:none; border-radius:6px; cursor:pointer;">
+                ← Back to Monsters
+            </button>
+        </div>
+    `;
 
     card.innerHTML = html;
     content.appendChild(card);
