@@ -50,12 +50,20 @@ function openSpecialShop(index) {
     html += `
         <br>
         <a href="#" class="link"
-           onclick="renderSpecialShopList(); return false;">
+           onclick="navigate('?special'); return false;">
            ← Back to Special Shops
         </a>
     `;
 
-	
+    card.innerHTML = html;
+    content.appendChild(card);
+}
+
+
+/* ======================================= */
+/* LIST VIEW */
+/* ======================================= */
+
 function renderSpecialShopList() {
 
     const data = DATA["SpecialShops.json"];

@@ -182,13 +182,17 @@ searchInput.addEventListener("input", (e) => {
     }
 
     /* ---- Stage Search ---- */
-    const stageData = DATA["stage-names.json"];
-    for (const id in stageData) {
-        if (stageData[id].en.toLowerCase().includes(value)) {
-            navigate(`?stage=${id}`);
-            return;
-        }
+for (const id in stageData) {
+
+    const stage = stageData[id];
+
+    if (!stage || !stage.en) continue;
+
+    if (stage.en.toLowerCase().includes(value)) {
+        navigate(`?stage=${id}`);
+        return;
     }
+}
 
     /* ---- Shop Search ---- */
     const shopData = DATA["Shop.json"];

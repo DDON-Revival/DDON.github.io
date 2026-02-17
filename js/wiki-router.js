@@ -39,5 +39,17 @@ if (params.has("shops")) {
     return;
 }
 
+if (params.has("special")) {
+    const value = params.get("special");
+
+    if (value === "" || value === null) {
+        renderSpecialShopList();
+    } else {
+        openSpecialShop(value);
+    }
+
+    return;
+}
+
     renderMonsterList();
 }
