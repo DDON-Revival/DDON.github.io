@@ -7,6 +7,11 @@ window.addEventListener("popstate", router);
 
 function router() {
 
+    if (!window.dataLoaded) {
+        setTimeout(router, 50);
+        return;
+    }
+
     const params = new URLSearchParams(window.location.search);
 
     if (params.has("monster")) {
@@ -23,16 +28,16 @@ function router() {
         openItem(params.get("item"));
         return;
     }
-	
-	if (params.has("shop")) {
-    openShop(params.get("shop"));
-    return;
-}
 
-if (params.has("specialshop")) {
-    openSpecialShop(params.get("specialshop"));
-    return;
-}
+    if (params.has("shop")) {
+        openShop(params.get("shop"));
+        return;
+    }
+
+    if (params.has("specialshop")) {
+        openSpecialShop(params.get("specialshop"));
+        return;
+    }
 
     renderMonsterList();
 }
