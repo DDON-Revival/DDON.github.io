@@ -193,7 +193,6 @@ function performSearch(value){
         return;
     }
 
-    const enemyData   = DATA["enemy-names.json"];
     const itemData    = DATA["item_names.json"];
     const stageData   = DATA["stage-names.json"];
     const shopData    = DATA["Shop.json"];
@@ -213,10 +212,8 @@ function performSearch(value){
     ========================== */
 
     if (currentFilter === "all" || currentFilter === "item"){
-
         if (itemData?.item){
             for (const item of itemData.item){
-
                 if (item.new?.toLowerCase().includes(value)){
                     navigate(`?item=${item.id}`);
                     return;
@@ -230,9 +227,7 @@ function performSearch(value){
     ========================== */
 
     if (currentFilter === "all" || currentFilter === "stage"){
-
         for (const id in stageData){
-
             if (stageData[id].en.toLowerCase().includes(value)){
                 navigate(`?stage=${id}`);
                 return;
@@ -245,10 +240,8 @@ function performSearch(value){
     ========================== */
 
     if (currentFilter === "all" || currentFilter === "shop"){
-
         if (shopData){
             for (const shop of shopData){
-
                 if (String(shop.ShopId).includes(value)){
                     navigate(`?shop=${shop.ShopId}`);
                     return;
@@ -262,10 +255,8 @@ function performSearch(value){
     ========================== */
 
     if (currentFilter === "all" || currentFilter === "special"){
-
         if (specialData?.shops){
             for (let i = 0; i < specialData.shops.length; i++){
-
                 if (specialData.shops[i].shop_type.toLowerCase().includes(value)){
                     navigate(`?special=${i}`);
                     return;
@@ -273,9 +264,6 @@ function performSearch(value){
             }
         }
     }
-}
-
-    renderMonsterList(value);
 }
 
 /* =========================
