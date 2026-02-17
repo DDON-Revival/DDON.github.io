@@ -100,31 +100,105 @@ function showDefaultView(){
 
 function performSearch(value){
 
-    if(!value){
-        showDefaultView();
-        return;
+    const itemData    = DATA["item_names.json"];
+    const stageData   = DATA["stage-names.json"];
+    const shopData    = DATA["Shop.json"];
+    const specialData = DATA["SpecialShops.json"];
+    const enemyData   = DATA["enemy-names.json"];
+
+    if (!value){
+
+        switch(currentFilter){
+            case "enemy":
+            case "all":
+                navigate("?");
+                return;
+
+            case "item":
+                renderItemList();
+                return;
+
+            case "stage":
+                renderStageList();
+                return;
+
+            case "shop":
+                renderShopList();
+                return;
+
+            case "special":
+                renderSpecialShopList();
+                return;
+        }
     }
 
-    content.innerHTML = "";
+    /* =========================
+       ENEMIES
+    ========================== */
 
-    if(currentFilter === "all" || currentFilter === "enemy"){
-        renderMonsterList(value);
+    if (currentFilter === "all" || currentFilter === "enemy"){
+
+        for (const id in enemyData){
+            if (enemyData[id].toLowerCase().includes(value)){
+                navigate(`?monster=${id}`);
+                return;
+            }
+        }
     }
 
-    if(currentFilter === "all" || currentFilter === "item"){
-        searchItems(value);
+    /* =========================
+       ITEMS
+    ========================== */
+
+    if (currentFilter === "all" || currentFilter === "item"){
+
+        for (const item of itemData?.item || []){
+            if (item.new?.toLowerCase().includes(value)){
+                navigate(`?item=${item.id}`);
+                return;
+            }
+        }
     }
 
-    if(currentFilter === "all" || currentFilter === "stage"){
-        searchStages(value);
+    /* =========================
+       STAGES
+    ========================== */
+
+    if (currentFilter === "all" || currentFilter === "stage"){
+
+        for (const id in stageData){
+            if (stageData[id].en.toLowerCase().includes(value)){
+                navigate(`?stage=${id}`);
+                return;
+            }
+        }
     }
 
-    if(currentFilter === "all" || currentFilter === "shop"){
-        searchShops(value);
+    /* =========================
+       SHOPS
+    ========================== */
+
+    if (currentFilter === "all" || currentFilter === "shop"){
+
+        for (const shop of shopData || []){
+            if (String(shop.ShopId).includes(value)){
+                navigate(`?shop=${shop.ShopId}`);
+                return;
+            }
+        }
     }
 
-    if(currentFilter === "all" || currentFilter === "special"){
-        searchSpecialShops(value);
+    /* =========================
+       SPECIAL
+    ========================== */
+
+    if (currentFilter === "all" || currentFilter === "special"){
+
+        specialData?.shops?.forEach((shop,index)=>{
+            if (shop.shop_type.toLowerCase().includes(value)){
+                navigate(`?special=${index}`);
+            }
+        });
     }
 }
 

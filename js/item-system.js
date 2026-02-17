@@ -1,23 +1,26 @@
 function renderItemList(){
 
-    const data = DATA["item_names.json"];
-    if(!data?.item) return;
+    const itemData = DATA["item_names.json"];
+    if (!itemData?.item) return;
 
     content.innerHTML = "";
 
-    data.item.forEach(item=>{
-        const card = document.createElement("div");
-        card.className = "card";
+    const card = document.createElement("div");
+    card.className = "card";
 
-        card.innerHTML = `
+    let html = "<h2>Items</h2>";
+
+    itemData.item.forEach(item=>{
+        html += `
             <a href="#" class="link"
                onclick="navigate('?item=${item.id}'); return false;">
                ${item.new}
             </a>
         `;
-
-        content.appendChild(card);
     });
+
+    card.innerHTML = html;
+    content.appendChild(card);
 }
 
 function searchItems(value){

@@ -1,25 +1,28 @@
 function renderStageList(){
 
     const stageData = DATA["stage-names.json"];
-    if(!stageData) return;
+    if (!stageData) return;
 
     content.innerHTML = "";
 
-    for(const id in stageData){
+    const card = document.createElement("div");
+    card.className = "card";
 
-        const card = document.createElement("div");
-        card.className = "card";
+    let html = "<h2>Stages</h2>";
 
-        card.innerHTML = `
+    for (const id in stageData){
+        html += `
             <a href="#" class="link"
                onclick="navigate('?stage=${id}'); return false;">
                ${stageData[id].en}
             </a>
         `;
-
-        content.appendChild(card);
     }
+
+    card.innerHTML = html;
+    content.appendChild(card);
 }
+
 
 function searchStages(value){
 
