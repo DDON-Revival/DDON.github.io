@@ -36,23 +36,14 @@ function performSearch(value){
         return;
     }
 
-    const enemyData = DATA["enemy-names.json"];
-    const itemData = DATA["item_names.json"];
-    const stageData = DATA["stage-names.json"];
-    const shopData = DATA["Shop.json"];
+    const enemyData   = DATA["enemy-names.json"];
+    const itemData    = DATA["item_names.json"];
+    const stageData   = DATA["stage-names.json"];
+    const shopData    = DATA["Shop.json"];
     const specialData = DATA["SpecialShops.json"];
 
-    content.innerHTML = "";
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    let html = `<h2>Search Results</h2>`;
-
-    let foundSomething = false;
-
     /* =========================
-       ENEMIES
+       ENEMY SEARCH
     ========================== */
 
     if (currentFilter === "all" || currentFilter === "enemy"){
@@ -60,44 +51,31 @@ function performSearch(value){
         for (const id in enemyData){
 
             if (enemyData[id].toLowerCase().includes(value)){
-
-                html += `
-                    <a href="#" class="link"
-                       onclick="navigate('?monster=${id}'); return false;">
-                       🐲 ${enemyData[id]}
-                    </a>
-                `;
-
-                foundSomething = true;
+                navigate(`?monster=${id}`);
+                return;
             }
         }
     }
 
     /* =========================
-       ITEMS
+       ITEM SEARCH
     ========================== */
 
     if (currentFilter === "all" || currentFilter === "item"){
 
-        itemData?.item?.forEach(item => {
+        if (itemData?.item){
+            for (const item of itemData.item){
 
-            if (item.new?.toLowerCase().includes(value)){
-
-                html += `
-                    <a href="#" class="link"
-                       onclick="navigate('?item=${item.id}'); return false;">
-                       📦 ${item.new}
-                    </a>
-                `;
-
-                foundSomething = true;
+                if (item.new?.toLowerCase().includes(value)){
+                    navigate(`?item=${item.id}`);
+                    return;
+                }
             }
-
-        });
+        }
     }
 
     /* =========================
-       STAGES
+       STAGE SEARCH
     ========================== */
 
     if (currentFilter === "all" || currentFilter === "stage"){
@@ -105,69 +83,51 @@ function performSearch(value){
         for (const id in stageData){
 
             if (stageData[id].en.toLowerCase().includes(value)){
-
-                html += `
-                    <a href="#" class="link"
-                       onclick="navigate('?stage=${id}'); return false;">
-                       🗺 ${stageData[id].en}
-                    </a>
-                `;
-
-                foundSomething = true;
+                navigate(`?stage=${id}`);
+                return;
             }
         }
     }
 
     /* =========================
-       SHOPS
+       SHOP SEARCH
     ========================== */
 
     if (currentFilter === "all" || currentFilter === "shop"){
 
-        shopData?.forEach(shop => {
+        if (shopData){
+            for (const shop of shopData){
 
-            if (String(shop.ShopId).includes(value)){
-
-                html += `
-                    <a href="#" class="link"
-                       onclick="navigate('?shop=${shop.ShopId}'); return false;">
-                       🏪 Shop ${shop.ShopId}
-                    </a>
-                `;
-
-                foundSomething = true;
+                if (String(shop.ShopId).includes(value)){
+                    navigate(`?shop=${shop.ShopId}`);
+                    return;
+                }
             }
-        });
+        }
     }
 
     /* =========================
-       SPECIAL SHOPS
+       SPECIAL SHOP SEARCH
     ========================== */
 
     if (currentFilter === "all" || currentFilter === "special"){
 
-        specialData?.shops?.forEach((shop,index) => {
+        if (specialData?.shops){
+            for (let i = 0; i < specialData.shops.length; i++){
 
-            if (shop.shop_type.toLowerCase().includes(value)){
-
-                html += `
-                    <a href="#" class="link"
-                       onclick="navigate('?special=${index}'); return false;">
-                       ⭐ ${shop.shop_type}
-                    </a>
-                `;
-
-                foundSomething = true;
+                if (specialData.shops[i].shop_type.toLowerCase().includes(value)){
+                    navigate(`?special=${i}`);
+                    return;
+                }
             }
-        });
+        }
     }
 
-    if (!foundSomething){
-        html += `<div>No results found.</div>`;
-    }
+    /* =========================
+       FALLBACK → MONSTER FILTER LIST
+    ========================== */
 
-    card.innerHTML = html;
-    content.appendChild(card);
+    renderMonsterList(value);
 }
 
 
