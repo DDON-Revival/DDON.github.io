@@ -59,7 +59,12 @@ async function loadQuests() {
 
         for (const file of list) {
             const r = await fetch("questwiki/" + file);
-            DATA.Quests.push(await r.json());
+            const json = await r.json();
+
+            // 🔥 Dateiname als eindeutige ID speichern
+            json._fileId = file.replace(".json","");
+
+            DATA.Quests.push(json);
         }
     } catch {
         DATA.Quests = [];
@@ -591,14 +596,11 @@ function renderQuests(filter=""){
 
     DATA.Quests?.forEach(q=>{
 
-        const questId = q.id || q.quest_id || q.QuestId;
-
-        if (!questId) return;
         if (!q.comment?.toLowerCase().includes(filter)) return;
 
         html+=`
             <div class="card">
-                <h3 onclick="navigate('?quest=${questId}')"
+                <h3 onclick="navigate('?quest=${q._fileId}')"
                     style="cursor:pointer">
                     ${q.comment}
                 </h3>
@@ -611,11 +613,7 @@ function renderQuests(filter=""){
 
 function openQuest(id){
 
-    const q = DATA.Quests?.find(x=>{
-        const questId = x.id || x.quest_id || x.QuestId;
-        return String(questId) === String(id);
-    });
-
+    const q = DATA.Quests?.find(x => x._fileId === id);
     if(!q) return;
 
     let body = `<div>Base Level: ${q.base_level}</div><br>`;
