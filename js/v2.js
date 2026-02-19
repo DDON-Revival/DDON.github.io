@@ -4,6 +4,7 @@
 
 const DATA = {};
 let currentTab = "monster";
+let currentQuestCategory = "All";
 
 /* =========================================================
    LOAD DATA
@@ -596,7 +597,14 @@ function renderQuests(filter=""){
 
     DATA.Quests?.forEach(q=>{
 
+        // 🔎 Search Filter
         if (!q.comment?.toLowerCase().includes(filter)) return;
+
+        // 🏷 Category Filter
+        if (
+            currentQuestCategory !== "All" &&
+            q.type !== currentQuestCategory
+        ) return;
 
         html+=`
             <div class="card">
@@ -604,6 +612,9 @@ function renderQuests(filter=""){
                     style="cursor:pointer">
                     ${q.comment}
                 </h3>
+                <div style="font-size:12px;opacity:.6">
+                    ${q.type || "Unknown"}
+                </div>
             </div>
         `;
     });
@@ -616,7 +627,13 @@ function openQuest(id){
     const q = DATA.Quests?.find(x => x._fileId === id);
     if(!q) return;
 
-    let body = `<div>Base Level: ${q.base_level}</div><br>`;
+    let body = `
+        <div style="font-size:12px;opacity:.6">
+            ${q.type || "Unknown"}
+        </div>
+        <div>Base Level: ${q.base_level}</div>
+        <br>
+    `;
 
     if(q.rewards){
         body += "<strong>Rewards:</strong>";
