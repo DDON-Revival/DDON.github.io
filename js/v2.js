@@ -330,13 +330,23 @@ function openItem(id) {
         });
     });
 
-    body += "<br><strong>Gathered At:</strong>";
+body += "<br><strong>Gathered At:</strong>";
 
-    DATA.Gathering?.forEach(r=>{
-        if (String(r[4]) === String(id)) {
-            body += `<div>${getStageName(r[0])}</div>`;
-        }
-    });
+const gatheredStages = new Set();
+
+DATA.Gathering?.forEach(r=>{
+    if (String(r[4]) === String(id)) {
+        gatheredStages.add(r[0]);
+    }
+});
+
+gatheredStages.forEach(stage=>{
+    body += `
+        <div onclick="navigate('?stage=${stage}')"
+             style="cursor:pointer">
+            ${getStageName(stage)}
+        </div>`;
+});
 	
 /* =======================
    CRAFTED FROM
@@ -581,11 +591,14 @@ function renderQuests(filter=""){
 
     DATA.Quests?.forEach(q=>{
 
-        if (!q.comment.toLowerCase().includes(filter)) return;
+        const questId = q.id || q.quest_id || q.QuestId;
+
+        if (!questId) return;
+        if (!q.comment?.toLowerCase().includes(filter)) return;
 
         html+=`
             <div class="card">
-                <h3 onclick="navigate('?quest=${q.id}')"
+                <h3 onclick="navigate('?quest=${questId}')"
                     style="cursor:pointer">
                     ${q.comment}
                 </h3>
@@ -598,7 +611,11 @@ function renderQuests(filter=""){
 
 function openQuest(id){
 
-    const q = DATA.Quests?.find(x=>String(x.id)===String(id));
+    const q = DATA.Quests?.find(x=>{
+        const questId = x.id || x.quest_id || x.QuestId;
+        return String(questId) === String(id);
+    });
+
     if(!q) return;
 
     let body = `<div>Base Level: ${q.base_level}</div><br>`;
