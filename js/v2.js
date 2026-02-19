@@ -483,13 +483,24 @@ function renderSpecial(filter=""){
    GATHERING
 ========================================================= */
 
-function renderGathering(){
+function renderGathering(filter=""){
 
     const map=new Map();
 
     DATA.Gathering?.forEach(r=>{
         const stage=r[0];
         const item=r[4];
+
+        const itemName = getItemName(item).toLowerCase();
+        const stageName = getStageName(stage).toLowerCase();
+
+        // 🔎 Filter auf Item ODER Stage
+        if (
+            filter &&
+            !itemName.includes(filter) &&
+            !stageName.includes(filter)
+        ) return;
+
         if(!map.has(stage)) map.set(stage,new Set());
         map.get(stage).add(item);
     });
@@ -591,8 +602,9 @@ function renderCrafting(filter=""){
     DATA.Crafting?.forEach(cat=>{
         cat.RecipeList?.forEach(r=>{
 
-            const name = getItemName(r.ItemID);
-            if (!name.toLowerCase().includes(filter)) return;
+		const name = getItemName(r.ItemID) || "";
+		if (!name.toLowerCase().includes(filter)) return;
+
 
             let mats="";
             r.CraftMaterialList?.forEach(m=>{
