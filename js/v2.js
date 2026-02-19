@@ -96,8 +96,10 @@ function getShopNames(id) {
 function card(title, html) {
     return `
         <div class="card">
-            <h3>${title}</h3>
-            ${html || ""}
+            <div class="card-title">${title}</div>
+            <div class="card-body">
+                ${html || ""}
+            </div>
         </div>
     `;
 }
@@ -230,7 +232,7 @@ function openMonster(id) {
 
     if (dropIds.size > 0) {
 
-        body += "<br><strong>Drops:</strong>";
+        body += "<strong>Drops</strong>";
 
         dropIds.forEach(dropId=>{
             const table =
@@ -304,7 +306,7 @@ function openItem(id) {
         });
     });
 
-    body += "<br><strong>Sold In Shops:</strong>";
+    body += "<strong>Sold In Shops:</strong>";
 
     DATA.Shops?.forEach(shop=>{
         shop?.Data?.GoodsParamList?.forEach(g=>{
@@ -322,7 +324,7 @@ function openItem(id) {
         });
     });
 
-    body += "<br><strong>Exchanged At:</strong>";
+    body += "<strong>Exchanged At:</strong>";
 
     DATA.Special?.shops?.forEach(shop=>{
         shop.categories?.forEach(cat=>{
@@ -336,7 +338,7 @@ function openItem(id) {
         });
     });
 
-body += "<br><strong>Gathered At:</strong>";
+body += "<strong>Gathered At:</strong>";
 
 const gatheredStages = new Set();
 
@@ -365,7 +367,7 @@ DATA.Crafting?.forEach(cat=>{
         if (String(r.ItemID) === String(id)) {
 
             if (!craftedFound) {
-                body += "<br><strong>Crafted From:</strong>";
+                body += "<strong>Crafted From:</strong>";
                 craftedFound = true;
             }
 
@@ -391,7 +393,7 @@ DATA.CraftingPlus?.forEach(cat=>{
         if (String(r.GradeupItemID) === String(id)) {
 
             if (!gradeFound) {
-                body += "<br><strong>Grade Up From:</strong>";
+                body += "<strong>Grade Up From:</strong>";
                 gradeFound = true;
             }
 
@@ -629,8 +631,7 @@ function openQuest(id){
 
     let body = `
         <div style="font-size:12px;opacity:.6">
-            ${q.type || "Unknown"}
-        </div>
+<div class="quest-badge">${q.type || "Unknown"}</div>
         <div>Base Level: ${q.base_level}</div>
         <br>
     `;
