@@ -1,275 +1,308 @@
-const content = document.getElementById("content");
-const searchBox = document.getElementById("searchBox");
-const tabs = document.querySelectorAll(".tabs button");
+/* =========================================================
+   DDON WIKI V2 FINAL
+   Single File Architecture
+========================================================= */
 
+const DATA = {};
 let currentTab = "monster";
 
-/* =========================
+/* =========================================================
+   LOAD ALL DATA (LOCAL DATAS FOLDER)
+========================================================= */
+
+async function loadJSON(name, path) {
+    const res = await fetch(path);
+    DATA[name] = await res.json();
+}
+
+async function loadCSV(name, path) {
+    const res = await fetch(path);
+    const text = await res.text();
+    DATA[name] = text.split("\n").slice(1).map(r => r.split(","));
+}
+
+async function loadAll() {
+
+    await loadJSON("EnemySpawn", "datas/EnemySpawn.json");
+    await loadJSON("EnemyNames", "datas/enemy-names.json");
+    await loadJSON("StageNames", "datas/stage-names.json");
+    await loadJSON("Items", "datas/item_names.json");
+    await loadJSON("Shops", "datas/Shop.json");
+    await loadJSON("Special", "datas/SpecialShops.json");
+    await loadJSON("Crafting", "datas/CraftingRecipes.json");
+    await loadJSON("CraftingPlus", "datas/CraftingRecipesGradeUp.json");
+
+    await loadCSV("Gathering", "datas/GatheringItem.csv");
+
+    renderHome();
+}
+
+loadAll();
+
+/* =========================================================
    HELPERS
-========================= */
+========================================================= */
 
-function getItemName(id){
-    const list = DATA.Items?.item;
-    if (!list) return id;
-    const f = list.find(i=>String(i.id)===String(id));
-    return f ? f.new : id;
+function getItemName(id) {
+    const found = DATA.Items.item.find(i => String(i.id) === String(id));
+    return found ? found.new : "Item " + id;
 }
 
-function getEnemyName(id){
-    return DATA.Enemies?.[id] || id;
+function getEnemyName(id) {
+    return DATA.EnemyNames[id] || id;
 }
 
-function getStageName(id){
-    return DATA.Stages?.[id]?.en || id;
+function getStageName(id) {
+    return DATA.StageNames[id]?.en || id;
 }
 
-/* =========================
-   TAB SWITCH
-========================= */
+function card(title, contentHTML) {
+    return `
+        <div class="card">
+            <h2>${title}</h2>
+            ${contentHTML}
+        </div>
+    `;
+}
 
-tabs.forEach(btn=>{
-    btn.addEventListener("click",()=>{
-        tabs.forEach(b=>b.classList.remove("active"));
+function link(text, fn) {
+    return `<a class="link" onclick="${fn}">${text}</a>`;
+}
+
+/* =========================================================
+   TAB + SEARCH
+========================================================= */
+
+document.querySelectorAll(".tabs button").forEach(btn => {
+    btn.onclick = () => {
+        document.querySelectorAll(".tabs button")
+            .forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         currentTab = btn.dataset.tab;
         renderHome();
-    });
+    };
 });
 
-searchBox.addEventListener("input", renderHome);
+document.getElementById("searchBox").addEventListener("input", renderHome);
 
-/* =========================
+/* =========================================================
    HOME RENDER
-========================= */
+========================================================= */
 
-function renderHome(){
+function renderHome() {
+    const value = document.getElementById("searchBox").value.toLowerCase();
+    const content = document.getElementById("content");
 
-    if (!window.dataLoaded) return;
-
-    const value = searchBox.value.toLowerCase();
-
-    if (currentTab==="monster") return renderMonsters(value);
-    if (currentTab==="item") return renderItems(value);
-    if (currentTab==="stage") return renderStages(value);
-    if (currentTab==="shop") return renderShops(value);
-    if (currentTab==="special") return renderSpecial(value);
-    if (currentTab==="gathering") return renderGathering();
-    if (currentTab==="crafting") return renderCrafting();
-    if (currentTab==="craftingPlus") return renderCraftingPlus();
+    if (currentTab === "monster") renderMonsters(value);
+    if (currentTab === "item") renderItems(value);
+    if (currentTab === "stage") renderStages(value);
+    if (currentTab === "shop") renderShops(value);
+    if (currentTab === "special") renderSpecial(value);
+    if (currentTab === "gathering") renderGathering();
+    if (currentTab === "crafting") renderCrafting();
+    if (currentTab === "craftingPlus") renderCraftingPlus();
 }
 
-/* =========================
+/* =========================================================
    MONSTERS
-========================= */
+========================================================= */
 
-function renderMonsters(filter=""){
+function renderMonsters(filter="") {
 
-    content.innerHTML="";
-
-    const enemies = DATA.EnemySpawn.enemies;
     const map = new Map();
+    DATA.EnemySpawn.enemies.forEach(e => {
+        const stage = e[0];
+        const enemy = e[5];
+        const level = e[9];
+        const drop = e[27];
 
-    enemies.forEach(e=>{
-        const stage=e[0];
-        const id=e[5];
-        const lv=e[9];
-        const drop=e[27];
-
-        if(!map.has(id)){
-            map.set(id,{stages:new Map(),drop});
+        if (!map.has(enemy)) {
+            map.set(enemy, { stages:new Map(), drop });
         }
 
-        if(!map.get(id).stages.has(stage)){
-            map.get(id).stages.set(stage,new Set());
-        }
+        if (!map.get(enemy).stages.has(stage))
+            map.get(enemy).stages.set(stage, []);
 
-        map.get(id).stages.get(stage).add(lv);
+        map.get(enemy).stages.get(stage).push(level);
     });
 
-    map.forEach((data,id)=>{
+    let html = "";
 
-        const name=getEnemyName(id);
-        if(!name.toLowerCase().includes(filter)) return;
+    map.forEach((data, enemyId) => {
 
-        const card=document.createElement("div");
-        card.className="card";
+        const name = getEnemyName(enemyId);
+        if (!name.toLowerCase().includes(filter)) return;
 
-        let html=`<h2>${name}</h2>`;
+        let stageHTML = "";
 
-        data.stages.forEach((levels,stageId)=>{
-            const arr=[...levels].sort((a,b)=>a-b);
-            const range=arr[0]===arr[arr.length-1]
-                ?`Lv ${arr[0]}`
-                :`Lv ${arr[0]}-${arr[arr.length-1]}`;
-
-            html+=`<div>${getStageName(stageId)} (${range})</div>`;
+        data.stages.forEach((levels, stageId) => {
+            levels.sort((a,b)=>a-b);
+            const min = levels[0];
+            const max = levels[levels.length-1];
+            stageHTML += `<div>${getStageName(stageId)} (Lv ${min}${min!==max?"-"+max:""})</div>`;
         });
 
-        html+=`<h3>Drops</h3>`;
+        stageHTML += "<h3>Drops</h3>";
 
-        const table=DATA.EnemySpawn.dropsTables
-            .find(d=>d.id==data.drop);
+        const table = DATA.EnemySpawn.dropsTables
+            .find(t => t.id == data.drop);
 
-        if(table){
+        if (table) {
             table.items.forEach(i=>{
-                html+=`<div>${getItemName(i[0])} - ${Math.round(i[5]*100)}%</div>`;
+                stageHTML += `<div>${getItemName(i[0])}</div>`;
             });
         }
 
-        card.innerHTML=html;
-        content.appendChild(card);
+        html += card(name, stageHTML);
     });
+
+    document.getElementById("content").innerHTML = html;
 }
 
-/* =========================
+/* =========================================================
    ITEMS
-========================= */
+========================================================= */
 
-function renderItems(filter=""){
+function renderItems(filter="") {
 
-    content.innerHTML="";
-    const list=DATA.Items.item;
+    let html = "";
 
-    list.forEach(item=>{
-        if(!item.new.toLowerCase().includes(filter)) return;
-
-        const card=document.createElement("div");
-        card.className="card";
-        card.innerHTML=`<h2>${item.new}</h2>`;
-        content.appendChild(card);
+    DATA.Items.item.forEach(i=>{
+        if (!i.new.toLowerCase().includes(filter)) return;
+        html += card(i.new, "");
     });
+
+    document.getElementById("content").innerHTML = html;
 }
 
-/* =========================
+/* =========================================================
    STAGES
-========================= */
+========================================================= */
 
-function renderStages(filter=""){
+function renderStages(filter="") {
 
-    content.innerHTML="";
-    const stages=DATA.Stages;
+    let html = "";
 
-    Object.keys(stages).forEach(id=>{
-        const name=stages[id].en;
-        if(!name.toLowerCase().includes(filter)) return;
+    Object.keys(DATA.StageNames).forEach(id=>{
+        const name = getStageName(id);
+        if (!name.toLowerCase().includes(filter)) return;
 
-        const card=document.createElement("div");
-        card.className="card";
-        card.innerHTML=`<h2>${name}</h2>`;
-        content.appendChild(card);
+        html += card(name,"");
     });
+
+    document.getElementById("content").innerHTML = html;
 }
 
-/* =========================
+/* =========================================================
+   GATHERING (GROUPED)
+========================================================= */
+
+function renderGathering() {
+
+    const map = new Map();
+
+    DATA.Gathering.forEach(r=>{
+        const stage = r[0];
+        const item = r[4];
+
+        if (!map.has(stage)) map.set(stage,new Set());
+        map.get(stage).add(item);
+    });
+
+    let html = "";
+
+    map.forEach((items,stageId)=>{
+        let itemHTML="";
+        items.forEach(i=>{
+            itemHTML += `<div>${getItemName(i)}</div>`;
+        });
+
+        html += card(getStageName(stageId), itemHTML);
+    });
+
+    document.getElementById("content").innerHTML = html;
+}
+
+/* =========================================================
    SHOPS
-========================= */
+========================================================= */
 
-function renderShops(){
+function renderShops() {
 
-    content.innerHTML="";
-    DATA.Shop.forEach(shop=>{
-        const card=document.createElement("div");
-        card.className="card";
-        card.innerHTML=`<h2>Shop ${shop.ShopId}</h2>`;
-        content.appendChild(card);
+    let html="";
+
+    DATA.Shops.forEach(shop=>{
+        let items="";
+        shop.Data.GoodsParamList.forEach(i=>{
+            items += `<div>${getItemName(i.ItemId)}</div>`;
+        });
+        html+=card("Shop "+shop.ShopId, items);
     });
+
+    document.getElementById("content").innerHTML=html;
 }
 
-/* =========================
+/* =========================================================
    SPECIAL
-========================= */
+========================================================= */
 
 function renderSpecial(){
-    content.innerHTML="";
-    DATA.SpecialShops.shops.forEach(s=>{
-        const card=document.createElement("div");
-        card.className="card";
-        card.innerHTML=`<h2>${s.shop_type}</h2>`;
-        content.appendChild(card);
-    });
-}
 
-/* =========================
-   GATHERING
-========================= */
+    let html="";
 
-function renderGathering(){
-
-    content.innerHTML="";
-    const rows=DATA.Gathering.slice(1);
-
-    const card=document.createElement("div");
-    card.className="card";
-
-    let html="<h2>Gathering Items</h2>";
-
-    rows.forEach(r=>{
-        const stage=r[0];
-        const item=r[4];
-        html+=`<div>${getStageName(stage)} → ${getItemName(item)}</div>`;
+    DATA.Special.shops.forEach(shop=>{
+        let items="";
+        shop.categories.forEach(c=>{
+            c.appraisals.forEach(a=>{
+                a.pool.forEach(p=>{
+                    items+=`<div>${p.name}</div>`;
+                });
+            });
+        });
+        html+=card(shop.shop_type,items);
     });
 
-    card.innerHTML=html;
-    content.appendChild(card);
+    document.getElementById("content").innerHTML=html;
 }
 
-/* =========================
+/* =========================================================
    CRAFTING
-========================= */
+========================================================= */
 
 function renderCrafting(){
 
-    content.innerHTML="";
+    let html="";
+
     DATA.Crafting.forEach(cat=>{
         cat.RecipeList.forEach(r=>{
-            const card=document.createElement("div");
-            card.className="card";
-
-            let html=`<h2>${getItemName(r.ItemID)}</h2>`;
-            html+=`<h3>Materials</h3>`;
-
+            let mats="";
             r.CraftMaterialList.forEach(m=>{
-                html+=`<div>${getItemName(m.ItemId)} x${m.Num}</div>`;
+                mats+=`<div>${getItemName(m.ItemId)} x${m.Num}</div>`;
             });
-
-            card.innerHTML=html;
-            content.appendChild(card);
+            html+=card(getItemName(r.ItemID),mats);
         });
     });
+
+    document.getElementById("content").innerHTML=html;
 }
 
-/* =========================
-   CRAFTING+
-========================= */
+/* =========================================================
+   CRAFTING PLUS
+========================================================= */
 
 function renderCraftingPlus(){
 
-    content.innerHTML="";
+    let html="";
+
     DATA.CraftingPlus.forEach(cat=>{
         cat.RecipeList.forEach(r=>{
-            const card=document.createElement("div");
-            card.className="card";
-
-            let html=`<h2>${getItemName(r.ItemID)} → ${getItemName(r.GradeupItemID)}</h2>`;
-            html+=`<h3>Materials</h3>`;
-
+            let mats="";
             r.CraftMaterialList.forEach(m=>{
-                html+=`<div>${getItemName(m.ItemId)} x${m.Num}</div>`;
+                mats+=`<div>${getItemName(m.ItemId)} x${m.Num}</div>`;
             });
-
-            card.innerHTML=html;
-            content.appendChild(card);
+            html+=card(getItemName(r.ItemID)+" → "+getItemName(r.GradeupItemID),mats);
         });
     });
+
+    document.getElementById("content").innerHTML=html;
 }
-
-/* =========================
-   WAIT FOR DATA
-========================= */
-
-const wait=setInterval(()=>{
-    if(window.dataLoaded){
-        clearInterval(wait);
-        renderHome();
-    }
-},100);
