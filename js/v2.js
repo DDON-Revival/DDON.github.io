@@ -1,5 +1,5 @@
 /* =========================================================
-   DDON WIKI V2 – FINAL STABLE ROUTED BUILD
+   DDON WIKI V2 – COMPLETE FIXED BUILD
 ========================================================= */
 
 const DATA = {};
@@ -42,7 +42,6 @@ async function loadAll() {
     await loadCSV("Gathering", "datas/GatheringItem.csv");
 
     await loadQuests();
-
     router();
 }
 
@@ -168,7 +167,7 @@ function renderMonsters(filter="") {
 
     ids.forEach(id => {
         const name = getEnemyName(id);
-        if (!name.toLowerCase().includes(filter)) return;
+        if (!name || !name.toLowerCase().includes(filter)) return;
 
         html += `
             <div class="card">
@@ -186,14 +185,15 @@ function renderMonsters(filter="") {
 function openMonster(id) {
 
     const stageMap = new Map();
-    let dropId = null;
+    const dropIds = new Set();
 
     DATA.EnemySpawn?.enemies?.forEach(e => {
         if (String(e[5]) !== String(id)) return;
 
         if (!stageMap.has(e[0])) stageMap.set(e[0], []);
         stageMap.get(e[0]).push(e[9]);
-        dropId = e[27];
+
+        if (e[27]) dropIds.add(e[27]);
     });
 
     let body = "";
@@ -213,22 +213,25 @@ function openMonster(id) {
         `;
     });
 
-    const table =
-        DATA.EnemySpawn?.dropsTables
-            ?.find(t => t.id == dropId);
+    if (dropIds.size > 0) {
 
-    if (table) {
         body += "<br><strong>Drops:</strong>";
 
-        table.items.forEach(i=>{
-            body += `
-                <div onclick="navigate('?item=${i[0]}')"
-                     style="cursor:pointer">
-                    ${getItemName(i[0])}
-                    (${i[1]}-${i[2]})
-                    - ${Math.round(i[5]*100)}%
-                </div>
-            `;
+        dropIds.forEach(dropId=>{
+            const table =
+                DATA.EnemySpawn?.dropsTables
+                    ?.find(t => t.id == dropId);
+
+            table?.items?.forEach(i=>{
+                body += `
+                    <div onclick="navigate('?item=${i[0]}')"
+                         style="cursor:pointer">
+                        ${getItemName(i[0])}
+                        (${i[1]}-${i[2]})
+                        - ${Math.round(i[5]*100)}%
+                    </div>
+                `;
+            });
         });
     }
 
@@ -245,6 +248,7 @@ function renderItems(filter="") {
     let html = "";
 
     DATA.Items?.item?.forEach(i=>{
+        if (!i?.new) return;
         if (!i.new.toLowerCase().includes(filter)) return;
 
         html += `
@@ -299,261 +303,76 @@ function openItem(id) {
         });
     });
 
+    body += "<br><strong>Exchanged At:</strong>";
+
+    DATA.Special?.shops?.forEach(shop=>{
+        shop.categories?.forEach(cat=>{
+            cat.appraisals?.forEach(app=>{
+                app.pool?.forEach(p=>{
+                    if (String(p.item_id) === String(id)) {
+                        body += `<div>${cat.label}</div>`;
+                    }
+                });
+            });
+        });
+    });
+
+    body += "<br><strong>Gathered At:</strong>";
+
+    DATA.Gathering?.forEach(r=>{
+        if (String(r[4]) === String(id)) {
+            body += `<div>${getStageName(r[0])}</div>`;
+        }
+    });
+
     document.getElementById("content").innerHTML =
         card(getItemName(id), body);
 }
 
 /* =========================================================
-   STAGES
+   QUESTS FULL REWARDS
 ========================================================= */
-
-function renderStages(filter="") {
-
-    let html="";
-
-    Object.keys(DATA.StageNames || {}).forEach(id=>{
-
-        const name = getStageName(id);
-        if (!name.toLowerCase().includes(filter)) return;
-
-        html += `
-            <div class="card">
-                <h3 onclick="navigate('?stage=${id}')"
-                    style="cursor:pointer">
-                    ${name}
-                </h3>
-            </div>
-        `;
-    });
-
-    document.getElementById("content").innerHTML = html;
-}
-
-function openStage(id) {
-
-    const map = new Map();
-
-    DATA.EnemySpawn?.enemies?.forEach(e=>{
-        if (String(e[0]) !== String(id)) return;
-
-        if (!map.has(e[5])) map.set(e[5], []);
-        map.get(e[5]).push(e[9]);
-    });
-
-    let body="";
-
-    map.forEach((levels, enemyId)=>{
-
-        levels.sort((a,b)=>a-b);
-        const min = levels[0];
-        const max = levels[levels.length-1];
-
-        body += `
-            <div onclick="navigate('?monster=${enemyId}')"
-                 style="cursor:pointer">
-                ${getEnemyName(enemyId)}
-                (Lv ${min}${min!==max?"-"+max:""})
-            </div>
-        `;
-    });
-
-    document.getElementById("content").innerHTML =
-        card(getStageName(id), body);
-}
-
-/* =========================================================
-   SHOPS
-========================================================= */
-
-function renderShops(){
-
-    let html="";
-
-    DATA.Shops?.forEach(shop=>{
-        getShopNames(shop.ShopId).forEach(name=>{
-            html += `
-                <div class="card">
-                    <h3 onclick="navigate('?shop=${shop.ShopId}')"
-                        style="cursor:pointer">
-                        ${name}
-                    </h3>
-                </div>
-            `;
-        });
-    });
-
-    document.getElementById("content").innerHTML=html;
-}
-
-function openShop(id){
-
-    const shop =
-        DATA.Shops?.find(s=>String(s.ShopId)===String(id));
-
-    if(!shop) return;
-
-    let body="";
-
-    shop.Data?.GoodsParamList?.forEach(i=>{
-        body += `
-            <div onclick="navigate('?item=${i.ItemId}')"
-                 style="cursor:pointer">
-                ${getItemName(i.ItemId)}
-                - ${i.Price} Gold
-            </div>
-        `;
-    });
-
-    document.getElementById("content").innerHTML =
-        card(getShopNames(id)[0], body);
-}
-
-/* =========================================================
-   SPECIAL
-========================================================= */
-
-function renderSpecial(){
-
-    let html="";
-
-    DATA.Special?.shops?.forEach(shop=>{
-
-        shop.categories?.forEach(cat=>{
-
-            let body="";
-
-            cat.appraisals?.forEach(app=>{
-                app.pool?.forEach(p=>{
-                    body += `
-                        <div onclick="navigate('?item=${p.item_id}')"
-                             style="cursor:pointer">
-                            ${p.name}
-                        </div>
-                    `;
-                });
-            });
-
-            html += card(cat.label, body);
-        });
-    });
-
-    document.getElementById("content").innerHTML=html;
-}
-
-/* =========================================================
-   GATHERING
-========================================================= */
-
-function renderGathering(){
-
-    const map=new Map();
-
-    DATA.Gathering?.forEach(r=>{
-        const stage=r[0];
-        const item=r[4];
-        if(!map.has(stage)) map.set(stage,new Set());
-        map.get(stage).add(item);
-    });
-
-    let html="";
-
-    map.forEach((items,stage)=>{
-        let body="";
-        items.forEach(i=>{
-            body+=`
-                <div onclick="navigate('?item=${i}')"
-                     style="cursor:pointer">
-                    ${getItemName(i)}
-                </div>`;
-        });
-        html+=card(getStageName(stage),body);
-    });
-
-    document.getElementById("content").innerHTML=html;
-}
-
-/* =========================================================
-   QUESTS
-========================================================= */
-
-function renderQuests(){
-
-    let html="";
-
-    DATA.Quests?.forEach(q=>{
-        html+=`
-            <div class="card">
-                <h3 onclick="navigate('?quest=${q.id}')"
-                    style="cursor:pointer">
-                    ${q.comment}
-                </h3>
-            </div>
-        `;
-    });
-
-    document.getElementById("content").innerHTML=html;
-}
 
 function openQuest(id){
 
     const q = DATA.Quests?.find(x=>String(x.id)===String(id));
     if(!q) return;
 
-    let body=`<div>Base Level: ${q.base_level}</div>`;
+    let body = `<div>Base Level: ${q.base_level}</div><br>`;
+
+    if(q.rewards){
+        body += "<strong>Rewards:</strong>";
+
+        q.rewards.forEach(r=>{
+
+            if(r.type==="select"){
+                r.loot_pool?.forEach(i=>{
+                    body+=`
+                        <div>
+                            ${i.comment || getItemName(i.item_id)}
+                            x${i.num}
+                        </div>`;
+                });
+            }
+
+            if(r.type==="item"){
+                body+=`
+                    <div>
+                        ${getItemName(r.item_id)}
+                        x${r.num}
+                    </div>`;
+            }
+
+            if(r.type==="wallet"){
+                body+=`<div>${r.wallet_type}: ${r.amount}</div>`;
+            }
+
+            if(r.type==="exp"){
+                body+=`<div>EXP: ${r.amount}</div>`;
+            }
+        });
+    }
 
     document.getElementById("content").innerHTML =
         card(q.comment, body);
-}
-
-/* =========================================================
-   CRAFTING
-========================================================= */
-
-function renderCrafting(){
-
-    let html="";
-
-    DATA.Crafting?.forEach(cat=>{
-        cat.RecipeList?.forEach(r=>{
-
-            let mats="";
-            r.CraftMaterialList?.forEach(m=>{
-                mats+=`
-                    <div onclick="navigate('?item=${m.ItemId}')"
-                         style="cursor:pointer">
-                        ${getItemName(m.ItemId)} x${m.Num}
-                    </div>`;
-            });
-
-            html+=card(getItemName(r.ItemID),mats);
-        });
-    });
-
-    document.getElementById("content").innerHTML=html;
-}
-
-function renderCraftingPlus(){
-
-    let html="";
-
-    DATA.CraftingPlus?.forEach(cat=>{
-        cat.RecipeList?.forEach(r=>{
-
-            let mats="";
-            r.CraftMaterialList?.forEach(m=>{
-                mats+=`
-                    <div onclick="navigate('?item=${m.ItemId}')"
-                         style="cursor:pointer">
-                        ${getItemName(m.ItemId)} x${m.Num}
-                    </div>`;
-            });
-
-            html+=card(
-                getItemName(r.ItemID)+" → "+getItemName(r.GradeupItemID),
-                mats
-            );
-        });
-    });
-
-    document.getElementById("content").innerHTML=html;
 }
