@@ -14,43 +14,55 @@ function router() {
 
     const params = new URLSearchParams(window.location.search);
 
+    /* ---------------- MONSTER ---------------- */
+
     if (params.has("monster")) {
-        renderSingleMonster(params.get("monster"));
+        openMonster(params.get("monster"));
         return;
     }
+
+    /* ---------------- STAGE ---------------- */
 
     if (params.has("stage")) {
         openStage(params.get("stage"));
         return;
     }
 
+    /* ---------------- ITEM ---------------- */
+
     if (params.has("item")) {
         openItem(params.get("item"));
         return;
     }
 
-if (params.has("shop")) {
-    openShop(params.get("shop"));
-    return;
-}
+    /* ---------------- SHOP ---------------- */
 
-if (params.has("shops")) {
-    renderShopList();
-    return;
-}
-
-if (params.has("special")) {
-
-    const index = params.get("special");
-
-    if (index === "") {
-        renderSpecialShopList();
-    } else {
-        openSpecialShop(index);
+    if (params.has("shop")) {
+        openShop(params.get("shop"));
+        return;
     }
 
-    return;
-}
+    if (params.has("shops")) {
+        renderShopList();
+        return;
+    }
+
+    /* ---------------- SPECIAL ---------------- */
+
+    if (params.has("special")) {
+
+        const index = params.get("special");
+
+        if (index === "") {
+            renderSpecialShopList();
+        } else {
+            openSpecialShop(index);
+        }
+
+        return;
+    }
+
+    /* ---------------- DEFAULT ---------------- */
 
     renderMonsterList();
 }
