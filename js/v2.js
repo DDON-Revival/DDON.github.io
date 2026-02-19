@@ -1,20 +1,20 @@
 /* =========================================================
-   DDON WIKI V2 – STABLE CLEAN FINAL
+   DDON WIKI V2 – COMPLETE STABLE FINAL
+   Query Routing + Fully Clickable
 ========================================================= */
 
 const DATA = {};
 let currentTab = "monster";
 
 /* =========================================================
-   LOAD DATA
+   LOAD ALL DATA
 ========================================================= */
 
 async function loadJSON(name, path) {
     try {
         const res = await fetch(path);
         DATA[name] = await res.json();
-    } catch (e) {
-        console.log("Failed loading:", name);
+    } catch {
         DATA[name] = {};
     }
 }
@@ -44,7 +44,7 @@ async function loadAll() {
 
     await loadQuests();
 
-    renderHome();
+    router();
 }
 
 loadAll();
@@ -57,15 +57,12 @@ async function loadQuests() {
     try {
         const res = await fetch("questwiki/index.json");
         const list = await res.json();
-
         DATA.Quests = [];
 
         for (const file of list) {
-            try {
-                const r = await fetch("questwiki/" + file);
-                const q = await r.json();
-                DATA.Quests.push(q);
-            } catch {}
+            const r = await fetch("questwiki/" + file);
+            const q = await r.json();
+            DATA.Quests.push(q);
         }
     } catch {
         DATA.Quests = [];
@@ -77,8 +74,7 @@ async function loadQuests() {
 ========================================================= */
 
 function getItemName(id) {
-    if (!DATA.Items || !DATA.Items.item) return id;
-    const found = DATA.Items.item.find(i => String(i.id) === String(id));
+    const found = DATA.Items?.item?.find(i => String(i.id) === String(id));
     return found ? found.new : id;
 }
 
@@ -104,7 +100,31 @@ function card(title, html) {
 }
 
 /* =========================================================
-   TAB SWITCH
+   QUERY ROUTING
+========================================================= */
+
+function navigate(url) {
+    history.pushState({}, "", url);
+    router();
+}
+
+window.addEventListener("popstate", router);
+
+function router() {
+
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.has("monster")) return openMonster(params.get("monster"));
+    if (params.has("item")) return openItem(params.get("item"));
+    if (params.has("stage")) return openStage(params.get("stage"));
+    if (params.has("shop")) return openShop(params.get("shop"));
+    if (params.has("quest")) return openQuest(params.get("quest"));
+
+    renderHome();
+}
+
+/* =========================================================
+   TAB SWITCHING
 ========================================================= */
 
 document.querySelectorAll(".tabs button").forEach(btn => {
@@ -113,7 +133,7 @@ document.querySelectorAll(".tabs button").forEach(btn => {
             .forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         currentTab = btn.dataset.tab;
-        renderHome();
+        navigate("?");
     };
 });
 
@@ -121,46 +141,54 @@ document.getElementById("searchBox")
     .addEventListener("input", renderHome);
 
 /* =========================================================
-   ROUTER
+   HOME RENDER
 ========================================================= */
 
 function renderHome() {
+
     const value =
         document.getElementById("searchBox").value.toLowerCase();
 
-    if (currentTab === "monster") renderMonsters(value);
-    if (currentTab === "item") renderItems(value);
-    if (currentTab === "stage") renderStages(value);
-    if (currentTab === "shop") renderShops();
-    if (currentTab === "special") renderSpecial();
-    if (currentTab === "gathering") renderGathering();
-    if (currentTab === "quest") renderQuests();
-    if (currentTab === "crafting") renderCrafting();
-    if (currentTab === "craftingPlus") renderCraftingPlus();
+    if (currentTab === "monster") return renderMonsters(value);
+    if (currentTab === "item") return renderItems(value);
+    if (currentTab === "stage") return renderStages(value);
+    if (currentTab === "shop") return renderShops();
+    if (currentTab === "special") return renderSpecial();
+    if (currentTab === "gathering") return renderGathering();
+    if (currentTab === "quest") return renderQuests();
+    if (currentTab === "crafting") return renderCrafting();
+    if (currentTab === "craftingPlus") return renderCraftingPlus();
 }
 
 /* =========================================================
-   MONSTERS (Clickable)
+   MONSTERS
 ========================================================= */
 
 function renderMonsters(filter="") {
 
-    const enemies = new Set();
+    const map = new Map();
 
     DATA.EnemySpawn?.enemies?.forEach(e => {
-        enemies.add(e[5]);
+        const stage = e[0];
+        const enemy = e[5];
+        const level = e[9];
+
+        if (!map.has(enemy)) map.set(enemy, new Map());
+        if (!map.get(enemy).has(stage)) map.get(enemy).set(stage, []);
+        map.get(enemy).get(stage).push(level);
     });
 
     let html = "";
 
-    enemies.forEach(id => {
+    map.forEach((stages, enemyId) => {
 
-        const name = getEnemyName(id);
+        const name = getEnemyName(enemyId);
         if (!name.toLowerCase().includes(filter)) return;
 
         html += `
             <div class="card">
-                <h3 onclick="openMonster('${id}')" style="cursor:pointer">
+                <h3 onclick="navigate('?monster=${enemyId}')"
+                    style="cursor:pointer">
                     ${name}
                 </h3>
             </div>
@@ -170,43 +198,62 @@ function renderMonsters(filter="") {
     document.getElementById("content").innerHTML = html;
 }
 
-function openMonster(enemyId) {
+function openMonster(id) {
+
+    const stages = new Map();
+    let dropTable = null;
+
+    DATA.EnemySpawn.enemies.forEach(e => {
+        if (String(e[5]) !== String(id)) return;
+
+        if (!stages.has(e[0])) stages.set(e[0], []);
+        stages.get(e[0]).push(e[9]);
+
+        dropTable = e[27];
+    });
 
     let body = "";
 
-    DATA.EnemySpawn.enemies.forEach(e => {
+    stages.forEach((levels, stageId) => {
 
-        if (String(e[5]) !== String(enemyId)) return;
+        levels.sort((a,b)=>a-b);
+        const min = levels[0];
+        const max = levels[levels.length-1];
 
         body += `
             <div>
-                ${getStageName(e[0])}
-                (Lv ${e[9]})
+                ${getStageName(stageId)}
+                (Lv ${min}${min!==max?"-"+max:""})
             </div>
         `;
-
-        const table =
-            DATA.EnemySpawn.dropsTables
-                ?.find(t => t.id == e[27]);
-
-        if (table) {
-            table.items.forEach(i=>{
-                body += `
-                    <div>
-                        ${getItemName(i[0])}
-                        - ${Math.round(i[5]*100)}%
-                    </div>
-                `;
-            });
-        }
     });
 
+    const table =
+        DATA.EnemySpawn.dropsTables
+            ?.find(t => t.id == dropTable);
+
+    if (table) {
+
+        body += "<br><strong>Drops:</strong>";
+
+        table.items.forEach(i=>{
+            body += `
+                <div onclick="navigate('?item=${i[0]}')"
+                     style="cursor:pointer">
+                    ${getItemName(i[0])}
+                    (${i[1]}-${i[2]})
+                    - ${Math.round(i[5]*100)}%
+                </div>
+            `;
+        });
+    }
+
     document.getElementById("content").innerHTML =
-        card(getEnemyName(enemyId), body);
+        card(getEnemyName(id), body);
 }
 
 /* =========================================================
-   ITEMS (Clickable)
+   ITEMS
 ========================================================= */
 
 function renderItems(filter="") {
@@ -218,7 +265,8 @@ function renderItems(filter="") {
 
         html += `
             <div class="card">
-                <h3 onclick="openItem('${i.id}')" style="cursor:pointer">
+                <h3 onclick="navigate('?item=${i.id}')"
+                    style="cursor:pointer">
                     ${i.new}
                 </h3>
             </div>
@@ -232,7 +280,7 @@ function openItem(id) {
 
     let body = "<strong>Dropped By:</strong>";
 
-    DATA.EnemySpawn?.enemies?.forEach(e=>{
+    DATA.EnemySpawn.enemies.forEach(e=>{
         const table =
             DATA.EnemySpawn.dropsTables
                 ?.find(t => t.id == e[27]);
@@ -241,18 +289,29 @@ function openItem(id) {
 
         table.items.forEach(i=>{
             if (String(i[0]) === String(id)) {
-                body += `<div>${getEnemyName(e[5])}</div>`;
+                body += `
+                    <div onclick="navigate('?monster=${e[5]}')"
+                         style="cursor:pointer">
+                        ${getEnemyName(e[5])}
+                    </div>
+                `;
             }
         });
     });
 
     body += "<br><strong>Sold In Shops:</strong>";
 
-    DATA.Shops?.forEach(shop=>{
-        shop?.Data?.GoodsParamList?.forEach(g=>{
+    DATA.Shops.forEach(shop=>{
+        shop.Data.GoodsParamList.forEach(g=>{
             if (String(g.ItemId) === String(id)) {
-                getShopNames(shop.ShopId)
-                    .forEach(n=> body+=`<div>${n}</div>`);
+                getShopNames(shop.ShopId).forEach(name=>{
+                    body += `
+                        <div onclick="navigate('?shop=${shop.ShopId}')"
+                             style="cursor:pointer">
+                            ${name} - ${g.Price} Gold
+                        </div>
+                    `;
+                });
             }
         });
     });
@@ -262,34 +321,61 @@ function openItem(id) {
 }
 
 /* =========================================================
-   STAGES (Clean & Deduped)
+   STAGES
 ========================================================= */
 
 function renderStages(filter="") {
 
     let html="";
 
-    Object.keys(DATA.StageNames || {}).forEach(id=>{
+    Object.keys(DATA.StageNames).forEach(id=>{
 
         const name = getStageName(id);
         if (!name.toLowerCase().includes(filter)) return;
 
-        const monsters = new Set();
-
-        DATA.EnemySpawn?.enemies?.forEach(e=>{
-            if (String(e[0]) === String(id))
-                monsters.add(e[5]);
-        });
-
-        let body="";
-        monsters.forEach(m=>{
-            body+=`<div>${getEnemyName(m)}</div>`;
-        });
-
-        html+=card(name, body);
+        html += `
+            <div class="card">
+                <h3 onclick="navigate('?stage=${id}')"
+                    style="cursor:pointer">
+                    ${name}
+                </h3>
+            </div>
+        `;
     });
 
     document.getElementById("content").innerHTML = html;
+}
+
+function openStage(id) {
+
+    const map = new Map();
+
+    DATA.EnemySpawn.enemies.forEach(e=>{
+        if (String(e[0]) !== String(id)) return;
+
+        if (!map.has(e[5])) map.set(e[5], []);
+        map.get(e[5]).push(e[9]);
+    });
+
+    let body="";
+
+    map.forEach((levels, enemyId)=>{
+
+        levels.sort((a,b)=>a-b);
+        const min = levels[0];
+        const max = levels[levels.length-1];
+
+        body += `
+            <div onclick="navigate('?monster=${enemyId}')"
+                 style="cursor:pointer">
+                ${getEnemyName(enemyId)}
+                (Lv ${min}${min!==max?"-"+max:""})
+            </div>
+        `;
+    });
+
+    document.getElementById("content").innerHTML =
+        card(getStageName(id), body);
 }
 
 /* =========================================================
@@ -300,126 +386,39 @@ function renderShops(){
 
     let html="";
 
-    DATA.Shops?.forEach(shop=>{
-
-        let body="";
-
-        shop?.Data?.GoodsParamList?.forEach(i=>{
-            body+=`<div>${getItemName(i.ItemId)}</div>`;
-        });
-
+    DATA.Shops.forEach(shop=>{
         getShopNames(shop.ShopId).forEach(name=>{
-            html+=card(name, body);
+            html += `
+                <div class="card">
+                    <h3 onclick="navigate('?shop=${shop.ShopId}')"
+                        style="cursor:pointer">
+                        ${name}
+                    </h3>
+                </div>
+            `;
         });
     });
 
     document.getElementById("content").innerHTML=html;
 }
 
-/* =========================================================
-   SPECIAL (Flat)
-========================================================= */
+function openShop(id){
 
-function renderSpecial(){
+    const shop =
+        DATA.Shops.find(s=>String(s.ShopId)===String(id));
 
-    let html="";
+    let body="";
 
-    DATA.Special?.shops?.forEach(shop=>{
-
-        shop.categories?.forEach(cat=>{
-
-            let body="";
-
-            cat.appraisals?.forEach(app=>{
-                app.pool?.forEach(p=>{
-                    body+=`<div>${p.name}</div>`;
-                });
-            });
-
-            html+=card(cat.label, body);
-        });
+    shop.Data.GoodsParamList.forEach(i=>{
+        body += `
+            <div onclick="navigate('?item=${i.ItemId}')"
+                 style="cursor:pointer">
+                ${getItemName(i.ItemId)}
+                - ${i.Price} Gold
+            </div>
+        `;
     });
 
-    document.getElementById("content").innerHTML=html;
-}
-
-/* =========================================================
-   GATHERING
-========================================================= */
-
-function renderGathering(){
-
-    const map=new Map();
-
-    DATA.Gathering?.forEach(r=>{
-        const stage=r[0];
-        const item=r[4];
-        if(!map.has(stage)) map.set(stage,new Set());
-        map.get(stage).add(item);
-    });
-
-    let html="";
-
-    map.forEach((items,stage)=>{
-        let body="";
-        items.forEach(i=>{
-            body+=`<div>${getItemName(i)}</div>`;
-        });
-        html+=card(getStageName(stage),body);
-    });
-
-    document.getElementById("content").innerHTML=html;
-}
-
-/* =========================================================
-   QUESTS
-========================================================= */
-
-function renderQuests(){
-
-    let html="";
-
-    DATA.Quests?.forEach(q=>{
-        html+=card(
-            q.comment,
-            `<div>Base Level: ${q.base_level}</div>`
-        );
-    });
-
-    document.getElementById("content").innerHTML=html;
-}
-
-/* =========================================================
-   CRAFTING
-========================================================= */
-
-function renderCrafting(){
-
-    let html="";
-
-    DATA.Crafting?.forEach(cat=>{
-        cat.RecipeList?.forEach(r=>{
-            html+=card(getItemName(r.ItemID),"");
-        });
-    });
-
-    document.getElementById("content").innerHTML=html;
-}
-
-function renderCraftingPlus(){
-
-    let html="";
-
-    DATA.CraftingPlus?.forEach(cat=>{
-        cat.RecipeList?.forEach(r=>{
-            html+=card(
-                getItemName(r.ItemID)
-                +" → "+
-                getItemName(r.GradeupItemID),
-                ""
-            );
-        });
-    });
-
-    document.getElementById("content").innerHTML=html;
+    document.getElementById("content").innerHTML =
+        card(getShopNames(id)[0], body);
 }
