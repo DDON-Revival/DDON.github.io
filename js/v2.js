@@ -1,5 +1,5 @@
 /* =========================================================
-   DDON WIKI V2 FINAL
+   DDON WIKI V2 – FINAL STABLE BUILD
    Single File Architecture
 ========================================================= */
 
@@ -7,7 +7,7 @@ const DATA = {};
 let currentTab = "monster";
 
 /* =========================================================
-   LOAD ALL DATA (LOCAL DATAS FOLDER)
+   LOAD ALL DATA
 ========================================================= */
 
 async function loadJSON(name, path) {
@@ -56,21 +56,27 @@ function getStageName(id) {
     return DATA.StageNames[id]?.en || id;
 }
 
-function card(title, contentHTML) {
+function card(title, contentHTML, id="") {
     return `
         <div class="card">
-            <h2>${title}</h2>
-            ${contentHTML}
+            <h2 onclick="toggle('${id}')" style="cursor:pointer;">
+                ${title}
+            </h2>
+            <div id="${id}" style="display:none;">
+                ${contentHTML}
+            </div>
         </div>
     `;
 }
 
-function link(text, fn) {
-    return `<a class="link" onclick="${fn}">${text}</a>`;
+function toggle(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.display = el.style.display === "none" ? "block" : "none";
 }
 
 /* =========================================================
-   TAB + SEARCH
+   TAB SYSTEM
 ========================================================= */
 
 document.querySelectorAll(".tabs button").forEach(btn => {
@@ -83,24 +89,28 @@ document.querySelectorAll(".tabs button").forEach(btn => {
     };
 });
 
-document.getElementById("searchBox").addEventListener("input", renderHome);
+document.getElementById("searchBox")
+    .addEventListener("input", renderHome);
 
 /* =========================================================
    HOME RENDER
 ========================================================= */
 
 function renderHome() {
-    const value = document.getElementById("searchBox").value.toLowerCase();
-    const content = document.getElementById("content");
 
-    if (currentTab === "monster") renderMonsters(value);
-    if (currentTab === "item") renderItems(value);
-    if (currentTab === "stage") renderStages(value);
-    if (currentTab === "shop") renderShops(value);
-    if (currentTab === "special") renderSpecial(value);
+    const filter = document
+        .getElementById("searchBox")
+        .value.toLowerCase();
+
+    if (currentTab === "monster") renderMonsters(filter);
+    if (currentTab === "item") renderItems(filter);
+    if (currentTab === "stage") renderStages(filter);
+    if (currentTab === "shop") renderShops();
+    if (currentTab === "special") renderSpecial();
     if (currentTab === "gathering") renderGathering();
     if (currentTab === "crafting") renderCrafting();
     if (currentTab === "craftingPlus") renderCraftingPlus();
+    if (currentTab === "quest") renderQuestList();
 }
 
 /* =========================================================
@@ -110,7 +120,9 @@ function renderHome() {
 function renderMonsters(filter="") {
 
     const map = new Map();
+
     DATA.EnemySpawn.enemies.forEach(e => {
+
         const stage = e[0];
         const enemy = e[5];
         const level = e[9];
@@ -133,117 +145,131 @@ function renderMonsters(filter="") {
         const name = getEnemyName(enemyId);
         if (!name.toLowerCase().includes(filter)) return;
 
-        let stageHTML = "";
+        let content = "";
 
         data.stages.forEach((levels, stageId) => {
+
             levels.sort((a,b)=>a-b);
             const min = levels[0];
             const max = levels[levels.length-1];
-            stageHTML += `<div>${getStageName(stageId)} (Lv ${min}${min!==max?"-"+max:""})</div>`;
+
+            content += `
+                <div>
+                    ${getStageName(stageId)} 
+                    (Lv ${min}${min!==max?"-"+max:""})
+                </div>
+            `;
         });
 
-        stageHTML += "<h3>Drops</h3>";
+        content += "<h3>Drops</h3>";
 
         const table = DATA.EnemySpawn.dropsTables
             .find(t => t.id == data.drop);
 
         if (table) {
             table.items.forEach(i=>{
-                stageHTML += `<div>${getItemName(i[0])}</div>`;
+                const chance = Math.round(i[5] * 100);
+                content += `
+                    <div>
+                        ${getItemName(i[0])} 
+                        (${i[1]}-${i[2]}) 
+                        - ${chance}%
+                    </div>
+                `;
             });
         }
 
-        html += card(name, stageHTML);
+        html += card(name, content, "m"+enemyId);
     });
 
     document.getElementById("content").innerHTML = html;
 }
 
 /* =========================================================
-   ITEMS
-========================================================= */
-
-function renderItems(filter="") {
-
-    let html = "";
-
-    DATA.Items.item.forEach(i=>{
-        if (!i.new.toLowerCase().includes(filter)) return;
-        html += card(i.new, "");
-    });
-
-    document.getElementById("content").innerHTML = html;
-}
-
-/* =========================================================
-   STAGES
+   STAGES (Stage → Monsters)
 ========================================================= */
 
 function renderStages(filter="") {
 
-    let html = "";
-
-    Object.keys(DATA.StageNames).forEach(id=>{
-        const name = getStageName(id);
-        if (!name.toLowerCase().includes(filter)) return;
-
-        html += card(name,"");
-    });
-
-    document.getElementById("content").innerHTML = html;
-}
-
-/* =========================================================
-   GATHERING (GROUPED)
-========================================================= */
-
-function renderGathering() {
-
     const map = new Map();
 
-    DATA.Gathering.forEach(r=>{
-        const stage = r[0];
-        const item = r[4];
+    DATA.EnemySpawn.enemies.forEach(e=>{
+        const stage=e[0];
+        const enemy=e[5];
+        const level=e[9];
 
-        if (!map.has(stage)) map.set(stage,new Set());
-        map.get(stage).add(item);
+        if(!map.has(stage))
+            map.set(stage,new Map());
+
+        if(!map.get(stage).has(enemy))
+            map.get(stage).set(enemy,[]);
+
+        map.get(stage).get(enemy).push(level);
     });
-
-    let html = "";
-
-    map.forEach((items,stageId)=>{
-        let itemHTML="";
-        items.forEach(i=>{
-            itemHTML += `<div>${getItemName(i)}</div>`;
-        });
-
-        html += card(getStageName(stageId), itemHTML);
-    });
-
-    document.getElementById("content").innerHTML = html;
-}
-
-/* =========================================================
-   SHOPS
-========================================================= */
-
-function renderShops() {
 
     let html="";
 
-    DATA.Shops.forEach(shop=>{
-        let items="";
-        shop.Data.GoodsParamList.forEach(i=>{
-            items += `<div>${getItemName(i.ItemId)}</div>`;
+    map.forEach((enemies,stageId)=>{
+
+        const name=getStageName(stageId);
+        if(!name.toLowerCase().includes(filter)) return;
+
+        let content="";
+
+        enemies.forEach((levels,enemyId)=>{
+            levels.sort((a,b)=>a-b);
+            const min=levels[0];
+            const max=levels[levels.length-1];
+
+            content+=`
+                <div>
+                    ${getEnemyName(enemyId)} 
+                    (Lv ${min}${min!==max?"-"+max:""})
+                </div>
+            `;
         });
-        html+=card("Shop "+shop.ShopId, items);
+
+        html+=card(name,content,"s"+stageId);
     });
 
     document.getElementById("content").innerHTML=html;
 }
 
 /* =========================================================
-   SPECIAL
+   GATHERING (Grouped)
+========================================================= */
+
+function renderGathering(){
+
+    const map=new Map();
+
+    DATA.Gathering.forEach(r=>{
+        const stage=r[0];
+        const item=r[4];
+
+        if(!map.has(stage))
+            map.set(stage,new Set());
+
+        map.get(stage).add(item);
+    });
+
+    let html="";
+
+    map.forEach((items,stageId)=>{
+
+        let content="";
+        items.forEach(i=>{
+            content+=`<div>${getItemName(i)}</div>`;
+        });
+
+        html+=card(getStageName(stageId),content,"g"+stageId);
+    });
+
+    document.getElementById("content").innerHTML=html;
+}
+
+/* =========================================================
+   SPECIAL (No Trinket Wrapper)
 ========================================================= */
 
 function renderSpecial(){
@@ -251,15 +277,41 @@ function renderSpecial(){
     let html="";
 
     DATA.Special.shops.forEach(shop=>{
-        let items="";
-        shop.categories.forEach(c=>{
-            c.appraisals.forEach(a=>{
+
+        shop.categories.forEach(cat=>{
+
+            let content="";
+
+            cat.appraisals.forEach(a=>{
                 a.pool.forEach(p=>{
-                    items+=`<div>${p.name}</div>`;
+                    content+=`<div>${p.name}</div>`;
                 });
             });
+
+            html+=card(cat.label,content,"sp"+cat.label);
         });
-        html+=card(shop.shop_type,items);
+    });
+
+    document.getElementById("content").innerHTML=html;
+}
+
+/* =========================================================
+   SHOPS
+========================================================= */
+
+function renderShops(){
+
+    let html="";
+
+    DATA.Shops.forEach(shop=>{
+
+        let content="";
+
+        shop.Data.GoodsParamList.forEach(i=>{
+            content+=`<div>${getItemName(i.ItemId)}</div>`;
+        });
+
+        html+=card("Shop "+shop.ShopId,content,"shop"+shop.ShopId);
     });
 
     document.getElementById("content").innerHTML=html;
@@ -275,11 +327,13 @@ function renderCrafting(){
 
     DATA.Crafting.forEach(cat=>{
         cat.RecipeList.forEach(r=>{
+
             let mats="";
             r.CraftMaterialList.forEach(m=>{
                 mats+=`<div>${getItemName(m.ItemId)} x${m.Num}</div>`;
             });
-            html+=card(getItemName(r.ItemID),mats);
+
+            html+=card(getItemName(r.ItemID),mats,"c"+r.ItemID);
         });
     });
 
@@ -296,13 +350,68 @@ function renderCraftingPlus(){
 
     DATA.CraftingPlus.forEach(cat=>{
         cat.RecipeList.forEach(r=>{
+
             let mats="";
             r.CraftMaterialList.forEach(m=>{
                 mats+=`<div>${getItemName(m.ItemId)} x${m.Num}</div>`;
             });
-            html+=card(getItemName(r.ItemID)+" → "+getItemName(r.GradeupItemID),mats);
+
+            html+=card(
+                getItemName(r.ItemID)+" → "+getItemName(r.GradeupItemID),
+                mats,
+                "cp"+r.RecipeID
+            );
         });
     });
 
     document.getElementById("content").innerHTML=html;
+}
+
+/* =========================================================
+   QUESTS (AUTO LOAD ALL qX.json)
+========================================================= */
+
+async function renderQuestList(){
+
+    const content=document.getElementById("content");
+    content.innerHTML="Loading Quests...";
+
+    const quests=[];
+
+    for(let i=1;i<1000;i++){
+        try{
+            const res=await fetch(`datas/quests/q${i}.json`);
+            if(!res.ok) continue;
+            const data=await res.json();
+            quests.push(data);
+        }catch(e){}
+    }
+
+    let html="";
+
+    quests.forEach(q=>{
+
+        let rewards="";
+
+        q.rewards.forEach(r=>{
+
+            if(r.type==="select"){
+                r.loot_pool.forEach(item=>{
+                    rewards+=`<div>${item.comment} x${item.num}</div>`;
+                });
+            }
+
+            if(r.type==="wallet"){
+                rewards+=`<div>${r.wallet_type}: ${r.amount}</div>`;
+            }
+
+            if(r.type==="exp"){
+                rewards+=`<div>EXP: ${r.amount}</div>`;
+            }
+        });
+
+        html+=card(q.comment,rewards,"q"+q.quest_id);
+    });
+
+    content.innerHTML=html;
 }
