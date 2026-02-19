@@ -41,29 +41,30 @@ async function loadAll() {
 }
 
 loadAll();
+await loadQuests();
 
 /* =========================================================
    GITHUB QUEST AUTO LOAD
 ========================================================= */
 
-async function loadQuestList() {
+async function loadQuests() {
 
-    const url =
-        `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/datas/questwiki`;
-
-    const res = await fetch(url);
-    const files = await res.json();
+    const res = await fetch("questwiki/index.json");
+    const list = await res.json();
 
     DATA.Quests = [];
 
-    for (const file of files) {
-
-        if (!file.name.endsWith(".json")) continue;
-
-        const questRes = await fetch(file.download_url);
-        const quest = await questRes.json();
-        DATA.Quests.push(quest);
+    for (const file of list) {
+        try {
+            const r = await fetch("questwiki/" + file);
+            const q = await r.json();
+            DATA.Quests.push(q);
+        } catch(e) {
+            console.log("Quest failed:", file);
+        }
     }
+
+    console.log("Loaded quests:", DATA.Quests.length);
 }
 
 /* =========================================================
