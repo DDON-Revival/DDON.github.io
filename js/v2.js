@@ -1,13 +1,12 @@
 /* =========================================================
-   DDON WIKI V2 – COMPLETE STABLE FINAL
-   Query Routing + Fully Clickable
+   DDON WIKI V2 – FINAL STABLE ROUTED BUILD
 ========================================================= */
 
 const DATA = {};
 let currentTab = "monster";
 
 /* =========================================================
-   LOAD ALL DATA
+   LOAD DATA
 ========================================================= */
 
 async function loadJSON(name, path) {
@@ -50,7 +49,7 @@ async function loadAll() {
 loadAll();
 
 /* =========================================================
-   QUEST LOADER (index.json)
+   QUEST LOADER
 ========================================================= */
 
 async function loadQuests() {
@@ -61,8 +60,7 @@ async function loadQuests() {
 
         for (const file of list) {
             const r = await fetch("questwiki/" + file);
-            const q = await r.json();
-            DATA.Quests.push(q);
+            DATA.Quests.push(await r.json());
         }
     } catch {
         DATA.Quests = [];
@@ -100,7 +98,7 @@ function card(title, html) {
 }
 
 /* =========================================================
-   QUERY ROUTING
+   ROUTING
 ========================================================= */
 
 function navigate(url) {
@@ -111,20 +109,19 @@ function navigate(url) {
 window.addEventListener("popstate", router);
 
 function router() {
+    const p = new URLSearchParams(window.location.search);
 
-    const params = new URLSearchParams(window.location.search);
-
-    if (params.has("monster")) return openMonster(params.get("monster"));
-    if (params.has("item")) return openItem(params.get("item"));
-    if (params.has("stage")) return openStage(params.get("stage"));
-    if (params.has("shop")) return openShop(params.get("shop"));
-    if (params.has("quest")) return openQuest(params.get("quest"));
+    if (p.has("monster")) return openMonster(p.get("monster"));
+    if (p.has("item")) return openItem(p.get("item"));
+    if (p.has("stage")) return openStage(p.get("stage"));
+    if (p.has("shop")) return openShop(p.get("shop"));
+    if (p.has("quest")) return openQuest(p.get("quest"));
 
     renderHome();
 }
 
 /* =========================================================
-   TAB SWITCHING
+   TAB SWITCH
 ========================================================= */
 
 document.querySelectorAll(".tabs button").forEach(btn => {
@@ -137,21 +134,19 @@ document.querySelectorAll(".tabs button").forEach(btn => {
     };
 });
 
-document.getElementById("searchBox")
-    .addEventListener("input", renderHome);
-
 /* =========================================================
-   HOME RENDER
+   HOME
 ========================================================= */
 
 function renderHome() {
 
-    const value =
-        document.getElementById("searchBox").value.toLowerCase();
+    const filter =
+        document.getElementById("searchBox")
+        ?.value?.toLowerCase() || "";
 
-    if (currentTab === "monster") return renderMonsters(value);
-    if (currentTab === "item") return renderItems(value);
-    if (currentTab === "stage") return renderStages(value);
+    if (currentTab === "monster") return renderMonsters(filter);
+    if (currentTab === "item") return renderItems(filter);
+    if (currentTab === "stage") return renderStages(filter);
     if (currentTab === "shop") return renderShops();
     if (currentTab === "special") return renderSpecial();
     if (currentTab === "gathering") return renderGathering();
@@ -166,28 +161,18 @@ function renderHome() {
 
 function renderMonsters(filter="") {
 
-    const map = new Map();
-
-    DATA.EnemySpawn?.enemies?.forEach(e => {
-        const stage = e[0];
-        const enemy = e[5];
-        const level = e[9];
-
-        if (!map.has(enemy)) map.set(enemy, new Map());
-        if (!map.get(enemy).has(stage)) map.get(enemy).set(stage, []);
-        map.get(enemy).get(stage).push(level);
-    });
+    const ids = new Set();
+    DATA.EnemySpawn?.enemies?.forEach(e => ids.add(e[5]));
 
     let html = "";
 
-    map.forEach((stages, enemyId) => {
-
-        const name = getEnemyName(enemyId);
+    ids.forEach(id => {
+        const name = getEnemyName(id);
         if (!name.toLowerCase().includes(filter)) return;
 
         html += `
             <div class="card">
-                <h3 onclick="navigate('?monster=${enemyId}')"
+                <h3 onclick="navigate('?monster=${id}')"
                     style="cursor:pointer">
                     ${name}
                 </h3>
@@ -200,28 +185,28 @@ function renderMonsters(filter="") {
 
 function openMonster(id) {
 
-    const stages = new Map();
-    let dropTable = null;
+    const stageMap = new Map();
+    let dropId = null;
 
-    DATA.EnemySpawn.enemies.forEach(e => {
+    DATA.EnemySpawn?.enemies?.forEach(e => {
         if (String(e[5]) !== String(id)) return;
 
-        if (!stages.has(e[0])) stages.set(e[0], []);
-        stages.get(e[0]).push(e[9]);
-
-        dropTable = e[27];
+        if (!stageMap.has(e[0])) stageMap.set(e[0], []);
+        stageMap.get(e[0]).push(e[9]);
+        dropId = e[27];
     });
 
     let body = "";
 
-    stages.forEach((levels, stageId) => {
+    stageMap.forEach((levels, stageId) => {
 
         levels.sort((a,b)=>a-b);
         const min = levels[0];
         const max = levels[levels.length-1];
 
         body += `
-            <div>
+            <div onclick="navigate('?stage=${stageId}')"
+                 style="cursor:pointer">
                 ${getStageName(stageId)}
                 (Lv ${min}${min!==max?"-"+max:""})
             </div>
@@ -229,11 +214,10 @@ function openMonster(id) {
     });
 
     const table =
-        DATA.EnemySpawn.dropsTables
-            ?.find(t => t.id == dropTable);
+        DATA.EnemySpawn?.dropsTables
+            ?.find(t => t.id == dropId);
 
     if (table) {
-
         body += "<br><strong>Drops:</strong>";
 
         table.items.forEach(i=>{
@@ -280,14 +264,12 @@ function openItem(id) {
 
     let body = "<strong>Dropped By:</strong>";
 
-    DATA.EnemySpawn.enemies.forEach(e=>{
+    DATA.EnemySpawn?.enemies?.forEach(e=>{
         const table =
-            DATA.EnemySpawn.dropsTables
+            DATA.EnemySpawn?.dropsTables
                 ?.find(t => t.id == e[27]);
 
-        if (!table) return;
-
-        table.items.forEach(i=>{
+        table?.items?.forEach(i=>{
             if (String(i[0]) === String(id)) {
                 body += `
                     <div onclick="navigate('?monster=${e[5]}')"
@@ -301,124 +283,22 @@ function openItem(id) {
 
     body += "<br><strong>Sold In Shops:</strong>";
 
-    DATA.Shops.forEach(shop=>{
-        shop.Data.GoodsParamList.forEach(g=>{
+    DATA.Shops?.forEach(shop=>{
+        shop?.Data?.GoodsParamList?.forEach(g=>{
             if (String(g.ItemId) === String(id)) {
-                getShopNames(shop.ShopId).forEach(name=>{
-                    body += `
-                        <div onclick="navigate('?shop=${shop.ShopId}')"
-                             style="cursor:pointer">
-                            ${name} - ${g.Price} Gold
-                        </div>
-                    `;
-                });
+                getShopNames(shop.ShopId)
+                    .forEach(name=>{
+                        body += `
+                            <div onclick="navigate('?shop=${shop.ShopId}')"
+                                 style="cursor:pointer">
+                                ${name} - ${g.Price} Gold
+                            </div>
+                        `;
+                    });
             }
         });
     });
 
     document.getElementById("content").innerHTML =
         card(getItemName(id), body);
-}
-
-/* =========================================================
-   STAGES
-========================================================= */
-
-function renderStages(filter="") {
-
-    let html="";
-
-    Object.keys(DATA.StageNames).forEach(id=>{
-
-        const name = getStageName(id);
-        if (!name.toLowerCase().includes(filter)) return;
-
-        html += `
-            <div class="card">
-                <h3 onclick="navigate('?stage=${id}')"
-                    style="cursor:pointer">
-                    ${name}
-                </h3>
-            </div>
-        `;
-    });
-
-    document.getElementById("content").innerHTML = html;
-}
-
-function openStage(id) {
-
-    const map = new Map();
-
-    DATA.EnemySpawn.enemies.forEach(e=>{
-        if (String(e[0]) !== String(id)) return;
-
-        if (!map.has(e[5])) map.set(e[5], []);
-        map.get(e[5]).push(e[9]);
-    });
-
-    let body="";
-
-    map.forEach((levels, enemyId)=>{
-
-        levels.sort((a,b)=>a-b);
-        const min = levels[0];
-        const max = levels[levels.length-1];
-
-        body += `
-            <div onclick="navigate('?monster=${enemyId}')"
-                 style="cursor:pointer">
-                ${getEnemyName(enemyId)}
-                (Lv ${min}${min!==max?"-"+max:""})
-            </div>
-        `;
-    });
-
-    document.getElementById("content").innerHTML =
-        card(getStageName(id), body);
-}
-
-/* =========================================================
-   SHOPS
-========================================================= */
-
-function renderShops(){
-
-    let html="";
-
-    DATA.Shops.forEach(shop=>{
-        getShopNames(shop.ShopId).forEach(name=>{
-            html += `
-                <div class="card">
-                    <h3 onclick="navigate('?shop=${shop.ShopId}')"
-                        style="cursor:pointer">
-                        ${name}
-                    </h3>
-                </div>
-            `;
-        });
-    });
-
-    document.getElementById("content").innerHTML=html;
-}
-
-function openShop(id){
-
-    const shop =
-        DATA.Shops.find(s=>String(s.ShopId)===String(id));
-
-    let body="";
-
-    shop.Data.GoodsParamList.forEach(i=>{
-        body += `
-            <div onclick="navigate('?item=${i.ItemId}')"
-                 style="cursor:pointer">
-                ${getItemName(i.ItemId)}
-                - ${i.Price} Gold
-            </div>
-        `;
-    });
-
-    document.getElementById("content").innerHTML =
-        card(getShopNames(id)[0], body);
 }
