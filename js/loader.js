@@ -1,22 +1,27 @@
 const DATA = {};
 
-async function loadJSON(key, url) {
-    const res = await fetch(url);
-    if (!res.ok) {
-        console.error("Failed loading:", url);
-        return;
+async function loadJSON(name, url) {
+    try {
+        const res = await fetch(url);
+        DATA[name] = await res.json();
+        console.log("Loaded:", name);
+    } catch (e) {
+        console.error("Failed loading:", name, e);
     }
-    DATA[key] = await res.json();
 }
 
-async function loadCSV(key, url) {
-    const res = await fetch(url);
-    if (!res.ok) {
-        console.error("Failed loading:", url);
-        return;
+async function loadCSV(name, url) {
+    try {
+        const res = await fetch(url);
+        const text = await res.text();
+
+        const rows = text.split("\n").map(r => r.split(","));
+        DATA[name] = rows;
+
+        console.log("Loaded CSV:", name);
+    } catch (e) {
+        console.error("Failed loading CSV:", name, e);
     }
-    const text = await res.text();
-    DATA[key] = text;
 }
 
 async function loadAll() {
@@ -42,8 +47,8 @@ async function loadAll() {
     await loadCSV("GatheringItem.csv",
         "https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/datas/GatheringItem.csv");
 
-    console.log("ALL DATA LOADED CLEAN");
     window.dataLoaded = true;
+    console.log("ALL DATA LOADED");
 }
 
 loadAll();

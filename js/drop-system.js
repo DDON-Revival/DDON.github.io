@@ -1,10 +1,9 @@
 function getItemName(itemId) {
 
     const data = DATA["item_names.json"];
-    if (!data || !data.item) return "Item " + itemId;
+    if (!data?.item) return "Item " + itemId;
 
     const found = data.item.find(i => String(i.id) === String(itemId));
-
     return found ? found.new : "Item " + itemId;
 }
 
@@ -12,14 +11,12 @@ function renderDrops(dropTableId) {
 
     if (!DATA["EnemySpawn.json"]) return "";
 
-    const dropTables = DATA["EnemySpawn.json"].dropsTables;
-    const table = dropTables.find(t => t.id === dropTableId);
+    const dropTables = DATA["EnemySpawn.json"].DropTables; // FIX
 
-    if (!table) {
-        return `<div style="opacity:0.6;">No Drop Data</div>`;
-    }
+    const table = dropTables.find(t => t.id == dropTableId);
+    if (!table) return "";
 
-    let html = `<div style="margin-top:8px;">`;
+    let html = "";
 
     table.items.forEach(item => {
 
@@ -28,21 +25,17 @@ function renderDrops(dropTableId) {
         const max = item[2];
         const chance = Math.round(item[5] * 100);
 
-        const itemName = getItemName(itemId);
-
         html += `
             <div class="drop-item">
                 <a href="#" class="link"
                    onclick="navigate('?item=${itemId}'); return false;">
-                    ${itemName}
+                    ${getItemName(itemId)}
                 </a>
                 (${min}${max > 1 ? "-" + max : ""})
                 - ${chance}%
             </div>
         `;
     });
-
-    html += `</div>`;
 
     return html;
 }

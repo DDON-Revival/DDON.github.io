@@ -1,59 +1,48 @@
-function renderItemList(){
-
-    const itemData = DATA["item_names.json"];
-    if (!itemData?.item) return;
-
-    content.innerHTML = "";
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    let html = "<h2>Items</h2>";
-
-    itemData.item.forEach(item=>{
-        html += `
-            <a href="#" class="link"
-               onclick="navigate('?item=${item.id}'); return false;">
-               ${item.new}
-            </a>
-        `;
-    });
-
-    card.innerHTML = html;
-    content.appendChild(card);
-}
-
-function searchItems(value){
-
-    const data = DATA["item_names.json"];
-    if(!data?.item) return;
-
-    data.item.forEach(item=>{
-        if(item.new?.toLowerCase().includes(value)){
-            openItem(item.id);
-        }
-    });
-}
-
 function openItem(itemId){
 
-    content.innerHTML = "";
+    content.innerHTML="";
 
-    const name = getItemName(itemId);
+    const card=document.createElement("div");
+    card.className="card";
 
-    const card = document.createElement("div");
-    card.className = "card";
-
-    let html = `
-        <h2>${name}</h2>
-        <p><strong>ID:</strong> ${itemId}</p>
-        <br>
-        <a href="#" class="link"
-           onclick="showDefaultView(); return false;">
-           ← Back
-        </a>
+    let html=`
+        <h2>${getItemName(itemId)}</h2>
+        <p>ID: ${itemId}</p>
     `;
 
-    card.innerHTML = html;
+    /* DROPPED BY */
+
+    const enemies=DATA["EnemySpawn.json"].enemies;
+    const dropTables=DATA["EnemySpawn.json"].DropTables;
+
+    const monsterSet=new Set();
+
+    dropTables.forEach(table=>{
+
+        table.items.forEach(item=>{
+
+            if (String(item[0])!==String(itemId)) return;
+
+            enemies
+                .filter(e=>e[27]==table.id)
+                .forEach(e=>monsterSet.add(e[5]));
+        });
+    });
+
+    if (monsterSet.size>0){
+
+        html+="<h3>Dropped By</h3>";
+
+        [...monsterSet].forEach(enemyId=>{
+            html+=`
+                <a href="#" class="link"
+                   onclick="navigate('?monster=${enemyId}'); return false;">
+                    ${getEnemyName(enemyId)}
+                </a>
+            `;
+        });
+    }
+
+    card.innerHTML=html;
     content.appendChild(card);
 }
