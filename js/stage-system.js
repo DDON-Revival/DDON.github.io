@@ -1,56 +1,28 @@
-function renderStageList(){
+function getStageName(id){
+    return DATA["stage-names.json"]?.[id]?.en || id;
+}
 
-    const stageData = DATA["stage-names.json"];
-    if (!stageData) return;
+function renderStageList(filter=""){
+
+    const stages = DATA["stage-names.json"];
+    if (!stages) return;
 
     content.innerHTML = "";
 
-    const card = document.createElement("div");
-    card.className = "card";
+    Object.keys(stages).forEach(id => {
 
-    let html = "<h2>Stages</h2>";
+        const name = stages[id].en;
 
-    for (const id in stageData){
-        html += `
-            <a href="#" class="link"
-               onclick="navigate('?stage=${id}'); return false;">
-               ${stageData[id].en}
-            </a>
+        if (!name.toLowerCase().includes(filter)) return;
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <h2>${name}</h2>
+            <button onclick="openStage('${id}')">Open</button>
         `;
-    }
 
-    card.innerHTML = html;
-    content.appendChild(card);
-}
-
-
-function searchStages(value){
-
-    const stageData = DATA["stage-names.json"];
-    if(!stageData) return;
-
-    for(const id in stageData){
-        if(stageData[id].en.toLowerCase().includes(value)){
-            openStage(id);
-        }
-    }
-}
-
-function openStage(stageId){
-
-    content.innerHTML = "";
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-        <h2>${getStageName(stageId)}</h2>
-        <br>
-        <a href="#" class="link"
-           onclick="showDefaultView(); return false;">
-           ← Back
-        </a>
-    `;
-
-    content.appendChild(card);
+        content.appendChild(card);
+    });
 }

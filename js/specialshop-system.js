@@ -1,56 +1,48 @@
-function renderSpecialShopList(){
+function renderSpecialShopList(filter=""){
 
-    const data = DATA["SpecialShops.json"];
-    if(!data?.shops) return;
+    const shops = DATA["SpecialShops.json"]?.shops;
+    if (!shops) return;
 
     content.innerHTML = "";
 
-    data.shops.forEach((shop,index)=>{
+    shops.forEach((shop,index) => {
+
+        if (!shop.shop_type.toLowerCase().includes(filter)) return;
 
         const card = document.createElement("div");
         card.className = "card";
 
         card.innerHTML = `
-            <a href="#" class="link"
-               onclick="navigate('?special=${index}'); return false;">
-               ${shop.shop_type}
-            </a>
+            <h2>${shop.shop_type}</h2>
+            <button onclick="openSpecialShop(${index})">Open</button>
         `;
 
         content.appendChild(card);
     });
 }
 
-function searchSpecialShops(value){
-
-    const data = DATA["SpecialShops.json"];
-    if(!data?.shops) return;
-
-    data.shops.forEach((shop,index)=>{
-        if(shop.shop_type.toLowerCase().includes(value)){
-            openSpecialShop(index);
-        }
-    });
-}
-
 function openSpecialShop(index){
 
-    content.innerHTML = "";
+    const shop = DATA["SpecialShops.json"].shops[index];
 
-    const data = DATA["SpecialShops.json"];
-    const shop = data.shops[index];
+    content.innerHTML = "";
 
     const card = document.createElement("div");
     card.className = "card";
 
-    card.innerHTML = `
-        <h2>${shop.shop_type}</h2>
-        <br>
-        <a href="#" class="link"
-           onclick="showDefaultView(); return false;">
-           ← Back
-        </a>
-    `;
+    let html = `<h2>${shop.shop_type}</h2>`;
 
+    shop.categories.forEach(cat=>{
+        html += `<h3>${cat.label}</h3>`;
+        cat.appraisals.forEach(app=>{
+            app.pool.forEach(item=>{
+                html += `<div>${item.name}</div>`;
+            });
+        });
+    });
+
+    html += `<br><button onclick="renderHome()">← Back</button>`;
+
+    card.innerHTML = html;
     content.appendChild(card);
 }

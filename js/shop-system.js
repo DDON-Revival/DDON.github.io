@@ -1,53 +1,43 @@
-function renderShopList(){
+function renderShopList(filter=""){
 
-    const shopData = DATA["Shop.json"];
-    if(!shopData) return;
+    const shops = DATA["Shop.json"];
+    if (!shops) return;
 
     content.innerHTML = "";
 
-    shopData.forEach(shop=>{
+    shops.forEach(shop => {
+
+        if (!String(shop.ShopId).includes(filter)) return;
 
         const card = document.createElement("div");
         card.className = "card";
 
         card.innerHTML = `
-            <a href="#" class="link"
-               onclick="navigate('?shop=${shop.ShopId}'); return false;">
-               Shop ${shop.ShopId}
-            </a>
+            <h2>Shop ${shop.ShopId}</h2>
+            <button onclick="openShop('${shop.ShopId}')">Open</button>
         `;
 
         content.appendChild(card);
     });
 }
 
-function searchShops(value){
+function openShop(id){
 
-    const shopData = DATA["Shop.json"];
-    if(!shopData) return;
-
-    shopData.forEach(shop=>{
-        if(String(shop.ShopId).includes(value)){
-            openShop(shop.ShopId);
-        }
-    });
-}
-
-function openShop(shopId){
+    const shop = DATA["Shop.json"].find(s => String(s.ShopId) === String(id));
 
     content.innerHTML = "";
 
     const card = document.createElement("div");
     card.className = "card";
 
-    card.innerHTML = `
-        <h2>Shop ${shopId}</h2>
-        <br>
-        <a href="#" class="link"
-           onclick="showDefaultView(); return false;">
-           ← Back
-        </a>
-    `;
+    let html = `<h2>Shop ${id}</h2>`;
 
+    shop.Data.GoodsParamList.forEach(item => {
+        html += `<div>${getItemName(item.ItemId)} - ${item.Price} Gold</div>`;
+    });
+
+    html += `<br><button onclick="renderHome()">← Back</button>`;
+
+    card.innerHTML = html;
     content.appendChild(card);
 }

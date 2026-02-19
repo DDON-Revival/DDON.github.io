@@ -1,71 +1,53 @@
-const content = document.getElementById("content");
-
-/* HELPERS */
-
-function getEnemyName(enemyId){
-    return DATA["enemy-names.json"]?.[enemyId] || enemyId;
+function getEnemyName(id){
+    return DATA["enemy-names.json"]?.[id] || id;
 }
-
-function getStageName(stageId){
-    const stage = DATA["stage-names.json"]?.[stageId];
-    return stage ? stage.en : stageId;
-}
-
-/* MONSTER LIST */
 
 function renderMonsterList(filter=""){
 
-    if (!DATA["EnemySpawn.json"]) return;
+    const enemies = DATA["EnemySpawn.json"]?.enemies;
+    if (!enemies) return;
 
     content.innerHTML = "";
 
-    const enemies = DATA["EnemySpawn.json"].enemies;
-    const monsterMap = new Map();
+    const unique = new Set();
 
-    enemies.forEach(e => {
+    enemies.forEach(e => unique.add(e[5]));
 
-        const stageId = e[0];
-        const enemyId = e[5];
-        const level = e[9];
-        const dropTableId = e[27];
+    [...unique].forEach(enemyId => {
 
-        if (!monsterMap.has(enemyId)){
-            monsterMap.set(enemyId,{
-                stages:new Map(),
-                dropTableId:dropTableId
-            });
-        }
+        const name = getEnemyName(enemyId);
 
-        const data = monsterMap.get(enemyId);
+        if (!name.toLowerCase().includes(filter)) return;
 
-        if (!data.stages.has(stageId)){
-            data.stages.set(stageId,new Set());
-        }
+        const card = document.createElement("div");
+        card.className = "card";
 
-        data.stages.get(stageId).add(level);
-    });
-
-    monsterMap.forEach((monsterData,enemyId)=>{
-
-        const name=getEnemyName(enemyId);
-
-        if (!name.toLowerCase().includes(filter.toLowerCase())) return;
-
-        const card=document.createElement("div");
-        card.className="card";
-
-        let html=`
-            <h2>
-                <a href="#" class="link"
-                   onclick="navigate('?monster=${enemyId}'); return false;">
-                   ${name}
-                </a>
-            </h2>
-            <h3>Drops</h3>
-            ${renderDrops(monsterData.dropTableId)}
+        card.innerHTML = `
+            <h2>${name}</h2>
+            <button onclick="openMonster('${enemyId}')">Open</button>
         `;
 
-        card.innerHTML=html;
         content.appendChild(card);
     });
+}
+
+function openMonster(enemyId){
+
+    const enemies = DATA["EnemySpawn.json"].enemies;
+    const filtered = enemies.filter(e => String(e[5]) === String(enemyId));
+
+    content.innerHTML = "";
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+        <h2>${getEnemyName(enemyId)}</h2>
+        <h3>Drops</h3>
+        ${renderDrops(filtered[0][27])}
+        <br><br>
+        <button onclick="renderHome()">← Back</button>
+    `;
+
+    content.appendChild(card);
 }

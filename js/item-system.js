@@ -1,48 +1,50 @@
+function getItemName(id){
+    const items = DATA["item_names.json"]?.item;
+    if (!items) return id;
+
+    const found = items.find(i => String(i.id) === String(id));
+    return found ? found.new : id;
+}
+
+function renderItemList(filter=""){
+
+    const items = DATA["item_names.json"]?.item;
+    if (!items) return;
+
+    content.innerHTML = "";
+
+    items.forEach(item => {
+
+        if (!item.new.toLowerCase().includes(filter)) return;
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <h2>${item.new}</h2>
+            <button onclick="openItem('${item.id}')">Open</button>
+        `;
+
+        content.appendChild(card);
+    });
+}
+
 function openItem(itemId){
 
-    content.innerHTML="";
+    content.innerHTML = "";
 
-    const card=document.createElement("div");
-    card.className="card";
+    const card = document.createElement("div");
+    card.className = "card";
 
-    let html=`
+    card.innerHTML = `
         <h2>${getItemName(itemId)}</h2>
-        <p>ID: ${itemId}</p>
+        <h3>Dropped By</h3>
+        ${renderItemDrops(itemId)}
+        <h3>Sold In Shops</h3>
+        ${renderItemShops(itemId)}
+        <br><br>
+        <button onclick="renderHome()">← Back</button>
     `;
 
-    /* DROPPED BY */
-
-    const enemies=DATA["EnemySpawn.json"].enemies;
-    const dropTables=DATA["EnemySpawn.json"].DropTables;
-
-    const monsterSet=new Set();
-
-    dropTables.forEach(table=>{
-
-        table.items.forEach(item=>{
-
-            if (String(item[0])!==String(itemId)) return;
-
-            enemies
-                .filter(e=>e[27]==table.id)
-                .forEach(e=>monsterSet.add(e[5]));
-        });
-    });
-
-    if (monsterSet.size>0){
-
-        html+="<h3>Dropped By</h3>";
-
-        [...monsterSet].forEach(enemyId=>{
-            html+=`
-                <a href="#" class="link"
-                   onclick="navigate('?monster=${enemyId}'); return false;">
-                    ${getEnemyName(enemyId)}
-                </a>
-            `;
-        });
-    }
-
-    card.innerHTML=html;
     content.appendChild(card);
 }
