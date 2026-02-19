@@ -337,6 +337,56 @@ function openItem(id) {
             body += `<div>${getStageName(r[0])}</div>`;
         }
     });
+	
+/* =======================
+   CRAFTED FROM
+======================= */
+
+let craftedFound = false;
+
+DATA.Crafting?.forEach(cat=>{
+    cat.RecipeList?.forEach(r=>{
+        if (String(r.ItemID) === String(id)) {
+
+            if (!craftedFound) {
+                body += "<br><strong>Crafted From:</strong>";
+                craftedFound = true;
+            }
+
+            r.CraftMaterialList?.forEach(m=>{
+                body += `
+                    <div onclick="navigate('?item=${m.ItemId}')"
+                         style="cursor:pointer">
+                        ${getItemName(m.ItemId)} x${m.Num}
+                    </div>`;
+            });
+        }
+    });
+});
+
+/* =======================
+   GRADE UP FROM
+======================= */
+
+let gradeFound = false;
+
+DATA.CraftingPlus?.forEach(cat=>{
+    cat.RecipeList?.forEach(r=>{
+        if (String(r.GradeupItemID) === String(id)) {
+
+            if (!gradeFound) {
+                body += "<br><strong>Grade Up From:</strong>";
+                gradeFound = true;
+            }
+
+            body += `
+                <div onclick="navigate('?item=${r.ItemID}')"
+                     style="cursor:pointer">
+                    ${getItemName(r.ItemID)}
+                </div>`;
+        }
+    });
+});	
 
     document.getElementById("content").innerHTML =
         card(getItemName(id), body);
@@ -491,10 +541,9 @@ function renderGathering(filter=""){
         const stage=r[0];
         const item=r[4];
 
-        const itemName = getItemName(item).toLowerCase();
-        const stageName = getStageName(stage).toLowerCase();
+        const itemName = (getItemName(item) || "").toLowerCase();
+        const stageName = (getStageName(stage) || "").toLowerCase();
 
-        // 🔎 Filter auf Item ODER Stage
         if (
             filter &&
             !itemName.includes(filter) &&
@@ -622,12 +671,15 @@ function renderCrafting(filter=""){
     document.getElementById("content").innerHTML=html;
 }
 
-function renderCraftingPlus(){
+function renderCraftingPlus(filter=""){
 
     let html="";
 
     DATA.CraftingPlus?.forEach(cat=>{
         cat.RecipeList?.forEach(r=>{
+
+            const name = (getItemName(r.ItemID) || "");
+            if (!name.toLowerCase().includes(filter)) return;
 
             let mats="";
             r.CraftMaterialList?.forEach(m=>{
@@ -639,7 +691,7 @@ function renderCraftingPlus(){
             });
 
             html+=card(
-                getItemName(r.ItemID)+" → "+getItemName(r.GradeupItemID),
+                name + " → " + getItemName(r.GradeupItemID),
                 mats
             );
         });
