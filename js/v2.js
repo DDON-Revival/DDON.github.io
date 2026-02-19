@@ -35,13 +35,12 @@ async function loadAll() {
     await loadJSON("CraftingPlus", "datas/CraftingRecipesGradeUp.json");
     await loadCSV("Gathering", "datas/GatheringItem.csv");
 
-    await loadQuestList();
+    await loadQuests();   // ← HIER rein
 
     renderHome();
 }
 
 loadAll();
-await loadQuests();
 
 /* =========================================================
    GITHUB QUEST AUTO LOAD
