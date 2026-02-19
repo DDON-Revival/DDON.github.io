@@ -285,15 +285,72 @@ function renderStages(filter="") {
 
 function renderQuests(){
 
-    let html="";
+    let html = "";
 
     DATA.Quests.forEach(q=>{
 
-        html += card(q.comment,
-            `Base Level: ${q.base_level}`);
+        let rewardsHTML = "";
+
+        if (q.rewards && q.rewards.length > 0) {
+
+            rewardsHTML += "<strong>Rewards:</strong>";
+
+            q.rewards.forEach(r=>{
+
+                // Select Rewards (Item Pools)
+                if (r.type === "select" && r.loot_pool) {
+
+                    r.loot_pool.forEach(item=>{
+                        rewardsHTML += `
+                            <div>
+                                ${item.comment || getItemName(item.item_id)}
+                                x${item.num}
+                            </div>
+                        `;
+                    });
+                }
+
+                // Fixed Item Reward
+                if (r.type === "item") {
+                    rewardsHTML += `
+                        <div>
+                            ${getItemName(r.item_id)} x${r.num}
+                        </div>
+                    `;
+                }
+
+                // Gold / Wallet
+                if (r.type === "wallet") {
+                    rewardsHTML += `
+                        <div>
+                            ${r.wallet_type}: ${r.amount}
+                        </div>
+                    `;
+                }
+
+                // EXP
+                if (r.type === "exp") {
+                    rewardsHTML += `
+                        <div>
+                            EXP: ${r.amount}
+                        </div>
+                    `;
+                }
+
+            });
+        }
+
+        html += card(
+            q.comment,
+            `
+                <div>Base Level: ${q.base_level}</div>
+                <br>
+                ${rewardsHTML}
+            `
+        );
     });
 
-    document.getElementById("content").innerHTML=html;
+    document.getElementById("content").innerHTML = html;
 }
 
 /* =========================================================
