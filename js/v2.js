@@ -155,12 +155,12 @@ function renderHome() {
     if (currentTab === "monster") return renderMonsters(filter);
     if (currentTab === "item") return renderItems(filter);
     if (currentTab === "stage") return renderStages(filter);
-    if (currentTab === "shop") return renderShops();
-    if (currentTab === "special") return renderSpecial();
-    if (currentTab === "gathering") return renderGathering();
-    if (currentTab === "quest") return renderQuests();
-    if (currentTab === "crafting") return renderCrafting();
-    if (currentTab === "craftingPlus") return renderCraftingPlus();
+    if (currentTab === "shop") return renderShops(filter);
+    if (currentTab === "special") return renderSpecial(filter);
+    if (currentTab === "gathering") return renderGathering(filter);
+    if (currentTab === "quest") return renderQuests(filter);
+    if (currentTab === "crafting") return renderCrafting(filter);
+    if (currentTab === "craftingPlus") return renderCraftingPlus(filter);
 }
 
 /* =========================================================
@@ -401,12 +401,15 @@ function openStage(id) {
    SHOPS
 ========================================================= */
 
-function renderShops(){
+function renderShops(filter=""){
 
     let html="";
 
     DATA.Shops?.forEach(shop=>{
         getShopNames(shop.ShopId).forEach(name=>{
+
+            if (!name.toLowerCase().includes(filter)) return;
+
             html += `
                 <div class="card">
                     <h3 onclick="navigate('?shop=${shop.ShopId}')"
@@ -448,12 +451,15 @@ function openShop(id){
    SPECIAL
 ========================================================= */
 
-function renderSpecial(){
+function renderSpecial(filter=""){
 
     let html="";
 
     DATA.Special?.shops?.forEach(shop=>{
         shop.categories?.forEach(cat=>{
+
+            if (!cat.label.toLowerCase().includes(filter)) return;
+
             let body="";
             cat.appraisals?.forEach(app=>{
                 app.pool?.forEach(p=>{
@@ -465,6 +471,7 @@ function renderSpecial(){
                     `;
                 });
             });
+
             html+=card(cat.label, body);
         });
     });
@@ -508,11 +515,14 @@ function renderGathering(){
    QUESTS
 ========================================================= */
 
-function renderQuests(){
+function renderQuests(filter=""){
 
     let html="";
 
     DATA.Quests?.forEach(q=>{
+
+        if (!q.comment.toLowerCase().includes(filter)) return;
+
         html+=`
             <div class="card">
                 <h3 onclick="navigate('?quest=${q.id}')"
@@ -574,12 +584,15 @@ function openQuest(id){
    CRAFTING
 ========================================================= */
 
-function renderCrafting(){
+function renderCrafting(filter=""){
 
     let html="";
 
     DATA.Crafting?.forEach(cat=>{
         cat.RecipeList?.forEach(r=>{
+
+            const name = getItemName(r.ItemID);
+            if (!name.toLowerCase().includes(filter)) return;
 
             let mats="";
             r.CraftMaterialList?.forEach(m=>{
@@ -590,7 +603,7 @@ function renderCrafting(){
                     </div>`;
             });
 
-            html+=card(getItemName(r.ItemID),mats);
+            html+=card(name,mats);
         });
     });
 
