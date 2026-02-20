@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,24 +48,9 @@ nav a:hover{
     margin-bottom:60px;
 }
 
-.card{
-    background:#1b1b25;
-    padding:30px;
-    margin:20px;
-    display:inline-block;
-    width:300px;
-    border:1px solid #2a2a35;
-    transition:0.3s;
-}
-
-.card:hover{
-    border-color:#c8a75d;
-    transform:translateY(-5px);
-}
-
 .feature-block{
     text-align:left;
-    max-width:900px;
+    max-width:1000px;
     margin:60px auto;
     background:#15151d;
     padding:40px;
@@ -87,8 +72,37 @@ nav a:hover{
     border-bottom:1px solid #2a2a35;
 }
 
-.feature-block li:last-child{
-    border-bottom:none;
+.lang-selector{
+    position:relative;
+}
+
+.lang-btn{
+    background:#1b1b25;
+    border:1px solid #c8a75d;
+    color:#c8a75d;
+    padding:6px 12px;
+    cursor:pointer;
+}
+
+.lang-dropdown{
+    display:none;
+    position:absolute;
+    right:0;
+    background:#1b1b25;
+    border:1px solid #c8a75d;
+}
+
+.lang-dropdown div{
+    padding:6px 12px;
+    cursor:pointer;
+}
+
+.lang-dropdown div:hover{
+    background:#2a2a35;
+}
+
+.lang-selector:hover .lang-dropdown{
+    display:block;
 }
 </style>
 </head>
@@ -97,92 +111,105 @@ nav a:hover{
 
 <header>
     <h2>DDON Revival</h2>
+
     <nav>
-        <a href="index.html">Home</a>
-        <a href="leaderboard.html">Leaderboard</a>
-        <a href="wiki.html">Wiki</a>
-        <a href="custom.html" style="color:#c8a75d;">Custom Features</a>
+        <a href="index.html" data-key="home"></a>
+        <a href="leaderboard.html" data-key="leaderboard"></a>
+        <a href="wiki.html" data-key="wiki"></a>
+        <a href="custom.html" style="color:#c8a75d;" data-key="customFeatures"></a>
     </nav>
+
+    <div class="lang-selector">
+        <button class="lang-btn">🌍</button>
+        <div class="lang-dropdown" id="languageList"></div>
+    </div>
 </header>
 
 <section class="section">
 
-<h1>Server Exclusive Features</h1>
-<p class="subtitle">Features only available on DDON Revival</p>
-
-<!-- TOP CARDS -->
-
-<div class="card">
-    <h3>Hardcore Mode</h3>
-    <p>One life only.<br>Permanent death.<br>No party allowed.</p>
-</div>
-
-<div class="card">
-    <h3>Custom Content</h3>
-    <p>Unique quests, systems and rewards.</p>
-</div>
-
-<div class="card">
-    <h3>Special Events</h3>
-    <p>Server-exclusive seasonal collaborations.</p>
-</div>
+<h1 data-key="customTitle"></h1>
+<p class="subtitle" data-key="customSubtitle"></p>
 
 </section>
 
-<!-- CUSTOM FEATURES -->
-
 <div class="feature-block">
-<h2>Custom Features</h2>
+<h2 data-key="cf_block1"></h2>
 <ul>
-<li>Courses!!!</li>
-<li>Storage Course permanently active (use item boxes outside city + expanded tabs)</li>
-<li>Free refill for Green Revive Gems (no 24h limit)</li>
-<li>All Storage Boxes visible per Crafting Room</li>
-<li>Party up with 8 Players using /invite</li>
+<li data-key="cf_1"></li>
+<li data-key="cf_2"></li>
+<li data-key="cf_3"></li>
+<li data-key="cf_4"></li>
+<li data-key="cf_5"></li>
 </ul>
 </div>
 
 <div class="feature-block">
-<h2>Custom Content</h2>
+<h2 data-key="cf_block2"></h2>
 <ul>
-<li>Bonus Dungeons are Endgame Dungeons for Endgame Materials</li>
-<li>Bonus Dungeon Tickets obtainable via PP Shop</li>
-<li>Currently filled Bonus Dungeons: R, XP</li>
+<li data-key="cf_6"></li>
+<li data-key="cf_7"></li>
+<li data-key="cf_8"></li>
 </ul>
 </div>
 
 <div class="feature-block">
-<h2>Quality of Life Systems</h2>
+<h2 data-key="cf_block3"></h2>
 <ul>
-<li>PP Cap increased from 2000 → 2,000,000</li>
-<li>Bazaar expiration increased from 3 → 30 days</li>
-<li>CraftConsumableProductionTimesMax: 10 → 100</li>
-<li>CraftItemRecycleMax: 10 → 50</li>
-<li>Golden Dragon Mark increased to 200</li>
-<li>Silver Dragon Mark increased to 500</li>
-<li>Pawns now gain Quest EXP and JP</li>
+<li data-key="cf_9"></li>
+<li data-key="cf_10"></li>
+<li data-key="cf_11"></li>
+<li data-key="cf_12"></li>
+<li data-key="cf_13"></li>
+<li data-key="cf_14"></li>
+<li data-key="cf_15"></li>
 </ul>
 </div>
 
 <div class="feature-block">
-<h2>Custom Channels</h2>
+<h2 data-key="cf_block4"></h2>
 <ul>
-<li>Collab Channel — Unique exclusive EXMs</li>
-<li>Custom Enemy Channel — Old spawns restored + new Endgame spawns</li>
-<li>Boss Rush Channel — Custom items and rewards</li>
+<li data-key="cf_16"></li>
+<li data-key="cf_17"></li>
+<li data-key="cf_18"></li>
 </ul>
 </div>
 
 <div class="feature-block">
-<h2>Collab EXMs</h2>
+<h2 data-key="cf_block5"></h2>
 <ul>
-<li>The Call of the Catacombs → Ghosts & Goblins Collab</li>
-<li>Drawn to Ancient Power → Attack on Titan Collab</li>
-<li>Phantasmic Great Dragon → Monster Hunter Collab</li>
-<li>Earth's Fury → Street Fighter Collab</li>
-<li>The Lost Order → Pijama Collab</li>
+<li data-key="cf_19"></li>
+<li data-key="cf_20"></li>
+<li data-key="cf_21"></li>
+<li data-key="cf_22"></li>
+<li data-key="cf_23"></li>
 </ul>
 </div>
+
+<script src="translations.js"></script>
+
+<script>
+function setLanguage(lang){
+    const t = translations[lang];
+    if(!t) return;
+
+    document.querySelectorAll("[data-key]").forEach(el=>{
+        const key = el.getAttribute("data-key");
+        if(t[key]) el.textContent = t[key];
+    });
+
+    localStorage.setItem("lang", lang);
+}
+
+languages.forEach(lang=>{
+    const div=document.createElement("div");
+    div.innerHTML=`${lang.flag} ${lang.name}`;
+    div.onclick=()=>setLanguage(lang.code);
+    document.getElementById("languageList").appendChild(div);
+});
+
+const saved = localStorage.getItem("lang") || "en";
+setLanguage(saved);
+</script>
 
 </body>
 </html>
