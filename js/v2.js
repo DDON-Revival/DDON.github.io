@@ -166,14 +166,15 @@ function getItemName(id) {
 }
 
 function getEnemyName(id) {
-    const enemy = DATA.EnemyNames?.[id];
+
+    const key = String(id);   // 🔥 DAS FEHLT
+
+    const enemy = DATA.EnemyNames?.[key];
     if (!enemy) return id;
 
-    // Falls alter JSON Stil (String)
     if (typeof enemy === "string")
         return enemy;
 
-    // Neuer Stil (Objekt mit en/jp)
     if (currentLanguage === "jp" && enemy.jp)
         return enemy.jp;
 
@@ -181,7 +182,10 @@ function getEnemyName(id) {
 }
 
 function getStageName(id) {
-    const stage = DATA.StageNames?.[id];
+
+    const key = String(id);  // 🔥 DAS FEHLT
+
+    const stage = DATA.StageNames?.[key];
     if (!stage) return id;
 
     if (typeof stage === "string")
@@ -191,6 +195,21 @@ function getStageName(id) {
         return stage.jp;
 
     return stage.en || id;
+}
+
+function getQuestName(q) {
+
+    if (!q.comment) return "";
+
+    // alter Stil (String)
+    if (typeof q.comment === "string")
+        return q.comment;
+
+    // neuer Stil (Objekt)
+    if (currentLanguage === "jp" && q.comment.jp)
+        return q.comment.jp;
+
+    return q.comment.en || "";
 }
 
 function getShopNames(id) {
@@ -742,7 +761,9 @@ function renderQuests(filter=""){
     DATA.Quests?.forEach(q=>{
 
         // 🔎 Search Filter
-        if (!q.comment?.toLowerCase().includes(filter)) return;
+        const questName = getQuestName(q);
+
+if (!questName.toLowerCase().includes(filter)) return;
 
         // 🏷 Category Filter
         if (
@@ -754,7 +775,7 @@ function renderQuests(filter=""){
             <div class="card">
                 <h3 onclick="navigate('?quest=${q._fileId}')"
                     style="cursor:pointer">
-                    ${q.comment}
+                    ${getQuestName(q)}
                 </h3>
                 <div style="font-size:12px;opacity:.6">
                     ${q.type || UI[currentLanguage].unknown}
@@ -787,7 +808,7 @@ function openQuest(id){
                 r.loot_pool?.forEach(i=>{
                     body+=`
                         <div>
-                            ${i.comment || getItemName(i.item_id)}
+                            ${getItemName(i.item_id)}
                             x${i.num}
                         </div>`;
                 });
@@ -812,7 +833,7 @@ function openQuest(id){
     }
 
     document.getElementById("content").innerHTML =
-        card(q.comment, body);
+        card(getQuestName(q), body);
 }
 
 /* =========================================================

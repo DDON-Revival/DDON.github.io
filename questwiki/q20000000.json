@@ -1,7 +1,10 @@
 {
   "state_machine": "GenericStateMachine",
   "type": "World",
-  "comment": "A Calamity at the Cathedral Ruins",
+"comment": {
+  "en": "A Calamity at the Cathedral Ruins",
+  "jp": "大聖堂跡の災厄"
+},
   "quest_id": 20000000,
   "base_level": 20,
   "minimum_item_rank": 0,
