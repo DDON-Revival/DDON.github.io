@@ -65,7 +65,7 @@ nav a:hover{
 
 .hero{
     text-align:center;
-    padding:120px 20px 60px 20px;
+    padding:120px 20px;
     background:linear-gradient(to bottom,#1b1b25,#0f0f14);
 }
 
@@ -73,58 +73,6 @@ nav a:hover{
     font-size:60px;
     color:#c8a75d;
 }
-
-/* 🔥 CONNECTION SECTION */
-
-.connection-section{
-    text-align:center;
-    padding:40px 20px 80px 20px;
-}
-
-.connection-box{
-    display:inline-block;
-    width:350px;
-    background:#1b1b25;
-    border:1px solid #c8a75d;
-    padding:25px;
-    box-shadow:0 0 25px rgba(200,167,93,0.15);
-    text-align:left;
-}
-
-.connection-box h3{
-    color:#c8a75d;
-    text-align:center;
-    margin-bottom:20px;
-}
-
-.connection-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin:10px 0;
-    font-size:14px;
-}
-
-.connection-row span{
-    color:#c8a75d;
-    font-weight:bold;
-}
-
-.copy-btn{
-    background:#14141c;
-    border:1px solid #2a2a35;
-    color:#c8a75d;
-    padding:4px 10px;
-    font-size:12px;
-    cursor:pointer;
-    transition:0.2s;
-}
-
-.copy-btn:hover{
-    border-color:#c8a75d;
-}
-
-/* existing styles */
 
 .section{
     padding:80px 20px;
@@ -192,83 +140,139 @@ footer{
 <div id="particles"></div>
 
 <header>
-<h2>DDON Revival</h2>
+    <h2>DDON Revival</h2>
 
-<div id="totalPlayersBox" style="color:#c8a75d;font-weight:bold;">
-Total Players Online: 0
-</div>
+    <div id="totalPlayersBox" style="color:#c8a75d;font-weight:bold;">
+        Total Players Online: 0
+    </div>
 
-<nav>
-<a href="#home" data-key="home">Home</a>
-<a href="#news" data-key="news">News</a>
-<a href="#status" data-key="status">Server Status</a>
-<a href="leaderboard.html" data-key="leaderboard">Leaderboard</a>
-<a href="howtoplay.html" data-key="howToPlay">How To Play</a>
-<a href="wiki.html" data-key="wiki">Wiki</a>
-<a href="custom.html" data-key="customFeatures">Custom Features</a>
-</nav>
+    <nav>
+        <a href="#home" data-key="home">Home</a>
+        <a href="#news" data-key="news">News</a>
+        <a href="#status" data-key="status">Server Status</a>
+        <a href="leaderboard.html" data-key="leaderboard">Leaderboard</a>
+        <a href="howtoplay.html" data-key="howToPlay">How To Play</a>
+		<a href="wiki.html" data-key="wiki">Wiki</a>
+		<a href="custom.html" data-key="customFeatures">Custom Features</a>
+    </nav>
 
-<div class="lang-selector">
-<button class="lang-btn">🌍</button>
-<div class="lang-dropdown" id="languageList"></div>
-</div>
+    <div class="lang-selector">
+        <button class="lang-btn">🌍</button>
+        <div class="lang-dropdown" id="languageList"></div>
+    </div>
 </header>
 
 <section id="home" class="hero">
-<h1 data-key="title">Dragon's Dogma Online</h1>
-<p data-key="subtitle">Biggest Server • Custom Content • Hardcore</p>
+    <h1 data-key="title">Dragon's Dogma Online</h1>
+    <p data-key="subtitle">Biggest Server • Custom Content • Hardcore</p>
 </section>
 
-<!-- 🔥 NEW CLEAN CONNECTION SECTION -->
-<section class="connection-section">
-<div class="connection-box">
-<h3>Server Connection</h3>
+<section id="news" class="section">
+    <h2 data-key="newsTitle">Latest News</h2>
 
-<div class="connection-row">
-<div><span>Lobby IP:</span> ddon.org</div>
-<button class="copy-btn" onclick="copyText('ddon.org')">Copy</button>
-</div>
+    <div class="card">
+        <h3 data-key="news1Title">Server Opening</h3>
+        <p data-key="news1Text">DDON is now live!</p>
+    </div>
 
-<div class="connection-row">
-<div><span>Lobby Port:</span> 52100</div>
-<button class="copy-btn" onclick="copyText('52100')">Copy</button>
-</div>
-
-<div class="connection-row">
-<div><span>Game IP:</span> ddon.org</div>
-<button class="copy-btn" onclick="copyText('ddon.org')">Copy</button>
-</div>
-
-<div class="connection-row">
-<div><span>Game Port:</span> 52099</div>
-<button class="copy-btn" onclick="copyText('52099')">Copy</button>
-</div>
-
-</div>
+    <div class="card">
+        <h3 data-key="news2Title">Hardcore Mode</h3>
+        <p data-key="news2Text">Hardcore Mode is now live!</p>
+    </div>
 </section>
 
-<!-- rest of your sections remain unchanged -->
+<section id="status" class="section">
+    <h2 data-key="serverStatusTitle">Server Status</h2>
+    <div id="serverStatusContainer"></div>
+</section>
 
 <footer>
 2023 DDON Revival • Unofficial Fan Project
 </footer>
 
+<!-- 🔥 translations FIRST -->
 <script src="translations.js"></script>
 
 <script>
+
+/* ===========================
+   🔥 Spark Generator
+=========================== */
 const container = document.getElementById("particles");
 for(let i=0;i<40;i++){
-let spark=document.createElement("div");
-spark.classList.add("spark");
-spark.style.left=Math.random()*100+"vw";
-spark.style.animationDuration=(5+Math.random()*5)+"s";
-spark.style.animationDelay=Math.random()*5+"s";
-container.appendChild(spark);
+    let spark=document.createElement("div");
+    spark.classList.add("spark");
+    spark.style.left=Math.random()*100+"vw";
+    spark.style.animationDuration=(5+Math.random()*5)+"s";
+    spark.style.animationDelay=Math.random()*5+"s";
+    container.appendChild(spark);
 }
 
-function copyText(text){
-navigator.clipboard.writeText(text);
+/* ===========================
+   LANGUAGE SYSTEM
+=========================== */
+
+function setLanguage(lang){
+    const t = translations[lang];
+    if(!t) return;
+
+    document.querySelectorAll("[data-key]").forEach(el=>{
+        const key = el.getAttribute("data-key");
+        if(t[key]) el.textContent = t[key];
+    });
+
+    localStorage.setItem("lang", lang);
+    loadServerStatus();
 }
+
+languages.forEach(lang=>{
+    const div=document.createElement("div");
+    div.innerHTML=`${lang.flag} ${lang.name}`;
+    div.onclick=()=>setLanguage(lang.code);
+    document.getElementById("languageList").appendChild(div);
+});
+
+const saved = localStorage.getItem("lang") || "en";
+setLanguage(saved);
+
+/* ===========================
+   SERVER STATUS
+=========================== */
+
+async function loadServerStatus(){
+    try{
+        const res = await fetch("status.json?nocache="+Date.now());
+        const data = await res.json();
+
+        const t = translations[localStorage.getItem("lang") || "en"];
+        const container = document.getElementById("serverStatusContainer");
+        container.innerHTML="";
+        let total=0;
+
+        data.forEach(server=>{
+            total+=server.players;
+
+            const div=document.createElement("div");
+            div.className="card";
+            div.innerHTML=`
+                <h3>${server.name}</h3>
+                <p>${t.statusLabel}: ${server.online ? "🟢 "+t.online : "🔴 "+t.offline}</p>
+                <p>${t.playersLabel}: ${server.players}</p>
+            `;
+            container.appendChild(div);
+        });
+
+        document.getElementById("totalPlayersBox").textContent=
+            `${t.totalPlayers}: ${total}`;
+
+    }catch(err){
+        console.error("Status load failed",err);
+    }
+}
+
+loadServerStatus();
+setInterval(loadServerStatus,15000);
+
 </script>
 
 </body>
