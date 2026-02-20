@@ -7,6 +7,15 @@
 
 <style>
 
+#languageSelect {
+    background: #1d1d22;
+    border: 1px solid #26262c;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
 /* =========================
    BASE
 ========================= */
@@ -149,7 +158,12 @@ header{
 <body>
 
 <header>DDON Wiki V2</header>
-
+<div style="padding:10px 20px;">
+    <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="jp">日本語</option>
+    </select>
+</div>
 <input id="searchBox" placeholder="Search...">
 
 <div class="tabs">

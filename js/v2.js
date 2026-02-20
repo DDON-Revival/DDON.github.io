@@ -5,6 +5,7 @@
 const DATA = {};
 let currentTab = "monster";
 let currentQuestCategory = "All";
+let currentLanguage = "en"; // en oder jp
 
 /* =========================================================
    LOAD DATA
@@ -78,15 +79,32 @@ async function loadQuests() {
 
 function getItemName(id) {
     const found = DATA.Items?.item?.find(i => String(i.id) === String(id));
-    return found ? found.new : id;
+    if (!found) return id;
+
+    if (currentLanguage === "jp" && found.jp)
+        return found.jp;
+
+    return found.new || id;
 }
 
 function getEnemyName(id) {
-    return DATA.EnemyNames?.[id] || id;
+    const enemy = DATA.EnemyNames?.[id];
+    if (!enemy) return id;
+
+    if (currentLanguage === "jp" && enemy.jp)
+        return enemy.jp;
+
+    return enemy.en || id;
 }
 
 function getStageName(id) {
-    return DATA.StageNames?.[id]?.en || id;
+    const stage = DATA.StageNames?.[id];
+    if (!stage) return id;
+
+    if (currentLanguage === "jp" && stage.jp)
+        return stage.jp;
+
+    return stage.en || id;
 }
 
 function getShopNames(id) {
@@ -149,6 +167,12 @@ document.getElementById("searchBox")
     ?.addEventListener("input", () => {
         renderHome();
     });
+	
+	document.getElementById("languageSelect")
+?.addEventListener("change", (e) => {
+    currentLanguage = e.target.value;
+    renderHome();
+});
 
 /* =========================================================
    HOME
