@@ -119,6 +119,19 @@ function getStageName(id) {
     return stage.en || id;
 }
 
+function getShopNames(id) {
+    const shop = DATA.ShopNames?.[id];
+    if (!shop) return ["Shop " + id];
+
+    if (typeof shop === "string")
+        return [shop];
+
+    if (currentLanguage === "jp" && shop.jp)
+        return [shop.jp];
+
+    return [shop.en || "Shop " + id];
+}
+
 
 function card(title, html) {
     return `
@@ -744,8 +757,8 @@ function renderCraftingPlus(filter=""){
     DATA.CraftingPlus?.forEach(cat=>{
         cat.RecipeList?.forEach(r=>{
 
-            const name = (getItemName(r.ItemID) || "");
-            if (!name.toLowerCase().includes(filter)) return;
+const name = String(getItemName(r.ItemID) || "");
+if (!name.toLowerCase().includes(filter)) return;
 
             let mats="";
             r.CraftMaterialList?.forEach(m=>{
