@@ -6,6 +6,57 @@ const DATA = {};
 let currentTab = "monster";
 let currentQuestCategory = "All";
 let currentLanguage = "en"; // en oder jp
+const UI = {
+    en: {
+        tabs: {
+            monster: "Monsters",
+            item: "Items",
+            stage: "Stages",
+            shop: "Shops",
+            special: "Special",
+            gathering: "Gathering",
+            quest: "Quests",
+            crafting: "Crafting",
+            craftingPlus: "Crafting+"
+        },
+        search: "Search...",
+        droppedBy: "Dropped By",
+        soldIn: "Sold In Shops",
+        exchangedAt: "Exchanged At",
+        gatheredAt: "Gathered At",
+        craftedFrom: "Crafted From",
+        gradeUpFrom: "Grade Up From",
+        rewards: "Rewards",
+        baseLevel: "Base Level",
+        unknown: "Unknown",
+        exp: "EXP"
+    },
+
+    jp: {
+        tabs: {
+            monster: "モンスター",
+            item: "アイテム",
+            stage: "ステージ",
+            shop: "ショップ",
+            special: "特別交換",
+            gathering: "採集",
+            quest: "クエスト",
+            crafting: "クラフト",
+            craftingPlus: "強化"
+        },
+        search: "検索...",
+        droppedBy: "ドロップ元",
+        soldIn: "販売ショップ",
+        exchangedAt: "交換場所",
+        gatheredAt: "採集場所",
+        craftedFrom: "素材",
+        gradeUpFrom: "強化元",
+        rewards: "報酬",
+        baseLevel: "基本レベル",
+        unknown: "不明",
+        exp: "経験値"
+    }
+};
 
 /* =========================================================
    LOAD DATA
@@ -345,7 +396,7 @@ function renderItems(filter="") {
 
 function openItem(id) {
 
-    let body = "<strong>Dropped By:</strong>";
+    let body = `<strong>${UI[currentLanguage].droppedBy}:</strong>`;
     const droppedSet = new Set();
 
     DATA.EnemySpawn?.enemies?.forEach(e=>{
@@ -368,7 +419,7 @@ function openItem(id) {
         });
     });
 
-    body += "<strong>Sold In Shops:</strong>";
+    body += `<strong>${UI[currentLanguage].soldIn}:</strong>`;
 
     DATA.Shops?.forEach(shop=>{
         shop?.Data?.GoodsParamList?.forEach(g=>{
@@ -386,7 +437,7 @@ function openItem(id) {
         });
     });
 
-    body += "<strong>Exchanged At:</strong>";
+    body += `<strong>${UI[currentLanguage].exchangedAt}:</strong>`;
 
     DATA.Special?.shops?.forEach(shop=>{
         shop.categories?.forEach(cat=>{
@@ -400,7 +451,7 @@ function openItem(id) {
         });
     });
 
-body += "<strong>Gathered At:</strong>";
+body += `<strong>${UI[currentLanguage].gatheredAt}:</strong>`;
 
 const gatheredStages = new Set();
 
@@ -429,7 +480,7 @@ DATA.Crafting?.forEach(cat=>{
         if (String(r.ItemID) === String(id)) {
 
             if (!craftedFound) {
-                body += "<strong>Crafted From:</strong>";
+                body += `<strong>${UI[currentLanguage].craftedFrom}:</strong>`;
                 craftedFound = true;
             }
 
@@ -455,7 +506,7 @@ DATA.CraftingPlus?.forEach(cat=>{
         if (String(r.GradeupItemID) === String(id)) {
 
             if (!gradeFound) {
-                body += "<strong>Grade Up From:</strong>";
+                body += `<strong>${UI[currentLanguage].gradeUpFrom}:</strong>`;
                 gradeFound = true;
             }
 
@@ -677,7 +728,7 @@ function renderQuests(filter=""){
                     ${q.comment}
                 </h3>
                 <div style="font-size:12px;opacity:.6">
-                    ${q.type || "Unknown"}
+                    ${q.type || UI[currentLanguage].unknown}
                 </div>
             </div>
         `;
@@ -694,12 +745,12 @@ function openQuest(id){
     let body = `
         <div style="font-size:12px;opacity:.6">
 <div class="quest-badge">${q.type || "Unknown"}</div>
-        <div>Base Level: ${q.base_level}</div>
+        <div>${UI[currentLanguage].baseLevel}: ${q.base_level}</div>
         <br>
     `;
 
     if(q.rewards){
-        body += "<strong>Rewards:</strong>";
+        body += `<strong>${UI[currentLanguage].rewards}:</strong>`;
 
         q.rewards.forEach(r=>{
 
@@ -726,7 +777,7 @@ function openQuest(id){
             }
 
             if(r.type==="exp"){
-                body+=`<div>EXP: ${r.amount}</div>`;
+                body+=`<div>${UI[currentLanguage].exp}: ${r.amount}</div>`;
             }
         });
     }
