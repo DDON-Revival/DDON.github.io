@@ -323,6 +323,18 @@ noPlayersFound:"未找到玩家",
 howToPlay:"游戏指南",
 wiki:"维基",
 
+customFeatures:"自定义功能",
+customTitle:"服务器专属功能",
+customSubtitle:"仅在 DDON Revival 可用的功能",
+
+hcTitle:"硬核模式",
+hcText:"硬核是全新的自定义游戏模式。体验只有一次生命的冒险 —— 死亡即结束！",
+
+customContentTitle:"自定义内容",
+customContentText:"独特的任务、奖励和平衡调整。",
+eventsTitle:"特别活动",
+eventsText:"服务器专属季节活动。",
+
 cf_block1:"自定义功能",
 cf_1:"课程系统开放！",
 cf_2:"仓库课程永久开启（扩展仓库+远程访问）",
@@ -444,6 +456,18 @@ dead:"Morto",
 noPlayersFound:"Nenhum jogador encontrado",
 howToPlay:"Como Jogar",
 wiki:"Wiki",
+
+customFeatures:"Funcionalidades Personalizadas",
+customTitle:"Recursos Exclusivos do Servidor",
+customSubtitle:"Disponível apenas no DDON Revival",
+
+hcTitle:"Modo Hardcore",
+hcText:"Hardcore é o novo modo de jogo personalizado. Viva uma aventura emocionante com apenas uma vida — morreu, acabou!",
+
+customContentTitle:"Conteúdo Personalizado",
+customContentText:"Missões e recompensas exclusivas.",
+eventsTitle:"Eventos Especiais",
+eventsText:"Eventos sazonais exclusivos do servidor.",
 
 cf_block1:"Funcionalidades Personalizadas",
 cf_1:"Cursos disponíveis!",
@@ -567,6 +591,18 @@ noPlayersFound:"No se encontraron jugadores",
 howToPlay:"Cómo Jugar",
 wiki:"Wiki",
 
+customFeatures:"Funciones Personalizadas",
+customTitle:"Funciones Exclusivas del Servidor",
+customSubtitle:"Disponibles solo en DDON Revival",
+
+hcTitle:"Modo Hardcore",
+hcText:"Hardcore es el nuevo modo de juego personalizado. Vive una aventura emocionante con una sola vida — si mueres, se acabó.",
+
+customContentTitle:"Contenido Personalizado",
+customContentText:"Misiones y recompensas únicas.",
+eventsTitle:"Eventos Especiales",
+eventsText:"Eventos exclusivos del servidor.",
+
 cf_block1:"Funciones Personalizadas",
 cf_1:"¡Cursos disponibles!",
 cf_2:"Curso de Almacenamiento activo permanentemente",
@@ -688,6 +724,18 @@ dead:"Мёртв",
 noPlayersFound:"Игроки не найдены",
 howToPlay:"Как Играть",
 wiki:"Вики",
+
+customFeatures:"Пользовательские функции",
+customTitle:"Эксклюзивные функции сервера",
+customSubtitle:"Доступно только на DDON Revival",
+
+hcTitle:"Hardcore режим",
+hcText:"Hardcore — это новый пользовательский игровой режим. Захватывающее приключение с одной жизнью — смерть означает конец.",
+
+customContentTitle:"Пользовательский контент",
+customContentText:"Уникальные задания и награды.",
+eventsTitle:"Специальные события",
+eventsText:"Эксклюзивные серверные события.",
 
 cf_block1:"Пользовательские функции",
 cf_1:"Доступны курсы!",
@@ -811,6 +859,18 @@ noPlayersFound:"Oyuncu bulunamadı",
 howToPlay:"Nasıl Oynanır",
 wiki:"Wiki",
 
+customFeatures:"Özel Özellikler",
+customTitle:"Sunucuya Özel Özellikler",
+customSubtitle:"Sadece DDON Revival'da mevcut",
+
+hcTitle:"Hardcore Modu",
+hcText:"Hardcore yeni özel oyun modudur. Tek canla heyecan dolu bir macera yaşa — ölürsen her şey biter.",
+
+customContentTitle:"Özel İçerik",
+customContentText:"Benzersiz görevler ve ödüller.",
+eventsTitle:"Özel Etkinlikler",
+eventsText:"Sunucuya özel sezonluk etkinlikler.",
+
 cf_block1:"Özel Özellikler",
 cf_1:"Kurslar mevcut!",
 cf_2:"Depolama Kursu kalıcı aktif",
@@ -932,6 +992,18 @@ dead:"Martwy",
 noPlayersFound:"Nie znaleziono graczy",
 howToPlay:"Jak Grać",
 wiki:"Wiki",
+
+customFeatures:"Funkcje Niestandardowe",
+customTitle:"Ekskluzywne Funkcje Serwera",
+customSubtitle:"Dostępne tylko na DDON Revival",
+
+hcTitle:"Tryb Hardcore",
+hcText:"Hardcore to nowy niestandardowy tryb gry. Przeżyj ekscytującą przygodę z jednym życiem — śmierć oznacza koniec.",
+
+customContentTitle:"Niestandardowa Zawartość",
+customContentText:"Unikalne zadania i nagrody.",
+eventsTitle:"Specjalne Wydarzenia",
+eventsText:"Sezonowe wydarzenia dostępne tylko na serwerze.",
 
 cf_block1:"Funkcje Niestandardowe",
 cf_1:"Dostępne kursy!",
@@ -1055,6 +1127,18 @@ noPlayersFound:"플레이어를 찾을 수 없습니다",
 howToPlay:"플레이 방법",
 wiki:"위키",
 
+customFeatures:"커스텀 기능",
+customTitle:"서버 전용 기능",
+customSubtitle:"DDON Revival에서만 이용 가능",
+
+hcTitle:"하드코어 모드",
+hcText:"하드코어는 새로운 커스텀 게임 모드입니다. 단 하나의 생명으로 모험을 즐기세요 — 죽으면 끝입니다.",
+
+customContentTitle:"커스텀 콘텐츠",
+customContentText:"독특한 퀘스트와 보상.",
+eventsTitle:"특별 이벤트",
+eventsText:"서버 전용 시즌 이벤트.",
+
 cf_block1:"커스텀 기능",
 cf_1:"코스 사용 가능!",
 cf_2:"창고 코스 상시 활성화 (확장 저장 + 원격 접근)",
@@ -1176,6 +1260,18 @@ dead:"Morto",
 noPlayersFound:"Nessun giocatore trovato",
 howToPlay:"Come Giocare",
 wiki:"Wiki",
+
+customFeatures:"Funzionalità Personalizzate",
+customTitle:"Funzionalità Esclusive del Server",
+customSubtitle:"Disponibili solo su DDON Revival",
+
+hcTitle:"Modalità Hardcore",
+hcText:"Hardcore è la nuova modalità di gioco personalizzata. Vivi un'avventura emozionante con una sola vita — se muori, è finita.",
+
+customContentTitle:"Contenuto Personalizzato",
+customContentText:"Missioni e ricompense uniche.",
+eventsTitle:"Eventi Speciali",
+eventsText:"Eventi stagionali esclusivi del server.",
 
 cf_block1:"Funzionalità Personalizzate",
 cf_1:"Corsi disponibili!",
@@ -1299,6 +1395,18 @@ noPlayersFound:"Aucun joueur trouvé",
 howToPlay:"Comment Jouer",
 wiki:"Wiki",
 
+customFeatures:"Fonctionnalités Personnalisées",
+customTitle:"Fonctionnalités Exclusives du Serveur",
+customSubtitle:"Disponibles uniquement sur DDON Revival",
+
+hcTitle:"Mode Hardcore",
+hcText:"Hardcore est le nouveau mode de jeu personnalisé. Vivez une aventure intense avec une seule vie — si vous mourez, c'est terminé.",
+
+customContentTitle:"Contenu Personnalisé",
+customContentText:"Quêtes et récompenses uniques.",
+eventsTitle:"Événements Spéciaux",
+eventsText:"Événements saisonniers exclusifs au serveur.",
+
 cf_block1:"Fonctionnalités Personnalisées",
 cf_1:"Cours disponibles !",
 cf_2:"Cours de stockage actif en permanence",
@@ -1420,6 +1528,18 @@ dead:"Νεκρός",
 noPlayersFound:"Δεν βρέθηκαν παίκτες",
 howToPlay:"Πώς να Παίξεις",
 wiki:"Wiki",
+
+customFeatures:"Προσαρμοσμένες Λειτουργίες",
+customTitle:"Αποκλειστικές Λειτουργίες Διακομιστή",
+customSubtitle:"Διαθέσιμες μόνο στο DDON Revival",
+
+hcTitle:"Hardcore Mode",
+hcText:"Το Hardcore είναι το νέο προσαρμοσμένο game mode. Ζήσε μια συναρπαστική περιπέτεια με μία μόνο ζωή — αν πεθάνεις, τελείωσε.",
+
+customContentTitle:"Προσαρμοσμένο Περιεχόμενο",
+customContentText:"Μοναδικές αποστολές και ανταμοιβές.",
+eventsTitle:"Ειδικές Εκδηλώσεις",
+eventsText:"Εποχιακές εκδηλώσεις αποκλειστικές στον διακομιστή.",
 
 cf_block1:"Προσαρμοσμένες Λειτουργίες",
 cf_1:"Διαθέσιμα μαθήματα!",
