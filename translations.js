@@ -61,6 +61,12 @@ noPlayersFound:"No players found",
 howToPlay:"How To Play",
 wiki:"Wiki",
 
+dungeon1:"Shadolean Great Temple",
+dungeon2:"Hadin Underground Old Road",
+dungeon3:"Mysree Barrow",
+dungeon4:"The Tunnel Across the Bridge",
+dungeon5:"Erte Deenan",
+
 hcFullDescription:
 "Experience the biggest update in DDON history — the brand new Hardcore Game Mode! Exclusive to this server! Embark on a thrilling adventure and do not die — because one death means permanent death!",
 
@@ -199,6 +205,13 @@ noPlayersFound:"プレイヤーが見つかりません",
 howToPlay:"遊び方",
 wiki:"ウィキ",
 
+dungeon1:"シャドリーン大神殿",
+dungeon2:"ハディン地下旧道",
+dungeon3:"ミスリー墓所",
+dungeon4:"橋向こうのトンネル",
+dungeon5:"エルテ・ディーナン",
+
+
 hcFullDescription:
 "DDON史上最大のアップデート、新ハードコアモードを体験せよ！このサーバー限定！スリリングな冒険を楽しみ、決して死なないでください — 一度の死が永久死亡を意味します。",
 
@@ -334,6 +347,13 @@ dead:"死亡",
 noPlayersFound:"未找到玩家",
 howToPlay:"游戏指南",
 wiki:"维基",
+
+dungeon1:"沙多琳大神殿",
+dungeon2:"哈丁地下旧道",
+dungeon3:"米斯里古墓",
+dungeon4:"桥对面的隧道",
+dungeon5:"埃尔特·迪南",
+
 
 hcFullDescription:
 "体验DDON历史上最大的更新——全新硬核模式！仅限本服务器！展开刺激的冒险，不要死亡——因为一次死亡即永久删除角色！",
@@ -475,6 +495,12 @@ noPlayersFound:"Nenhum jogador encontrado",
 howToPlay:"Como Jogar",
 wiki:"Wiki",
 
+dungeon1:"Grande Templo Shadolean",
+dungeon2:"Antiga Estrada Subterrânea de Hadin",
+dungeon3:"Túmulo Mysree",
+dungeon4:"O Túnel Além da Ponte",
+dungeon5:"Erte Deenan",
+
 hcFullDescription:
 "Experimente a maior atualização da história do DDON — o novo modo Hardcore! Exclusivo deste servidor! Viva uma aventura emocionante e não morra — pois uma morte significa morte permanente!",
 
@@ -614,6 +640,13 @@ dead:"Muerto",
 noPlayersFound:"No se encontraron jugadores",
 howToPlay:"Cómo Jugar",
 wiki:"Wiki",
+
+dungeon1:"Gran Templo Shadolean",
+dungeon2:"Antiguo Camino Subterráneo de Hadin",
+dungeon3:"Túmulo Mysree",
+dungeon4:"El Túnel al Otro Lado del Puente",
+dungeon5:"Erte Deenan",
+
 
 hcFullDescription:
 "Vive la mayor actualización en la historia de DDON — el nuevo modo Hardcore. ¡Exclusivo aquí! Disfruta una aventura emocionante y no mueras — porque una sola muerte significa muerte permanente.",
@@ -755,6 +788,13 @@ noPlayersFound:"Игроки не найдены",
 howToPlay:"Как Играть",
 wiki:"Вики",
 
+dungeon1:"Великий Храм Шадолеан",
+dungeon2:"Старая Подземная Дорога Хадина",
+dungeon3:"Курган Мисри",
+dungeon4:"Тоннель за Мостом",
+dungeon5:"Эрте Динан",
+
+
 hcFullDescription:
 "Испытайте крупнейшее обновление в истории DDON — новый режим Hardcore! Эксклюзивно только здесь! Одно приключение — одна жизнь. Одна смерть означает окончательную смерть персонажа!",
 
@@ -894,6 +934,12 @@ dead:"Ölü",
 noPlayersFound:"Oyuncu bulunamadı",
 howToPlay:"Nasıl Oynanır",
 wiki:"Wiki",
+
+dungeon1:"Shadolean Büyük Tapınağı",
+dungeon2:"Hadin Yeraltı Eski Yolu",
+dungeon3:"Mysree Höyüğü",
+dungeon4:"Köprünün Ötesindeki Tünel",
+dungeon5:"Erte Deenan",
 
 hcFullDescription:
 "DDON tarihinin en büyük güncellemesini deneyimle — yeni Hardcore oyun modu! Sadece burada! Heyecan dolu bir maceraya atıl ve ölme — çünkü bir ölüm kalıcı ölümdür!",
@@ -1035,6 +1081,12 @@ noPlayersFound:"Nie znaleziono graczy",
 howToPlay:"Jak Grać",
 wiki:"Wiki",
 
+dungeon1:"Wielka Świątynia Shadolean",
+dungeon2:"Stara Podziemna Droga Hadina",
+dungeon3:"Kurhan Mysree",
+dungeon4:"Tunel za Mostem",
+dungeon5:"Erte Deenan",
+
 hcFullDescription:
 "Przeżyj największą aktualizację w historii DDON — nowy tryb Hardcore! Dostępny wyłącznie tutaj! Jedna przygoda, jedno życie — jedna śmierć oznacza koniec postaci!",
 
@@ -1174,6 +1226,12 @@ dead:"사망",
 noPlayersFound:"플레이어를 찾을 수 없습니다",
 howToPlay:"플레이 방법",
 wiki:"위키",
+
+dungeon1:"샤돌린 대사원",
+dungeon2:"하딘 지하 구도로",
+dungeon3:"미스리 고분",
+dungeon4:"다리 건너 터널",
+dungeon5:"에르테 디난",
 
 hcFullDescription:
 "DDON 역사상 가장 큰 업데이트를 경험하세요 — 새로운 하드코어 모드! 이 서버에서만 가능합니다! 단 하나의 생명으로 모험을 즐기세요 — 한 번의 죽음은 영구적인 죽음을 의미합니다.",
@@ -1315,6 +1373,12 @@ noPlayersFound:"Nessun giocatore trovato",
 howToPlay:"Come Giocare",
 wiki:"Wiki",
 
+dungeon1:"Grande Tempio Shadolean",
+dungeon2:"Antica Strada Sotterranea di Hadin",
+dungeon3:"Tumulo di Mysree",
+dungeon4:"Il Tunnel Oltre il Ponte",
+dungeon5:"Erte Deenan",
+
 hcFullDescription:
 "Vivi il più grande aggiornamento nella storia di DDON — la nuova modalità Hardcore! Esclusiva solo qui! Un'avventura intensa con una sola vita — una morte significa fine definitiva.",
 
@@ -1455,6 +1519,13 @@ noPlayersFound:"Aucun joueur trouvé",
 howToPlay:"Comment Jouer",
 wiki:"Wiki",
 
+dungeon1:"Grand Temple Shadolean",
+dungeon2:"Ancienne Route Souterraine d'Hadin",
+dungeon3:"Tumulus Mysree",
+dungeon4:"Le Tunnel au-delà du Pont",
+dungeon5:"Erte Deenan",
+
+
 hcFullDescription:
 "Découvrez la plus grande mise à jour de l'histoire de DDON — le nouveau mode Hardcore ! Exclusif à ce serveur ! Une aventure intense avec une seule vie — une mort signifie la fin définitive.",
 
@@ -1594,6 +1665,12 @@ dead:"Νεκρός",
 noPlayersFound:"Δεν βρέθηκαν παίκτες",
 howToPlay:"Πώς να Παίξεις",
 wiki:"Wiki",
+
+dungeon1:"Μεγάλος Ναός Shadolean",
+dungeon2:"Παλαιός Υπόγειος Δρόμος Hadin",
+dungeon3:"Τύμβος Mysree",
+dungeon4:"Το Τούνελ Πέρα από τη Γέφυρα",
+dungeon5:"Erte Deenan",
 
 hcFullDescription:
 "Ζήσε το μεγαλύτερο update στην ιστορία του DDON — το νέο Hardcore Mode! Αποκλειστικά εδώ! Μία ζωή, μία ευκαιρία — ένας θάνατος σημαίνει οριστικό τέλος.",
