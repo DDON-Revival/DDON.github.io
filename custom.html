@@ -353,15 +353,15 @@ nav a:hover{
 <script src="translations.js"></script>
 
 <script>
-
-/* LANGUAGE SYSTEM */
 function setLanguage(lang){
     const t = translations[lang];
     if(!t) return;
+
     document.querySelectorAll("[data-key]").forEach(el=>{
         const key = el.getAttribute("data-key");
         if(t[key]) el.textContent = t[key];
     });
+
     localStorage.setItem("lang", lang);
 }
 
@@ -372,11 +372,12 @@ languages.forEach(lang=>{
     document.getElementById("languageList").appendChild(div);
 });
 
-setLanguage(localStorage.getItem("lang") || "en");
+const saved = localStorage.getItem("lang") || "en";
+setLanguage(saved);
 
-/* EMBERS */
+/* 🔥 EMBER EFFECT FIXED */
 const emberContainer = document.getElementById("embers");
-for(let i=0;i<80;i++){
+for(let i=0;i<60;i++){
     let ember=document.createElement("div");
     ember.classList.add("ember");
     ember.style.left=Math.random()*100+"vw";
@@ -384,17 +385,6 @@ for(let i=0;i<80;i++){
     ember.style.animationDelay=Math.random()*5+"s";
     emberContainer.appendChild(ember);
 }
-
-/* BLOOD DRIPS */
-const banner=document.getElementById("hardcoreBanner");
-for(let i=0;i<8;i++){
-    let drop=document.createElement("div");
-    drop.classList.add("blood-drop");
-    drop.style.left=Math.random()*100+"%";
-    drop.style.animationDelay=Math.random()*4+"s";
-    banner.appendChild(drop);
-}
-
 </script>
 
 </body>
