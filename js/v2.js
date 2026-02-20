@@ -81,6 +81,10 @@ function getItemName(id) {
     const found = DATA.Items?.item?.find(i => String(i.id) === String(id));
     if (!found) return id;
 
+    // Falls name nicht string ist → absichern
+    if (typeof found === "string")
+        return found;
+
     if (currentLanguage === "jp" && found.jp)
         return found.jp;
 
@@ -91,6 +95,11 @@ function getEnemyName(id) {
     const enemy = DATA.EnemyNames?.[id];
     if (!enemy) return id;
 
+    // Falls alter JSON Stil (String)
+    if (typeof enemy === "string")
+        return enemy;
+
+    // Neuer Stil (Objekt mit en/jp)
     if (currentLanguage === "jp" && enemy.jp)
         return enemy.jp;
 
@@ -101,15 +110,15 @@ function getStageName(id) {
     const stage = DATA.StageNames?.[id];
     if (!stage) return id;
 
+    if (typeof stage === "string")
+        return stage;
+
     if (currentLanguage === "jp" && stage.jp)
         return stage.jp;
 
     return stage.en || id;
 }
 
-function getShopNames(id) {
-    return DATA.ShopNames?.[id] || ["Shop " + id];
-}
 
 function card(title, html) {
     return `
@@ -708,8 +717,8 @@ function renderCrafting(filter=""){
     DATA.Crafting?.forEach(cat=>{
         cat.RecipeList?.forEach(r=>{
 
-		const name = getItemName(r.ItemID) || "";
-		if (!name.toLowerCase().includes(filter)) return;
+const name = String(getItemName(r.ItemID) || "");
+if (!name.toLowerCase().includes(filter)) return;
 
 
             let mats="";
