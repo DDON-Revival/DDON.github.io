@@ -216,7 +216,7 @@ hcFullDescription:
 "DDON史上最大のアップデート、新ハードコアモードを体験せよ！このサーバー限定！スリリングな冒険を楽しみ、決して死なないでください — 一度の死が永久死亡を意味します。",
 
 bossRushDescription:
-"ボスラッシュダンジョンはエンドゲームダンジョンで、ボスラッシュチャンネルでのみ入場可能です。現在利用可能なダンジョン：Shadolean Great Temple、Hadin Underground Old Road、Mysree Barrow、The Tunnel Across the Bridge、そして最新ダンジョン Erte Deenan。究極の高難易度チャレンジを体験せよ！",
+"ボスラッシュダンジョンはエンドゲームダンジョンで、ボスラッシュチャンネルからのみ入場可能です。現在利用可能なダンジョンは、シャドリーン大神殿、ハディン地下旧道、ミスリー墓所（旧・古代埋葬塚）、橋向こうのトンネル、そして最新ダンジョン エルテ・ディーナンです。究極の高難易度エンドゲームに挑戦せよ！",
 
 customFeatures: "カスタム機能",
 customTitle: "サーバー限定機能",
@@ -359,7 +359,7 @@ hcFullDescription:
 "体验DDON历史上最大的更新——全新硬核模式！仅限本服务器！展开刺激的冒险，不要死亡——因为一次死亡即永久删除角色！",
 
 bossRushDescription:
-"Boss Rush 地下城为终局地下城，仅可通过 Boss Rush 频道进入。目前开放的地下城包括：Shadolean Great Temple、Hadin Underground Old Road、Mysree Barrow、The Tunnel Across the Bridge 以及最新地下城 Erte Deenan。挑战高难度终局内容！",
+"Boss Rush 地下城是终局地下城，仅可通过 Boss Rush 频道进入。目前开放的地下城包括：沙多琳大神殿、哈丁地下旧道、米斯里古墓（原古代墓丘）、桥对面的隧道，以及最新地下城 埃尔特·迪南。迎接紧张而极具挑战性的终局体验！",
 
 customFeatures:"自定义功能",
 customTitle:"服务器专属功能",
@@ -505,7 +505,7 @@ hcFullDescription:
 "Experimente a maior atualização da história do DDON — o novo modo Hardcore! Exclusivo deste servidor! Viva uma aventura emocionante e não morra — pois uma morte significa morte permanente!",
 
 bossRushDescription:
-"As Dungeons Boss Rush são Dungeons de Endgame acessíveis apenas pelo canal Boss Rush. Atualmente disponíveis: Shadolean Great Temple, Hadin Underground Old Road, Mysree Barrow, The Tunnel Across the Bridge e o novo dungeon Erte Deenan. Enfrente um desafio extremo!",
+"As Dungeons Boss Rush são Dungeons de Endgame acessíveis apenas pelo canal Boss Rush. Atualmente disponíveis: Grande Templo Shadolean, Antiga Estrada Subterrânea de Hadin, Túmulo Mysree (antigo Monte de Sepultamento Ancestral), O Túnel Além da Ponte e o mais novo dungeon Erte Deenan. Enfrente um desafio intenso e extremo de endgame!",
 
 customFeatures:"Funcionalidades Personalizadas",
 customTitle:"Recursos Exclusivos do Servidor",
@@ -652,7 +652,7 @@ hcFullDescription:
 "Vive la mayor actualización en la historia de DDON — el nuevo modo Hardcore. ¡Exclusivo aquí! Disfruta una aventura emocionante y no mueras — porque una sola muerte significa muerte permanente.",
 
 bossRushDescription:
-"Las Boss Rush Dungeons son mazmorras de Endgame accesibles solo desde el canal Boss Rush. Actualmente disponibles: Shadolean Great Temple, Hadin Underground Old Road, Mysree Barrow, The Tunnel Across the Bridge y el nuevo dungeon Erte Deenan. ¡Desafío extremo garantizado!",
+"Las mazmorras Boss Rush son mazmorras de Endgame accesibles únicamente a través del canal Boss Rush. Actualmente disponibles: Gran Templo Shadolean, Antiguo Camino Subterráneo de Hadin, Túmulo Mysree (antiguo Montículo de Entierro Ancestral), El Túnel al Otro Lado del Puente y el nuevo dungeon Erte Deenan. ¡Enfrenta una experiencia de endgame intensa y desafiante!",
 
 customFeatures:"Funciones Personalizadas",
 customTitle:"Funciones Exclusivas del Servidor",
@@ -799,7 +799,7 @@ hcFullDescription:
 "Испытайте крупнейшее обновление в истории DDON — новый режим Hardcore! Эксклюзивно только здесь! Одно приключение — одна жизнь. Одна смерть означает окончательную смерть персонажа!",
 
 bossRushDescription:
-"Подземелья Boss Rush — это эндгейм-контент, доступный только через канал Boss Rush. Доступные подземелья: Shadolean Great Temple, Hadin Underground Old Road, Mysree Barrow, The Tunnel Across the Bridge и новейшее подземелье Erte Deenan. Испытайте настоящий хардкор!",
+"Подземелья Boss Rush — это эндгейм-контент, доступный только через канал Boss Rush. В настоящее время доступны: Великий Храм Шадолеан, Старая Подземная Дорога Хадина, Курган Мисри (бывший Древний Погребальный Холм), Тоннель за Мостом и новейшее подземелье Эрте Динан. Испытайте напряжённое и по-настоящему сложное эндгейм-приключение!",
 
 customFeatures:"Пользовательские функции",
 customTitle:"Эксклюзивные функции сервера",
@@ -945,7 +945,7 @@ hcFullDescription:
 "DDON tarihinin en büyük güncellemesini deneyimle — yeni Hardcore oyun modu! Sadece burada! Heyecan dolu bir maceraya atıl ve ölme — çünkü bir ölüm kalıcı ölümdür!",
 
 bossRushDescription:
-"Boss Rush Dungeons Endgame zindanlarıdır ve sadece Boss Rush kanalından girilebilir. Mevcut zindanlar: Shadolean Great Temple, Hadin Underground Old Road, Mysree Barrow, The Tunnel Across the Bridge ve en yeni dungeon Erte Deenan. Zorlu bir meydan okumaya hazır ol!",
+"Boss Rush Zindanları, yalnızca Boss Rush Kanalı üzerinden erişilebilen Endgame zindanlarıdır. Mevcut zindanlar: Shadolean Büyük Tapınağı, Hadin Yeraltı Eski Yolu, Mysree Höyüğü (eski Antik Mezar Höyüğü), Köprünün Ötesindeki Tünel ve en yeni zindan Erte Deenan. Yoğun ve zorlu bir endgame deneyimine hazır olun!",
 
 customFeatures:"Özel Özellikler",
 customTitle:"Sunucuya Özel Özellikler",
@@ -1091,7 +1091,7 @@ hcFullDescription:
 "Przeżyj największą aktualizację w historii DDON — nowy tryb Hardcore! Dostępny wyłącznie tutaj! Jedna przygoda, jedno życie — jedna śmierć oznacza koniec postaci!",
 
 bossRushDescription:
-"Dungeony Boss Rush to zawartość Endgame dostępna wyłącznie przez kanał Boss Rush. Obecne dungeony: Shadolean Great Temple, Hadin Underground Old Road, Mysree Barrow, The Tunnel Across the Bridge oraz najnowszy dungeon Erte Deenan. Prawdziwe wyzwanie czeka!",
+"Lochy Boss Rush to zawartość Endgame dostępna wyłącznie przez kanał Boss Rush. Obecnie dostępne lochy: Wielka Świątynia Shadolean, Stara Podziemna Droga Hadina, Kurhan Mysree (dawny Starożytny Kopiec Pogrzebowy), Tunel za Mostem oraz najnowszy loch Erte Deenan. Zmierz się z intensywnym i wymagającym wyzwaniem endgame!",
 
 customFeatures:"Funkcje Niestandardowe",
 customTitle:"Ekskluzywne Funkcje Serwera",
@@ -1237,7 +1237,7 @@ hcFullDescription:
 "DDON 역사상 가장 큰 업데이트를 경험하세요 — 새로운 하드코어 모드! 이 서버에서만 가능합니다! 단 하나의 생명으로 모험을 즐기세요 — 한 번의 죽음은 영구적인 죽음을 의미합니다.",
 
 bossRushDescription:
-"보스 러시 던전은 엔드게임 던전이며 보스 러시 채널에서만 입장 가능합니다. 현재 던전: Shadolean Great Temple, Hadin Underground Old Road, Mysree Barrow, The Tunnel Across the Bridge, 그리고 최신 던전 Erte Deenan. 극한의 도전을 경험하세요!",
+"보스 러시 던전은 보스 러시 채널을 통해서만 입장할 수 있는 엔드게임 던전입니다. 현재 이용 가능한 던전은 샤돌린 대사원, 하딘 지하 구도로, 미스리 고분(구 고대 매장지), 다리 건너 터널, 그리고 최신 던전 에르테 디난입니다. 긴장감 넘치고 도전적인 엔드게임을 경험하세요!",
 
 customFeatures:"커스텀 기능",
 customTitle:"서버 전용 기능",
@@ -1383,7 +1383,7 @@ hcFullDescription:
 "Vivi il più grande aggiornamento nella storia di DDON — la nuova modalità Hardcore! Esclusiva solo qui! Un'avventura intensa con una sola vita — una morte significa fine definitiva.",
 
 bossRushDescription:
-"I Boss Rush Dungeon sono contenuti Endgame accessibili solo tramite il Boss Rush Channel. Attualmente disponibili: Shadolean Great Temple, Hadin Underground Old Road, Mysree Barrow, The Tunnel Across the Bridge e il nuovo dungeon Erte Deenan. Una sfida estrema ti aspetta!",
+"I Boss Rush Dungeon sono contenuti Endgame accessibili esclusivamente tramite il Boss Rush Channel. Attualmente disponibili: Grande Tempio Shadolean, Antica Strada Sotterranea di Hadin, Tumulo di Mysree (ex Antico Tumulo Funerario), Il Tunnel Oltre il Ponte e il nuovo dungeon Erte Deenan. Affronta un'esperienza endgame intensa e impegnativa!",
 
 customFeatures:"Funzionalità Personalizzate",
 customTitle:"Funzionalità Esclusive del Server",
@@ -1530,7 +1530,7 @@ hcFullDescription:
 "Découvrez la plus grande mise à jour de l'histoire de DDON — le nouveau mode Hardcore ! Exclusif à ce serveur ! Une aventure intense avec une seule vie — une mort signifie la fin définitive.",
 
 bossRushDescription:
-"Les Boss Rush Dungeons sont des donjons Endgame accessibles uniquement via le canal Boss Rush. Donjons actuels : Shadolean Great Temple, Hadin Underground Old Road, Mysree Barrow, The Tunnel Across the Bridge et le nouveau donjon Erte Deenan. Relevez un défi extrême !",
+"Les Boss Rush Dungeons sont des donjons Endgame accessibles uniquement via le canal Boss Rush. Donjons actuellement disponibles : Grand Temple Shadolean, Ancienne Route Souterraine d'Hadin, Tumulus Mysree (ancien Tertre Funéraire Antique), Le Tunnel au-delà du Pont et le nouveau donjon Erte Deenan. Relevez un défi intense et exigeant en endgame !",
 
 customFeatures:"Fonctionnalités Personnalisées",
 customTitle:"Fonctionnalités Exclusives du Serveur",
@@ -1676,7 +1676,7 @@ hcFullDescription:
 "Ζήσε το μεγαλύτερο update στην ιστορία του DDON — το νέο Hardcore Mode! Αποκλειστικά εδώ! Μία ζωή, μία ευκαιρία — ένας θάνατος σημαίνει οριστικό τέλος.",
 
 bossRushDescription:
-"Τα Boss Rush Dungeons είναι Endgame dungeons και είναι προσβάσιμα μόνο μέσω του Boss Rush Channel. Διαθέσιμα: Shadolean Great Temple, Hadin Underground Old Road, Mysree Barrow, The Tunnel Across the Bridge και το νέο dungeon Erte Deenan. Αντιμετώπισε μια σκληρή πρόκληση!",
+"Τα Boss Rush Dungeons είναι Endgame dungeons προσβάσιμα μόνο μέσω του Boss Rush Channel. Διαθέσιμα αυτή τη στιγμή: Μεγάλος Ναός Shadolean, Παλαιός Υπόγειος Δρόμος Hadin, Τύμβος Mysree (πρώην Αρχαίος Ταφικός Τύμβος), Το Τούνελ Πέρα από τη Γέφυρα και το νέο dungeon Erte Deenan. Αντιμετώπισε μια έντονη και απαιτητική endgame πρόκληση!",
 
 customFeatures:"Προσαρμοσμένες Λειτουργίες",
 customTitle:"Αποκλειστικές Λειτουργίες Διακομιστή",
