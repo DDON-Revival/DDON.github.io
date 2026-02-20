@@ -146,17 +146,23 @@ async function loadQuests() {
 ========================================================= */
 
 function getItemName(id) {
+
     const found = DATA.Items?.item?.find(i => String(i.id) === String(id));
     if (!found) return id;
 
-    // Falls name nicht string ist → absichern
+    // Falls alter Stil (String)
     if (typeof found === "string")
         return found;
 
-    if (currentLanguage === "jp" && found.jp)
-        return found.jp;
+    // 🔥 JP Mode → benutze "old"
+    if (currentLanguage === "jp" && found.old)
+        return found.old;
 
-    return found.new || id;
+    // EN Mode → benutze "new"
+    if (found.new)
+        return found.new;
+
+    return id;
 }
 
 function getEnemyName(id) {
