@@ -7,17 +7,38 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
+
+/* ================= GLOBAL ================= */
+
 body{
     margin:0;
     font-family:'Cinzel', serif;
-    background:#0f0f14;
+    background:#0b0b0f;
     color:#e6e6e6;
+    overflow-x:hidden;
+}
+
+/* SUBTLE DARK PULSE */
+body::after{
+    content:"";
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:radial-gradient(circle at center,rgba(255,0,0,.08),transparent 70%);
+    pointer-events:none;
+    animation:darkPulse 6s infinite;
+}
+
+@keyframes darkPulse{
+    0%{opacity:.4}
+    50%{opacity:.8}
+    100%{opacity:.4}
 }
 
 /* ================= HEADER ================= */
 
 header{
-    background:#1b1b25;
+    background:#14141c;
     padding:20px;
     display:flex;
     justify-content:space-between;
@@ -29,10 +50,56 @@ nav a{
     color:#e6e6e6;
     text-decoration:none;
     margin:0 15px;
+    transition:.3s;
 }
 
 nav a:hover{
     color:#c8a75d;
+}
+
+/* ================= EMBERS ================= */
+
+#embers{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:-2;
+    overflow:hidden;
+}
+
+.ember{
+    position:absolute;
+    width:4px;
+    height:4px;
+    background:#ff2a00;
+    border-radius:50%;
+    opacity:.8;
+    animation:rise 8s linear infinite;
+}
+
+@keyframes rise{
+    0%{transform:translateY(100vh);opacity:0;}
+    20%{opacity:1;}
+    100%{transform:translateY(-10vh);opacity:0;}
+}
+
+/* ================= SMOKE ================= */
+
+.smoke{
+    position:fixed;
+    bottom:0;
+    width:200%;
+    height:200px;
+    background:radial-gradient(circle,rgba(80,0,0,.4),transparent 70%);
+    animation:smokeMove 20s linear infinite;
+    z-index:-1;
+}
+
+@keyframes smokeMove{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
 }
 
 /* ================= SECTION ================= */
@@ -44,7 +111,7 @@ nav a:hover{
 
 .section h1{
     color:#c8a75d;
-    font-size:40px;
+    font-size:42px;
 }
 
 .subtitle{
@@ -57,35 +124,45 @@ nav a:hover{
 .hardcore-banner{
     margin:80px auto;
     max-width:1000px;
-    padding:60px;
-    background:linear-gradient(135deg,#2a0a0a,#4b0000);
-    border:2px solid #ff3b1f;
+    padding:70px;
+    background:linear-gradient(135deg,#2a0000,#550000);
+    border:2px solid #ff1e00;
     text-align:center;
-    box-shadow:0 0 40px rgba(255,0,0,.4);
-    animation:pulse 3s infinite;
+    box-shadow:0 0 60px rgba(255,0,0,.6);
+    animation:pulse 2.5s infinite;
 }
 
 .hardcore-banner h2{
-    font-size:36px;
-    color:#ff3b1f;
-    margin-bottom:20px;
+    font-size:40px;
+    color:#ff1e00;
+    animation:flicker 3s infinite;
 }
 
 @keyframes pulse{
-    0%{box-shadow:0 0 20px rgba(255,0,0,.4);}
-    50%{box-shadow:0 0 60px rgba(255,0,0,.8);}
-    100%{box-shadow:0 0 20px rgba(255,0,0,.4);}
+    0%{box-shadow:0 0 30px rgba(255,0,0,.5);}
+    50%{box-shadow:0 0 90px rgba(255,0,0,.9);}
+    100%{box-shadow:0 0 30px rgba(255,0,0,.5);}
+}
+
+@keyframes flicker{
+    0%,18%,22%,25%,53%,57%,100%{opacity:1;}
+    20%,24%,55%{opacity:.4;}
 }
 
 /* ================= FEATURE BLOCK ================= */
 
 .feature-block{
-    text-align:left;
-    max-width:1000px;
-    margin:60px auto;
+    max-width:1100px;
+    margin:80px auto;
     background:#15151d;
-    padding:40px;
+    padding:50px;
     border:1px solid #2a2a35;
+    transition:.4s;
+}
+
+.feature-block:hover{
+    border-color:#c8a75d;
+    box-shadow:0 10px 40px rgba(200,167,93,.2);
 }
 
 .feature-block h2{
@@ -99,7 +176,7 @@ nav a:hover{
 }
 
 .feature-block li{
-    padding:8px 0;
+    padding:10px 0;
     border-bottom:1px solid #2a2a35;
 }
 
@@ -108,23 +185,35 @@ nav a:hover{
 .dungeon-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
+    gap:25px;
     margin-top:40px;
 }
 
 .dungeon-card{
+    position:relative;
+    height:200px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    font-weight:bold;
     background:#1b1b25;
-    padding:30px;
     border:1px solid #2a2a35;
-    text-align:center;
-    transition:.4s;
-    cursor:pointer;
+    overflow:hidden;
+    transition:.5s;
+}
+
+.dungeon-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to top,rgba(0,0,0,.8),transparent);
 }
 
 .dungeon-card:hover{
-    transform:translateY(-10px);
-    border-color:#c8a75d;
-    box-shadow:0 10px 30px rgba(200,167,93,.4);
+    transform:scale(1.05);
+    border-color:#ff1e00;
+    box-shadow:0 20px 60px rgba(255,0,0,.4);
 }
 
 /* ================= LANGUAGE ================= */
@@ -162,41 +251,13 @@ nav a:hover{
     display:block;
 }
 
-/* ================= EMBERS ================= */
-
-#embers{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    z-index:-1;
-    background:#0f0f14;
-    overflow:hidden;
-}
-
-.ember{
-    position:absolute;
-    width:3px;
-    height:3px;
-    background:#ff3b1f;
-    border-radius:50%;
-    opacity:.7;
-    animation:rise 8s linear infinite;
-}
-
-@keyframes rise{
-    0%{transform:translateY(100vh);opacity:0;}
-    20%{opacity:1;}
-    100%{transform:translateY(-10vh);opacity:0;}
-}
-
 </style>
 </head>
 
 <body>
 
 <div id="embers"></div>
+<div class="smoke"></div>
 
 <header>
     <h2>DDON Revival</h2>
@@ -225,6 +286,8 @@ nav a:hover{
 <p class="subtitle" data-key="customSubtitle"></p>
 
 </section>
+
+<!-- FEATURE BLOCKS (DEINE LISTE BLEIBT GLEICH) -->
 
 <div class="feature-block">
 <h2 data-key="cf_block1"></h2>
@@ -279,7 +342,6 @@ nav a:hover{
 </ul>
 </div>
 
-<!-- BOSS RUSH SECTION -->
 <div class="feature-block">
 <h2>Boss Rush Dungeons</h2>
 <p data-key="bossRushDescription"></p>
@@ -318,9 +380,9 @@ languages.forEach(lang=>{
 const saved = localStorage.getItem("lang") || "en";
 setLanguage(saved);
 
-/* EMBER GENERATOR */
+/* EMBERS */
 const emberContainer = document.getElementById("embers");
-for(let i=0;i<60;i++){
+for(let i=0;i<80;i++){
     let ember=document.createElement("div");
     ember.classList.add("ember");
     ember.style.left=Math.random()*100+"vw";
