@@ -1,533 +1,2126 @@
 {
-  "0x000000": "None",
-  "0x015230": "Abaddon0",
-  "0x080800": "Abbadon1",
-  "0x010911": "AcidBlob",
-  "0x080801": "Albe",
-  "0x011201": "AlbeParasiticPoison",
-  "0x077000": "AlbeSNest",
-  "0x011120": "AlchemizedGoblin",
-  "0x011121": "AlchemizedGoblinFighter",
-  "0x015304": "AlchemizedGriffin",
-  "0x010606": "AlchemizedHarpy",
-  "0x010312": "AlchemizedSkeleton",
-  "0x011122": "AlchemizedSlingGoblin",
-  "0x010207": "AlchemizedWolf",
-  "0x015420": "AlchemyEye",
-  "0x020403": "AlteredZuhl",
-  "0x015831": "AncestorOrc",
-  "0x015833": "AncestorOrcDifferentBones",
-  "0x015832": "AncestorOrcFighter",
-  "0x015870": "AncestorOrigin",
-  "0x015708": "Angules0",
-  "0x070920": "Angules1",
-  "0x010904": "AquaJelly",
-  "0x080504": "ArisenOfTheBlackDragon",
-  "0x015002": "ArmoredCyclops",
-  "0x015003": "ArmoredCyclopsClub",
-  "0x010820": "ArmoredInsectBlue",
-  "0x010821": "ArmoredInsectRed",
-  "0x010822": "ArmoredInsectRedPassiveAi0",
-  "0x010823": "ArmoredInsectRedPassiveAi1",
-  "0x011014": "BandedDefender",
-  "0x011010": "BandedFighter",
-  "0x011013": "BandedHealer",
-  "0x011012": "BandedHunter",
-  "0x011015": "BandedMage",
-  "0x011011": "BandedSeeker",
-  "0x011016": "BandedWarrior",
-  "0x020602": "Baphomet0",
-  "0x080900": "Baphomet1",
-  "0x071311": "BaphometEnraged",
-  "0x080901": "BaphometGlowingPurple",
-  "0x018100": "Bat",
-  "0x015920": "BeardedGrigori",
-  "0x015861": "BeastMaster0",
-  "0x071252": "BeastMaster1",
-  "0x015709": "Behemoth0",
-  "0x070930": "Behemoth1",
-  "0x015740": "BehemothGoblinTest",
-  "0x100100": "BehemothTest",
-  "0x015321": "Bifrest0",
-  "0x070640": "Bifrest1",
-  "0x070641": "Bifrest2",
-  "0x024000": "BlackDragon1stForm0",
-  "0x081000": "BlackDragon1stForm1",
-  "0x081002": "BlackDragon1stFormAgainEm",
-  "0x071101": "BlackDragon1stFormCutscene",
-  "0x081001": "BlackDragon2ndForm",
-  "0x081003": "BlackDragon2ndFormAgainEm",
-  "0x071102": "BlackDragon2ndFormCutscene",
-  "0x024002": "BlackDragon2ndFormDamaged",
-  "0x024001": "BlackDragon2ndFormUntranslated",
-  "0x015303": "BlackGriffin0",
-  "0x070610": "BlackGriffin1",
-  "0x080501": "BlackKnight",
-  "0x020700": "BlackKnightDarkOnly",
-  "0x080502": "BlackKnightFanOfSwords",
-  "0x100104": "BlackKnightGettingInjuredCutscene",
-  "0x020701": "BlackKnightHolyIce0",
-  "0x020702": "BlackKnightHolyIce1",
-  "0x080500": "BlackKnightPhantomClear",
-  "0x080503": "BlackKnightPhantomOpaque",
-  "0x030118": "BlackSword0",
-  "0x080505": "BlackSword1",
-  "0x015204": "BlazeChimera",
-  "0x011170": "BlazeGoblin",
-  "0x011171": "BlazeGoblinFighter",
-  "0x011173": "BlazeGoblinLeader",
-  "0x011172": "BlazeGoblinSling",
-  "0x015930": "BlazeGrigori",
-  "0x010608": "BlazeHarpy",
-  "0x010212": "BlazeWolf",
-  "0x010910": "Blob",
-  "0x010460": "BlueNewt",
-  "0x015822": "BluntSoldierDwarfOrc",
-  "0x018600": "Boar",
-  "0x010514": "BoltCorpsePunisher",
-  "0x010518": "BoltCorpseTorturer",
-  "0x010211": "BoltGrimwarg",
-  "0x015852": "BoltMachina",
-  "0x095803": "BoltMachinaTrinity",
-  "0x010316": "BoltSkeleton",
-  "0x010322": "BoltSkeletonBrute",
-  "0x015053": "BoltSkeletonCyclops",
-  "0x015504": "BruteApe",
-  "0x018200": "Buck",
-  "0x015033": "BurnedEnt",
-  "0x015839": "CaptainAncestorOrc",
-  "0x015820": "CaptainOrc0",
-  "0x085004": "CaptainOrc1",
-  "0x015730": "Catoblepas",
-  "0x019001": "ChickenBrown",
-  "0x019000": "ChickenWhite",
-  "0x015200": "Chimera0",
-  "0x070800": "Chimera1",
-  "0x015301": "Cockatrice",
-  "0x015020": "Colossus0",
-  "0x070041": "Colossus1",
-  "0x070042": "Colossus2",
-  "0x015508": "Cragger",
-  "0x015410": "CrystalEye",
-  "0x030114": "CrystalOfBlessing",
-  "0x015706": "CursedDragon",
-  "0x015000": "Cyclops0",
-  "0x085110": "Cyclops1",
-  "0x085111": "Cyclops2",
-  "0x085112": "Cyclops3",
-  "0x085113": "Cyclops4",
-  "0x085114": "Cyclops5",
-  "0x015001": "CyclopsClub",
-  "0x015004": "CyclopsGiant",
-  "0x015719": "Dagon",
-  "0x011123": "DamnedGoblin",
-  "0x011125": "DamnedGoblinFighter",
-  "0x015103": "DamnedGolem",
-  "0x011124": "DamnedSlingGoblinFlask",
-  "0x010208": "DamnedWolf",
-  "0x010516": "DarkCorpsePunisher",
-  "0x010520": "DarkCorpseTorturer",
-  "0x010318": "DarkSkeleton",
-  "0x010324": "DarkSkeletonBrute",
-  "0x015603": "Death",
-  "0x010310": "DeathKnight",
-  "0x010901": "DeepSlime",
-  "0x020500": "Diamantes",
-  "0x011041": "DiamantesHuman",
-  "0x010909": "DimSlime",
-  "0x010201": "Direwolf",
-  "0x018201": "Doe",
-  "0x030117": "DragonCrystalOfBindingBlackDragon",
-  "0x030115": "DragonCrystalOfDarknessFlyingUntranslated",
-  "0x030113": "DragonCrystalOfDarknessInvulnerableFlying",
-  "0x030112": "DragonCrystalOfDarknessInvulnerableGround",
-  "0x030116": "DragonCrystalOfDestruction",
-  "0x081006": "DragonCrystalOfDestructionLotsOfLaserRocksAndBigExplosion",
-  "0x081004": "DragonCrystalOfDestructionShootsLaserRocks",
-  "0x081005": "DragonCrystalOfDestructionSucksYouInWithMagic0",
-  "0x081007": "DragonCrystalOfDestructionSucksYouInWithMagic1",
-  "0x030105": "DragonCrystalOfGroaningSpiritDragonWillmiaWm",
-  "0x030104": "DragonCrystalOfPrayingSpiritDragonWillmiaWm",
-  "0x030107": "DragonCrystalTheEvilDragonWmUntranslated",
-  "0x015700": "Drake0",
-  "0x070900": "Drake1",
-  "0x015502": "DreadApe",
-  "0x015825": "DwarfOrcTest",
-  "0x021001": "ElderDragon0",
-  "0x080000": "ElderDragon1",
-  "0x071100": "ElderDragonEpitathRoadTrial",
-  "0x010907": "ElectricSlime",
-  "0x010508": "Eliminator",
-  "0x010530": "EliminatorSlay",
-  "0x015413": "EmeraldEye",
-  "0x015605": "EmpressGhost",
-  "0x071400": "EmptyNoEnemy0",
-  "0x079000": "EmptyNoEnemy1",
-  "0x080802": "EmptyNoEnemy2",
-  "0x015031": "Ent",
-  "0x015400": "EvilEye0",
-  "0x080700": "EvilEye1",
-  "0x010513": "FlameCorpsePunisher",
-  "0x010517": "FlameCorpseTorturer",
-  "0x010314": "FlameSkeleton",
-  "0x010320": "FlameSkeletonBrute",
-  "0x015054": "FlameSkeletonCyclops",
-  "0x015042": "Fodden",
-  "0x011500": "FootBiter",
-  "0x011100": "ForestGoblin",
-  "0x011101": "ForestGoblinFighter",
-  "0x011044": "FormerCommanderLeoFinalBoss",
-  "0x010906": "FreezingSlime",
-  "0x019201": "FrogBlue",
-  "0x019200": "FrogGold",
-  "0x010511": "FrostCorpsePunisher",
-  "0x010512": "FrostCorpseTorturer",
-  "0x015851": "FrostMachina",
-  "0x095802": "FrostMachinaTrinity",
-  "0x010315": "FrostSkeleton",
-  "0x010321": "FrostSkeletonBrute",
-  "0x015052": "FrostSkeletonCyclops",
-  "0x010603": "Gargoyle",
-  "0x015830": "GeneralOrc",
-  "0x015104": "GeoGolem",
-  "0x010420": "GeoSaurian",
-  "0x015620": "Ghost",
-  "0x010311": "GhostMail",
-  "0x015503": "Ghoul0",
-  "0x070200": "Ghoul1",
-  "0x010421": "GiantGeoSaurian",
-  "0x018401": "GiantRat",
-  "0x010401": "GiantSaurian",
-  "0x010431": "GiantSaurianSage",
-  "0x010411": "GiantSulfurSaurian",
-  "0x030101": "GiantUnspeakableMeat",
-  "0x015850": "GigantMachina",
-  "0x095801": "GigantMachinaTrinity",
-  "0x010903": "GluttonOoze",
-  "0x019100": "Goat",
-  "0x010100": "Goblin",
-  "0x010141": "GoblinAidShaman",
-  "0x011150": "GoblinBomber",
-  "0x010101": "GoblinFighter0",
-  "0x085010": "GoblinFighter1",
-  "0x085011": "GoblinFighter2",
-  "0x085012": "GoblinFighter3",
-  "0x085013": "GoblinFighter4",
-  "0x085014": "GoblinFighter5",
-  "0x085015": "GoblinFighter6",
-  "0x085016": "GoblinFighter7",
-  "0x085017": "GoblinFighter8",
-  "0x085018": "GoblinFighter9",
-  "0x085019": "GoblinFighter10",
-  "0x010180": "GoblinHorn",
-  "0x011140": "GoblinKingNpc",
-  "0x010104": "GoblinLeader",
-  "0x010140": "GoblinShaman",
-  "0x015100": "Golem",
-  "0x021002": "Golgorran0",
-  "0x080100": "Golgorran1",
-  "0x015102": "Goliath",
-  "0x015105": "GoliathCyclopsTest",
-  "0x015201": "Gorechimera0",
-  "0x070820": "Gorechimera1",
-  "0x015010": "Gorecyclops0",
-  "0x070050": "Gorecyclops1",
-  "0x070051": "Gorecyclops2",
-  "0x015211": "Goremanticore",
-  "0x015611": "Gorgon",
-  "0x015030": "GrandEnt0",
-  "0x070510": "GrandEnt1",
-  "0x080200": "GrandEnt2",
-  "0x010130": "GreaterGoblinSword",
-  "0x010131": "GreaterGoblinTorch",
-  "0x010210": "GreenGuardian",
-  "0x015300": "Griffin0",
-  "0x070600": "Griffin1",
-  "0x015900": "Grigori",
-  "0x010120": "GrimGoblin",
-  "0x010121": "GrimGoblinFighter",
-  "0x010124": "GrimGoblinLeader",
-  "0x010205": "Grimwarg",
-  "0x015622": "GrudgeGhost",
-  "0x011302": "Habanero",
-  "0x010600": "Harpy",
-  "0x015823": "HeavySoldierDwarfOrc",
-  "0x010202": "Hellhound",
-  "0x010190": "HighPixieBiff",
-  "0x010192": "HighPixiePow",
-  "0x010191": "HighPixieZolda",
-  "0x010110": "Hobgoblin",
-  "0x010111": "HobgoblinFighter",
-  "0x010113": "HobgoblinLeader",
-  "0x011043": "HoodedIris",
-  "0x020803": "Ifrit1stForm",
-  "0x020804": "Ifrit2ndForm",
-  "0x015712": "InfectedBehemoth",
-  "0x010209": "InfectedDirewolf",
-  "0x015012": "InfectedGorecyclops",
-  "0x015306": "InfectedGriffin",
-  "0x010160": "InfectedHobgoblin",
-  "0x010161": "InfectedHobgoblinFighter",
-  "0x015814": "InfectedOrcAimer",
-  "0x015815": "InfectedOrcBanger",
-  "0x015813": "InfectedOrcSoldier",
-  "0x010162": "InfectedSlingHobgoblin",
-  "0x010612": "InfectedSnowHarpy",
-  "0x011040": "Iris",
-  "0x011200": "KillerBee",
-  "0x015412": "LapisEye",
-  "0x010461": "LargeNewt",
-  "0x010810": "Leech",
-  "0x015835": "Legion",
-  "0x015837": "LegionDifferentBones",
-  "0x015836": "LegionFighter",
-  "0x015838": "LegionLeader",
-  "0x011042": "Leo",
-  "0x015707": "Lindwurm0",
-  "0x070940": "Lindwurm1",
-  "0x015509": "LittleCrag",
-  "0x015507": "LittleSpine",
-  "0x010306": "LivingArmor",
-  "0x015718": "LotusFin",
-  "0x010515": "LuxCorpsePunisher",
-  "0x010519": "LuxCorpseTorturer",
-  "0x010317": "LuxSkeleton",
-  "0x010323": "LuxSkeletonBrute",
-  "0x011300": "Mandragora",
-  "0x011301": "MandragoraFlower",
-  "0x011400": "Maneater",
-  "0x011401": "ManeaterClosed",
-  "0x015210": "Manticore0",
-  "0x070830": "Manticore1",
-  "0x015610": "Medusa",
-  "0x011080": "MegadoGuardFighter",
-  "0x011082": "MegadoGuardHunter",
-  "0x011081": "MegadoGuardSeeker",
-  "0x011083": "MegadoGuardWarrior",
-  "0x011024": "MerganDefender",
-  "0x011027": "MerganElementArcher",
-  "0x011020": "MerganFighter",
-  "0x011023": "MerganHealer",
-  "0x011022": "MerganHunter",
-  "0x011025": "MerganMage",
-  "0x011021": "MerganSeeker",
-  "0x011026": "MerganWarrior",
-  "0x010480": "Merman",
-  "0x015621": "MiseryGhost",
-  "0x015710": "MistDrake",
-  "0x011030": "MistFighter",
-  "0x011031": "MistHunter",
-  "0x011032": "MistPriest",
-  "0x011033": "MistSorcerer",
-  "0x011034": "MistWarrior",
-  "0x015711": "MistWyrm",
-  "0x015840": "Mogok",
-  "0x015041": "MoleTroll0",
-  "0x070410": "MoleTroll1",
-  "0x011210": "MothCyanSleep",
-  "0x011211": "MothMagentaPoison",
-  "0x010509": "Mudman",
-  "0x015862": "NecroMaster",
-  "0x015305": "Nightmare",
-  "0x030106": "NoEnemyInCombat0",
-  "0x030108": "NoEnemyInCombat1",
-  "0x030111": "NoEnemyInCombat2",
-  "0x015500": "Ogre",
-  "0x010920": "OilJelly",
-  "0x010902": "Ooze",
-  "0x015801": "OrcAimer",
-  "0x015802": "OrcBanger",
-  "0x015810": "OrcBattler",
-  "0x015811": "OrcBringer",
-  "0x085009": "OrcGoblinTest",
-  "0x015800": "OrcSoldier0",
-  "0x085000": "OrcSoldier1",
-  "0x085001": "OrcSoldier2",
-  "0x085002": "OrcSoldier3",
-  "0x085003": "OrcSoldier4",
-  "0x015812": "OrcTrooper",
-  "0x018300": "Ox",
-  "0x011054": "PawnDefender",
-  "0x011057": "PawnElementArcher",
-  "0x011050": "PawnFighter",
-  "0x011053": "PawnHealer",
-  "0x011052": "PawnHunter",
-  "0x011055": "PawnMage",
-  "0x011051": "PawnSeeker",
-  "0x011056": "PawnWarrior",
-  "0x011064": "PhindymianDefender",
-  "0x011067": "PhindymianElementArcher",
-  "0x015032": "PhindymianEnt0",
-  "0x070520": "PhindymianEnt1",
-  "0x011060": "PhindymianFighter",
-  "0x011062": "PhindymianHunter",
-  "0x011063": "PhindymianPriest",
-  "0x011061": "PhindymianSeeker",
-  "0x011065": "PhindymianSorcerer",
-  "0x011066": "PhindymianWarrior",
-  "0x010908": "PhotonSlime",
-  "0x018601": "Pig",
-  "0x018603": "PigDirty",
-  "0x018602": "Piglet",
-  "0x018604": "PigletDirty",
-  "0x010150": "Pixie",
-  "0x010151": "PixieBiff",
-  "0x010152": "PixieDin",
-  "0x010155": "PixieJabber",
-  "0x010195": "PixieKing",
-  "0x010153": "PixiePow",
-  "0x010482": "PoisonMerman",
-  "0x010440": "PyreSaurianSalamander",
-  "0x010905": "PyroSlime",
-  "0x018000": "Rabbit",
-  "0x015623": "RageGhost",
-  "0x015824": "RangedSoldierDwarfOrc",
-  "0x020404": "RedZuhl",
-  "0x011110": "Redcap",
-  "0x011111": "RedcapFighter",
-  "0x010450": "RockSaurian",
-  "0x010451": "RockSaurianSpinel",
-  "0x030109": "RockTheEvilDragonWm",
-  "0x011004": "RogueDefender",
-  "0x011000": "RogueFighter",
-  "0x011003": "RogueHealer",
-  "0x011002": "RogueHunter",
-  "0x011005": "RogueMage",
-  "0x011001": "RogueSeeker",
-  "0x011006": "RogueWarrior",
-  "0x015411": "RubyEye",
-  "0x015921": "Samyaza",
-  "0x010400": "Saurian",
-  "0x010430": "SaurianSage",
-  "0x011074": "ScarletDefender",
-  "0x011070": "ScarletFighter",
-  "0x011073": "ScarletHealer",
-  "0x011072": "ScarletHunter",
-  "0x011075": "ScarletMage",
-  "0x011071": "ScarletSeeker",
-  "0x011076": "ScarletWarrior",
-  "0x020601": "Scourge0",
-  "0x071310": "Scourge1",
-  "0x015717": "SeverelyInfectedBehemoth",
-  "0x015910": "SeverelyInfectedDemon",
-  "0x015017": "SeverelyInfectedGorecyclops",
-  "0x015310": "SeverelyInfectedGriffin",
-  "0x010170": "SeverelyInfectedPixie",
-  "0x010171": "SeverelyInfectedPixieClub",
-  "0x010172": "SeverelyInfectedPixieCorruptionSeeds",
-  "0x020606": "SeverelyInfectedScourge",
-  "0x010614": "SeverelyInfectedStymphalides",
-  "0x010220": "SeverelyInfectedWarg",
-  "0x015203": "ShadowChimera",
-  "0x011130": "ShadowGoblin",
-  "0x011131": "ShadowGoblinFighter",
-  "0x011160": "ShadowGoblinLeader",
-  "0x015932": "ShadowGrigori",
-  "0x010607": "ShadowHarpy",
-  "0x071250": "ShadowMasterGiant",
-  "0x015863": "ShadowMasterInvulnerable",
-  "0x011132": "ShadowSlingGoblin",
-  "0x010206": "ShadowWolf",
-  "0x010102": "ShieldGoblin",
-  "0x015505": "SilverRoar",
-  "0x010605": "Siren",
-  "0x010300": "Skeleton",
-  "0x010307": "SkeletonBrute",
-  "0x015050": "SkeletonCyclops",
-  "0x015051": "SkeletonCyclopsTest",
-  "0x010301": "SkeletonKnight",
-  "0x010303": "SkeletonLordAbyss",
-  "0x010308": "SkeletonMage0",
-  "0x075120": "SkeletonMage1",
-  "0x075121": "SkeletonMageDifferentAi",
-  "0x010309": "SkeletonSorcerer0",
-  "0x075130": "SkeletonSorcerer1",
-  "0x075131": "SkeletonSorcerer2",
-  "0x075300": "SkeletonSorcerer3",
-  "0x010221": "SkeletonWarg",
-  "0x010302": "SkeletonWarrior",
-  "0x010313": "SkullLord",
-  "0x010900": "Slime",
-  "0x011102": "SlingForestGoblin",
-  "0x010103": "SlingGoblinRock",
-  "0x010105": "SlingGoblinTorch",
-  "0x010123": "SlingGrimGoblinOilFlask",
-  "0x010112": "SlingHobgoblinOilFlask",
-  "0x010114": "SlingHobgoblinTorch",
-  "0x011112": "SlingRedcap",
-  "0x010510": "Sludgeman",
-  "0x018700": "Snake",
-  "0x010601": "SnowHarpy",
-  "0x015302": "Sphinx0",
-  "0x070700": "Sphinx1",
-  "0x018800": "Spider",
-  "0x015506": "Spineback0",
-  "0x070210": "Spineback1",
-  "0x070211": "Spineback2",
-  "0x022000": "SpiritDragonWillmia0",
-  "0x080400": "SpiritDragonWillmia1",
-  "0x100106": "SpiritDragonWillmiaActive",
-  "0x022001": "SpiritDragonWillmiaGoblinTest",
-  "0x100105": "SpiritDragonWillmiaTest",
-  "0x015826": "SquadLeaderDwarfOrc",
-  "0x010915": "StoneBlob",
-  "0x010502": "StoutUndead",
-  "0x010610": "Strix",
-  "0x010611": "Stymphalides",
-  "0x010410": "SulfurSaurian",
-  "0x015821": "SwordSoldierDwarfOrc",
-  "0x010503": "SwordUndead",
-  "0x015720": "Tarasque",
-  "0x070950": "TarasqueGoblinTest",
-  "0x011410": "TentacleEvilEye0",
-  "0x011411": "TentacleEvilEye1",
-  "0x011412": "TentacleVoltEye0",
-  "0x011413": "TentacleVoltEye1",
-  "0x023000": "TheEvilDragon0",
-  "0x075401": "TheEvilDragon1",
-  "0x075400": "TheEvilDragonSparks",
-  "0x030110": "TotemShadowMasterWmUntranslated",
-  "0x015040": "Troll",
-  "0x010621": "Ukobach",
-  "0x010501": "UndeadFemale",
-  "0x010500": "UndeadMale",
-  "0x030100": "UnspeakableMeat",
-  "0x021004": "Ushumgal",
-  "0x010240": "Valefar",
-  "0x015401": "VileEye",
-  "0x015406": "VoltEye",
-  "0x015860": "WarMaster0",
-  "0x071251": "WarMaster1",
-  "0x010471": "WarReadyGiantSaurianLightArmor",
-  "0x015060": "WarReadyGorecyclopsLightArmor0",
-  "0x015061": "WarReadyGorecyclopsLightArmor1",
-  "0x015220": "WarReadyGoremanticoreLightArmor",
-  "0x010230": "WarReadyGrimwargLightArmor",
-  "0x015330": "WarReadyNightmareLightArmor",
-  "0x015510": "WarReadyOgreLightArmor",
-  "0x010470": "WarReadySaurianLightArmor",
-  "0x010203": "Warg",
-  "0x010504": "WarriorUndead",
-  "0x015202": "WhiteChimera0",
-  "0x070810": "WhiteChimera1",
-  "0x021003": "WhiteDragon",
-  "0x021000": "WhiteDragonNpc",
-  "0x015320": "WhiteGriffin0",
-  "0x070620": "WhiteGriffin1",
-  "0x015723": "WhiteTarasque",
-  "0x015600": "Wight0",
-  "0x075700": "Wight1",
-  "0x019300": "WildBoarBrown",
-  "0x019301": "WildBoarStripes",
-  "0x015721": "WisenedTarasque0",
-  "0x080600": "WisenedTarasque1",
-  "0x015604": "Witch",
-  "0x010200": "Wolf",
-  "0x010800": "Worm",
-  "0x015701": "Wyrm0",
-  "0x070910": "Wyrm1",
-  "0x020402": "Zuhl0",
-  "0x071300": "Zuhl1",
-  "0x080300": "Zuhl2",
-  "0x100101": "ZuhlPassive"
+  "0x000000": {
+    "en": "None",
+    "jp": "None"
+  },
+  "0x015230": {
+    "en": "Abaddon0",
+    "jp": "Test1"
+  },
+  "0x080800": {
+    "en": "Abbadon1",
+    "jp": "Abbadon1"
+  },
+  "0x010911": {
+    "en": "AcidBlob",
+    "jp": "AcidBlob"
+  },
+  "0x080801": {
+    "en": "Albe",
+    "jp": "Albe"
+  },
+  "0x011201": {
+    "en": "AlbeParasiticPoison",
+    "jp": "AlbeParasiticPoison"
+  },
+  "0x077000": {
+    "en": "AlbeSNest",
+    "jp": "AlbeSNest"
+  },
+  "0x011120": {
+    "en": "AlchemizedGoblin",
+    "jp": "AlchemizedGoblin"
+  },
+  "0x011121": {
+    "en": "AlchemizedGoblinFighter",
+    "jp": "AlchemizedGoblinFighter"
+  },
+  "0x015304": {
+    "en": "AlchemizedGriffin",
+    "jp": "AlchemizedGriffin"
+  },
+  "0x010606": {
+    "en": "AlchemizedHarpy",
+    "jp": "AlchemizedHarpy"
+  },
+  "0x010312": {
+    "en": "AlchemizedSkeleton",
+    "jp": "AlchemizedSkeleton"
+  },
+  "0x011122": {
+    "en": "AlchemizedSlingGoblin",
+    "jp": "AlchemizedSlingGoblin"
+  },
+  "0x010207": {
+    "en": "AlchemizedWolf",
+    "jp": "AlchemizedWolf"
+  },
+  "0x015420": {
+    "en": "AlchemyEye",
+    "jp": "AlchemyEye"
+  },
+  "0x020403": {
+    "en": "AlteredZuhl",
+    "jp": "AlteredZuhl"
+  },
+  "0x015831": {
+    "en": "AncestorOrc",
+    "jp": "AncestorOrc"
+  },
+  "0x015833": {
+    "en": "AncestorOrcDifferentBones",
+    "jp": "AncestorOrcDifferentBones"
+  },
+  "0x015832": {
+    "en": "AncestorOrcFighter",
+    "jp": "AncestorOrcFighter"
+  },
+  "0x015870": {
+    "en": "AncestorOrigin",
+    "jp": "AncestorOrigin"
+  },
+  "0x015708": {
+    "en": "Angules0",
+    "jp": "Angules0"
+  },
+  "0x070920": {
+    "en": "Angules1",
+    "jp": "Angules1"
+  },
+  "0x010904": {
+    "en": "AquaJelly",
+    "jp": "AquaJelly"
+  },
+  "0x080504": {
+    "en": "ArisenOfTheBlackDragon",
+    "jp": "ArisenOfTheBlackDragon"
+  },
+  "0x015002": {
+    "en": "ArmoredCyclops",
+    "jp": "ArmoredCyclops"
+  },
+  "0x015003": {
+    "en": "ArmoredCyclopsClub",
+    "jp": "ArmoredCyclopsClub"
+  },
+  "0x010820": {
+    "en": "ArmoredInsectBlue",
+    "jp": "ArmoredInsectBlue"
+  },
+  "0x010821": {
+    "en": "ArmoredInsectRed",
+    "jp": "ArmoredInsectRed"
+  },
+  "0x010822": {
+    "en": "ArmoredInsectRedPassiveAi0",
+    "jp": "ArmoredInsectRedPassiveAi0"
+  },
+  "0x010823": {
+    "en": "ArmoredInsectRedPassiveAi1",
+    "jp": "ArmoredInsectRedPassiveAi1"
+  },
+  "0x011014": {
+    "en": "BandedDefender",
+    "jp": "BandedDefender"
+  },
+  "0x011010": {
+    "en": "BandedFighter",
+    "jp": "BandedFighter"
+  },
+  "0x011013": {
+    "en": "BandedHealer",
+    "jp": "BandedHealer"
+  },
+  "0x011012": {
+    "en": "BandedHunter",
+    "jp": "BandedHunter"
+  },
+  "0x011015": {
+    "en": "BandedMage",
+    "jp": "BandedMage"
+  },
+  "0x011011": {
+    "en": "BandedSeeker",
+    "jp": "BandedSeeker"
+  },
+  "0x011016": {
+    "en": "BandedWarrior",
+    "jp": "BandedWarrior"
+  },
+  "0x020602": {
+    "en": "Baphomet0",
+    "jp": "Baphomet0"
+  },
+  "0x080900": {
+    "en": "Baphomet1",
+    "jp": "Baphomet1"
+  },
+  "0x071311": {
+    "en": "BaphometEnraged",
+    "jp": "BaphometEnraged"
+  },
+  "0x080901": {
+    "en": "BaphometGlowingPurple",
+    "jp": "BaphometGlowingPurple"
+  },
+  "0x018100": {
+    "en": "Bat",
+    "jp": "Bat"
+  },
+  "0x015920": {
+    "en": "BeardedGrigori",
+    "jp": "BeardedGrigori"
+  },
+  "0x015861": {
+    "en": "BeastMaster0",
+    "jp": "BeastMaster0"
+  },
+  "0x071252": {
+    "en": "BeastMaster1",
+    "jp": "BeastMaster1"
+  },
+  "0x015709": {
+    "en": "Behemoth0",
+    "jp": "Behemoth0"
+  },
+  "0x070930": {
+    "en": "Behemoth1",
+    "jp": "Behemoth1"
+  },
+  "0x015740": {
+    "en": "BehemothGoblinTest",
+    "jp": "BehemothGoblinTest"
+  },
+  "0x100100": {
+    "en": "BehemothTest",
+    "jp": "BehemothTest"
+  },
+  "0x015321": {
+    "en": "Bifrest0",
+    "jp": "Bifrest0"
+  },
+  "0x070640": {
+    "en": "Bifrest1",
+    "jp": "Bifrest1"
+  },
+  "0x070641": {
+    "en": "Bifrest2",
+    "jp": "Bifrest2"
+  },
+  "0x024000": {
+    "en": "BlackDragon1stForm0",
+    "jp": "BlackDragon1stForm0"
+  },
+  "0x081000": {
+    "en": "BlackDragon1stForm1",
+    "jp": "BlackDragon1stForm1"
+  },
+  "0x081002": {
+    "en": "BlackDragon1stFormAgainEm",
+    "jp": "BlackDragon1stFormAgainEm"
+  },
+  "0x071101": {
+    "en": "BlackDragon1stFormCutscene",
+    "jp": "BlackDragon1stFormCutscene"
+  },
+  "0x081001": {
+    "en": "BlackDragon2ndForm",
+    "jp": "BlackDragon2ndForm"
+  },
+  "0x081003": {
+    "en": "BlackDragon2ndFormAgainEm",
+    "jp": "BlackDragon2ndFormAgainEm"
+  },
+  "0x071102": {
+    "en": "BlackDragon2ndFormCutscene",
+    "jp": "BlackDragon2ndFormCutscene"
+  },
+  "0x024002": {
+    "en": "BlackDragon2ndFormDamaged",
+    "jp": "BlackDragon2ndFormDamaged"
+  },
+  "0x024001": {
+    "en": "BlackDragon2ndFormUntranslated",
+    "jp": "BlackDragon2ndFormUntranslated"
+  },
+  "0x015303": {
+    "en": "BlackGriffin0",
+    "jp": "BlackGriffin0"
+  },
+  "0x070610": {
+    "en": "BlackGriffin1",
+    "jp": "BlackGriffin1"
+  },
+  "0x080501": {
+    "en": "BlackKnight",
+    "jp": "BlackKnight"
+  },
+  "0x020700": {
+    "en": "BlackKnightDarkOnly",
+    "jp": "BlackKnightDarkOnly"
+  },
+  "0x080502": {
+    "en": "BlackKnightFanOfSwords",
+    "jp": "BlackKnightFanOfSwords"
+  },
+  "0x100104": {
+    "en": "BlackKnightGettingInjuredCutscene",
+    "jp": "BlackKnightGettingInjuredCutscene"
+  },
+  "0x020701": {
+    "en": "BlackKnightHolyIce0",
+    "jp": "BlackKnightHolyIce0"
+  },
+  "0x020702": {
+    "en": "BlackKnightHolyIce1",
+    "jp": "BlackKnightHolyIce1"
+  },
+  "0x080500": {
+    "en": "BlackKnightPhantomClear",
+    "jp": "BlackKnightPhantomClear"
+  },
+  "0x080503": {
+    "en": "BlackKnightPhantomOpaque",
+    "jp": "BlackKnightPhantomOpaque"
+  },
+  "0x030118": {
+    "en": "BlackSword0",
+    "jp": "BlackSword0"
+  },
+  "0x080505": {
+    "en": "BlackSword1",
+    "jp": "BlackSword1"
+  },
+  "0x015204": {
+    "en": "BlazeChimera",
+    "jp": "BlazeChimera"
+  },
+  "0x011170": {
+    "en": "BlazeGoblin",
+    "jp": "BlazeGoblin"
+  },
+  "0x011171": {
+    "en": "BlazeGoblinFighter",
+    "jp": "BlazeGoblinFighter"
+  },
+  "0x011173": {
+    "en": "BlazeGoblinLeader",
+    "jp": "BlazeGoblinLeader"
+  },
+  "0x011172": {
+    "en": "BlazeGoblinSling",
+    "jp": "BlazeGoblinSling"
+  },
+  "0x015930": {
+    "en": "BlazeGrigori",
+    "jp": "BlazeGrigori"
+  },
+  "0x010608": {
+    "en": "BlazeHarpy",
+    "jp": "BlazeHarpy"
+  },
+  "0x010212": {
+    "en": "BlazeWolf",
+    "jp": "BlazeWolf"
+  },
+  "0x010910": {
+    "en": "Blob",
+    "jp": "Blob"
+  },
+  "0x010460": {
+    "en": "BlueNewt",
+    "jp": "BlueNewt"
+  },
+  "0x015822": {
+    "en": "BluntSoldierDwarfOrc",
+    "jp": "BluntSoldierDwarfOrc"
+  },
+  "0x018600": {
+    "en": "Boar",
+    "jp": "Boar"
+  },
+  "0x010514": {
+    "en": "BoltCorpsePunisher",
+    "jp": "BoltCorpsePunisher"
+  },
+  "0x010518": {
+    "en": "BoltCorpseTorturer",
+    "jp": "BoltCorpseTorturer"
+  },
+  "0x010211": {
+    "en": "BoltGrimwarg",
+    "jp": "BoltGrimwarg"
+  },
+  "0x015852": {
+    "en": "BoltMachina",
+    "jp": "BoltMachina"
+  },
+  "0x095803": {
+    "en": "BoltMachinaTrinity",
+    "jp": "BoltMachinaTrinity"
+  },
+  "0x010316": {
+    "en": "BoltSkeleton",
+    "jp": "BoltSkeleton"
+  },
+  "0x010322": {
+    "en": "BoltSkeletonBrute",
+    "jp": "BoltSkeletonBrute"
+  },
+  "0x015053": {
+    "en": "BoltSkeletonCyclops",
+    "jp": "BoltSkeletonCyclops"
+  },
+  "0x015504": {
+    "en": "BruteApe",
+    "jp": "BruteApe"
+  },
+  "0x018200": {
+    "en": "Buck",
+    "jp": "Buck"
+  },
+  "0x015033": {
+    "en": "BurnedEnt",
+    "jp": "BurnedEnt"
+  },
+  "0x015839": {
+    "en": "CaptainAncestorOrc",
+    "jp": "CaptainAncestorOrc"
+  },
+  "0x015820": {
+    "en": "CaptainOrc0",
+    "jp": "CaptainOrc0"
+  },
+  "0x085004": {
+    "en": "CaptainOrc1",
+    "jp": "CaptainOrc1"
+  },
+  "0x015730": {
+    "en": "Catoblepas",
+    "jp": "Catoblepas"
+  },
+  "0x019001": {
+    "en": "ChickenBrown",
+    "jp": "ChickenBrown"
+  },
+  "0x019000": {
+    "en": "ChickenWhite",
+    "jp": "ChickenWhite"
+  },
+  "0x015200": {
+    "en": "Chimera0",
+    "jp": "Chimera0"
+  },
+  "0x070800": {
+    "en": "Chimera1",
+    "jp": "Chimera1"
+  },
+  "0x015301": {
+    "en": "Cockatrice",
+    "jp": "Cockatrice"
+  },
+  "0x015020": {
+    "en": "Colossus0",
+    "jp": "Colossus0"
+  },
+  "0x070041": {
+    "en": "Colossus1",
+    "jp": "Colossus1"
+  },
+  "0x070042": {
+    "en": "Colossus2",
+    "jp": "Colossus2"
+  },
+  "0x015508": {
+    "en": "Cragger",
+    "jp": "Cragger"
+  },
+  "0x015410": {
+    "en": "CrystalEye",
+    "jp": "CrystalEye"
+  },
+  "0x030114": {
+    "en": "CrystalOfBlessing",
+    "jp": "CrystalOfBlessing"
+  },
+  "0x015706": {
+    "en": "CursedDragon",
+    "jp": "CursedDragon"
+  },
+  "0x015000": {
+    "en": "Cyclops0",
+    "jp": "Cyclops0"
+  },
+  "0x085110": {
+    "en": "Cyclops1",
+    "jp": "Cyclops1"
+  },
+  "0x085111": {
+    "en": "Cyclops2",
+    "jp": "Cyclops2"
+  },
+  "0x085112": {
+    "en": "Cyclops3",
+    "jp": "Cyclops3"
+  },
+  "0x085113": {
+    "en": "Cyclops4",
+    "jp": "Cyclops4"
+  },
+  "0x085114": {
+    "en": "Cyclops5",
+    "jp": "Cyclops5"
+  },
+  "0x015001": {
+    "en": "CyclopsClub",
+    "jp": "CyclopsClub"
+  },
+  "0x015004": {
+    "en": "CyclopsGiant",
+    "jp": "CyclopsGiant"
+  },
+  "0x015719": {
+    "en": "Dagon",
+    "jp": "Dagon"
+  },
+  "0x011123": {
+    "en": "DamnedGoblin",
+    "jp": "DamnedGoblin"
+  },
+  "0x011125": {
+    "en": "DamnedGoblinFighter",
+    "jp": "DamnedGoblinFighter"
+  },
+  "0x015103": {
+    "en": "DamnedGolem",
+    "jp": "DamnedGolem"
+  },
+  "0x011124": {
+    "en": "DamnedSlingGoblinFlask",
+    "jp": "DamnedSlingGoblinFlask"
+  },
+  "0x010208": {
+    "en": "DamnedWolf",
+    "jp": "DamnedWolf"
+  },
+  "0x010516": {
+    "en": "DarkCorpsePunisher",
+    "jp": "DarkCorpsePunisher"
+  },
+  "0x010520": {
+    "en": "DarkCorpseTorturer",
+    "jp": "DarkCorpseTorturer"
+  },
+  "0x010318": {
+    "en": "DarkSkeleton",
+    "jp": "DarkSkeleton"
+  },
+  "0x010324": {
+    "en": "DarkSkeletonBrute",
+    "jp": "DarkSkeletonBrute"
+  },
+  "0x015603": {
+    "en": "Death",
+    "jp": "Death"
+  },
+  "0x010310": {
+    "en": "DeathKnight",
+    "jp": "DeathKnight"
+  },
+  "0x010901": {
+    "en": "DeepSlime",
+    "jp": "DeepSlime"
+  },
+  "0x020500": {
+    "en": "Diamantes",
+    "jp": "Diamantes"
+  },
+  "0x011041": {
+    "en": "DiamantesHuman",
+    "jp": "DiamantesHuman"
+  },
+  "0x010909": {
+    "en": "DimSlime",
+    "jp": "DimSlime"
+  },
+  "0x010201": {
+    "en": "Direwolf",
+    "jp": "Direwolf"
+  },
+  "0x018201": {
+    "en": "Doe",
+    "jp": "Doe"
+  },
+  "0x030117": {
+    "en": "DragonCrystalOfBindingBlackDragon",
+    "jp": "DragonCrystalOfBindingBlackDragon"
+  },
+  "0x030115": {
+    "en": "DragonCrystalOfDarknessFlyingUntranslated",
+    "jp": "DragonCrystalOfDarknessFlyingUntranslated"
+  },
+  "0x030113": {
+    "en": "DragonCrystalOfDarknessInvulnerableFlying",
+    "jp": "DragonCrystalOfDarknessInvulnerableFlying"
+  },
+  "0x030112": {
+    "en": "DragonCrystalOfDarknessInvulnerableGround",
+    "jp": "DragonCrystalOfDarknessInvulnerableGround"
+  },
+  "0x030116": {
+    "en": "DragonCrystalOfDestruction",
+    "jp": "DragonCrystalOfDestruction"
+  },
+  "0x081006": {
+    "en": "DragonCrystalOfDestructionLotsOfLaserRocksAndBigExplosion",
+    "jp": "DragonCrystalOfDestructionLotsOfLaserRocksAndBigExplosion"
+  },
+  "0x081004": {
+    "en": "DragonCrystalOfDestructionShootsLaserRocks",
+    "jp": "DragonCrystalOfDestructionShootsLaserRocks"
+  },
+  "0x081005": {
+    "en": "DragonCrystalOfDestructionSucksYouInWithMagic0",
+    "jp": "DragonCrystalOfDestructionSucksYouInWithMagic0"
+  },
+  "0x081007": {
+    "en": "DragonCrystalOfDestructionSucksYouInWithMagic1",
+    "jp": "DragonCrystalOfDestructionSucksYouInWithMagic1"
+  },
+  "0x030105": {
+    "en": "DragonCrystalOfGroaningSpiritDragonWillmiaWm",
+    "jp": "DragonCrystalOfGroaningSpiritDragonWillmiaWm"
+  },
+  "0x030104": {
+    "en": "DragonCrystalOfPrayingSpiritDragonWillmiaWm",
+    "jp": "DragonCrystalOfPrayingSpiritDragonWillmiaWm"
+  },
+  "0x030107": {
+    "en": "DragonCrystalTheEvilDragonWmUntranslated",
+    "jp": "DragonCrystalTheEvilDragonWmUntranslated"
+  },
+  "0x015700": {
+    "en": "Drake0",
+    "jp": "Drake0"
+  },
+  "0x070900": {
+    "en": "Drake1",
+    "jp": "Drake1"
+  },
+  "0x015502": {
+    "en": "DreadApe",
+    "jp": "DreadApe"
+  },
+  "0x015825": {
+    "en": "DwarfOrcTest",
+    "jp": "DwarfOrcTest"
+  },
+  "0x021001": {
+    "en": "ElderDragon0",
+    "jp": "ElderDragon0"
+  },
+  "0x080000": {
+    "en": "ElderDragon1",
+    "jp": "ElderDragon1"
+  },
+  "0x071100": {
+    "en": "ElderDragonEpitathRoadTrial",
+    "jp": "ElderDragonEpitathRoadTrial"
+  },
+  "0x010907": {
+    "en": "ElectricSlime",
+    "jp": "ElectricSlime"
+  },
+  "0x010508": {
+    "en": "Eliminator",
+    "jp": "Eliminator"
+  },
+  "0x010530": {
+    "en": "EliminatorSlay",
+    "jp": "EliminatorSlay"
+  },
+  "0x015413": {
+    "en": "EmeraldEye",
+    "jp": "EmeraldEye"
+  },
+  "0x015605": {
+    "en": "EmpressGhost",
+    "jp": "EmpressGhost"
+  },
+  "0x071400": {
+    "en": "EmptyNoEnemy0",
+    "jp": "EmptyNoEnemy0"
+  },
+  "0x079000": {
+    "en": "EmptyNoEnemy1",
+    "jp": "EmptyNoEnemy1"
+  },
+  "0x080802": {
+    "en": "EmptyNoEnemy2",
+    "jp": "EmptyNoEnemy2"
+  },
+  "0x015031": {
+    "en": "Ent",
+    "jp": "Ent"
+  },
+  "0x015400": {
+    "en": "EvilEye0",
+    "jp": "EvilEye0"
+  },
+  "0x080700": {
+    "en": "EvilEye1",
+    "jp": "EvilEye1"
+  },
+  "0x010513": {
+    "en": "FlameCorpsePunisher",
+    "jp": "FlameCorpsePunisher"
+  },
+  "0x010517": {
+    "en": "FlameCorpseTorturer",
+    "jp": "FlameCorpseTorturer"
+  },
+  "0x010314": {
+    "en": "FlameSkeleton",
+    "jp": "FlameSkeleton"
+  },
+  "0x010320": {
+    "en": "FlameSkeletonBrute",
+    "jp": "FlameSkeletonBrute"
+  },
+  "0x015054": {
+    "en": "FlameSkeletonCyclops",
+    "jp": "FlameSkeletonCyclops"
+  },
+  "0x015042": {
+    "en": "Fodden",
+    "jp": "Fodden"
+  },
+  "0x011500": {
+    "en": "FootBiter",
+    "jp": "FootBiter"
+  },
+  "0x011100": {
+    "en": "ForestGoblin",
+    "jp": "ForestGoblin"
+  },
+  "0x011101": {
+    "en": "ForestGoblinFighter",
+    "jp": "ForestGoblinFighter"
+  },
+  "0x011044": {
+    "en": "FormerCommanderLeoFinalBoss",
+    "jp": "FormerCommanderLeoFinalBoss"
+  },
+  "0x010906": {
+    "en": "FreezingSlime",
+    "jp": "FreezingSlime"
+  },
+  "0x019201": {
+    "en": "FrogBlue",
+    "jp": "FrogBlue"
+  },
+  "0x019200": {
+    "en": "FrogGold",
+    "jp": "FrogGold"
+  },
+  "0x010511": {
+    "en": "FrostCorpsePunisher",
+    "jp": "FrostCorpsePunisher"
+  },
+  "0x010512": {
+    "en": "FrostCorpseTorturer",
+    "jp": "FrostCorpseTorturer"
+  },
+  "0x015851": {
+    "en": "FrostMachina",
+    "jp": "FrostMachina"
+  },
+  "0x095802": {
+    "en": "FrostMachinaTrinity",
+    "jp": "FrostMachinaTrinity"
+  },
+  "0x010315": {
+    "en": "FrostSkeleton",
+    "jp": "FrostSkeleton"
+  },
+  "0x010321": {
+    "en": "FrostSkeletonBrute",
+    "jp": "FrostSkeletonBrute"
+  },
+  "0x015052": {
+    "en": "FrostSkeletonCyclops",
+    "jp": "FrostSkeletonCyclops"
+  },
+  "0x010603": {
+    "en": "Gargoyle",
+    "jp": "Gargoyle"
+  },
+  "0x015830": {
+    "en": "GeneralOrc",
+    "jp": "GeneralOrc"
+  },
+  "0x015104": {
+    "en": "GeoGolem",
+    "jp": "GeoGolem"
+  },
+  "0x010420": {
+    "en": "GeoSaurian",
+    "jp": "GeoSaurian"
+  },
+  "0x015620": {
+    "en": "Ghost",
+    "jp": "Ghost"
+  },
+  "0x010311": {
+    "en": "GhostMail",
+    "jp": "GhostMail"
+  },
+  "0x015503": {
+    "en": "Ghoul0",
+    "jp": "Ghoul0"
+  },
+  "0x070200": {
+    "en": "Ghoul1",
+    "jp": "Ghoul1"
+  },
+  "0x010421": {
+    "en": "GiantGeoSaurian",
+    "jp": "GiantGeoSaurian"
+  },
+  "0x018401": {
+    "en": "GiantRat",
+    "jp": "GiantRat"
+  },
+  "0x010401": {
+    "en": "GiantSaurian",
+    "jp": "GiantSaurian"
+  },
+  "0x010431": {
+    "en": "GiantSaurianSage",
+    "jp": "GiantSaurianSage"
+  },
+  "0x010411": {
+    "en": "GiantSulfurSaurian",
+    "jp": "GiantSulfurSaurian"
+  },
+  "0x030101": {
+    "en": "GiantUnspeakableMeat",
+    "jp": "GiantUnspeakableMeat"
+  },
+  "0x015850": {
+    "en": "GigantMachina",
+    "jp": "GigantMachina"
+  },
+  "0x095801": {
+    "en": "GigantMachinaTrinity",
+    "jp": "GigantMachinaTrinity"
+  },
+  "0x010903": {
+    "en": "GluttonOoze",
+    "jp": "GluttonOoze"
+  },
+  "0x019100": {
+    "en": "Goat",
+    "jp": "Goat"
+  },
+  "0x010100": {
+    "en": "Goblin",
+    "jp": "Goblin"
+  },
+  "0x010141": {
+    "en": "GoblinAidShaman",
+    "jp": "GoblinAidShaman"
+  },
+  "0x011150": {
+    "en": "GoblinBomber",
+    "jp": "GoblinBomber"
+  },
+  "0x010101": {
+    "en": "GoblinFighter0",
+    "jp": "GoblinFighter0"
+  },
+  "0x085010": {
+    "en": "GoblinFighter1",
+    "jp": "GoblinFighter1"
+  },
+  "0x085011": {
+    "en": "GoblinFighter2",
+    "jp": "GoblinFighter2"
+  },
+  "0x085012": {
+    "en": "GoblinFighter3",
+    "jp": "GoblinFighter3"
+  },
+  "0x085013": {
+    "en": "GoblinFighter4",
+    "jp": "GoblinFighter4"
+  },
+  "0x085014": {
+    "en": "GoblinFighter5",
+    "jp": "GoblinFighter5"
+  },
+  "0x085015": {
+    "en": "GoblinFighter6",
+    "jp": "GoblinFighter6"
+  },
+  "0x085016": {
+    "en": "GoblinFighter7",
+    "jp": "GoblinFighter7"
+  },
+  "0x085017": {
+    "en": "GoblinFighter8",
+    "jp": "GoblinFighter8"
+  },
+  "0x085018": {
+    "en": "GoblinFighter9",
+    "jp": "GoblinFighter9"
+  },
+  "0x085019": {
+    "en": "GoblinFighter10",
+    "jp": "GoblinFighter10"
+  },
+  "0x010180": {
+    "en": "GoblinHorn",
+    "jp": "GoblinHorn"
+  },
+  "0x011140": {
+    "en": "GoblinKingNpc",
+    "jp": "GoblinKingNpc"
+  },
+  "0x010104": {
+    "en": "GoblinLeader",
+    "jp": "GoblinLeader"
+  },
+  "0x010140": {
+    "en": "GoblinShaman",
+    "jp": "GoblinShaman"
+  },
+  "0x015100": {
+    "en": "Golem",
+    "jp": "Golem"
+  },
+  "0x021002": {
+    "en": "Golgorran0",
+    "jp": "Golgorran0"
+  },
+  "0x080100": {
+    "en": "Golgorran1",
+    "jp": "Golgorran1"
+  },
+  "0x015102": {
+    "en": "Goliath",
+    "jp": "Goliath"
+  },
+  "0x015105": {
+    "en": "GoliathCyclopsTest",
+    "jp": "GoliathCyclopsTest"
+  },
+  "0x015201": {
+    "en": "Gorechimera0",
+    "jp": "Gorechimera0"
+  },
+  "0x070820": {
+    "en": "Gorechimera1",
+    "jp": "Gorechimera1"
+  },
+  "0x015010": {
+    "en": "Gorecyclops0",
+    "jp": "Gorecyclops0"
+  },
+  "0x070050": {
+    "en": "Gorecyclops1",
+    "jp": "Gorecyclops1"
+  },
+  "0x070051": {
+    "en": "Gorecyclops2",
+    "jp": "Gorecyclops2"
+  },
+  "0x015211": {
+    "en": "Goremanticore",
+    "jp": "Goremanticore"
+  },
+  "0x015611": {
+    "en": "Gorgon",
+    "jp": "Gorgon"
+  },
+  "0x015030": {
+    "en": "GrandEnt0",
+    "jp": "GrandEnt0"
+  },
+  "0x070510": {
+    "en": "GrandEnt1",
+    "jp": "GrandEnt1"
+  },
+  "0x080200": {
+    "en": "GrandEnt2",
+    "jp": "GrandEnt2"
+  },
+  "0x010130": {
+    "en": "GreaterGoblinSword",
+    "jp": "GreaterGoblinSword"
+  },
+  "0x010131": {
+    "en": "GreaterGoblinTorch",
+    "jp": "GreaterGoblinTorch"
+  },
+  "0x010210": {
+    "en": "GreenGuardian",
+    "jp": "GreenGuardian"
+  },
+  "0x015300": {
+    "en": "Griffin0",
+    "jp": "Griffin0"
+  },
+  "0x070600": {
+    "en": "Griffin1",
+    "jp": "Griffin1"
+  },
+  "0x015900": {
+    "en": "Grigori",
+    "jp": "Grigori"
+  },
+  "0x010120": {
+    "en": "GrimGoblin",
+    "jp": "GrimGoblin"
+  },
+  "0x010121": {
+    "en": "GrimGoblinFighter",
+    "jp": "GrimGoblinFighter"
+  },
+  "0x010124": {
+    "en": "GrimGoblinLeader",
+    "jp": "GrimGoblinLeader"
+  },
+  "0x010205": {
+    "en": "Grimwarg",
+    "jp": "Grimwarg"
+  },
+  "0x015622": {
+    "en": "GrudgeGhost",
+    "jp": "GrudgeGhost"
+  },
+  "0x011302": {
+    "en": "Habanero",
+    "jp": "Habanero"
+  },
+  "0x010600": {
+    "en": "Harpy",
+    "jp": "Harpy"
+  },
+  "0x015823": {
+    "en": "HeavySoldierDwarfOrc",
+    "jp": "HeavySoldierDwarfOrc"
+  },
+  "0x010202": {
+    "en": "Hellhound",
+    "jp": "Hellhound"
+  },
+  "0x010190": {
+    "en": "HighPixieBiff",
+    "jp": "HighPixieBiff"
+  },
+  "0x010192": {
+    "en": "HighPixiePow",
+    "jp": "HighPixiePow"
+  },
+  "0x010191": {
+    "en": "HighPixieZolda",
+    "jp": "HighPixieZolda"
+  },
+  "0x010110": {
+    "en": "Hobgoblin",
+    "jp": "Hobgoblin"
+  },
+  "0x010111": {
+    "en": "HobgoblinFighter",
+    "jp": "HobgoblinFighter"
+  },
+  "0x010113": {
+    "en": "HobgoblinLeader",
+    "jp": "HobgoblinLeader"
+  },
+  "0x011043": {
+    "en": "HoodedIris",
+    "jp": "HoodedIris"
+  },
+  "0x020803": {
+    "en": "Ifrit1stForm",
+    "jp": "Ifrit1stForm"
+  },
+  "0x020804": {
+    "en": "Ifrit2ndForm",
+    "jp": "Ifrit2ndForm"
+  },
+  "0x015712": {
+    "en": "InfectedBehemoth",
+    "jp": "InfectedBehemoth"
+  },
+  "0x010209": {
+    "en": "InfectedDirewolf",
+    "jp": "InfectedDirewolf"
+  },
+  "0x015012": {
+    "en": "InfectedGorecyclops",
+    "jp": "InfectedGorecyclops"
+  },
+  "0x015306": {
+    "en": "InfectedGriffin",
+    "jp": "InfectedGriffin"
+  },
+  "0x010160": {
+    "en": "InfectedHobgoblin",
+    "jp": "InfectedHobgoblin"
+  },
+  "0x010161": {
+    "en": "InfectedHobgoblinFighter",
+    "jp": "InfectedHobgoblinFighter"
+  },
+  "0x015814": {
+    "en": "InfectedOrcAimer",
+    "jp": "InfectedOrcAimer"
+  },
+  "0x015815": {
+    "en": "InfectedOrcBanger",
+    "jp": "InfectedOrcBanger"
+  },
+  "0x015813": {
+    "en": "InfectedOrcSoldier",
+    "jp": "InfectedOrcSoldier"
+  },
+  "0x010162": {
+    "en": "InfectedSlingHobgoblin",
+    "jp": "InfectedSlingHobgoblin"
+  },
+  "0x010612": {
+    "en": "InfectedSnowHarpy",
+    "jp": "InfectedSnowHarpy"
+  },
+  "0x011040": {
+    "en": "Iris",
+    "jp": "Iris"
+  },
+  "0x011200": {
+    "en": "KillerBee",
+    "jp": "KillerBee"
+  },
+  "0x015412": {
+    "en": "LapisEye",
+    "jp": "LapisEye"
+  },
+  "0x010461": {
+    "en": "LargeNewt",
+    "jp": "LargeNewt"
+  },
+  "0x010810": {
+    "en": "Leech",
+    "jp": "Leech"
+  },
+  "0x015835": {
+    "en": "Legion",
+    "jp": "Legion"
+  },
+  "0x015837": {
+    "en": "LegionDifferentBones",
+    "jp": "LegionDifferentBones"
+  },
+  "0x015836": {
+    "en": "LegionFighter",
+    "jp": "LegionFighter"
+  },
+  "0x015838": {
+    "en": "LegionLeader",
+    "jp": "LegionLeader"
+  },
+  "0x011042": {
+    "en": "Leo",
+    "jp": "Leo"
+  },
+  "0x015707": {
+    "en": "Lindwurm0",
+    "jp": "Lindwurm0"
+  },
+  "0x070940": {
+    "en": "Lindwurm1",
+    "jp": "Lindwurm1"
+  },
+  "0x015509": {
+    "en": "LittleCrag",
+    "jp": "LittleCrag"
+  },
+  "0x015507": {
+    "en": "LittleSpine",
+    "jp": "LittleSpine"
+  },
+  "0x010306": {
+    "en": "LivingArmor",
+    "jp": "LivingArmor"
+  },
+  "0x015718": {
+    "en": "LotusFin",
+    "jp": "LotusFin"
+  },
+  "0x010515": {
+    "en": "LuxCorpsePunisher",
+    "jp": "LuxCorpsePunisher"
+  },
+  "0x010519": {
+    "en": "LuxCorpseTorturer",
+    "jp": "LuxCorpseTorturer"
+  },
+  "0x010317": {
+    "en": "LuxSkeleton",
+    "jp": "LuxSkeleton"
+  },
+  "0x010323": {
+    "en": "LuxSkeletonBrute",
+    "jp": "LuxSkeletonBrute"
+  },
+  "0x011300": {
+    "en": "Mandragora",
+    "jp": "Mandragora"
+  },
+  "0x011301": {
+    "en": "MandragoraFlower",
+    "jp": "MandragoraFlower"
+  },
+  "0x011400": {
+    "en": "Maneater",
+    "jp": "Maneater"
+  },
+  "0x011401": {
+    "en": "ManeaterClosed",
+    "jp": "ManeaterClosed"
+  },
+  "0x015210": {
+    "en": "Manticore0",
+    "jp": "Manticore0"
+  },
+  "0x070830": {
+    "en": "Manticore1",
+    "jp": "Manticore1"
+  },
+  "0x015610": {
+    "en": "Medusa",
+    "jp": "Medusa"
+  },
+  "0x011080": {
+    "en": "MegadoGuardFighter",
+    "jp": "MegadoGuardFighter"
+  },
+  "0x011082": {
+    "en": "MegadoGuardHunter",
+    "jp": "MegadoGuardHunter"
+  },
+  "0x011081": {
+    "en": "MegadoGuardSeeker",
+    "jp": "MegadoGuardSeeker"
+  },
+  "0x011083": {
+    "en": "MegadoGuardWarrior",
+    "jp": "MegadoGuardWarrior"
+  },
+  "0x011024": {
+    "en": "MerganDefender",
+    "jp": "MerganDefender"
+  },
+  "0x011027": {
+    "en": "MerganElementArcher",
+    "jp": "MerganElementArcher"
+  },
+  "0x011020": {
+    "en": "MerganFighter",
+    "jp": "MerganFighter"
+  },
+  "0x011023": {
+    "en": "MerganHealer",
+    "jp": "MerganHealer"
+  },
+  "0x011022": {
+    "en": "MerganHunter",
+    "jp": "MerganHunter"
+  },
+  "0x011025": {
+    "en": "MerganMage",
+    "jp": "MerganMage"
+  },
+  "0x011021": {
+    "en": "MerganSeeker",
+    "jp": "MerganSeeker"
+  },
+  "0x011026": {
+    "en": "MerganWarrior",
+    "jp": "MerganWarrior"
+  },
+  "0x010480": {
+    "en": "Merman",
+    "jp": "Merman"
+  },
+  "0x015621": {
+    "en": "MiseryGhost",
+    "jp": "MiseryGhost"
+  },
+  "0x015710": {
+    "en": "MistDrake",
+    "jp": "MistDrake"
+  },
+  "0x011030": {
+    "en": "MistFighter",
+    "jp": "MistFighter"
+  },
+  "0x011031": {
+    "en": "MistHunter",
+    "jp": "MistHunter"
+  },
+  "0x011032": {
+    "en": "MistPriest",
+    "jp": "MistPriest"
+  },
+  "0x011033": {
+    "en": "MistSorcerer",
+    "jp": "MistSorcerer"
+  },
+  "0x011034": {
+    "en": "MistWarrior",
+    "jp": "MistWarrior"
+  },
+  "0x015711": {
+    "en": "MistWyrm",
+    "jp": "MistWyrm"
+  },
+  "0x015840": {
+    "en": "Mogok",
+    "jp": "Mogok"
+  },
+  "0x015041": {
+    "en": "MoleTroll0",
+    "jp": "MoleTroll0"
+  },
+  "0x070410": {
+    "en": "MoleTroll1",
+    "jp": "MoleTroll1"
+  },
+  "0x011210": {
+    "en": "MothCyanSleep",
+    "jp": "MothCyanSleep"
+  },
+  "0x011211": {
+    "en": "MothMagentaPoison",
+    "jp": "MothMagentaPoison"
+  },
+  "0x010509": {
+    "en": "Mudman",
+    "jp": "Mudman"
+  },
+  "0x015862": {
+    "en": "NecroMaster",
+    "jp": "NecroMaster"
+  },
+  "0x015305": {
+    "en": "Nightmare",
+    "jp": "Nightmare"
+  },
+  "0x030106": {
+    "en": "NoEnemyInCombat0",
+    "jp": "NoEnemyInCombat0"
+  },
+  "0x030108": {
+    "en": "NoEnemyInCombat1",
+    "jp": "NoEnemyInCombat1"
+  },
+  "0x030111": {
+    "en": "NoEnemyInCombat2",
+    "jp": "NoEnemyInCombat2"
+  },
+  "0x015500": {
+    "en": "Ogre",
+    "jp": "Ogre"
+  },
+  "0x010920": {
+    "en": "OilJelly",
+    "jp": "OilJelly"
+  },
+  "0x010902": {
+    "en": "Ooze",
+    "jp": "Ooze"
+  },
+  "0x015801": {
+    "en": "OrcAimer",
+    "jp": "OrcAimer"
+  },
+  "0x015802": {
+    "en": "OrcBanger",
+    "jp": "OrcBanger"
+  },
+  "0x015810": {
+    "en": "OrcBattler",
+    "jp": "OrcBattler"
+  },
+  "0x015811": {
+    "en": "OrcBringer",
+    "jp": "OrcBringer"
+  },
+  "0x085009": {
+    "en": "OrcGoblinTest",
+    "jp": "OrcGoblinTest"
+  },
+  "0x015800": {
+    "en": "OrcSoldier0",
+    "jp": "OrcSoldier0"
+  },
+  "0x085000": {
+    "en": "OrcSoldier1",
+    "jp": "OrcSoldier1"
+  },
+  "0x085001": {
+    "en": "OrcSoldier2",
+    "jp": "OrcSoldier2"
+  },
+  "0x085002": {
+    "en": "OrcSoldier3",
+    "jp": "OrcSoldier3"
+  },
+  "0x085003": {
+    "en": "OrcSoldier4",
+    "jp": "OrcSoldier4"
+  },
+  "0x015812": {
+    "en": "OrcTrooper",
+    "jp": "OrcTrooper"
+  },
+  "0x018300": {
+    "en": "Ox",
+    "jp": "Ox"
+  },
+  "0x011054": {
+    "en": "PawnDefender",
+    "jp": "PawnDefender"
+  },
+  "0x011057": {
+    "en": "PawnElementArcher",
+    "jp": "PawnElementArcher"
+  },
+  "0x011050": {
+    "en": "PawnFighter",
+    "jp": "PawnFighter"
+  },
+  "0x011053": {
+    "en": "PawnHealer",
+    "jp": "PawnHealer"
+  },
+  "0x011052": {
+    "en": "PawnHunter",
+    "jp": "PawnHunter"
+  },
+  "0x011055": {
+    "en": "PawnMage",
+    "jp": "PawnMage"
+  },
+  "0x011051": {
+    "en": "PawnSeeker",
+    "jp": "PawnSeeker"
+  },
+  "0x011056": {
+    "en": "PawnWarrior",
+    "jp": "PawnWarrior"
+  },
+  "0x011064": {
+    "en": "PhindymianDefender",
+    "jp": "PhindymianDefender"
+  },
+  "0x011067": {
+    "en": "PhindymianElementArcher",
+    "jp": "PhindymianElementArcher"
+  },
+  "0x015032": {
+    "en": "PhindymianEnt0",
+    "jp": "PhindymianEnt0"
+  },
+  "0x070520": {
+    "en": "PhindymianEnt1",
+    "jp": "PhindymianEnt1"
+  },
+  "0x011060": {
+    "en": "PhindymianFighter",
+    "jp": "PhindymianFighter"
+  },
+  "0x011062": {
+    "en": "PhindymianHunter",
+    "jp": "PhindymianHunter"
+  },
+  "0x011063": {
+    "en": "PhindymianPriest",
+    "jp": "PhindymianPriest"
+  },
+  "0x011061": {
+    "en": "PhindymianSeeker",
+    "jp": "PhindymianSeeker"
+  },
+  "0x011065": {
+    "en": "PhindymianSorcerer",
+    "jp": "PhindymianSorcerer"
+  },
+  "0x011066": {
+    "en": "PhindymianWarrior",
+    "jp": "PhindymianWarrior"
+  },
+  "0x010908": {
+    "en": "PhotonSlime",
+    "jp": "PhotonSlime"
+  },
+  "0x018601": {
+    "en": "Pig",
+    "jp": "Pig"
+  },
+  "0x018603": {
+    "en": "PigDirty",
+    "jp": "PigDirty"
+  },
+  "0x018602": {
+    "en": "Piglet",
+    "jp": "Piglet"
+  },
+  "0x018604": {
+    "en": "PigletDirty",
+    "jp": "PigletDirty"
+  },
+  "0x010150": {
+    "en": "Pixie",
+    "jp": "Pixie"
+  },
+  "0x010151": {
+    "en": "PixieBiff",
+    "jp": "PixieBiff"
+  },
+  "0x010152": {
+    "en": "PixieDin",
+    "jp": "PixieDin"
+  },
+  "0x010155": {
+    "en": "PixieJabber",
+    "jp": "PixieJabber"
+  },
+  "0x010195": {
+    "en": "PixieKing",
+    "jp": "PixieKing"
+  },
+  "0x010153": {
+    "en": "PixiePow",
+    "jp": "PixiePow"
+  },
+  "0x010482": {
+    "en": "PoisonMerman",
+    "jp": "PoisonMerman"
+  },
+  "0x010440": {
+    "en": "PyreSaurianSalamander",
+    "jp": "PyreSaurianSalamander"
+  },
+  "0x010905": {
+    "en": "PyroSlime",
+    "jp": "PyroSlime"
+  },
+  "0x018000": {
+    "en": "Rabbit",
+    "jp": "Rabbit"
+  },
+  "0x015623": {
+    "en": "RageGhost",
+    "jp": "RageGhost"
+  },
+  "0x015824": {
+    "en": "RangedSoldierDwarfOrc",
+    "jp": "RangedSoldierDwarfOrc"
+  },
+  "0x020404": {
+    "en": "RedZuhl",
+    "jp": "RedZuhl"
+  },
+  "0x011110": {
+    "en": "Redcap",
+    "jp": "Redcap"
+  },
+  "0x011111": {
+    "en": "RedcapFighter",
+    "jp": "RedcapFighter"
+  },
+  "0x010450": {
+    "en": "RockSaurian",
+    "jp": "RockSaurian"
+  },
+  "0x010451": {
+    "en": "RockSaurianSpinel",
+    "jp": "RockSaurianSpinel"
+  },
+  "0x030109": {
+    "en": "RockTheEvilDragonWm",
+    "jp": "RockTheEvilDragonWm"
+  },
+  "0x011004": {
+    "en": "RogueDefender",
+    "jp": "RogueDefender"
+  },
+  "0x011000": {
+    "en": "RogueFighter",
+    "jp": "RogueFighter"
+  },
+  "0x011003": {
+    "en": "RogueHealer",
+    "jp": "RogueHealer"
+  },
+  "0x011002": {
+    "en": "RogueHunter",
+    "jp": "RogueHunter"
+  },
+  "0x011005": {
+    "en": "RogueMage",
+    "jp": "RogueMage"
+  },
+  "0x011001": {
+    "en": "RogueSeeker",
+    "jp": "RogueSeeker"
+  },
+  "0x011006": {
+    "en": "RogueWarrior",
+    "jp": "RogueWarrior"
+  },
+  "0x015411": {
+    "en": "RubyEye",
+    "jp": "RubyEye"
+  },
+  "0x015921": {
+    "en": "Samyaza",
+    "jp": "Samyaza"
+  },
+  "0x010400": {
+    "en": "Saurian",
+    "jp": "Saurian"
+  },
+  "0x010430": {
+    "en": "SaurianSage",
+    "jp": "SaurianSage"
+  },
+  "0x011074": {
+    "en": "ScarletDefender",
+    "jp": "ScarletDefender"
+  },
+  "0x011070": {
+    "en": "ScarletFighter",
+    "jp": "ScarletFighter"
+  },
+  "0x011073": {
+    "en": "ScarletHealer",
+    "jp": "ScarletHealer"
+  },
+  "0x011072": {
+    "en": "ScarletHunter",
+    "jp": "ScarletHunter"
+  },
+  "0x011075": {
+    "en": "ScarletMage",
+    "jp": "ScarletMage"
+  },
+  "0x011071": {
+    "en": "ScarletSeeker",
+    "jp": "ScarletSeeker"
+  },
+  "0x011076": {
+    "en": "ScarletWarrior",
+    "jp": "ScarletWarrior"
+  },
+  "0x020601": {
+    "en": "Scourge0",
+    "jp": "Scourge0"
+  },
+  "0x071310": {
+    "en": "Scourge1",
+    "jp": "Scourge1"
+  },
+  "0x015717": {
+    "en": "SeverelyInfectedBehemoth",
+    "jp": "SeverelyInfectedBehemoth"
+  },
+  "0x015910": {
+    "en": "SeverelyInfectedDemon",
+    "jp": "SeverelyInfectedDemon"
+  },
+  "0x015017": {
+    "en": "SeverelyInfectedGorecyclops",
+    "jp": "SeverelyInfectedGorecyclops"
+  },
+  "0x015310": {
+    "en": "SeverelyInfectedGriffin",
+    "jp": "SeverelyInfectedGriffin"
+  },
+  "0x010170": {
+    "en": "SeverelyInfectedPixie",
+    "jp": "SeverelyInfectedPixie"
+  },
+  "0x010171": {
+    "en": "SeverelyInfectedPixieClub",
+    "jp": "SeverelyInfectedPixieClub"
+  },
+  "0x010172": {
+    "en": "SeverelyInfectedPixieCorruptionSeeds",
+    "jp": "SeverelyInfectedPixieCorruptionSeeds"
+  },
+  "0x020606": {
+    "en": "SeverelyInfectedScourge",
+    "jp": "SeverelyInfectedScourge"
+  },
+  "0x010614": {
+    "en": "SeverelyInfectedStymphalides",
+    "jp": "SeverelyInfectedStymphalides"
+  },
+  "0x010220": {
+    "en": "SeverelyInfectedWarg",
+    "jp": "SeverelyInfectedWarg"
+  },
+  "0x015203": {
+    "en": "ShadowChimera",
+    "jp": "ShadowChimera"
+  },
+  "0x011130": {
+    "en": "ShadowGoblin",
+    "jp": "ShadowGoblin"
+  },
+  "0x011131": {
+    "en": "ShadowGoblinFighter",
+    "jp": "ShadowGoblinFighter"
+  },
+  "0x011160": {
+    "en": "ShadowGoblinLeader",
+    "jp": "ShadowGoblinLeader"
+  },
+  "0x015932": {
+    "en": "ShadowGrigori",
+    "jp": "ShadowGrigori"
+  },
+  "0x010607": {
+    "en": "ShadowHarpy",
+    "jp": "ShadowHarpy"
+  },
+  "0x071250": {
+    "en": "ShadowMasterGiant",
+    "jp": "ShadowMasterGiant"
+  },
+  "0x015863": {
+    "en": "ShadowMasterInvulnerable",
+    "jp": "ShadowMasterInvulnerable"
+  },
+  "0x011132": {
+    "en": "ShadowSlingGoblin",
+    "jp": "ShadowSlingGoblin"
+  },
+  "0x010206": {
+    "en": "ShadowWolf",
+    "jp": "ShadowWolf"
+  },
+  "0x010102": {
+    "en": "ShieldGoblin",
+    "jp": "ShieldGoblin"
+  },
+  "0x015505": {
+    "en": "SilverRoar",
+    "jp": "SilverRoar"
+  },
+  "0x010605": {
+    "en": "Siren",
+    "jp": "Siren"
+  },
+  "0x010300": {
+    "en": "Skeleton",
+    "jp": "Skeleton"
+  },
+  "0x010307": {
+    "en": "SkeletonBrute",
+    "jp": "SkeletonBrute"
+  },
+  "0x015050": {
+    "en": "SkeletonCyclops",
+    "jp": "SkeletonCyclops"
+  },
+  "0x015051": {
+    "en": "SkeletonCyclopsTest",
+    "jp": "SkeletonCyclopsTest"
+  },
+  "0x010301": {
+    "en": "SkeletonKnight",
+    "jp": "SkeletonKnight"
+  },
+  "0x010303": {
+    "en": "SkeletonLordAbyss",
+    "jp": "SkeletonLordAbyss"
+  },
+  "0x010308": {
+    "en": "SkeletonMage0",
+    "jp": "SkeletonMage0"
+  },
+  "0x075120": {
+    "en": "SkeletonMage1",
+    "jp": "SkeletonMage1"
+  },
+  "0x075121": {
+    "en": "SkeletonMageDifferentAi",
+    "jp": "SkeletonMageDifferentAi"
+  },
+  "0x010309": {
+    "en": "SkeletonSorcerer0",
+    "jp": "SkeletonSorcerer0"
+  },
+  "0x075130": {
+    "en": "SkeletonSorcerer1",
+    "jp": "SkeletonSorcerer1"
+  },
+  "0x075131": {
+    "en": "SkeletonSorcerer2",
+    "jp": "SkeletonSorcerer2"
+  },
+  "0x075300": {
+    "en": "SkeletonSorcerer3",
+    "jp": "SkeletonSorcerer3"
+  },
+  "0x010221": {
+    "en": "SkeletonWarg",
+    "jp": "SkeletonWarg"
+  },
+  "0x010302": {
+    "en": "SkeletonWarrior",
+    "jp": "SkeletonWarrior"
+  },
+  "0x010313": {
+    "en": "SkullLord",
+    "jp": "SkullLord"
+  },
+  "0x010900": {
+    "en": "Slime",
+    "jp": "Slime"
+  },
+  "0x011102": {
+    "en": "SlingForestGoblin",
+    "jp": "SlingForestGoblin"
+  },
+  "0x010103": {
+    "en": "SlingGoblinRock",
+    "jp": "SlingGoblinRock"
+  },
+  "0x010105": {
+    "en": "SlingGoblinTorch",
+    "jp": "SlingGoblinTorch"
+  },
+  "0x010123": {
+    "en": "SlingGrimGoblinOilFlask",
+    "jp": "SlingGrimGoblinOilFlask"
+  },
+  "0x010112": {
+    "en": "SlingHobgoblinOilFlask",
+    "jp": "SlingHobgoblinOilFlask"
+  },
+  "0x010114": {
+    "en": "SlingHobgoblinTorch",
+    "jp": "SlingHobgoblinTorch"
+  },
+  "0x011112": {
+    "en": "SlingRedcap",
+    "jp": "SlingRedcap"
+  },
+  "0x010510": {
+    "en": "Sludgeman",
+    "jp": "Sludgeman"
+  },
+  "0x018700": {
+    "en": "Snake",
+    "jp": "Snake"
+  },
+  "0x010601": {
+    "en": "SnowHarpy",
+    "jp": "SnowHarpy"
+  },
+  "0x015302": {
+    "en": "Sphinx0",
+    "jp": "Sphinx0"
+  },
+  "0x070700": {
+    "en": "Sphinx1",
+    "jp": "Sphinx1"
+  },
+  "0x018800": {
+    "en": "Spider",
+    "jp": "Spider"
+  },
+  "0x015506": {
+    "en": "Spineback0",
+    "jp": "Spineback0"
+  },
+  "0x070210": {
+    "en": "Spineback1",
+    "jp": "Spineback1"
+  },
+  "0x070211": {
+    "en": "Spineback2",
+    "jp": "Spineback2"
+  },
+  "0x022000": {
+    "en": "SpiritDragonWillmia0",
+    "jp": "SpiritDragonWillmia0"
+  },
+  "0x080400": {
+    "en": "SpiritDragonWillmia1",
+    "jp": "SpiritDragonWillmia1"
+  },
+  "0x100106": {
+    "en": "SpiritDragonWillmiaActive",
+    "jp": "SpiritDragonWillmiaActive"
+  },
+  "0x022001": {
+    "en": "SpiritDragonWillmiaGoblinTest",
+    "jp": "SpiritDragonWillmiaGoblinTest"
+  },
+  "0x100105": {
+    "en": "SpiritDragonWillmiaTest",
+    "jp": "SpiritDragonWillmiaTest"
+  },
+  "0x015826": {
+    "en": "SquadLeaderDwarfOrc",
+    "jp": "SquadLeaderDwarfOrc"
+  },
+  "0x010915": {
+    "en": "StoneBlob",
+    "jp": "StoneBlob"
+  },
+  "0x010502": {
+    "en": "StoutUndead",
+    "jp": "StoutUndead"
+  },
+  "0x010610": {
+    "en": "Strix",
+    "jp": "Strix"
+  },
+  "0x010611": {
+    "en": "Stymphalides",
+    "jp": "Stymphalides"
+  },
+  "0x010410": {
+    "en": "SulfurSaurian",
+    "jp": "SulfurSaurian"
+  },
+  "0x015821": {
+    "en": "SwordSoldierDwarfOrc",
+    "jp": "SwordSoldierDwarfOrc"
+  },
+  "0x010503": {
+    "en": "SwordUndead",
+    "jp": "SwordUndead"
+  },
+  "0x015720": {
+    "en": "Tarasque",
+    "jp": "Tarasque"
+  },
+  "0x070950": {
+    "en": "TarasqueGoblinTest",
+    "jp": "TarasqueGoblinTest"
+  },
+  "0x011410": {
+    "en": "TentacleEvilEye0",
+    "jp": "TentacleEvilEye0"
+  },
+  "0x011411": {
+    "en": "TentacleEvilEye1",
+    "jp": "TentacleEvilEye1"
+  },
+  "0x011412": {
+    "en": "TentacleVoltEye0",
+    "jp": "TentacleVoltEye0"
+  },
+  "0x011413": {
+    "en": "TentacleVoltEye1",
+    "jp": "TentacleVoltEye1"
+  },
+  "0x023000": {
+    "en": "TheEvilDragon0",
+    "jp": "TheEvilDragon0"
+  },
+  "0x075401": {
+    "en": "TheEvilDragon1",
+    "jp": "TheEvilDragon1"
+  },
+  "0x075400": {
+    "en": "TheEvilDragonSparks",
+    "jp": "TheEvilDragonSparks"
+  },
+  "0x030110": {
+    "en": "TotemShadowMasterWmUntranslated",
+    "jp": "TotemShadowMasterWmUntranslated"
+  },
+  "0x015040": {
+    "en": "Troll",
+    "jp": "Troll"
+  },
+  "0x010621": {
+    "en": "Ukobach",
+    "jp": "Ukobach"
+  },
+  "0x010501": {
+    "en": "UndeadFemale",
+    "jp": "UndeadFemale"
+  },
+  "0x010500": {
+    "en": "UndeadMale",
+    "jp": "UndeadMale"
+  },
+  "0x030100": {
+    "en": "UnspeakableMeat",
+    "jp": "UnspeakableMeat"
+  },
+  "0x021004": {
+    "en": "Ushumgal",
+    "jp": "Ushumgal"
+  },
+  "0x010240": {
+    "en": "Valefar",
+    "jp": "Valefar"
+  },
+  "0x015401": {
+    "en": "VileEye",
+    "jp": "VileEye"
+  },
+  "0x015406": {
+    "en": "VoltEye",
+    "jp": "VoltEye"
+  },
+  "0x015860": {
+    "en": "WarMaster0",
+    "jp": "WarMaster0"
+  },
+  "0x071251": {
+    "en": "WarMaster1",
+    "jp": "WarMaster1"
+  },
+  "0x010471": {
+    "en": "WarReadyGiantSaurianLightArmor",
+    "jp": "WarReadyGiantSaurianLightArmor"
+  },
+  "0x015060": {
+    "en": "WarReadyGorecyclopsLightArmor0",
+    "jp": "WarReadyGorecyclopsLightArmor0"
+  },
+  "0x015061": {
+    "en": "WarReadyGorecyclopsLightArmor1",
+    "jp": "WarReadyGorecyclopsLightArmor1"
+  },
+  "0x015220": {
+    "en": "WarReadyGoremanticoreLightArmor",
+    "jp": "WarReadyGoremanticoreLightArmor"
+  },
+  "0x010230": {
+    "en": "WarReadyGrimwargLightArmor",
+    "jp": "WarReadyGrimwargLightArmor"
+  },
+  "0x015330": {
+    "en": "WarReadyNightmareLightArmor",
+    "jp": "WarReadyNightmareLightArmor"
+  },
+  "0x015510": {
+    "en": "WarReadyOgreLightArmor",
+    "jp": "WarReadyOgreLightArmor"
+  },
+  "0x010470": {
+    "en": "WarReadySaurianLightArmor",
+    "jp": "WarReadySaurianLightArmor"
+  },
+  "0x010203": {
+    "en": "Warg",
+    "jp": "Warg"
+  },
+  "0x010504": {
+    "en": "WarriorUndead",
+    "jp": "WarriorUndead"
+  },
+  "0x015202": {
+    "en": "WhiteChimera0",
+    "jp": "WhiteChimera0"
+  },
+  "0x070810": {
+    "en": "WhiteChimera1",
+    "jp": "WhiteChimera1"
+  },
+  "0x021003": {
+    "en": "WhiteDragon",
+    "jp": "WhiteDragon"
+  },
+  "0x021000": {
+    "en": "WhiteDragonNpc",
+    "jp": "WhiteDragonNpc"
+  },
+  "0x015320": {
+    "en": "WhiteGriffin0",
+    "jp": "WhiteGriffin0"
+  },
+  "0x070620": {
+    "en": "WhiteGriffin1",
+    "jp": "WhiteGriffin1"
+  },
+  "0x015723": {
+    "en": "WhiteTarasque",
+    "jp": "WhiteTarasque"
+  },
+  "0x015600": {
+    "en": "Wight0",
+    "jp": "Wight0"
+  },
+  "0x075700": {
+    "en": "Wight1",
+    "jp": "Wight1"
+  },
+  "0x019300": {
+    "en": "WildBoarBrown",
+    "jp": "WildBoarBrown"
+  },
+  "0x019301": {
+    "en": "WildBoarStripes",
+    "jp": "WildBoarStripes"
+  },
+  "0x015721": {
+    "en": "WisenedTarasque0",
+    "jp": "WisenedTarasque0"
+  },
+  "0x080600": {
+    "en": "WisenedTarasque1",
+    "jp": "WisenedTarasque1"
+  },
+  "0x015604": {
+    "en": "Witch",
+    "jp": "Witch"
+  },
+  "0x010200": {
+    "en": "Wolf",
+    "jp": "Wolf"
+  },
+  "0x010800": {
+    "en": "Worm",
+    "jp": "Worm"
+  },
+  "0x015701": {
+    "en": "Wyrm0",
+    "jp": "Wyrm0"
+  },
+  "0x070910": {
+    "en": "Wyrm1",
+    "jp": "Wyrm1"
+  },
+  "0x020402": {
+    "en": "Zuhl0",
+    "jp": "Zuhl0"
+  },
+  "0x071300": {
+    "en": "Zuhl1",
+    "jp": "Zuhl1"
+  },
+  "0x080300": {
+    "en": "Zuhl2",
+    "jp": "Zuhl2"
+  },
+  "0x100101": {
+    "en": "ZuhlPassive",
+    "jp": "ZuhlPassive"
+  }
 }

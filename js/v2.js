@@ -403,15 +403,18 @@ function renderItems(filter="") {
 
     let html = "";
 
-    DATA.Items?.item?.forEach(i=>{
-        if (!i?.new) return;
-        if (!i.new.toLowerCase().includes(filter)) return;
+    DATA.Items?.item?.forEach(i => {
+
+        const name = getItemName(i.id);
+        if (!name) return;
+
+        if (!name.toLowerCase().includes(filter)) return;
 
         html += `
             <div class="card">
                 <h3 onclick="navigate('?item=${i.id}')"
                     style="cursor:pointer">
-                    ${i.new}
+                    ${name}
                 </h3>
             </div>
         `;
@@ -670,12 +673,12 @@ function renderSpecial(filter=""){
             let body="";
             cat.appraisals?.forEach(app=>{
                 app.pool?.forEach(p=>{
-                    body+=`
-                        <div onclick="navigate('?item=${p.item_id}')"
-                             style="cursor:pointer">
-                            ${p.name}
-                        </div>
-                    `;
+body += `
+    <div onclick="navigate('?item=${p.item_id}')"
+         style="cursor:pointer">
+        ${getItemName(p.item_id)}
+    </div>
+`;
                 });
             });
 
