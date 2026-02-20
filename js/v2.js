@@ -120,16 +120,32 @@ function getStageName(id) {
 }
 
 function getShopNames(id) {
-    const shop = DATA.ShopNames?.[id];
-    if (!shop) return ["Shop " + id];
 
+    const key = String(id);
+    const shop = DATA.ShopNames?.[key];
+
+    if (!shop)
+        return ["Shop " + key];
+
+    // 🔥 Alter Stil: Array
+    if (Array.isArray(shop))
+        return shop;
+
+    // 🔥 Alter Stil: String
     if (typeof shop === "string")
         return [shop];
 
-    if (currentLanguage === "jp" && shop.jp)
-        return [shop.jp];
+    // 🔥 Neuer Stil: { en:[], jp:[] }
+    if (typeof shop === "object") {
 
-    return [shop.en || "Shop " + id];
+        if (currentLanguage === "jp" && shop.jp && shop.jp.length)
+            return shop.jp;
+
+        if (shop.en && shop.en.length)
+            return shop.en;
+    }
+
+    return ["Shop " + key];
 }
 
 
@@ -466,7 +482,7 @@ function renderStages(filter="") {
 
     Object.keys(DATA.StageNames || {}).forEach(id=>{
         const name = getStageName(id);
-        if (!name.toLowerCase().includes(filter)) return;
+        if (!String(name).toLowerCase().includes(filter)) return;
 
         html += `
             <div class="card">

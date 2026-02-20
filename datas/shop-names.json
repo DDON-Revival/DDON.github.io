@@ -1,10 +1,10 @@
 {
-  "100": [
-    "Furnival",
-    "Gran Soren General Store"
-  ],
-  "200": [
-    "Madeleine",
-    "Black Cat"
-  ]
+  "100": {
+    "en": ["Furnival", "Gran Soren General Store"],
+    "jp": ["フォーニバル", "グランソレン商店"]
+  },
+  "200": {
+    "en": ["Madeleine", "Black Cat"],
+    "jp": ["マデリン", "ブラックキャット"]
+  }
 }
