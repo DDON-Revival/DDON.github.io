@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,8 +34,18 @@ nav a:hover{
 }
 
 .section{
-    padding:100px 20px;
+    padding:100px 10%;
     text-align:center;
+}
+
+.section h1{
+    color:#c8a75d;
+    font-size:40px;
+}
+
+.subtitle{
+    opacity:.7;
+    margin-bottom:60px;
 }
 
 .card{
@@ -51,6 +61,34 @@ nav a:hover{
 .card:hover{
     border-color:#c8a75d;
     transform:translateY(-5px);
+}
+
+.feature-block{
+    text-align:left;
+    max-width:900px;
+    margin:60px auto;
+    background:#15151d;
+    padding:40px;
+    border:1px solid #2a2a35;
+}
+
+.feature-block h2{
+    color:#c8a75d;
+    margin-bottom:20px;
+}
+
+.feature-block ul{
+    list-style:none;
+    padding:0;
+}
+
+.feature-block li{
+    padding:8px 0;
+    border-bottom:1px solid #2a2a35;
+}
+
+.feature-block li:last-child{
+    border-bottom:none;
 }
 </style>
 </head>
@@ -68,36 +106,83 @@ nav a:hover{
 </header>
 
 <section class="section">
-    <h1 data-key="customTitle">Server Exclusive Features</h1>
-    <p data-key="customSubtitle">Features only available on DDON Revival</p>
 
-    <div class="card">
-        <h3 data-key="hcTitle">Hardcore Mode</h3>
-        <p data-key="hcText">One life only. Permanent death. No party allowed.</p>
-    </div>
+<h1>Server Exclusive Features</h1>
+<p class="subtitle">Features only available on DDON Revival</p>
 
-    <div class="card">
-        <h3 data-key="customContentTitle">Custom Content</h3>
-        <p data-key="customContentText">Unique quests and rewards.</p>
-    </div>
+<!-- TOP CARDS -->
 
-    <div class="card">
-        <h3 data-key="eventsTitle">Special Events</h3>
-        <p data-key="eventsText">Server-exclusive seasonal events.</p>
-    </div>
+<div class="card">
+    <h3>Hardcore Mode</h3>
+    <p>One life only.<br>Permanent death.<br>No party allowed.</p>
+</div>
+
+<div class="card">
+    <h3>Custom Content</h3>
+    <p>Unique quests, systems and rewards.</p>
+</div>
+
+<div class="card">
+    <h3>Special Events</h3>
+    <p>Server-exclusive seasonal collaborations.</p>
+</div>
 
 </section>
 
-<script src="translations.js"></script>
-<script>
-const saved = localStorage.getItem("lang") || "en";
-const t = translations[saved];
+<!-- CUSTOM FEATURES -->
 
-document.querySelectorAll("[data-key]").forEach(el=>{
-    const key = el.getAttribute("data-key");
-    if(t[key]) el.textContent = t[key];
-});
-</script>
+<div class="feature-block">
+<h2>Custom Features</h2>
+<ul>
+<li>Courses!!!</li>
+<li>Storage Course permanently active (use item boxes outside city + expanded tabs)</li>
+<li>Free refill for Green Revive Gems (no 24h limit)</li>
+<li>All Storage Boxes visible per Crafting Room</li>
+<li>Party up with 8 Players using /invite</li>
+</ul>
+</div>
+
+<div class="feature-block">
+<h2>Custom Content</h2>
+<ul>
+<li>Bonus Dungeons are Endgame Dungeons for Endgame Materials</li>
+<li>Bonus Dungeon Tickets obtainable via PP Shop</li>
+<li>Currently filled Bonus Dungeons: R, XP</li>
+</ul>
+</div>
+
+<div class="feature-block">
+<h2>Quality of Life Systems</h2>
+<ul>
+<li>PP Cap increased from 2000 → 2,000,000</li>
+<li>Bazaar expiration increased from 3 → 30 days</li>
+<li>CraftConsumableProductionTimesMax: 10 → 100</li>
+<li>CraftItemRecycleMax: 10 → 50</li>
+<li>Golden Dragon Mark increased to 200</li>
+<li>Silver Dragon Mark increased to 500</li>
+<li>Pawns now gain Quest EXP and JP</li>
+</ul>
+</div>
+
+<div class="feature-block">
+<h2>Custom Channels</h2>
+<ul>
+<li>Collab Channel — Unique exclusive EXMs</li>
+<li>Custom Enemy Channel — Old spawns restored + new Endgame spawns</li>
+<li>Boss Rush Channel — Custom items and rewards</li>
+</ul>
+</div>
+
+<div class="feature-block">
+<h2>Collab EXMs</h2>
+<ul>
+<li>The Call of the Catacombs → Ghosts & Goblins Collab</li>
+<li>Drawn to Ancient Power → Attack on Titan Collab</li>
+<li>Phantasmic Great Dragon → Monster Hunter Collab</li>
+<li>Earth's Fury → Street Fighter Collab</li>
+<li>The Lost Order → Pijama Collab</li>
+</ul>
+</div>
 
 </body>
 </html>
