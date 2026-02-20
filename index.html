@@ -51,6 +51,8 @@ header{
     justify-content:space-between;
     align-items:center;
     border-bottom:2px solid #c8a75d;
+    position:relative;
+    z-index:1000;
 }
 
 nav a{
@@ -67,6 +69,7 @@ nav a:hover{
     text-align:center;
     padding:120px 20px;
     background:linear-gradient(to bottom,#1b1b25,#0f0f14);
+    position:relative;
 }
 
 .hero h1{
@@ -96,14 +99,7 @@ nav a:hover{
 
 .lang-selector{
     position:relative;
-}
-
-.lang-btn{
-    background:#1b1b25;
-    border:1px solid #c8a75d;
-    color:#c8a75d;
-    padding:6px 12px;
-    cursor:pointer;
+    z-index:2000;
 }
 
 .lang-dropdown{
@@ -112,6 +108,7 @@ nav a:hover{
     right:0;
     background:#1b1b25;
     border:1px solid #c8a75d;
+    z-index:3000;
 }
 
 .lang-dropdown div{
@@ -133,13 +130,7 @@ footer{
     background:#1b1b25;
 }
 
-/* ==============================
-   🔥 CONNECTION BOX
-============================== */
-
-.hero{
-    position:relative;
-}
+/* 🔥 CONNECTION BOX */
 
 .connection-box{
     position:absolute;
@@ -152,6 +143,7 @@ footer{
     padding:25px;
     box-shadow:0 0 25px rgba(200,167,93,0.15);
     text-align:left;
+    z-index:1;
 }
 
 .connection-box h3{
@@ -216,8 +208,8 @@ footer{
         <a href="#status" data-key="status">Server Status</a>
         <a href="leaderboard.html" data-key="leaderboard">Leaderboard</a>
         <a href="howtoplay.html" data-key="howToPlay">How To Play</a>
-		<a href="wiki.html" data-key="wiki">Wiki</a>
-		<a href="custom.html" data-key="customFeatures">Custom Features</a>
+        <a href="wiki.html" data-key="wiki">Wiki</a>
+        <a href="custom.html" data-key="customFeatures">Custom Features</a>
     </nav>
 
     <div class="lang-selector">
@@ -255,37 +247,11 @@ footer{
     </div>
 </section>
 
-<section id="news" class="section">
-    <h2 data-key="newsTitle">Latest News</h2>
-
-    <div class="card">
-        <h3 data-key="news1Title">Server Opening</h3>
-        <p data-key="news1Text">DDON is now live!</p>
-    </div>
-
-    <div class="card">
-        <h3 data-key="news2Title">Hardcore Mode</h3>
-        <p data-key="news2Text">Hardcore Mode is now live!</p>
-    </div>
-</section>
-
-<section id="status" class="section">
-    <h2 data-key="serverStatusTitle">Server Status</h2>
-    <div id="serverStatusContainer"></div>
-</section>
-
 <footer>
 2023 DDON Revival • Unofficial Fan Project
 </footer>
 
-<!-- 🔥 translations FIRST -->
-<script src="translations.js"></script>
-
 <script>
-
-/* ===========================
-   🔥 Spark Generator
-=========================== */
 const container = document.getElementById("particles");
 for(let i=0;i<40;i++){
     let spark=document.createElement("div");
@@ -296,75 +262,10 @@ for(let i=0;i<40;i++){
     container.appendChild(spark);
 }
 
-/* ===========================
-   LANGUAGE SYSTEM
-=========================== */
-
-function setLanguage(lang){
-    const t = translations[lang];
-    if(!t) return;
-
-    document.querySelectorAll("[data-key]").forEach(el=>{
-        const key = el.getAttribute("data-key");
-        if(t[key]) el.textContent = t[key];
-    });
-
-    localStorage.setItem("lang", lang);
-    loadServerStatus();
-}
-
-languages.forEach(lang=>{
-    const div=document.createElement("div");
-    div.innerHTML=`${lang.flag} ${lang.name}`;
-    div.onclick=()=>setLanguage(lang.code);
-    document.getElementById("languageList").appendChild(div);
-});
-
-const saved = localStorage.getItem("lang") || "en";
-setLanguage(saved);
-
-/* ===========================
-   SERVER STATUS
-=========================== */
-
-async function loadServerStatus(){
-    try{
-        const res = await fetch("status.json?nocache="+Date.now());
-        const data = await res.json();
-
-        const t = translations[localStorage.getItem("lang") || "en"];
-        const container = document.getElementById("serverStatusContainer");
-        container.innerHTML="";
-        let total=0;
-
-        data.forEach(server=>{
-            total+=server.players;
-
-            const div=document.createElement("div");
-            div.className="card";
-            div.innerHTML=`
-                <h3>${server.name}</h3>
-                <p>${t.statusLabel}: ${server.online ? "🟢 "+t.online : "🔴 "+t.offline}</p>
-                <p>${t.playersLabel}: ${server.players}</p>
-            `;
-            container.appendChild(div);
-        });
-
-        document.getElementById("totalPlayersBox").textContent=
-            `${t.totalPlayers}: ${total}`;
-
-    }catch(err){
-        console.error("Status load failed",err);
-    }
-}
-
-loadServerStatus();
-setInterval(loadServerStatus,15000);
-
-</script>
 function copyText(text){
     navigator.clipboard.writeText(text);
 }
+</script>
 
 </body>
 </html>
