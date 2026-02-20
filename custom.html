@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom Features - DDON Revival</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    font-family:'Cinzel', serif;
+    background:#0f0f14;
+    color:#e6e6e6;
+}
+
+header{
+    background:#1b1b25;
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:2px solid #c8a75d;
+}
+
+nav a{
+    color:#e6e6e6;
+    text-decoration:none;
+    margin:0 15px;
+}
+
+nav a:hover{
+    color:#c8a75d;
+}
+
+.section{
+    padding:100px 20px;
+    text-align:center;
+}
+
+.card{
+    background:#1b1b25;
+    padding:30px;
+    margin:20px;
+    display:inline-block;
+    width:300px;
+    border:1px solid #2a2a35;
+    transition:0.3s;
+}
+
+.card:hover{
+    border-color:#c8a75d;
+    transform:translateY(-5px);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>DDON Revival</h2>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="wiki.html">Wiki</a>
+        <a href="custom.html" style="color:#c8a75d;">Custom Features</a>
+    </nav>
+</header>
+
+<section class="section">
+    <h1 data-key="customTitle">Server Exclusive Features</h1>
+    <p data-key="customSubtitle">Features only available on DDON Revival</p>
+
+    <div class="card">
+        <h3 data-key="hcTitle">Hardcore Mode</h3>
+        <p data-key="hcText">One life only. Permanent death. No party allowed.</p>
+    </div>
+
+    <div class="card">
+        <h3 data-key="customContentTitle">Custom Content</h3>
+        <p data-key="customContentText">Unique quests and rewards.</p>
+    </div>
+
+    <div class="card">
+        <h3 data-key="eventsTitle">Special Events</h3>
+        <p data-key="eventsText">Server-exclusive seasonal events.</p>
+    </div>
+
+</section>
+
+<script src="translations.js"></script>
+<script>
+const saved = localStorage.getItem("lang") || "en";
+const t = translations[saved];
+
+document.querySelectorAll("[data-key]").forEach(el=>{
+    const key = el.getAttribute("data-key");
+    if(t[key]) el.textContent = t[key];
+});
+</script>
+
+</body>
+</html>
