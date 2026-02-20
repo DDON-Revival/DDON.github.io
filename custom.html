@@ -13,25 +13,24 @@
 body{
     margin:0;
     font-family:'Cinzel', serif;
-    background:#0b0b0f;
+    background:#08080c;
     color:#e6e6e6;
     overflow-x:hidden;
 }
 
-/* SUBTLE DARK PULSE */
+/* DARK SCREEN PULSE */
 body::after{
     content:"";
     position:fixed;
-    top:0;left:0;
-    width:100%;height:100%;
-    background:radial-gradient(circle at center,rgba(255,0,0,.08),transparent 70%);
+    inset:0;
+    background:radial-gradient(circle at center,rgba(255,0,0,.07),transparent 70%);
     pointer-events:none;
     animation:darkPulse 6s infinite;
 }
 
 @keyframes darkPulse{
     0%{opacity:.4}
-    50%{opacity:.8}
+    50%{opacity:.9}
     100%{opacity:.4}
 }
 
@@ -61,11 +60,8 @@ nav a:hover{
 
 #embers{
     position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    z-index:-2;
+    inset:0;
+    z-index:-3;
     overflow:hidden;
 }
 
@@ -73,7 +69,7 @@ nav a:hover{
     position:absolute;
     width:4px;
     height:4px;
-    background:#ff2a00;
+    background:#ff1e00;
     border-radius:50%;
     opacity:.8;
     animation:rise 8s linear infinite;
@@ -93,8 +89,8 @@ nav a:hover{
     width:200%;
     height:200px;
     background:radial-gradient(circle,rgba(80,0,0,.4),transparent 70%);
-    animation:smokeMove 20s linear infinite;
-    z-index:-1;
+    animation:smokeMove 25s linear infinite;
+    z-index:-2;
 }
 
 @keyframes smokeMove{
@@ -122,31 +118,52 @@ nav a:hover{
 /* ================= HARDCORE BANNER ================= */
 
 .hardcore-banner{
-    margin:80px auto;
+    position:relative;
+    margin:100px auto;
     max-width:1000px;
-    padding:70px;
-    background:linear-gradient(135deg,#2a0000,#550000);
-    border:2px solid #ff1e00;
+    padding:80px;
+    background:linear-gradient(135deg,#2a0000,#5c0000);
+    border:3px solid #ff0000;
     text-align:center;
-    box-shadow:0 0 60px rgba(255,0,0,.6);
+    box-shadow:0 0 80px rgba(255,0,0,.8);
     animation:pulse 2.5s infinite;
+    overflow:hidden;
 }
 
 .hardcore-banner h2{
-    font-size:40px;
-    color:#ff1e00;
+    font-size:42px;
+    color:#ff0000;
+    margin-bottom:20px;
     animation:flicker 3s infinite;
 }
 
 @keyframes pulse{
-    0%{box-shadow:0 0 30px rgba(255,0,0,.5);}
-    50%{box-shadow:0 0 90px rgba(255,0,0,.9);}
-    100%{box-shadow:0 0 30px rgba(255,0,0,.5);}
+    0%{box-shadow:0 0 40px rgba(255,0,0,.6);}
+    50%{box-shadow:0 0 120px rgba(255,0,0,1);}
+    100%{box-shadow:0 0 40px rgba(255,0,0,.6);}
 }
 
 @keyframes flicker{
     0%,18%,22%,25%,53%,57%,100%{opacity:1;}
-    20%,24%,55%{opacity:.4;}
+    20%,24%,55%{opacity:.5;}
+}
+
+/* ================= BLOOD DRIPS ================= */
+
+.blood-drop{
+    position:absolute;
+    top:0;
+    width:6px;
+    height:20px;
+    background:#8b0000;
+    border-radius:50%;
+    animation:drip 4s infinite;
+}
+
+@keyframes drip{
+    0%{transform:translateY(0) scaleY(1);opacity:1;}
+    70%{transform:translateY(120px) scaleY(1.5);opacity:1;}
+    100%{transform:translateY(200px) scaleY(.5);opacity:0;}
 }
 
 /* ================= FEATURE BLOCK ================= */
@@ -199,29 +216,18 @@ nav a:hover{
     font-weight:bold;
     background:#1b1b25;
     border:1px solid #2a2a35;
-    overflow:hidden;
     transition:.5s;
-}
-
-.dungeon-card::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:linear-gradient(to top,rgba(0,0,0,.8),transparent);
 }
 
 .dungeon-card:hover{
     transform:scale(1.05);
-    border-color:#ff1e00;
+    border-color:#ff0000;
     box-shadow:0 20px 60px rgba(255,0,0,.4);
 }
 
 /* ================= LANGUAGE ================= */
 
-.lang-selector{
-    position:relative;
-}
-
+.lang-selector{position:relative;}
 .lang-btn{
     background:#1b1b25;
     border:1px solid #c8a75d;
@@ -229,7 +235,6 @@ nav a:hover{
     padding:6px 12px;
     cursor:pointer;
 }
-
 .lang-dropdown{
     display:none;
     position:absolute;
@@ -237,19 +242,12 @@ nav a:hover{
     background:#1b1b25;
     border:1px solid #c8a75d;
 }
-
 .lang-dropdown div{
     padding:6px 12px;
     cursor:pointer;
 }
-
-.lang-dropdown div:hover{
-    background:#2a2a35;
-}
-
-.lang-selector:hover .lang-dropdown{
-    display:block;
-}
+.lang-dropdown div:hover{background:#2a2a35;}
+.lang-selector:hover .lang-dropdown{display:block;}
 
 </style>
 </head>
@@ -261,14 +259,12 @@ nav a:hover{
 
 <header>
     <h2>DDON Revival</h2>
-
     <nav>
         <a href="index.html" data-key="home"></a>
         <a href="leaderboard.html" data-key="leaderboard"></a>
         <a href="wiki.html" data-key="wiki"></a>
         <a href="custom.html" style="color:#c8a75d;" data-key="customFeatures"></a>
     </nav>
-
     <div class="lang-selector">
         <button class="lang-btn">🌍</button>
         <div class="lang-dropdown" id="languageList"></div>
@@ -277,7 +273,7 @@ nav a:hover{
 
 <section class="section">
 
-<div class="hardcore-banner">
+<div class="hardcore-banner" id="hardcoreBanner">
     <h2 data-key="hcTitle"></h2>
     <p data-key="hcFullDescription"></p>
 </div>
@@ -287,7 +283,7 @@ nav a:hover{
 
 </section>
 
-<!-- FEATURE BLOCKS (DEINE LISTE BLEIBT GLEICH) -->
+<!-- FEATURE BLOCKS -->
 
 <div class="feature-block">
 <h2 data-key="cf_block1"></h2>
@@ -345,7 +341,6 @@ nav a:hover{
 <div class="feature-block">
 <h2>Boss Rush Dungeons</h2>
 <p data-key="bossRushDescription"></p>
-
 <div class="dungeon-grid">
     <div class="dungeon-card">Shadolean Great Temple</div>
     <div class="dungeon-card">Hadin Underground Old Road</div>
@@ -358,15 +353,15 @@ nav a:hover{
 <script src="translations.js"></script>
 
 <script>
+
+/* LANGUAGE SYSTEM */
 function setLanguage(lang){
     const t = translations[lang];
     if(!t) return;
-
     document.querySelectorAll("[data-key]").forEach(el=>{
         const key = el.getAttribute("data-key");
         if(t[key]) el.textContent = t[key];
     });
-
     localStorage.setItem("lang", lang);
 }
 
@@ -377,8 +372,7 @@ languages.forEach(lang=>{
     document.getElementById("languageList").appendChild(div);
 });
 
-const saved = localStorage.getItem("lang") || "en";
-setLanguage(saved);
+setLanguage(localStorage.getItem("lang") || "en");
 
 /* EMBERS */
 const emberContainer = document.getElementById("embers");
@@ -390,6 +384,17 @@ for(let i=0;i<80;i++){
     ember.style.animationDelay=Math.random()*5+"s";
     emberContainer.appendChild(ember);
 }
+
+/* BLOOD DRIPS */
+const banner=document.getElementById("hardcoreBanner");
+for(let i=0;i<8;i++){
+    let drop=document.createElement("div");
+    drop.classList.add("blood-drop");
+    drop.style.left=Math.random()*100+"%";
+    drop.style.animationDelay=Math.random()*4+"s";
+    banner.appendChild(drop);
+}
+
 </script>
 
 </body>
