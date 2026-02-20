@@ -148,21 +148,18 @@ async function loadQuests() {
 function getItemName(id) {
 
     const found = DATA.Items?.item?.find(i => String(i.id) === String(id));
-    if (!found) return id;
+    if (!found) return String(id);
 
-    // Falls alter Stil (String)
     if (typeof found === "string")
         return found;
 
-    // 🔥 JP Mode → benutze "old"
     if (currentLanguage === "jp" && found.old)
-        return found.old;
+        return String(found.old);
 
-    // EN Mode → benutze "new"
     if (found.new)
-        return found.new;
+        return String(found.new);
 
-    return id;
+    return String(id);
 }
 
 function getEnemyName(id) {
@@ -424,8 +421,11 @@ function renderItems(filter="") {
 
     DATA.Items?.item?.forEach(i => {
 
-        const name = getItemName(i.id);
-        if (!name) return;
+        const rawName = getItemName(i.id);
+
+        if (!rawName) return;
+
+        const name = String(rawName);   // 🔥 FIX
 
         if (!name.toLowerCase().includes(filter)) return;
 
