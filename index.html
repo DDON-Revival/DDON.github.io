@@ -132,6 +132,70 @@ footer{
     padding:20px;
     background:#1b1b25;
 }
+
+/* ==============================
+   🔥 CONNECTION BOX
+============================== */
+
+.hero{
+    position:relative;
+}
+
+.connection-box{
+    position:absolute;
+    right:6%;
+    top:50%;
+    transform:translateY(-50%);
+    width:330px;
+    background:linear-gradient(145deg,#1b1b25,#14141c);
+    border:1px solid #c8a75d;
+    padding:25px;
+    box-shadow:0 0 25px rgba(200,167,93,0.15);
+    text-align:left;
+}
+
+.connection-box h3{
+    color:#c8a75d;
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.connection-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:8px 0;
+    font-size:14px;
+}
+
+.connection-row span{
+    color:#c8a75d;
+    font-weight:bold;
+}
+
+.copy-btn{
+    background:#1b1b25;
+    border:1px solid #2a2a35;
+    color:#c8a75d;
+    padding:3px 8px;
+    font-size:12px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.copy-btn:hover{
+    border-color:#c8a75d;
+    background:#14141c;
+}
+
+@media(max-width:1000px){
+    .connection-box{
+        position:static;
+        transform:none;
+        margin:40px auto 0 auto;
+    }
+}
+
 </style>
 </head>
 
@@ -165,6 +229,30 @@ footer{
 <section id="home" class="hero">
     <h1 data-key="title">Dragon's Dogma Online</h1>
     <p data-key="subtitle">Biggest Server • Custom Content • Hardcore</p>
+
+    <div class="connection-box">
+        <h3>Server Connection</h3>
+
+        <div class="connection-row">
+            <div><span>Lobby IP:</span> ddon.org</div>
+            <button class="copy-btn" onclick="copyText('ddon.org')">Copy</button>
+        </div>
+
+        <div class="connection-row">
+            <div><span>Lobby Port:</span> 52100</div>
+            <button class="copy-btn" onclick="copyText('52100')">Copy</button>
+        </div>
+
+        <div class="connection-row">
+            <div><span>Game IP:</span> ddon.org</div>
+            <button class="copy-btn" onclick="copyText('ddon.org')">Copy</button>
+        </div>
+
+        <div class="connection-row">
+            <div><span>Game Port:</span> 52099</div>
+            <button class="copy-btn" onclick="copyText('52099')">Copy</button>
+        </div>
+    </div>
 </section>
 
 <section id="news" class="section">
@@ -274,6 +362,9 @@ loadServerStatus();
 setInterval(loadServerStatus,15000);
 
 </script>
+function copyText(text){
+    navigator.clipboard.writeText(text);
+}
 
 </body>
 </html>
