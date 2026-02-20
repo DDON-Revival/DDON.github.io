@@ -58,6 +58,23 @@ const UI = {
     }
 };
 
+function updateUI() {
+
+    const t = UI[currentLanguage];
+
+    // Tabs
+    document.querySelectorAll(".tabs button").forEach(btn => {
+        const key = btn.dataset.tab;
+        if (t.tabs[key])
+            btn.textContent = t.tabs[key];
+    });
+
+    // Search Placeholder
+    const search = document.getElementById("searchBox");
+    if (search)
+        search.placeholder = t.search;
+}
+
 /* =========================================================
    LOAD DATA
 ========================================================= */
@@ -223,6 +240,9 @@ function navigate(url) {
 window.addEventListener("popstate", router);
 
 function router() {
+
+    updateUI(); // 🔥 DAS FEHLT
+
     const p = new URLSearchParams(window.location.search);
 
     if (p.has("monster")) return openMonster(p.get("monster"));
@@ -257,10 +277,10 @@ document.getElementById("searchBox")
         renderHome();
     });
 	
-	document.getElementById("languageSelect")
+document.getElementById("languageSelect")
 ?.addEventListener("change", (e) => {
     currentLanguage = e.target.value;
-    renderHome();
+    router(); // 🔥 wichtig!
 });
 
 /* =========================================================
