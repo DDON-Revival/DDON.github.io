@@ -242,32 +242,60 @@ setLanguage(saved);
 
 async function loadServerStatus(){
     try{
-        const res = await fetch("https://api.ddon.org/api/status");
+        const res = await fetch("https://api.ddon.org/api/channel-status");
         const data = await res.json();
 
         const container = document.getElementById("serverStatusContainer");
-        container.innerHTML="";
+        container.innerHTML = "";
 
-        const div=document.createElement("div");
-        div.className="card";
-        div.innerHTML=`
-            <h3>Live Server Status</h3>
-            <p>🟢 Online Players: ${data.online}</p>
-            <p>👤 Total Accounts: ${data.totalAccounts}</p>
-            <p>🎮 Total Characters: ${data.totalCharacters}</p>
-        `;
-        container.appendChild(div);
+        const channelNames = {
+            0: "Login Queue",
+            1: "Channel 1",
+            2: "Channel 2",
+            3: "Channel 3",
+            4: "Channel 4",
+            5: "Channel 5",
+            6: "Channel 6",
+            7: "Channel 7",
+            8: "Channel 8",
+            9: "Collab",
+            10: "Custom Enemy",
+            11: "Boss Rush"
+        };
 
-        document.getElementById("totalPlayersBox").textContent=
-            "Total Players Online: " + data.online;
+        let totalOnline = 0;
 
-    }catch(err){
-        console.error("Live status failed",err);
+        Object.keys(channelNames).forEach(id => {
+
+            const channel = data.find(c => parseInt(c.server_id) === parseInt(id));
+            const players = channel ? parseInt(channel.players) : 0;
+
+            totalOnline += players;
+
+            const div = document.createElement("div");
+            div.className = "card";
+
+            const isOnline = players > 0;
+
+            div.innerHTML = `
+                <h3>${channelNames[id]}</h3>
+                <p>Status: ${isOnline ? "🟢 Online" : "🔴 Offline"}</p>
+                <p>Players: ${players}</p>
+            `;
+
+            container.appendChild(div);
+        });
+
+        document.getElementById("totalPlayersBox").textContent =
+            "Total Players Online: " + totalOnline;
+
+    } catch(err){
+        console.error("Channel load failed", err);
     }
 }
 
 loadServerStatus();
-setInterval(loadServerStatus,15000);
+setInterval(loadServerStatus, 5000);
 
 </script>
 
