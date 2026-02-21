@@ -194,7 +194,23 @@ button:hover{
     <div id="languageSelector"></div>
 </div>
 
-<div class="container">
+<!-- LOGIN SECTION -->
+<div id="loginSection" style="display:none; padding:120px 0; text-align:center;">
+    <div class="card" style="max-width:400px; margin:auto;">
+
+        <h2 data-key="login"></h2>
+
+        <input id="username" type="text" data-placeholder="username">
+        <input id="password" type="password" data-placeholder="password">
+
+        <p id="loginMsg" style="color:#ff6b6b;"></p>
+
+        <button data-key="login" onclick="login()"></button>
+
+    </div>
+</div>
+
+<div class="container" id="dashboardContainer" style="display:none;">
 
     <div class="sidebar">
         <button data-key="changePassword" onclick="openChangePassword()"></button>
@@ -429,7 +445,10 @@ window.onload = function(){
     const token = localStorage.getItem("token");
 
     if(token){
+        document.getElementById("dashboardContainer").style.display = "flex";
         loadCharacters();
+    } else {
+        document.getElementById("loginSection").style.display = "block";
     }
 };
 
