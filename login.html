@@ -124,6 +124,43 @@ async function login(){
     }
 }
 
+async function loadCharacters(){
+    try{
+        const res = await fetch("https://api.ddon.org/api/characters",{
+            headers:{
+                "Authorization":"Bearer "+localStorage.getItem("token")
+            }
+        });
+
+        if(!res.ok){
+            characters.innerHTML="<p>Could not load characters.</p>";
+            return;
+        }
+
+        const chars = await res.json();
+        characters.innerHTML="";
+
+        if(!chars.length){
+            characters.innerHTML="<p>No characters found.</p>";
+            return;
+        }
+
+        chars.forEach(c=>{
+            characters.innerHTML+=`
+            <div class="card">
+                <h3>${c.first_name} ${c.last_name}</h3>
+                <p>Level: ${c.lv}</p>
+                <div>
+                    <span class="badge">${c.job}</span>
+                </div>
+            </div>`;
+        });
+
+    }catch(e){
+        characters.innerHTML="<p>Character API error.</p>";
+    }
+}
+
 async function loadStatus(){
     try{
         const res = await fetch("https://api.ddon.org/api/account-status",{
