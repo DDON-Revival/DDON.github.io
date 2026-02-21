@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DDON Account Panel</title>
+
+<style>
+body{
+    background:#0f0f14;
+    color:#e6e6e6;
+    font-family:'Cinzel', serif;
+    text-align:center;
+}
+
+.card{
+    background:#1b1b25;
+    padding:30px;
+    margin:20px auto;
+    width:350px;
+    border:1px solid #2a2a35;
+}
+
+input{
+    width:90%;
+    padding:8px;
+    margin:8px;
+    background:#111;
+    border:1px solid #333;
+    color:white;
+}
+
+button{
+    padding:8px 15px;
+    background:#c8a75d;
+    border:none;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>DDON Account Login</h1>
+
+<div class="card" id="loginBox">
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p id="loginMsg"></p>
+</div>
+
+<div id="dashboard" style="display:none;">
+    <h2>Your Characters</h2>
+    <div id="characters"></div>
+</div>
+
+<script>
+async function login(){
+    const res = await fetch("https://api.ddon.org/api/login",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+            username:username.value,
+            password:password.value
+        })
+    });
+
+    const data = await res.json();
+
+    if(data.token){
+        localStorage.setItem("token",data.token);
+        loginBox.style.display="none";
+        dashboard.style.display="block";
+        loadCharacters();
+    } else {
+        loginMsg.textContent=data.error;
+    }
+}
+
+async function loadCharacters(){
+    const res = await fetch("https://api.ddon.org/api/characters",{
+        headers:{
+            "Authorization":"Bearer "+localStorage.getItem("token")
+        }
+    });
+
+    const chars = await res.json();
+    characters.innerHTML="";
+
+    chars.forEach(c=>{
+        characters.innerHTML+=`
+        <div class="card">
+            <h3>${c.first_name} ${c.last_name}</h3>
+            <p>Level: ${c.lv}</p>
+            <p>Job: ${c.job}</p>
+        </div>`;
+    });
+}
+</script>
+
+</body>
+</html>
