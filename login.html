@@ -281,7 +281,13 @@ loginMsg.textContent = t.connectionError || "Connection error.";
             return;
         }
 
-        const data = await res.json();
+        if(res.status === 401){
+    localStorage.removeItem("token");
+    location.reload();
+    return;
+}
+
+const data = await res.json();
 
         if(data.token){
             localStorage.setItem("token",data.token);
