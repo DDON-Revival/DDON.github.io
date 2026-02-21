@@ -7,68 +7,42 @@
 
 <style>
 body{
-    background:#0f0f14;
+    margin:0;
+    background:#0b0c14;
     color:#e6e6e6;
     font-family:'Cinzel', serif;
-    text-align:center;
 }
 
-.card{
-    background:#1b1b25;
-    padding:30px;
-    margin:20px auto;
-    width:350px;
-    border:1px solid #2a2a35;
-    box-shadow:0 0 15px rgba(200,167,93,0.2);
-    transition:0.3s;
+/* HEADER */
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 60px;
+    border-bottom:1px solid #1f1f2a;
 }
 
-.card:hover{
-    box-shadow:0 0 25px rgba(200,167,93,0.4);
+.header h1{
+    margin:0;
+    font-size:28px;
+    letter-spacing:2px;
 }
 
-input{
-    width:90%;
-    padding:8px;
-    margin:8px;
-    background:#111;
-    border:1px solid #333;
-    color:white;
-}
-
-button{
-    padding:8px 15px;
-    background:#c8a75d;
-    border:none;
-    cursor:pointer;
-}
-
-.badge{
-    display:inline-block;
-    padding:4px 8px;
-    margin:4px;
-    border:1px solid #c8a75d;
-    font-size:12px;
-    background:#111;
-}
-.online{color:#4caf50;}
-.offline{color:#f44336;}
+/* LANGUAGE */
 
 #languageSelector{
     display:flex;
-    justify-content:flex-end;
-    gap:8px;
-    padding:20px 40px;
+    gap:6px;
 }
 
 .langBtn{
-    background:#1b1b25;
+    background:#151622;
     border:1px solid #c8a75d;
-    color:white;
+    color:#c8a75d;
     padding:6px 10px;
-    margin:2px;
     cursor:pointer;
-    font-size:14px;
+    font-size:12px;
     transition:0.2s;
 }
 
@@ -77,31 +51,114 @@ button{
     color:black;
 }
 
+/* LAYOUT */
+
+.container{
+    display:flex;
+    padding:40px 80px;
+    gap:40px;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:220px;
+}
+
+.sidebar button{
+    width:100%;
+    margin-bottom:15px;
+}
+
+/* MAIN */
+
+.main{
+    flex:1;
+}
+
+/* CARDS */
+
+.card{
+    background:linear-gradient(145deg,#171827,#10111a);
+    padding:30px;
+    border:1px solid #222334;
+    box-shadow:0 0 25px rgba(0,0,0,0.6);
+    margin-bottom:30px;
+}
+
+/* CHARACTER GRID */
+
+.charactersGrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:25px;
+}
+
+/* CHARACTER CARD */
+
+.characterCard{
+    background:#141523;
+    border:1px solid #2a2c40;
+    padding:20px;
+    transition:0.3s;
+}
+
+.characterCard:hover{
+    transform:translateY(-4px);
+    box-shadow:0 0 15px rgba(200,167,93,0.3);
+}
+
+.badge{
+    display:inline-block;
+    padding:5px 10px;
+    margin-top:10px;
+    border:1px solid #c8a75d;
+    font-size:12px;
+    color:#c8a75d;
+}
+
+/* BUTTON */
+
+button{
+    background:#c8a75d;
+    border:none;
+    padding:8px 14px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
 </style>
 </head>
 
 <body>
 
-<h1 data-key="accountPanelTitle"></h1>
-
-<div id="languageSelector"></div>
-
-<div class="card" id="loginBox">
-<input id="username" data-placeholder="username">
-<input id="password" type="password" data-placeholder="password">
-    <button data-key="login" onclick="login()"></button>
-    <p id="loginMsg"></p>
+<div class="header">
+    <h1 data-key="accountPanelTitle"></h1>
+    <div id="languageSelector"></div>
 </div>
 
-<div id="dashboard" style="display:none;">
-    <div class="card">
-        <h2 data-key="dashboardTitle"></h2>
-		<button data-key="changePassword" onclick="openChangePassword()"></button>
-		<button data-key="logout" onclick="logout()"></button>
+<div class="container">
+
+    <div class="sidebar">
+        <button data-key="changePassword" onclick="openChangePassword()"></button>
+        <button data-key="logout" onclick="logout()"></button>
     </div>
 
-    <h2 data-key="charactersTitle"></h2>
-    <div id="characters"></div>
+    <div class="main">
+
+        <div class="card">
+            <h2 data-key="dashboardTitle"></h2>
+        </div>
+
+        <h2 data-key="charactersTitle"></h2>
+        <div id="characters" class="charactersGrid"></div>
+
+    </div>
+
 </div>
 
 <!-- Change Password Modal -->
@@ -208,14 +265,13 @@ async function loadCharacters(){
             const translatedJob =
                 translations[lang]?.jobs?.[jobName] || jobName;
 
-            characters.innerHTML += `
-                <div class="card">
-                    <h3>${c.first_name} ${c.last_name}</h3>
-                    <p>${t.level}: ${c.lv}</p>
-                    <div>
-                        <span class="badge">${translatedJob}</span>
-                    </div>
-                </div>
+characters.innerHTML += `
+    <div class="characterCard">
+        <h3>${c.first_name} ${c.last_name}</h3>
+        <p>${t.level}: ${c.lv}</p>
+        <span class="badge">${translatedJob}</span>
+    </div>
+`;
             `;
         });
 
