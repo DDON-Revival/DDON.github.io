@@ -330,31 +330,6 @@ characters.innerHTML += `
     }
 }
 
-async function loadStatus(){
-    try{
-        const res = await fetch("https://api.ddon.org/api/account-status",{
-            headers:{
-                "Authorization":"Bearer "+localStorage.getItem("token")
-            }
-        });
-
-        if(!res.ok){
-            return;
-        }
-
-        const data = await res.json();
-
-        if(data.online){
-            onlineStatus.innerHTML = `<span class="online">🟢 Online</span>`;
-        }else{
-            onlineStatus.innerHTML = `<span class="offline">🔴 Offline</span>`;
-        }
-
-    }catch(e){
-        onlineStatus.innerHTML = `<span class="offline">🔴 API Error</span>`;
-    }
-}
-
 function logout(){
     localStorage.removeItem("token");
     location.reload();
