@@ -274,7 +274,33 @@ window.onload = function(){
 
     initLanguageSelector();
 	
-	const currentLang = localStorage.getItem("lang") || "en";
+	function initLanguageSelector(){
+
+    const container = document.getElementById("languageSelector");
+    container.innerHTML = "";
+
+    const currentLang = localStorage.getItem("lang") || "en";
+
+    window.languages.forEach(lang=>{
+
+        const btn = document.createElement("button");
+        btn.className = "langBtn";
+
+        if(lang.code === currentLang){
+            btn.style.background = "#c8a75d";
+            btn.style.color = "black";
+        }
+
+        btn.innerText = lang.flag + " " + lang.code.toUpperCase();
+
+        btn.onclick = ()=>{
+            localStorage.setItem("lang", lang.code);
+            location.reload();
+        };
+
+        container.appendChild(btn);
+    });
+}
 
     const token = localStorage.getItem("token");
     if(token){
