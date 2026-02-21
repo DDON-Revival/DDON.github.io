@@ -184,7 +184,7 @@ setLanguage(localStorage.getItem("lang") || "en");
 =========================== */
 
 async function loadLeaderboard(){
-    const res = await fetch("leaderboard.json?nocache="+Date.now());
+    const res = await fetch("https://api.ddon.org/api/leaderboard");
     leaderboardData = await res.json();
     filteredPlayers = leaderboardData[currentTab];
     renderLeaderboard();
