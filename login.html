@@ -375,6 +375,8 @@ function closeChangePassword(){
 
 async function changePassword(){
 
+	    console.log("TOKEN SENT:", localStorage.getItem("token"));
+
     if(newPass.value !== confirmPass.value){
         const lang = localStorage.getItem("lang") || "en";
 const t = translations[lang];
