@@ -276,17 +276,17 @@ async function loadServerStatus(){
 
             const isOnline = players > 0;
 
-            div.innerHTML = `
-                <h3>${channelNames[id]}</h3>
-                <p>Status: ${isOnline ? "🟢 Online" : "🔴 Offline"}</p>
-                <p>Players: ${players}</p>
-            `;
+div.innerHTML = `
+    <h3>${channelNames[id]}</h3>
+    <p>${t.statusLabel}: ${isOnline ? "🟢 " + t.online : "🔴 " + t.offline}</p>
+    <p>${t.playersLabel}: ${players}</p>
+`;
 
             container.appendChild(div);
         });
 
-        document.getElementById("totalPlayersBox").textContent =
-            "Total Players Online: " + totalOnline;
+document.getElementById("totalPlayersBox").textContent =
+    t.totalPlayers + ": " + totalOnline;
 
     } catch(err){
         console.error("Channel load failed", err);
