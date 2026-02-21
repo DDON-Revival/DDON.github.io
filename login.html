@@ -18,6 +18,12 @@ body{
     margin:20px auto;
     width:350px;
     border:1px solid #2a2a35;
+    box-shadow:0 0 15px rgba(200,167,93,0.2);
+    transition:0.3s;
+}
+
+.card:hover{
+    box-shadow:0 0 25px rgba(200,167,93,0.4);
 }
 
 input{
@@ -35,12 +41,24 @@ button{
     border:none;
     cursor:pointer;
 }
+
+.badge{
+    display:inline-block;
+    padding:4px 8px;
+    margin:4px;
+    border:1px solid #c8a75d;
+    font-size:12px;
+    background:#111;
+}
+.online{color:#4caf50;}
+.offline{color:#f44336;}
+
 </style>
 </head>
 
 <body>
 
-<h1>DDON Account Login</h1>
+<h1>DDON Account Panel</h1>
 
 <div class="card" id="loginBox">
     <input id="username" placeholder="Username">
@@ -50,52 +68,142 @@ button{
 </div>
 
 <div id="dashboard" style="display:none;">
+    <div class="card">
+        <h2>Account Dashboard</h2>
+        <p id="onlineStatus">Checking status...</p>
+        <button onclick="openChangePassword()">Change Password</button>
+        <button onclick="logout()">Logout</button>
+    </div>
+
     <h2>Your Characters</h2>
     <div id="characters"></div>
 </div>
 
+<!-- Change Password Modal -->
+<div id="passwordModal" style="display:none;" class="card">
+    <h3>Change Password</h3>
+    <input id="currentPass" type="password" placeholder="Current Password">
+    <input id="newPass" type="password" placeholder="New Password">
+    <input id="confirmPass" type="password" placeholder="Confirm New Password">
+    <button onclick="changePassword()">Save</button>
+    <button onclick="closeChangePassword()">Cancel</button>
+    <p id="pwMsg"></p>
+</div>
+
 <script>
 async function login(){
-    const res = await fetch("https://api.ddon.org/api/login",{
+    try{
+        const res = await fetch("https://api.ddon.org/api/login",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+                username:username.value,
+                password:password.value
+            })
+        });
+
+        if(!res.ok){
+            loginMsg.textContent="Login server unavailable.";
+            return;
+        }
+
+        const data = await res.json();
+
+        if(data.token){
+            localStorage.setItem("token",data.token);
+            loginBox.style.display="none";
+            dashboard.style.display="block";
+            loadCharacters();
+            loadStatus();
+        } else {
+            loginMsg.textContent=data.error || "Login failed.";
+        }
+
+    }catch(e){
+        loginMsg.textContent="Connection error.";
+    }
+}
+
+async function loadStatus(){
+    try{
+        const res = await fetch("https://api.ddon.org/api/account-status",{
+            headers:{
+                "Authorization":"Bearer "+localStorage.getItem("token")
+            }
+        });
+
+        if(!res.ok){
+            onlineStatus.innerHTML = `<span class="offline">🔴 Status unavailable</span>`;
+            return;
+        }
+
+        const data = await res.json();
+
+        if(data.online){
+            onlineStatus.innerHTML = `<span class="online">🟢 Online</span>`;
+        }else{
+            onlineStatus.innerHTML = `<span class="offline">🔴 Offline</span>`;
+        }
+
+    }catch(e){
+        onlineStatus.innerHTML = `<span class="offline">🔴 API Error</span>`;
+    }
+}
+
+function logout(){
+    localStorage.removeItem("token");
+    location.reload();
+}
+
+/* PASSWORD */
+
+function openChangePassword(){
+    passwordModal.style.display="block";
+}
+
+function closeChangePassword(){
+    passwordModal.style.display="none";
+}
+
+async function changePassword(){
+
+    if(newPass.value !== confirmPass.value){
+        pwMsg.textContent="Passwords do not match.";
+        return;
+    }
+
+    const res = await fetch("https://api.ddon.org/api/change-password",{
         method:"POST",
-        headers:{"Content-Type":"application/json"},
+        headers:{
+            "Content-Type":"application/json",
+            "Authorization":"Bearer "+localStorage.getItem("token")
+        },
         body:JSON.stringify({
-            username:username.value,
-            password:password.value
+            current:currentPass.value,
+            new:newPass.value
         })
     });
 
     const data = await res.json();
+    pwMsg.textContent = data.message || data.error;
+}
 
-    if(data.token){
-        localStorage.setItem("token",data.token);
+window.onload = function(){
+    const token = localStorage.getItem("token");
+    if(token){
         loginBox.style.display="none";
         dashboard.style.display="block";
         loadCharacters();
-    } else {
-        loginMsg.textContent=data.error;
+        loadStatus();
     }
 }
 
-async function loadCharacters(){
-    const res = await fetch("https://api.ddon.org/api/characters",{
-        headers:{
-            "Authorization":"Bearer "+localStorage.getItem("token")
-        }
-    });
+setInterval(()=>{
+    if(localStorage.getItem("token")){
+        loadStatus();
+    }
+}, 10000); // alle 10 Sekunden
 
-    const chars = await res.json();
-    characters.innerHTML="";
-
-    chars.forEach(c=>{
-        characters.innerHTML+=`
-        <div class="card">
-            <h3>${c.first_name} ${c.last_name}</h3>
-            <p>Level: ${c.lv}</p>
-            <p>Job: ${c.job}</p>
-        </div>`;
-    });
-}
 </script>
 
 </body>
