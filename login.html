@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="translations.js"></script>
 <meta charset="UTF-8">
 <title>DDON Account Panel</title>
 
@@ -53,12 +54,36 @@ button{
 .online{color:#4caf50;}
 .offline{color:#f44336;}
 
+#languageSelector{
+    position:absolute;
+    top:20px;
+    right:30px;
+}
+
+.langBtn{
+    background:#1b1b25;
+    border:1px solid #c8a75d;
+    color:white;
+    padding:6px 10px;
+    margin:2px;
+    cursor:pointer;
+    font-size:14px;
+    transition:0.2s;
+}
+
+.langBtn:hover{
+    background:#c8a75d;
+    color:black;
+}
+
 </style>
 </head>
 
 <body>
 
 <h1>DDON Account Panel</h1>
+
+<div id="languageSelector"></div>
 
 <div class="card" id="loginBox">
     <input id="username" placeholder="Username">
@@ -246,12 +271,35 @@ async function changePassword(){
 }
 
 window.onload = function(){
+
+    initLanguageSelector();
+
     const token = localStorage.getItem("token");
     if(token){
         loginBox.style.display="none";
         dashboard.style.display="block";
         loadCharacters();
     }
+}
+
+function initLanguageSelector(){
+
+    const container = document.getElementById("languageSelector");
+    container.innerHTML = "";
+
+    window.languages.forEach(lang=>{
+
+        const btn = document.createElement("button");
+        btn.className = "langBtn";
+        btn.innerText = lang.flag + " " + lang.code.toUpperCase();
+
+        btn.onclick = ()=>{
+            localStorage.setItem("lang", lang.code);
+            location.reload();
+        };
+
+        container.appendChild(btn);
+    });
 }
 
 </script>
