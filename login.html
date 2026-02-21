@@ -90,6 +90,21 @@ button{
 </div>
 
 <script>
+
+const jobMap = {
+    1: "Fighter",
+    2: "Seeker",
+    3: "Hunter",
+    4: "Priest",
+    5: "Shield Sage",
+    6: "Sorcerer",
+    7: "Warrior",
+    8: "Element Archer",
+    9: "Alchemist",
+    10: "Spirit Lancer",
+    11: "High Scepter"
+};
+
 async function login(){
     try{
         const res = await fetch("https://api.ddon.org/api/login",{
@@ -113,7 +128,6 @@ async function login(){
             loginBox.style.display="none";
             dashboard.style.display="block";
             loadCharacters();
-            loadStatus();
         } else {
             loginMsg.textContent=data.error || "Login failed.";
         }
@@ -144,16 +158,23 @@ async function loadCharacters(){
             return;
         }
 
-        chars.forEach(c=>{
-            characters.innerHTML+=`
-            <div class="card">
-                <h3>${c.first_name} ${c.last_name}</h3>
-                <p>Level: ${c.lv}</p>
-                <div>
-                    <span class="badge">${c.job}</span>
-                </div>
-            </div>`;
-        });
+chars.forEach(c=>{
+
+    const lang = localStorage.getItem("lang") || "en";
+    const jobName = jobMap[c.job] || c.job;
+    const translatedJob =
+        window.translations?.[lang]?.jobs?.[jobName] || jobName;
+
+    characters.innerHTML += `
+        <div class="card">
+            <h3>${c.first_name} ${c.last_name}</h3>
+            <p>Level: ${c.lv}</p>
+            <div>
+                <span class="badge">${translatedJob}</span>
+            </div>
+        </div>
+    `;
+});
 
     }catch(e){
         characters.innerHTML="<p>Character API error.</p>";
