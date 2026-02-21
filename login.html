@@ -309,7 +309,7 @@ async function loadCharacters(){
         });
 
         if(!res.ok){
-            characters.innerHTML = `<p>${t.charactersLoadError || "Could not load characters."}</p>`;
+            characters.innerHTML = `<p>${t.charactersLoadError}</p>`;
             return;
         }
 
@@ -317,27 +317,30 @@ async function loadCharacters(){
         characters.innerHTML="";
 
         if(!chars.length){
-            characters.innerHTML = `<p>${t.noCharacters || "No characters found."}</p>`;
+            characters.innerHTML = `<p>${t.noCharacters}</p>`;
             return;
         }
 
         chars.forEach(c => {
 
-            const jobName = jobMap[c.job] || c.job;
-            const translatedJob =
-                translations[lang]?.jobs?.[jobName] || jobName;
+            const jobList = c.jobs.map(j => {
+                const jobName = jobMap[j.job] || j.job;
+                const translatedJob =
+                    translations[lang]?.jobs?.[jobName] || jobName;
 
-characters.innerHTML += `
-    <div class="characterCard">
-        <h3>${c.first_name} ${c.last_name}</h3>
-        <p>${t.level}: ${c.lv}</p>
-        <span class="badge">${translatedJob}</span>
-    </div>
-`;
+                return `<span class="badge">${translatedJob} Lv.${j.level}</span>`;
+            }).join(" ");
+
+            characters.innerHTML += `
+                <div class="characterCard">
+                    <h3>${c.name}</h3>
+                    <div>${jobList}</div>
+                </div>
+            `;
         });
 
     }catch(e){
-        characters.innerHTML = `<p>${t.characterApiError || "Character API error."}</p>`;
+        characters.innerHTML = `<p>${t.characterApiError}</p>`;
     }
 }
 
