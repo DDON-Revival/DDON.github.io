@@ -148,6 +148,20 @@ let currentPage = 1;
 const playersPerPage = 100;
 let filteredPlayers = [];
 
+const jobMap = {
+  1: "Fighter",
+  2: "Seeker",
+  3: "Hunter",
+  4: "Priest",
+  5: "Shield Sage",
+  6: "Sorcerer",
+  7: "Warrior",
+  8: "Element Archer",
+  9: "Alchemist",
+  10: "Spirit Lancer",
+  11: "High Scepter"
+};
+
 /* ===========================
    🌍 LANGUAGE
 =========================== */
@@ -237,10 +251,11 @@ function renderLeaderboard(){
             <p>${t.level}: ${highestLevel}</p>
             <p><strong>${t.classes}:</strong></p>
             <ul>
-                ${player.classes.map(c=>{
-                    const jobName = t.jobs?.[c.class] || c.class;
-                    return `<li>${jobName} (${t.level} ${c.level})</li>`;
-                }).join("")}
+${player.classes.map(c=>{
+    const jobKey = jobMap[c.class] || c.class;
+    const jobName = t.jobs?.[jobKey] || jobKey;
+    return `<li>${jobName} (${t.level} ${c.level})</li>`;
+}).join("")}
             </ul>
             ${extra}
         `;
