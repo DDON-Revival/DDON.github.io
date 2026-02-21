@@ -116,6 +116,33 @@ cf_21:"Monster Hunter Collab",
 cf_22:"Street Fighter Collab",
 cf_23:"Pijama Collab",
 
+accountPanelTitle:"Account Panel",
+dashboardTitle:"Dashboard",
+charactersTitle:"Characters",
+
+login:"Login",
+logout:"Logout",
+changePassword:"Change Password",
+save:"Save",
+cancel:"Cancel",
+
+username:"Username",
+password:"Password",
+currentPassword:"Current Password",
+newPassword:"New Password",
+confirmPassword:"Confirm Password",
+
+loginServerUnavailable:"Login server unavailable.",
+connectionError:"Connection error.",
+loginFailed:"Login failed.",
+
+charactersLoadError:"Could not load characters.",
+noCharacters:"No characters found.",
+characterApiError:"Character API error.",
+
+passwordsDontMatch:"Passwords do not match.",
+unknownError:"Unknown error.",
+
 howto:{
 step1Title:"1️⃣ Downloading",
 step1Text:"First of all you have to load the main game (~36GB). Just use one of these links:",
@@ -210,6 +237,33 @@ dungeon2:"ハディン地下旧道",
 dungeon3:"ミスリー墓所",
 dungeon4:"橋向こうのトンネル",
 dungeon5:"エルテ・ディーナン",
+
+accountPanelTitle:"アカウントパネル",
+dashboardTitle:"ダッシュボード",
+charactersTitle:"キャラクター",
+
+login:"ログイン",
+logout:"ログアウト",
+changePassword:"パスワード変更",
+save:"保存",
+cancel:"キャンセル",
+
+username:"ユーザー名",
+password:"パスワード",
+currentPassword:"現在のパスワード",
+newPassword:"新しいパスワード",
+confirmPassword:"パスワード確認",
+
+loginServerUnavailable:"ログインサーバーは利用できません。",
+connectionError:"接続エラー。",
+loginFailed:"ログインに失敗しました。",
+
+charactersLoadError:"キャラクターを取得できませんでした。",
+noCharacters:"キャラクターが見つかりません。",
+characterApiError:"キャラクターAPIエラー。",
+
+passwordsDontMatch:"パスワードが一致しません。",
+unknownError:"不明なエラー。",
 
 
 hcFullDescription:
@@ -354,6 +408,33 @@ dungeon3:"米斯里古墓",
 dungeon4:"桥对面的隧道",
 dungeon5:"埃尔特·迪南",
 
+accountPanelTitle:"账户面板",
+dashboardTitle:"控制面板",
+charactersTitle:"角色",
+
+login:"登录",
+logout:"退出登录",
+changePassword:"更改密码",
+save:"保存",
+cancel:"取消",
+
+username:"用户名",
+password:"密码",
+currentPassword:"当前密码",
+newPassword:"新密码",
+confirmPassword:"确认密码",
+
+loginServerUnavailable:"登录服务器不可用。",
+connectionError:"连接错误。",
+loginFailed:"登录失败。",
+
+charactersLoadError:"无法加载角色。",
+noCharacters:"未找到角色。",
+characterApiError:"角色API错误。",
+
+passwordsDontMatch:"密码不匹配。",
+unknownError:"未知错误。",
+
 
 hcFullDescription:
 "体验DDON历史上最大的更新——全新硬核模式！仅限本服务器！展开刺激的冒险，不要死亡——因为一次死亡即永久删除角色！",
@@ -494,6 +575,33 @@ dead:"Morto",
 noPlayersFound:"Nenhum jogador encontrado",
 howToPlay:"Como Jogar",
 wiki:"Wiki",
+
+accountPanelTitle:"Painel da Conta",
+dashboardTitle:"Painel",
+charactersTitle:"Personagens",
+
+login:"Entrar",
+logout:"Sair",
+changePassword:"Alterar Senha",
+save:"Salvar",
+cancel:"Cancelar",
+
+username:"Usuário",
+password:"Senha",
+currentPassword:"Senha Atual",
+newPassword:"Nova Senha",
+confirmPassword:"Confirmar Senha",
+
+loginServerUnavailable:"Servidor de login indisponível.",
+connectionError:"Erro de conexão.",
+loginFailed:"Falha no login.",
+
+charactersLoadError:"Não foi possível carregar personagens.",
+noCharacters:"Nenhum personagem encontrado.",
+characterApiError:"Erro na API de personagens.",
+
+passwordsDontMatch:"As senhas não coincidem.",
+unknownError:"Erro desconhecido.",
 
 dungeon1:"Grande Templo Shadolean",
 dungeon2:"Antiga Estrada Subterrânea de Hadin",
@@ -641,6 +749,33 @@ noPlayersFound:"No se encontraron jugadores",
 howToPlay:"Cómo Jugar",
 wiki:"Wiki",
 
+accountPanelTitle:"Panel de Cuenta",
+dashboardTitle:"Panel",
+charactersTitle:"Personajes",
+
+login:"Iniciar Sesión",
+logout:"Cerrar Sesión",
+changePassword:"Cambiar Contraseña",
+save:"Guardar",
+cancel:"Cancelar",
+
+username:"Usuario",
+password:"Contraseña",
+currentPassword:"Contraseña Actual",
+newPassword:"Nueva Contraseña",
+confirmPassword:"Confirmar Contraseña",
+
+loginServerUnavailable:"Servidor de login no disponible.",
+connectionError:"Error de conexión.",
+loginFailed:"Error al iniciar sesión.",
+
+charactersLoadError:"No se pudieron cargar los personajes.",
+noCharacters:"No se encontraron personajes.",
+characterApiError:"Error en la API de personajes.",
+
+passwordsDontMatch:"Las contraseñas no coinciden.",
+unknownError:"Error desconocido.",
+
 dungeon1:"Gran Templo Shadolean",
 dungeon2:"Antiguo Camino Subterráneo de Hadin",
 dungeon3:"Túmulo Mysree",
@@ -787,6 +922,33 @@ dead:"Мёртв",
 noPlayersFound:"Игроки не найдены",
 howToPlay:"Как Играть",
 wiki:"Вики",
+
+accountPanelTitle:"Панель Аккаунта",
+dashboardTitle:"Панель",
+charactersTitle:"Персонажи",
+
+login:"Войти",
+logout:"Выйти",
+changePassword:"Сменить пароль",
+save:"Сохранить",
+cancel:"Отмена",
+
+username:"Имя пользователя",
+password:"Пароль",
+currentPassword:"Текущий пароль",
+newPassword:"Новый пароль",
+confirmPassword:"Подтвердить пароль",
+
+loginServerUnavailable:"Сервер входа недоступен.",
+connectionError:"Ошибка соединения.",
+loginFailed:"Ошибка входа.",
+
+charactersLoadError:"Не удалось загрузить персонажей.",
+noCharacters:"Персонажи не найдены.",
+characterApiError:"Ошибка API персонажей.",
+
+passwordsDontMatch:"Пароли не совпадают.",
+unknownError:"Неизвестная ошибка.",
 
 dungeon1:"Великий Храм Шадолеан",
 dungeon2:"Старая Подземная Дорога Хадина",
@@ -941,6 +1103,33 @@ dungeon3:"Mysree Höyüğü",
 dungeon4:"Köprünün Ötesindeki Tünel",
 dungeon5:"Erte Deenan",
 
+accountPanelTitle:"Hesap Paneli",
+dashboardTitle:"Panel",
+charactersTitle:"Karakterler",
+
+login:"Giriş Yap",
+logout:"Çıkış Yap",
+changePassword:"Şifre Değiştir",
+save:"Kaydet",
+cancel:"İptal",
+
+username:"Kullanıcı Adı",
+password:"Şifre",
+currentPassword:"Mevcut Şifre",
+newPassword:"Yeni Şifre",
+confirmPassword:"Şifreyi Onayla",
+
+loginServerUnavailable:"Giriş sunucusu kullanılamıyor.",
+connectionError:"Bağlantı hatası.",
+loginFailed:"Giriş başarısız.",
+
+charactersLoadError:"Karakterler yüklenemedi.",
+noCharacters:"Karakter bulunamadı.",
+characterApiError:"Karakter API hatası.",
+
+passwordsDontMatch:"Şifreler eşleşmiyor.",
+unknownError:"Bilinmeyen hata.",
+
 hcFullDescription:
 "DDON tarihinin en büyük güncellemesini deneyimle — yeni Hardcore oyun modu! Sadece burada! Heyecan dolu bir maceraya atıl ve ölme — çünkü bir ölüm kalıcı ölümdür!",
 
@@ -1080,6 +1269,33 @@ dead:"Martwy",
 noPlayersFound:"Nie znaleziono graczy",
 howToPlay:"Jak Grać",
 wiki:"Wiki",
+
+accountPanelTitle:"Panel Konta",
+dashboardTitle:"Panel",
+charactersTitle:"Postacie",
+
+login:"Zaloguj się",
+logout:"Wyloguj się",
+changePassword:"Zmień Hasło",
+save:"Zapisz",
+cancel:"Anuluj",
+
+username:"Nazwa użytkownika",
+password:"Hasło",
+currentPassword:"Aktualne hasło",
+newPassword:"Nowe hasło",
+confirmPassword:"Potwierdź hasło",
+
+loginServerUnavailable:"Serwer logowania niedostępny.",
+connectionError:"Błąd połączenia.",
+loginFailed:"Logowanie nie powiodło się.",
+
+charactersLoadError:"Nie można załadować postaci.",
+noCharacters:"Nie znaleziono postaci.",
+characterApiError:"Błąd API postaci.",
+
+passwordsDontMatch:"Hasła nie są zgodne.",
+unknownError:"Nieznany błąd.",
 
 dungeon1:"Wielka Świątynia Shadolean",
 dungeon2:"Stara Podziemna Droga Hadina",
@@ -1233,6 +1449,33 @@ dungeon3:"미스리 고분",
 dungeon4:"다리 건너 터널",
 dungeon5:"에르테 디난",
 
+accountPanelTitle:"계정 패널",
+dashboardTitle:"대시보드",
+charactersTitle:"캐릭터",
+
+login:"로그인",
+logout:"로그아웃",
+changePassword:"비밀번호 변경",
+save:"저장",
+cancel:"취소",
+
+username:"사용자 이름",
+password:"비밀번호",
+currentPassword:"현재 비밀번호",
+newPassword:"새 비밀번호",
+confirmPassword:"비밀번호 확인",
+
+loginServerUnavailable:"로그인 서버를 사용할 수 없습니다.",
+connectionError:"연결 오류.",
+loginFailed:"로그인 실패.",
+
+charactersLoadError:"캐릭터를 불러올 수 없습니다.",
+noCharacters:"캐릭터가 없습니다.",
+characterApiError:"캐릭터 API 오류.",
+
+passwordsDontMatch:"비밀번호가 일치하지 않습니다.",
+unknownError:"알 수 없는 오류.",
+
 hcFullDescription:
 "DDON 역사상 가장 큰 업데이트를 경험하세요 — 새로운 하드코어 모드! 이 서버에서만 가능합니다! 단 하나의 생명으로 모험을 즐기세요 — 한 번의 죽음은 영구적인 죽음을 의미합니다.",
 
@@ -1372,6 +1615,33 @@ dead:"Morto",
 noPlayersFound:"Nessun giocatore trovato",
 howToPlay:"Come Giocare",
 wiki:"Wiki",
+
+accountPanelTitle:"Pannello Account",
+dashboardTitle:"Dashboard",
+charactersTitle:"Personaggi",
+
+login:"Accedi",
+logout:"Esci",
+changePassword:"Cambia Password",
+save:"Salva",
+cancel:"Annulla",
+
+username:"Nome utente",
+password:"Password",
+currentPassword:"Password attuale",
+newPassword:"Nuova password",
+confirmPassword:"Conferma password",
+
+loginServerUnavailable:"Server di login non disponibile.",
+connectionError:"Errore di connessione.",
+loginFailed:"Accesso fallito.",
+
+charactersLoadError:"Impossibile caricare i personaggi.",
+noCharacters:"Nessun personaggio trovato.",
+characterApiError:"Errore API personaggi.",
+
+passwordsDontMatch:"Le password non coincidono.",
+unknownError:"Errore sconosciuto.",
 
 dungeon1:"Grande Tempio Shadolean",
 dungeon2:"Antica Strada Sotterranea di Hadin",
@@ -1519,6 +1789,33 @@ noPlayersFound:"Aucun joueur trouvé",
 howToPlay:"Comment Jouer",
 wiki:"Wiki",
 
+accountPanelTitle:"Panneau de Compte",
+dashboardTitle:"Tableau de bord",
+charactersTitle:"Personnages",
+
+login:"Connexion",
+logout:"Déconnexion",
+changePassword:"Changer le mot de passe",
+save:"Enregistrer",
+cancel:"Annuler",
+
+username:"Nom d'utilisateur",
+password:"Mot de passe",
+currentPassword:"Mot de passe actuel",
+newPassword:"Nouveau mot de passe",
+confirmPassword:"Confirmer le mot de passe",
+
+loginServerUnavailable:"Serveur de connexion indisponible.",
+connectionError:"Erreur de connexion.",
+loginFailed:"Échec de la connexion.",
+
+charactersLoadError:"Impossible de charger les personnages.",
+noCharacters:"Aucun personnage trouvé.",
+characterApiError:"Erreur API personnages.",
+
+passwordsDontMatch:"Les mots de passe ne correspondent pas.",
+unknownError:"Erreur inconnue.",
+
 dungeon1:"Grand Temple Shadolean",
 dungeon2:"Ancienne Route Souterraine d'Hadin",
 dungeon3:"Tumulus Mysree",
@@ -1665,6 +1962,33 @@ dead:"Νεκρός",
 noPlayersFound:"Δεν βρέθηκαν παίκτες",
 howToPlay:"Πώς να Παίξεις",
 wiki:"Wiki",
+
+accountPanelTitle:"Πίνακας Λογαριασμού",
+dashboardTitle:"Πίνακας Ελέγχου",
+charactersTitle:"Χαρακτήρες",
+
+login:"Σύνδεση",
+logout:"Αποσύνδεση",
+changePassword:"Αλλαγή Κωδικού",
+save:"Αποθήκευση",
+cancel:"Ακύρωση",
+
+username:"Όνομα χρήστη",
+password:"Κωδικός πρόσβασης",
+currentPassword:"Τρέχων κωδικός",
+newPassword:"Νέος κωδικός",
+confirmPassword:"Επιβεβαίωση κωδικού",
+
+loginServerUnavailable:"Ο διακομιστής σύνδεσης δεν είναι διαθέσιμος.",
+connectionError:"Σφάλμα σύνδεσης.",
+loginFailed:"Αποτυχία σύνδεσης.",
+
+charactersLoadError:"Αδυναμία φόρτωσης χαρακτήρων.",
+noCharacters:"Δεν βρέθηκαν χαρακτήρες.",
+characterApiError:"Σφάλμα API χαρακτήρων.",
+
+passwordsDontMatch:"Οι κωδικοί δεν ταιριάζουν.",
+unknownError:"Άγνωστο σφάλμα.",
 
 dungeon1:"Μεγάλος Ναός Shadolean",
 dungeon2:"Παλαιός Υπόγειος Δρόμος Hadin",

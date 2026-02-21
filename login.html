@@ -55,9 +55,10 @@ button{
 .offline{color:#f44336;}
 
 #languageSelector{
-    position:absolute;
-    top:20px;
-    right:30px;
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    padding:20px 40px;
 }
 
 .langBtn{
@@ -81,37 +82,42 @@ button{
 
 <body>
 
-<h1>DDON Account Panel</h1>
+<h1 data-key="accountPanelTitle"></h1>
 
 <div id="languageSelector"></div>
 
 <div class="card" id="loginBox">
-    <input id="username" placeholder="Username">
-    <input id="password" type="password" placeholder="Password">
-    <button onclick="login()">Login</button>
+<input id="username" data-placeholder="username">
+<input id="password" type="password" data-placeholder="password">
+    <button data-key="login" onclick="login()"></button>
     <p id="loginMsg"></p>
 </div>
 
 <div id="dashboard" style="display:none;">
     <div class="card">
-        <h2>Account Dashboard</h2>
-        <button onclick="openChangePassword()">Change Password</button>
-        <button onclick="logout()">Logout</button>
+        <h2 data-key="dashboardTitle"></h2>
+		<button data-key="changePassword" onclick="openChangePassword()"></button>
+		<button data-key="logout" onclick="logout()"></button>
     </div>
 
-    <h2>Your Characters</h2>
+    <h2 data-key="charactersTitle"></h2>
     <div id="characters"></div>
 </div>
 
 <!-- Change Password Modal -->
 <div id="passwordModal" style="display:none;" class="card">
-    <h3>Change Password</h3>
-    <input id="currentPass" type="password" placeholder="Current Password">
-    <input id="newPass" type="password" placeholder="New Password">
-    <input id="confirmPass" type="password" placeholder="Confirm New Password">
-    <button onclick="changePassword()">Save</button>
-    <button onclick="closeChangePassword()">Cancel</button>
+
+    <h3 data-key="changePassword"></h3>
+
+    <input id="currentPass" type="password" data-placeholder="currentPassword">
+    <input id="newPass" type="password" data-placeholder="newPassword">
+    <input id="confirmPass" type="password" data-placeholder="confirmPassword">
+
     <p id="pwMsg"></p>
+
+    <button data-key="save" onclick="changePassword()"></button>
+    <button data-key="cancel" onclick="closeChangePassword()"></button>
+
 </div>
 
 <script>
@@ -142,7 +148,10 @@ async function login(){
         });
 
         if(!res.ok){
-            loginMsg.textContent="Login server unavailable.";
+            const lang = localStorage.getItem("lang") || "en";
+const t = translations[lang];
+
+loginMsg.textContent = t.connectionError || "Connection error.";
             return;
         }
 
@@ -154,15 +163,25 @@ async function login(){
             dashboard.style.display="block";
             loadCharacters();
         } else {
-            loginMsg.textContent=data.error || "Login failed.";
+            const lang = localStorage.getItem("lang") || "en";
+const t = translations[lang];
+
+loginMsg.textContent = t.loginFailed || "Login failed.";
         }
 
     }catch(e){
-        loginMsg.textContent="Connection error.";
+        const lang = localStorage.getItem("lang") || "en";
+const t = translations[lang];
+
+loginMsg.textContent = t.loginServerUnavailable || "Login server unavailable.";
     }
 }
 
 async function loadCharacters(){
+
+    const lang = localStorage.getItem("lang") || "en";
+    const t = translations[lang];
+
     try{
         const res = await fetch("https://api.ddon.org/api/characters",{
             headers:{
@@ -171,7 +190,7 @@ async function loadCharacters(){
         });
 
         if(!res.ok){
-            characters.innerHTML="<p>Could not load characters.</p>";
+            characters.innerHTML = `<p>${t.charactersLoadError || "Could not load characters."}</p>`;
             return;
         }
 
@@ -179,30 +198,29 @@ async function loadCharacters(){
         characters.innerHTML="";
 
         if(!chars.length){
-            characters.innerHTML="<p>No characters found.</p>";
+            characters.innerHTML = `<p>${t.noCharacters || "No characters found."}</p>`;
             return;
         }
 
-chars.forEach(c=>{
+        chars.forEach(c => {
 
-    const lang = localStorage.getItem("lang") || "en";
-    const jobName = jobMap[c.job] || c.job;
-    const translatedJob =
-        window.translations?.[lang]?.jobs?.[jobName] || jobName;
+            const jobName = jobMap[c.job] || c.job;
+            const translatedJob =
+                translations[lang]?.jobs?.[jobName] || jobName;
 
-    characters.innerHTML += `
-        <div class="card">
-            <h3>${c.first_name} ${c.last_name}</h3>
-            <p>Level: ${c.lv}</p>
-            <div>
-                <span class="badge">${translatedJob}</span>
-            </div>
-        </div>
-    `;
-});
+            characters.innerHTML += `
+                <div class="card">
+                    <h3>${c.first_name} ${c.last_name}</h3>
+                    <p>${t.level}: ${c.lv}</p>
+                    <div>
+                        <span class="badge">${translatedJob}</span>
+                    </div>
+                </div>
+            `;
+        });
 
     }catch(e){
-        characters.innerHTML="<p>Character API error.</p>";
+        characters.innerHTML = `<p>${t.characterApiError || "Character API error."}</p>`;
     }
 }
 
@@ -237,6 +255,21 @@ function logout(){
     location.reload();
 }
 
+function applyTranslations(){
+    const lang = localStorage.getItem("lang") || "en";
+    const t = translations[lang];
+
+    document.querySelectorAll("[data-key]").forEach(el=>{
+        const key = el.getAttribute("data-key");
+        if(t[key]) el.textContent = t[key];
+    });
+
+    document.querySelectorAll("[data-placeholder]").forEach(el=>{
+        const key = el.getAttribute("data-placeholder");
+        if(t[key]) el.placeholder = t[key];
+    });
+}
+
 /* PASSWORD */
 
 function openChangePassword(){
@@ -250,7 +283,10 @@ function closeChangePassword(){
 async function changePassword(){
 
     if(newPass.value !== confirmPass.value){
-        pwMsg.textContent="Passwords do not match.";
+        const lang = localStorage.getItem("lang") || "en";
+const t = translations[lang];
+
+pwMsg.textContent = t.passwordsDontMatch || "Passwords do not match.";
         return;
     }
 
@@ -267,47 +303,14 @@ async function changePassword(){
     });
 
     const data = await res.json();
-    pwMsg.textContent = data.message || data.error;
-}
+    const lang = localStorage.getItem("lang") || "en";
+const t = translations[lang];
 
-window.onload = function(){
-
-    initLanguageSelector();
-	
-	function initLanguageSelector(){
-
-    const container = document.getElementById("languageSelector");
-    container.innerHTML = "";
-
-    const currentLang = localStorage.getItem("lang") || "en";
-
-    window.languages.forEach(lang=>{
-
-        const btn = document.createElement("button");
-        btn.className = "langBtn";
-
-        if(lang.code === currentLang){
-            btn.style.background = "#c8a75d";
-            btn.style.color = "black";
-        }
-
-        btn.innerText = lang.flag + " " + lang.code.toUpperCase();
-
-        btn.onclick = ()=>{
-            localStorage.setItem("lang", lang.code);
-            location.reload();
-        };
-
-        container.appendChild(btn);
-    });
-}
-
-    const token = localStorage.getItem("token");
-    if(token){
-        loginBox.style.display="none";
-        dashboard.style.display="block";
-        loadCharacters();
-    }
+pwMsg.textContent =
+    data.message ||
+    data.error ||
+    t.unknownError ||
+    "Unknown error.";
 }
 
 function initLanguageSelector(){
@@ -315,15 +318,17 @@ function initLanguageSelector(){
     const container = document.getElementById("languageSelector");
     container.innerHTML = "";
 
-    window.languages.forEach(lang=>{
+    const currentLang = localStorage.getItem("lang") || "en";
 
+    window.languages.forEach(lang=>{
         const btn = document.createElement("button");
         btn.className = "langBtn";
-		if(lang.code === currentLang){
-    btn.style.background = "#c8a75d";
-    btn.style.color = "black";
-}
         btn.innerText = lang.flag + " " + lang.code.toUpperCase();
+
+        if(lang.code === currentLang){
+            btn.style.background = "#c8a75d";
+            btn.style.color = "black";
+        }
 
         btn.onclick = ()=>{
             localStorage.setItem("lang", lang.code);
@@ -333,6 +338,20 @@ function initLanguageSelector(){
         container.appendChild(btn);
     });
 }
+
+window.onload = function(){
+
+    initLanguageSelector();
+    applyTranslations();
+
+    const token = localStorage.getItem("token");
+
+    if(token){
+        loginBox.style.display="none";
+        dashboard.style.display="block";
+        loadCharacters();
+    }
+};
 
 </script>
 
