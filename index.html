@@ -242,32 +242,27 @@ setLanguage(saved);
 
 async function loadServerStatus(){
     try{
-        const res = await fetch("status.json?nocache="+Date.now());
+        const res = await fetch("https://api.ddon.org/api/status");
         const data = await res.json();
 
-        const t = translations[localStorage.getItem("lang") || "en"];
         const container = document.getElementById("serverStatusContainer");
         container.innerHTML="";
-        let total=0;
 
-        data.forEach(server=>{
-            total+=server.players;
-
-            const div=document.createElement("div");
-            div.className="card";
-            div.innerHTML=`
-                <h3>${server.name}</h3>
-                <p>${t.statusLabel}: ${server.online ? "🟢 "+t.online : "🔴 "+t.offline}</p>
-                <p>${t.playersLabel}: ${server.players}</p>
-            `;
-            container.appendChild(div);
-        });
+        const div=document.createElement("div");
+        div.className="card";
+        div.innerHTML=`
+            <h3>Live Server Status</h3>
+            <p>🟢 Online Players: ${data.online}</p>
+            <p>👤 Total Accounts: ${data.totalAccounts}</p>
+            <p>🎮 Total Characters: ${data.totalCharacters}</p>
+        `;
+        container.appendChild(div);
 
         document.getElementById("totalPlayersBox").textContent=
-            `${t.totalPlayers}: ${total}`;
+            "Total Players Online: " + data.online;
 
     }catch(err){
-        console.error("Status load failed",err);
+        console.error("Live status failed",err);
     }
 }
 
