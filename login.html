@@ -70,7 +70,6 @@ button{
 <div id="dashboard" style="display:none;">
     <div class="card">
         <h2>Account Dashboard</h2>
-        <p id="onlineStatus">Checking status...</p>
         <button onclick="openChangePassword()">Change Password</button>
         <button onclick="logout()">Logout</button>
     </div>
@@ -231,15 +230,8 @@ window.onload = function(){
         loginBox.style.display="none";
         dashboard.style.display="block";
         loadCharacters();
-        loadStatus();
     }
 }
-
-setInterval(()=>{
-    if(localStorage.getItem("token")){
-        loadStatus();
-    }
-}, 10000); // alle 10 Sekunden
 
 </script>
 
