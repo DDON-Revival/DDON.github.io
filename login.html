@@ -8,7 +8,7 @@
 <style>
 body{
     margin:0;
-    background:#0b0c14;
+    background:radial-gradient(circle at top,#121425 0%,#0a0b14 60%);
     color:#e6e6e6;
     font-family:'Cinzel', serif;
 }
@@ -19,31 +19,33 @@ body{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:20px 60px;
-    border-bottom:1px solid #1f1f2a;
+    padding:25px 80px;
+    background:linear-gradient(to right,#0f111f,#14162a);
+    border-bottom:1px solid #2a2d48;
 }
 
 .header h1{
     margin:0;
-    font-size:28px;
-    letter-spacing:2px;
+    font-size:30px;
+    color:#c8a75d;
+    letter-spacing:3px;
 }
 
 /* LANGUAGE */
 
 #languageSelector{
     display:flex;
-    gap:6px;
+    gap:8px;
 }
 
 .langBtn{
-    background:#151622;
+    background:transparent;
     border:1px solid #c8a75d;
     color:#c8a75d;
     padding:6px 10px;
-    cursor:pointer;
     font-size:12px;
-    transition:0.2s;
+    cursor:pointer;
+    transition:0.25s;
 }
 
 .langBtn:hover{
@@ -55,19 +57,22 @@ body{
 
 .container{
     display:flex;
-    padding:40px 80px;
-    gap:40px;
+    padding:60px 100px;
+    gap:60px;
 }
 
 /* SIDEBAR */
 
 .sidebar{
-    width:220px;
+    width:240px;
+    background:#111320;
+    padding:25px;
+    border:1px solid #252845;
 }
 
 .sidebar button{
     width:100%;
-    margin-bottom:15px;
+    margin-bottom:20px;
 }
 
 /* MAIN */
@@ -79,42 +84,56 @@ body{
 /* CARDS */
 
 .card{
-    background:linear-gradient(145deg,#171827,#10111a);
-    padding:30px;
-    border:1px solid #222334;
-    box-shadow:0 0 25px rgba(0,0,0,0.6);
-    margin-bottom:30px;
+    background:linear-gradient(145deg,#181a30,#101222);
+    padding:35px;
+    border:1px solid #2a2e50;
+    box-shadow:0 0 40px rgba(0,0,0,0.8);
+    margin-bottom:40px;
+}
+
+.card h2{
+    margin-top:0;
+    color:#c8a75d;
+    border-bottom:1px solid #2a2e50;
+    padding-bottom:10px;
 }
 
 /* CHARACTER GRID */
 
 .charactersGrid{
     display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-    gap:25px;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:30px;
 }
 
 /* CHARACTER CARD */
 
 .characterCard{
-    background:#141523;
-    border:1px solid #2a2c40;
-    padding:20px;
+    background:#131528;
+    border:1px solid #2a2d48;
+    padding:25px;
     transition:0.3s;
 }
 
 .characterCard:hover{
-    transform:translateY(-4px);
-    box-shadow:0 0 15px rgba(200,167,93,0.3);
+    transform:translateY(-6px);
+    box-shadow:0 0 20px rgba(200,167,93,0.35);
+    border-color:#c8a75d;
+}
+
+.characterCard h3{
+    margin:0;
+    margin-bottom:10px;
+    color:#ffffff;
 }
 
 .badge{
     display:inline-block;
-    padding:5px 10px;
-    margin-top:10px;
+    padding:6px 12px;
+    margin-top:12px;
     border:1px solid #c8a75d;
-    font-size:12px;
     color:#c8a75d;
+    font-size:12px;
 }
 
 /* BUTTON */
@@ -122,19 +141,53 @@ body{
 button{
     background:#c8a75d;
     border:none;
-    padding:8px 14px;
+    padding:10px 14px;
     cursor:pointer;
     font-weight:bold;
+    transition:0.25s;
 }
 
 button:hover{
-    opacity:0.9;
+    box-shadow:0 0 10px rgba(200,167,93,0.6);
+}
+
+/* MODAL */
+
+#passwordModal{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:400px;
+    background:#181a30;
+    border:1px solid #c8a75d;
+    padding:30px;
+    z-index:1000;
+}
+
+#passwordModal input{
+    width:100%;
+    padding:8px;
+    margin-bottom:15px;
+    background:#0f1020;
+    border:1px solid #2a2e50;
+    color:white;
+}
+
+#modalOverlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(4px);
+    z-index:999;
 }
 
 </style>
 </head>
 
 <body>
+
+<div id="modalOverlay" style="display:none;"></div>
 
 <div class="header">
     <h1 data-key="accountPanelTitle"></h1>
@@ -216,8 +269,6 @@ loginMsg.textContent = t.connectionError || "Connection error.";
 
         if(data.token){
             localStorage.setItem("token",data.token);
-            loginBox.style.display="none";
-            dashboard.style.display="block";
             loadCharacters();
         } else {
             const lang = localStorage.getItem("lang") || "en";
@@ -272,7 +323,6 @@ characters.innerHTML += `
         <span class="badge">${translatedJob}</span>
     </div>
 `;
-            `;
         });
 
     }catch(e){
@@ -289,7 +339,6 @@ async function loadStatus(){
         });
 
         if(!res.ok){
-            onlineStatus.innerHTML = `<span class="offline">🔴 Status unavailable</span>`;
             return;
         }
 
@@ -329,10 +378,12 @@ function applyTranslations(){
 /* PASSWORD */
 
 function openChangePassword(){
+    modalOverlay.style.display="block";
     passwordModal.style.display="block";
 }
 
 function closeChangePassword(){
+    modalOverlay.style.display="none";
     passwordModal.style.display="none";
 }
 
@@ -403,8 +454,6 @@ window.onload = function(){
     const token = localStorage.getItem("token");
 
     if(token){
-        loginBox.style.display="none";
-        dashboard.style.display="block";
         loadCharacters();
     }
 };
