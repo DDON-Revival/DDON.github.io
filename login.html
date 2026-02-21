@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="translations.js"></script>
 <meta charset="UTF-8">
+<script src="translations.js"></script>
 <title>DDON Account Panel</title>
 
 <style>
@@ -273,6 +273,8 @@ async function changePassword(){
 window.onload = function(){
 
     initLanguageSelector();
+	
+	const currentLang = localStorage.getItem("lang") || "en";
 
     const token = localStorage.getItem("token");
     if(token){
@@ -291,6 +293,10 @@ function initLanguageSelector(){
 
         const btn = document.createElement("button");
         btn.className = "langBtn";
+		if(lang.code === currentLang){
+    btn.style.background = "#c8a75d";
+    btn.style.color = "black";
+}
         btn.innerText = lang.flag + " " + lang.code.toUpperCase();
 
         btn.onclick = ()=>{
