@@ -657,7 +657,7 @@ function renderShops(filter=""){
 
             html += `
                 <div class="card">
-                    <h3 onclick="navigate('?shop=${shop.ShopId}')"
+                    <h3 onclick="navigate('?shop=${shop.ShopId}&npc=${encodeURIComponent(name)}')"
                         style="cursor:pointer">
                         ${name}
                     </h3>
@@ -670,6 +670,9 @@ function renderShops(filter=""){
 }
 
 function openShop(id){
+
+    const params = new URLSearchParams(window.location.search);
+    const npcName = params.get("npc");
 
     const shop =
         DATA.Shops?.find(s=>String(s.ShopId)===String(id));
@@ -688,8 +691,10 @@ function openShop(id){
         `;
     });
 
+    const title = npcName || getShopNames(id)[0];
+
     document.getElementById("content").innerHTML =
-        card(getShopNames(id)[0], body);
+        card(title, body);
 }
 
 /* =========================================================
