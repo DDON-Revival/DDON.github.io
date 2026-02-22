@@ -110,6 +110,19 @@ h1{ color:#c8a75d; }
 .lang-selector:hover .lang-dropdown{
     display:block;
 }
+
+.card{
+    background:#1b1b25;
+    border:1px solid #2a2a35;
+    width:280px;
+    padding:20px;
+    margin:15px;
+}
+
+.dead-card{
+    border:1px solid #8b0000;
+    background:#1a0f0f;
+}
 </style>
 </head>
 
@@ -121,6 +134,7 @@ h1{ color:#c8a75d; }
 
 <button class="btn" onclick="switchTab('normal')" data-key="normalTab">Normal</button>
 <button class="btn" onclick="switchTab('hc')" data-key="hcTab">Hardcore</button>
+<button class="btn" onclick="switchTab('hall')">Hall of Fame</button>
 
 <br>
 
@@ -247,10 +261,18 @@ function renderLeaderboard(){
         const card = document.createElement("div");
         card.className = "card";
 
-        // NAME
-        const name = document.createElement("h3");
-        name.textContent = player.name; // SAFE
-        card.appendChild(name);
+// NAME
+const name = document.createElement("h3");
+
+if(player.dead){
+    name.textContent = player.name + " ☠ DEAD";
+    name.style.color = "#ff4d4d";
+    card.classList.add("dead-card"); // 🔥 HIER
+} else {
+    name.textContent = player.name;
+}
+
+card.appendChild(name);
 
         // LEVEL
         const highestLevel = Math.max(...player.classes.map(c => c.level));
@@ -280,7 +302,7 @@ function renderLeaderboard(){
         card.appendChild(ul);
 
         // HARDCORE INFO
-        if(currentTab === "hc"){
+        if(currentTab === "hc" || currentTab === "hall"){
 
             const hcSince = document.createElement("p");
             hcSince.textContent = t.hcSince + ": " + (player.hardcore_since || "-");
@@ -332,10 +354,11 @@ function searchPlayer(){
     const value=document.getElementById("search").value.toLowerCase();
 
     if(value === ""){
-        filteredPlayers = leaderboardData[currentTab];
+        filteredPlayers = leaderboardData[currentTab] || [];
     }else{
-        const all=[...(leaderboardData.normal||[]),...(leaderboardData.hc||[])];
-        filteredPlayers = all.filter(p =>
+        const source = leaderboardData[currentTab] || [];
+
+        filteredPlayers = source.filter(p =>
             p.name.toLowerCase().includes(value)
         );
     }
