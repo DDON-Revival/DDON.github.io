@@ -486,38 +486,63 @@ function renderItems(filter="") {
 
 function openItem(id) {
 
-    let body = `<strong>${UI[currentLanguage].droppedBy}:</strong>`;
-    const droppedSet = new Set();
+    let body = "";
 
-    DATA.EnemySpawn?.enemies?.forEach(e=>{
-        const table =
-            DATA.EnemySpawn?.dropsTables
-                ?.find(t => t.id == e[27]);
+    /* =========================
+       DROPPED BY (CHANNEL AWARE)
+    ========================== */
 
-        table?.items?.forEach(i=>{
-            if (String(i[0]) === String(id)) {
-                if (!droppedSet.has(e[5])) {
+    SPAWN_CHANNELS.forEach(channel => {
+
+        const data = DATA[channel.key];
+        if (!data?.enemies) return;
+
+        const droppedSet = new Set();
+
+        data.enemies.forEach(e => {
+
+            const table =
+                data?.dropsTables
+                    ?.find(t => t.id == e[27]);
+
+            table?.items?.forEach(i => {
+                if (String(i[0]) === String(id)) {
                     droppedSet.add(e[5]);
-                    body += `
-                        <div onclick="navigate('?monster=${e[5]}')"
-                             style="cursor:pointer">
-                            ${getEnemyName(e[5])}
-                        </div>
-                    `;
                 }
-            }
+            });
         });
+
+        if (droppedSet.size === 0) return;
+
+        body += `<strong>${UI[currentLanguage].droppedBy} – ${channel.label}</strong>`;
+
+        droppedSet.forEach(enemyId => {
+            body += `
+                <div onclick="navigate('?monster=${enemyId}')"
+                     style="cursor:pointer">
+                    ${getEnemyName(enemyId)}
+                </div>
+            `;
+        });
+
+        body += "<br>";
     });
 
-    body += `<strong>${UI[currentLanguage].soldIn}:</strong>`;
+    /* =========================
+       SOLD IN
+    ========================== */
 
-    DATA.Shops?.forEach(shop=>{
-        shop?.Data?.GoodsParamList?.forEach(g=>{
+    body += `<strong>${UI[currentLanguage].soldIn}</strong>`;
+
+    DATA.Shops?.forEach(shop => {
+        shop?.Data?.GoodsParamList?.forEach(g => {
             if (String(g.ItemId) === String(id)) {
+
                 getShopNames(shop.ShopId)
-                    .forEach(name=>{
+                    .forEach(name => {
+
                         body += `
-                            <div onclick="navigate('?shop=${shop.ShopId}')"
+                            <div onclick="navigate('?shop=${shop.ShopId}&npc=${encodeURIComponent(name)}')"
                                  style="cursor:pointer">
                                 ${name} - ${g.Price} Gold
                             </div>
@@ -527,87 +552,82 @@ function openItem(id) {
         });
     });
 
-    body += `<strong>${UI[currentLanguage].exchangedAt}:</strong>`;
+    /* =========================
+       GATHERED
+    ========================== */
 
-    DATA.Special?.shops?.forEach(shop=>{
-        shop.categories?.forEach(cat=>{
-            cat.appraisals?.forEach(app=>{
-                app.pool?.forEach(p=>{
-                    if (String(p.item_id) === String(id)) {
-                        body += `<div>${cat.label}</div>`;
-                    }
+    body += `<br><strong>${UI[currentLanguage].gatheredAt}</strong>`;
+
+    const gatheredStages = new Set();
+
+    DATA.Gathering?.forEach(r => {
+        if (String(r[4]) === String(id)) {
+            gatheredStages.add(r[0]);
+        }
+    });
+
+    gatheredStages.forEach(stage => {
+        body += `
+            <div onclick="navigate('?stage=${stage}')"
+                 style="cursor:pointer">
+                ${getStageName(stage)}
+            </div>
+        `;
+    });
+
+    /* =========================
+       CRAFTED FROM
+    ========================== */
+
+    let craftedFound = false;
+
+    DATA.Crafting?.forEach(cat => {
+        cat.RecipeList?.forEach(r => {
+
+            if (String(r.ItemID) === String(id)) {
+
+                if (!craftedFound) {
+                    body += `<br><strong>${UI[currentLanguage].craftedFrom}</strong>`;
+                    craftedFound = true;
+                }
+
+                r.CraftMaterialList?.forEach(m => {
+                    body += `
+                        <div onclick="navigate('?item=${m.ItemId}')"
+                             style="cursor:pointer">
+                            ${getItemName(m.ItemId)} x${m.Num}
+                        </div>
+                    `;
                 });
-            });
+            }
         });
     });
 
-body += `<strong>${UI[currentLanguage].gatheredAt}:</strong>`;
+    /* =========================
+       GRADE UP FROM
+    ========================== */
 
-const gatheredStages = new Set();
+    let gradeFound = false;
 
-DATA.Gathering?.forEach(r=>{
-    if (String(r[4]) === String(id)) {
-        gatheredStages.add(r[0]);
-    }
-});
+    DATA.CraftingPlus?.forEach(cat => {
+        cat.RecipeList?.forEach(r => {
 
-gatheredStages.forEach(stage=>{
-    body += `
-        <div onclick="navigate('?stage=${stage}')"
-             style="cursor:pointer">
-            ${getStageName(stage)}
-        </div>`;
-});
-	
-/* =======================
-   CRAFTED FROM
-======================= */
+            if (String(r.GradeupItemID) === String(id)) {
 
-let craftedFound = false;
+                if (!gradeFound) {
+                    body += `<br><strong>${UI[currentLanguage].gradeUpFrom}</strong>`;
+                    gradeFound = true;
+                }
 
-DATA.Crafting?.forEach(cat=>{
-    cat.RecipeList?.forEach(r=>{
-        if (String(r.ItemID) === String(id)) {
-
-            if (!craftedFound) {
-                body += `<strong>${UI[currentLanguage].craftedFrom}:</strong>`;
-                craftedFound = true;
-            }
-
-            r.CraftMaterialList?.forEach(m=>{
                 body += `
-                    <div onclick="navigate('?item=${m.ItemId}')"
+                    <div onclick="navigate('?item=${r.ItemID}')"
                          style="cursor:pointer">
-                        ${getItemName(m.ItemId)} x${m.Num}
-                    </div>`;
-            });
-        }
-    });
-});
-
-/* =======================
-   GRADE UP FROM
-======================= */
-
-let gradeFound = false;
-
-DATA.CraftingPlus?.forEach(cat=>{
-    cat.RecipeList?.forEach(r=>{
-        if (String(r.GradeupItemID) === String(id)) {
-
-            if (!gradeFound) {
-                body += `<strong>${UI[currentLanguage].gradeUpFrom}:</strong>`;
-                gradeFound = true;
+                        ${getItemName(r.ItemID)}
+                    </div>
+                `;
             }
-
-            body += `
-                <div onclick="navigate('?item=${r.ItemID}')"
-                     style="cursor:pointer">
-                    ${getItemName(r.ItemID)}
-                </div>`;
-        }
+        });
     });
-});	
 
     document.getElementById("content").innerHTML =
         card(getItemName(id), body);
@@ -640,28 +660,42 @@ function renderStages(filter="") {
 
 function openStage(id) {
 
-    const map = new Map();
+    let body = "";
 
-    DATA.EnemySpawn?.enemies?.forEach(e=>{
-        if (String(e[0]) !== String(id)) return;
-        if (!map.has(e[5])) map.set(e[5], []);
-        map.get(e[5]).push(e[9]);
-    });
+    SPAWN_CHANNELS.forEach(channel => {
 
-    let body="";
+        const data = DATA[channel.key];
+        if (!data?.enemies) return;
 
-    map.forEach((levels, enemyId)=>{
-        levels.sort((a,b)=>a-b);
-        const min = levels[0];
-        const max = levels[levels.length-1];
+        const map = new Map();
 
-        body += `
-            <div onclick="navigate('?monster=${enemyId}')"
-                 style="cursor:pointer">
-                ${getEnemyName(enemyId)}
-                (Lv ${min}${min!==max?"-"+max:""})
-            </div>
-        `;
+        data.enemies.forEach(e => {
+            if (String(e[0]) !== String(id)) return;
+
+            if (!map.has(e[5])) map.set(e[5], []);
+            map.get(e[5]).push(e[9]);
+        });
+
+        if (map.size === 0) return;
+
+        body += `<strong>${channel.label}</strong>`;
+
+        map.forEach((levels, enemyId) => {
+
+            levels.sort((a,b)=>a-b);
+            const min = levels[0];
+            const max = levels[levels.length-1];
+
+            body += `
+                <div onclick="navigate('?monster=${enemyId}')"
+                     style="cursor:pointer">
+                    ${getEnemyName(enemyId)}
+                    (Lv ${min}${min!==max?"-"+max:""})
+                </div>
+            `;
+        });
+
+        body += "<br>";
     });
 
     document.getElementById("content").innerHTML =
