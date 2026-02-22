@@ -216,7 +216,7 @@ button:hover{
             <p id="loginMsg" style="color:#ff6b6b;"></p>
 
             <button type="submit" data-key="login"></button>
-			<button type="button" onclick="register()" style="margin-top:15px;">Register</button>
+			<button type="button" onclick="register()" data-key="register"></button>
 
         </div>
     </form>
@@ -315,6 +315,8 @@ loginMsg.textContent = data.error || t.loginFailed;
     loginMsg.textContent = t.connectionError;
 }
 
+}
+
 async function register(){
 
     const lang = localStorage.getItem("lang") || "en";
@@ -324,8 +326,6 @@ async function register(){
     const password = document.getElementById("password").value;
 
     if(!username || !password){
-        const lang = localStorage.getItem("lang") || "en";
-const t = translations[lang];
 
 loginMsg.textContent = t.enterCredentials;
         loginMsg.style.color = "#ff6b6b";
