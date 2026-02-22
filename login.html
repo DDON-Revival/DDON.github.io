@@ -216,6 +216,7 @@ button:hover{
             <p id="loginMsg" style="color:#ff6b6b;"></p>
 
             <button type="submit" data-key="login"></button>
+			<button type="button" onclick="register()" style="margin-top:15px;">Register</button>
 
         </div>
     </form>
@@ -277,22 +278,30 @@ async function login(event){
 
     if(event) event.preventDefault();
 
+    const lang = localStorage.getItem("lang") || "en";
+    const t = translations[lang];
+
+    loginMsg.style.color = "#ff6b6b";
+
     try{
 const res = await fetch("https://api.ddon.org/api/login",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     credentials: "include", // 🔥 WICHTIG
-    body:JSON.stringify({
-        username:document.getElementById("username").value,
-        password:document.getElementById("password").value
-    })
+body:JSON.stringify({
+    username: document.getElementById("username").value.trim(),
+    password: document.getElementById("password").value
+})
 });
 
         const data = await res.json();
 		console.log("LOGIN RESPONSE:", data);
 
         if(res.status !== 200){
-            loginMsg.textContent = data.error || "Login failed.";
+            const lang = localStorage.getItem("lang") || "en";
+const t = translations[lang];
+
+loginMsg.textContent = data.error || t.loginFailed;
             return;
         }
 
@@ -302,8 +311,50 @@ const res = await fetch("https://api.ddon.org/api/login",{
 
         loadCharacters();
 
+}catch(e){
+    loginMsg.textContent = t.connectionError;
+}
+
+async function register(){
+
+    const lang = localStorage.getItem("lang") || "en";
+    const t = translations[lang];
+
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+
+    if(!username || !password){
+        const lang = localStorage.getItem("lang") || "en";
+const t = translations[lang];
+
+loginMsg.textContent = t.enterCredentials;
+        loginMsg.style.color = "#ff6b6b";
+        return;
+    }
+
+    try{
+        const res = await fetch("https://api.ddon.org/api/register",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body: JSON.stringify({
+                username,
+                password
+            })
+        });
+
+        const data = await res.json();
+
+if(res.status !== 200){
+    loginMsg.textContent = data.error || t.registerFailed;
+            return;
+        }
+
+        loginMsg.style.color = "#4caf50";
+        loginMsg.textContent = t.registerSuccess;
+		document.getElementById("password").value = "";
+
     }catch(e){
-        loginMsg.textContent = "Connection error.";
+        loginMsg.textContent = t.connectionError;
     }
 }
 
@@ -410,8 +461,6 @@ function closeChangePassword(){
 }
 
 async function changePassword(){
-
-	    console.log("TOKEN SENT:", );
 
     if(newPass.value !== confirmPass.value){
         const lang = localStorage.getItem("lang") || "en";
