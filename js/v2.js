@@ -286,6 +286,26 @@ function getNpcName(id) {
     return npc.en || id;
 }
 
+function buildNpcMap() {
+
+    DATA._npcMap = {};
+
+    DATA.NpcNamesRaw?.forEach(row => {
+
+        if (!row || row.length < 3) return;
+
+        const raw = row[0];
+        if (!raw) return;
+
+        const id = raw.replace("NPC_NAME_", "").trim();
+
+        DATA._npcMap[id] = {
+            en: row[1]?.trim(),
+            jp: row[2]?.trim()
+        };
+    });
+}
+
 function buildShopNpcMap() {
 
     DATA._shopNpcMap = {};
