@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DDON Revival</title>
 
+<meta http-equiv="Content-Security-Policy"
+content="
+default-src 'self';
+script-src 'self' 'unsafe-inline';
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+font-src https://fonts.gstatic.com;
+connect-src https://api.ddon.org;
+">
+
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
@@ -245,7 +254,9 @@ async function loadServerStatus(){
 
         const t = translations[localStorage.getItem("lang") || "en"];
 
-        const res = await fetch("https://api.ddon.org/api/channel-status");
+        const res = await fetch("https://api.ddon.org/api/channel-status", {
+    credentials: "include"
+});
         const data = await res.json();
 
         const container = document.getElementById("serverStatusContainer");
@@ -279,11 +290,19 @@ async function loadServerStatus(){
 
             const isOnline = players > 0;
 
-            div.innerHTML = `
-                <h3>${channelNames[id]}</h3>
-                <p>${t.statusLabel}: ${isOnline ? "🟢 " + t.online : "🔴 " + t.offline}</p>
-                <p>${t.playersLabel}: ${players}</p>
-            `;
+const h3 = document.createElement("h3");
+h3.textContent = channelNames[id];
+
+const p1 = document.createElement("p");
+p1.textContent = t.statusLabel + ": " +
+    (isOnline ? "🟢 " + t.online : "🔴 " + t.offline);
+
+const p2 = document.createElement("p");
+p2.textContent = t.playersLabel + ": " + players;
+
+div.appendChild(h3);
+div.appendChild(p1);
+div.appendChild(p2);
 
             container.appendChild(div);
         });
