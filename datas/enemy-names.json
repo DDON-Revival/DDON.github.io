@@ -825,19 +825,19 @@
   },
   "0x010100": {
     "en": "Goblin",
-    "jp": "Goblin"
+    "jp": "ゴブリン"
   },
   "0x010141": {
-    "en": "GoblinAidShaman",
-    "jp": "GoblinAidShaman"
+    "en": "Goblin Aid Shaman",
+    "jp": "ゴブリンエイドシャーマン"
   },
   "0x011150": {
     "en": "GoblinBomber",
     "jp": "GoblinBomber"
   },
   "0x010101": {
-    "en": "GoblinFighter0",
-    "jp": "GoblinFighter0"
+    "en": "GoblinFighter",
+    "jp": "ゴブリンファイター"
   },
   "0x085010": {
     "en": "GoblinFighter1",
@@ -880,20 +880,20 @@
     "jp": "GoblinFighter10"
   },
   "0x010180": {
-    "en": "GoblinHorn",
-    "jp": "GoblinHorn"
+    "en": "Goblin (Horn)",
+    "jp": "ゴブリン (ホーン）"
   },
   "0x011140": {
     "en": "GoblinKingNpc",
     "jp": "GoblinKingNpc"
   },
   "0x010104": {
-    "en": "GoblinLeader",
-    "jp": "GoblinLeader"
+    "en": "Goblin Leader",
+    "jp": "ゴブリンリーダー"
   },
   "0x010140": {
-    "en": "GoblinShaman",
-    "jp": "GoblinShaman"
+    "en": "Goblin Shaman",
+    "jp": "ゴブリンシャーマン"
   },
   "0x015100": {
     "en": "Golem",
@@ -956,12 +956,12 @@
     "jp": "GrandEnt2"
   },
   "0x010130": {
-    "en": "GreaterGoblinSword",
-    "jp": "GreaterGoblinSword"
+    "en": "Greater Goblin (Sword)",
+    "jp": "グレーターゴブリン （剣）"
   },
   "0x010131": {
-    "en": "GreaterGoblinTorch",
-    "jp": "GreaterGoblinTorch"
+    "en": "Greater Goblin (Torch)",
+    "jp": "グレーターゴブリン (トーチ）"
   },
   "0x010210": {
     "en": "GreenGuardian",
@@ -980,16 +980,16 @@
     "jp": "Grigori"
   },
   "0x010120": {
-    "en": "GrimGoblin",
-    "jp": "GrimGoblin"
+    "en": "Grim Goblin",
+    "jp": "グリムゴブリン"
   },
   "0x010121": {
-    "en": "GrimGoblinFighter",
-    "jp": "GrimGoblinFighter"
+    "en": "Grim Goblin Fighter",
+    "jp": "グリムゴブリンファイター"
   },
   "0x010124": {
-    "en": "GrimGoblinLeader",
-    "jp": "GrimGoblinLeader"
+    "en": "Grim Goblin Leader",
+    "jp": "グリムゴブリンリーダー"
   },
   "0x010205": {
     "en": "Grimwarg",
@@ -1029,15 +1029,15 @@
   },
   "0x010110": {
     "en": "Hobgoblin",
-    "jp": "Hobgoblin"
+    "jp": "ホブゴブリン"
   },
   "0x010111": {
-    "en": "HobgoblinFighter",
-    "jp": "HobgoblinFighter"
+    "en": "Hobgoblin Fighter",
+    "jp": "ホブゴブリンファイター"
   },
   "0x010113": {
-    "en": "HobgoblinLeader",
-    "jp": "HobgoblinLeader"
+    "en": "Hobgoblin Leader",
+    "jp": "ホブゴブリンリーダー"
   },
   "0x011043": {
     "en": "HoodedIris",
@@ -1068,12 +1068,12 @@
     "jp": "InfectedGriffin"
   },
   "0x010160": {
-    "en": "InfectedHobgoblin",
-    "jp": "InfectedHobgoblin"
+    "en": "Infected Hobgoblin",
+    "jp": "侵食ホブゴブリン"
   },
   "0x010161": {
-    "en": "InfectedHobgoblinFighter",
-    "jp": "InfectedHobgoblinFighter"
+    "en": "Infected Hobgoblin Fighter",
+    "jp": "侵食ホブゴブリンファイター"
   },
   "0x015814": {
     "en": "InfectedOrcAimer",
@@ -1088,8 +1088,8 @@
     "jp": "InfectedOrcSoldier"
   },
   "0x010162": {
-    "en": "InfectedSlingHobgoblin",
-    "jp": "InfectedSlingHobgoblin"
+    "en": "Infected Sling Hobgoblin",
+    "jp": "侵食スリングホブゴブリン"
   },
   "0x010612": {
     "en": "InfectedSnowHarpy",
@@ -1485,27 +1485,27 @@
   },
   "0x010150": {
     "en": "Pixie",
-    "jp": "Pixie"
+    "jp": "ピクシー"
   },
   "0x010151": {
-    "en": "PixieBiff",
-    "jp": "PixieBiff"
+    "en": "Pixie Biff",
+    "jp": "ピクシービフ"
   },
   "0x010152": {
-    "en": "PixieDin",
-    "jp": "PixieDin"
+    "en": "Pixie Din",
+    "jp": "ピクシーディン"
   },
   "0x010155": {
-    "en": "PixieJabber",
-    "jp": "PixieJabber"
+    "en": "Pixie Jabber",
+    "jp": "ピクシージャバー"
   },
   "0x010195": {
     "en": "PixieKing",
     "jp": "PixieKing"
   },
   "0x010153": {
-    "en": "PixiePow",
-    "jp": "PixiePow"
+    "en": "Pixie Pow",
+    "jp": "ピクシーポウ"
   },
   "0x010482": {
     "en": "PoisonMerman",
@@ -1652,16 +1652,16 @@
     "jp": "SeverelyInfectedGriffin"
   },
   "0x010170": {
-    "en": "SeverelyInfectedPixie",
-    "jp": "SeverelyInfectedPixie"
+    "en": "Severely Infected Pixie",
+    "jp": "狂侵ピクシー"
   },
   "0x010171": {
-    "en": "SeverelyInfectedPixieClub",
-    "jp": "SeverelyInfectedPixieClub"
+    "en": "Severely Infected Pixie (Club)",
+    "jp": "狂侵ピクシー (クラブ）"
   },
   "0x010172": {
-    "en": "SeverelyInfectedPixieCorruptionSeeds",
-    "jp": "SeverelyInfectedPixieCorruptionSeeds"
+    "en": "Severely Infected Pixie (Seeds of corruption)",
+    "jp": "狂侵ピクシー （腐敗の種）"
   },
   "0x020606": {
     "en": "SeverelyInfectedScourge",
@@ -1717,7 +1717,7 @@
   },
   "0x010102": {
     "en": "ShieldGoblin",
-    "jp": "ShieldGoblin"
+    "jp": "シールドゴブリン"
   },
   "0x015505": {
     "en": "SilverRoar",
@@ -1800,24 +1800,24 @@
     "jp": "SlingForestGoblin"
   },
   "0x010103": {
-    "en": "SlingGoblinRock",
-    "jp": "SlingGoblinRock"
+    "en": "Sling Goblin (Rock)",
+    "jp": "スリングゴブリン (ロック）"
   },
   "0x010105": {
-    "en": "SlingGoblinTorch",
-    "jp": "SlingGoblinTorch"
+    "en": "Sling Goblin (Torch)",
+    "jp": "スリングゴブリン (トーチ）"
   },
   "0x010123": {
-    "en": "SlingGrimGoblinOilFlask",
-    "jp": "SlingGrimGoblinOilFlask"
+    "en": "Sling Grim Goblin (Oil flask)",
+    "jp": "スリンググリムゴブリン （オイルフラスコ）"
   },
   "0x010112": {
-    "en": "SlingHobgoblinOilFlask",
-    "jp": "SlingHobgoblinOilFlask"
+    "en": "Sling Hobgoblin (Oil flask)",
+    "jp": "スリングホブゴブリン （オイルフラスコ）"
   },
   "0x010114": {
-    "en": "SlingHobgoblinTorch",
-    "jp": "SlingHobgoblinTorch"
+    "en": "Sling Hobgoblin (Torch)",
+    "jp": "スリングホブゴブリン (トーチ）"
   },
   "0x011112": {
     "en": "SlingRedcap",
