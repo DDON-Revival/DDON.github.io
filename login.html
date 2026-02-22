@@ -276,14 +276,15 @@ async function login(event){
     if(event) event.preventDefault();
 
     try{
-        const res = await fetch("https://api.ddon.org/api/login",{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({
-                username:document.getElementById("username").value,
-                password:document.getElementById("password").value
-            })
-        });
+const res = await fetch("https://api.ddon.org/api/login",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    credentials: "include", // 🔥 WICHTIG
+    body:JSON.stringify({
+        username:document.getElementById("username").value,
+        password:document.getElementById("password").value
+    })
+});
 
         const data = await res.json();
 		console.log("LOGIN RESPONSE:", data);
@@ -293,7 +294,6 @@ async function login(event){
             return;
         }
 
-        localStorage.setItem("token", data.token);
 
         document.getElementById("loginSection").style.display = "none";
         document.getElementById("dashboardContainer").style.display = "flex";
@@ -313,10 +313,8 @@ async function loadCharacters(){
 
     try{
         const res = await fetch("https://api.ddon.org/api/characters",{
-            headers:{
-                "Authorization":"Bearer "+localStorage.getItem("token")
-            }
-        });
+    credentials: "include" // 🔥
+});
 
         if(!res.ok){
             container.innerHTML = "";
@@ -406,7 +404,7 @@ function closeChangePassword(){
 
 async function changePassword(){
 
-	    console.log("TOKEN SENT:", localStorage.getItem("token"));
+	    console.log("TOKEN SENT:", );
 
     if(newPass.value !== confirmPass.value){
         const lang = localStorage.getItem("lang") || "en";
@@ -416,17 +414,17 @@ pwMsg.textContent = t.passwordsDontMatch || "Passwords do not match.";
         return;
     }
 
-    const res = await fetch("https://api.ddon.org/api/change-password",{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json",
-            "Authorization":"Bearer "+localStorage.getItem("token")
-        },
-        body:JSON.stringify({
-            current:currentPass.value,
-            new:newPass.value
-        })
-    });
+const res = await fetch("https://api.ddon.org/api/change-password",{
+    method:"POST",
+    headers:{
+        "Content-Type":"application/json"
+    },
+    credentials: "include", // 🔥
+    body:JSON.stringify({
+        current:currentPass.value,
+        new:newPass.value
+    })
+});
 
     const data = await res.json();
     const lang = localStorage.getItem("lang") || "en";
@@ -470,14 +468,16 @@ window.onload = function(){
     initLanguageSelector();
     applyTranslations();
 
-    const token = localStorage.getItem("token");
-
-    if(token){
-        document.getElementById("dashboardContainer").style.display = "flex";
-        loadCharacters();
-    } else {
-        document.getElementById("loginSection").style.display = "block";
-    }
+    fetch("https://api.ddon.org/api/characters",{
+        credentials: "include"
+    }).then(res => {
+        if(res.ok){
+            document.getElementById("dashboardContainer").style.display = "flex";
+            loadCharacters();
+        } else {
+            document.getElementById("loginSection").style.display = "block";
+        }
+    });
 };
 
 </script>
