@@ -205,18 +205,20 @@ button:hover{
 
 <!-- LOGIN SECTION -->
 <div id="loginSection" style="display:none; padding:120px 0; text-align:center;">
-    <div class="card" style="max-width:400px; margin:auto;">
+    <form onsubmit="login(event)">
+        <div class="card" style="max-width:400px; margin:auto;">
 
-        <h2 data-key="login"></h2>
+            <h2 data-key="login"></h2>
 
-        <input id="username" type="text" data-placeholder="username">
-        <input id="password" type="password" data-placeholder="password">
+            <input id="username" type="text" data-placeholder="username">
+            <input id="password" type="password" data-placeholder="password">
 
-        <p id="loginMsg" style="color:#ff6b6b;"></p>
+            <p id="loginMsg" style="color:#ff6b6b;"></p>
 
-        <button type="button" data-key="login" onclick="login(event)"></button>
+            <button type="submit" data-key="login"></button>
 
-    </div>
+        </div>
+    </form>
 </div>
 
 <div class="container" id="dashboardContainer" style="display:none;">
@@ -370,8 +372,13 @@ async function loadCharacters(){
     }
 }
 
-function logout(){
-    localStorage.removeItem("token");
+async function logout(){
+
+    await fetch("https://api.ddon.org/api/logout",{
+        method: "POST",
+        credentials: "include"
+    });
+
     location.reload();
 }
 
