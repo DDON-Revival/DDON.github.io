@@ -18,6 +18,13 @@ const GATHERING_CHANNELS = [
     { label: "Custom Channel", key: "GatheringCustom" }
 ];
 
+const SHOP_CHANNELS = [
+    { label: "Normal Channel", key: "ShopsNormal" },
+    { label: "Boss Rush Channel", key: "ShopsBR" },
+    { label: "Collab Channel", key: "ShopsCollab" },
+    { label: "Custom Channel", key: "ShopsCustom" }
+];
+
 let currentTab = "monster";
 let currentQuestCategory = "All";
 let currentLanguage = "en"; // en oder jp
@@ -92,6 +99,45 @@ function updateUI() {
         search.placeholder = t.search;
 }
 
+const WALLET_TYPES = {
+    0:  { en:"None", jp:"なし", color:"#888888" },
+
+    1:  { en:"Gold", jp:"ゴールド", color:"#FFD700" },             // Gelb
+    2:  { en:"Rift Points", jp:"リム", color:"#0A1E6A" },         // Dunkelblau
+    3:  { en:"Blood Orbs", jp:"ブラッドオーブ", color:"#8B0000" }, // Dunkelrot
+    4:  { en:"Silver Tickets", jp:"シルバーチケット", color:"#C0C0C0" }, // Silber
+    5:  { en:"Golden Gemstones", jp:"ゴールドジェムストーン", color:"#D4AF37" }, // Gold
+
+    6:  { en:"Rental Points", jp:"レンタルポイント", color:"#87CEFA" }, // Hellblau
+    7:  { en:"Reset Job Points", jp:"ジョブポイント初期化", color:"#FFFFFF" }, 
+    8:  { en:"Reset Craft Skills", jp:"クラフトスキル初期化", color:"#FFFFFF" },
+    9:  { en:"High Orbs", jp:"ハイオーブ", color:"#800080" }, // Lila
+
+    10: { en:"Dominion Points", jp:"ドミニオンポイント", color:"#FFFFFF" },
+    11: { en:"Adventure Pass Points", jp:"アドベンチャーパスポイント", color:"#FFFFFF" },
+    12: { en:"Custom Made Service Tickets", jp:"カスタムメイド券", color:"#FFFFFF" },
+    13: { en:"Bitterblack Maze Reset Tickets", jp:"黒呪の迷宮リセット券", color:"#FFFFFF" },
+
+    14: { en:"Golden Dragon Marks", jp:"金竜印", color:"#B87333" }, // Goldrot
+    15: { en:"Silver Dragon Marks", jp:"銀竜印", color:"#A0522D" }, // Silberrot
+    16: { en:"Red Dragon Marks", jp:"赤竜印", color:"#FF0000" }     // Rot
+};
+
+function getWalletDisplay(walletType) {
+
+    const wallet = WALLET_TYPES[walletType] || WALLET_TYPES[1];
+
+    return `
+        <span style="
+            color:${wallet.color};
+            font-weight:600;
+            text-shadow:0 0 6px ${wallet.color}55;
+        ">
+            ${wallet[currentLanguage]}
+        </span>
+    `;
+}
+
 /* =========================================================
    LOAD DATA
 ========================================================= */
@@ -124,7 +170,10 @@ async function loadAll() {
     await loadJSON("EnemyNames", "datas/enemy-names.json");
     await loadJSON("StageNames", "datas/stage-names.json");
     await loadJSON("Items", "datas/item_names.json");
-    await loadJSON("Shops", "datas/Shop.json");
+    await loadJSON("ShopsNormal", "datas/Shop.json");
+	await loadJSON("ShopsBR", "datas/ShopBR.json");
+	await loadJSON("ShopsCollab", "datas/ShopCollab.json");
+	await loadJSON("ShopsCustom", "datas/ShopCustom.json");
     await loadCSV("NpcNamesRaw", "datas/npc_names.csv");
     await loadJSON("ShopFunctions", "datas/shops_function.json");
     await loadJSON("Special", "datas/SpecialShops.json");
@@ -325,6 +374,20 @@ function buildShopNpcMap() {
             DATA._shopNpcMap[shopId].add(npcId);
         });
     });
+}
+
+function getShopNames(shopId) {
+
+    const npcSet = DATA._shopNpcMap?.[String(shopId)];
+    if (!npcSet) return [];
+
+    const names = [];
+
+    npcSet.forEach(npcId => {
+        names.push(getNpcName(npcId));
+    });
+
+    return names;
 }
 
 /* =========================================================
@@ -616,7 +679,17 @@ function openItem(id) {
 
     body += `<strong>${UI[currentLanguage].soldIn}</strong>`;
 
-    DATA.Shops?.forEach(shop => {
+    SHOP_CHANNELS.forEach(channel => {
+
+    if (
+        currentChannelFilter !== "all" &&
+        currentChannelFilter !== channel.label
+    ) return;
+
+    const shops = DATA[channel.key];
+    if (!shops) return;
+
+    shops.forEach(shop => {
         shop?.Data?.GoodsParamList?.forEach(g => {
             if (String(g.ItemId) === String(id)) {
 
@@ -624,9 +697,9 @@ function openItem(id) {
                     .forEach(name => {
 
                         body += `
-                            <div onclick="navigate('?shop=${shop.ShopId}&npc=${encodeURIComponent(name)}')"
+                            <div onclick="navigate('?shop=${shop.ShopId}&npc=${encodeURIComponent(name)}&channel=${channel.key}')"
                                  style="cursor:pointer">
-                                ${name} - ${g.Price} Gold
+                                ${name} - ${g.Price} ${getWalletDisplay(g.WalletType)}
                             </div>
                         `;
                     });
@@ -810,25 +883,37 @@ function renderShops(filter="") {
 
     let html = "";
 
-    Object.keys(DATA._shopNpcMap || {}).forEach(shopId => {
+    SHOP_CHANNELS.forEach(channel => {
 
-        const npcSet = DATA._shopNpcMap[shopId];
-        if (!npcSet) return;
+        if (
+            currentChannelFilter !== "all" &&
+            currentChannelFilter !== channel.label
+        ) return;
 
-        npcSet.forEach(npcId => {
+        const shops = DATA[channel.key];
+        if (!shops) return;
 
-            const npcName = getNpcName(npcId);
+        shops.forEach(shop => {
 
-            if (!npcName.toLowerCase().includes(filter)) return;
+            const shopId = String(shop.ShopId);
+            const npcSet = DATA._shopNpcMap?.[shopId];
+            if (!npcSet) return;
 
-            html += `
-                <div class="card">
-                    <h3 onclick="navigate('?shop=${shopId}&npc=${npcId}')"
-                        style="cursor:pointer">
-                        ${npcName}
-                    </h3>
-                </div>
-            `;
+            npcSet.forEach(npcId => {
+
+                const npcName = getNpcName(npcId);
+
+                if (!npcName.toLowerCase().includes(filter)) return;
+
+                html += `
+                    <div class="card">
+                        <h3 onclick="navigate('?shop=${shopId}&npc=${npcId}&channel=${channel.key}')"
+                            style="cursor:pointer">
+                            ${npcName}
+                        </h3>
+                    </div>
+                `;
+            });
         });
     });
 
@@ -839,20 +924,33 @@ function openShop(id) {
 
     const params = new URLSearchParams(window.location.search);
     const npcId = params.get("npc");
+    const channelKey = params.get("channel");
+
+    let shops = [];
+
+    if (channelKey && DATA[channelKey])
+        shops = DATA[channelKey];
+    else
+        shops = DATA.ShopsNormal;
 
     const shop =
-        DATA.Shops?.find(s => String(s.ShopId) === String(id));
+        shops?.find(s => String(s.ShopId) === String(id));
 
     if (!shop) return;
 
     let body = "";
+
+    body += getChannelBadge(
+        SHOP_CHANNELS.find(c => c.key === channelKey)?.label
+        || "Normal Channel"
+    );
 
     shop.Data?.GoodsParamList?.forEach(i => {
         body += `
             <div onclick="navigate('?item=${i.ItemId}')"
                  style="cursor:pointer">
                 ${getItemName(i.ItemId)}
-                - ${i.Price} Gold
+                - ${i.Price} ${getWalletDisplay(i.WalletType)}
             </div>
         `;
     });
