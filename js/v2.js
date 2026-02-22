@@ -404,8 +404,12 @@ function openMonster(id) {
             if (e[27]) dropIds.add(e[27]);
         });
 
-        if (stageMap.size === 0 && dropIds.size === 0)
-            return;
+body += `<strong>${channel.label}</strong>`;
+
+if (stageMap.size === 0 && dropIds.size === 0) {
+    body += `<div style="opacity:.5">No spawn in this channel</div><br>`;
+    return;
+}
 
         body += `<strong>${channel.label}</strong>`;
 
