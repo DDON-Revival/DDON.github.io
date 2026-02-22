@@ -3,6 +3,12 @@
 ========================================================= */
 
 const DATA = {};
+const SPAWN_CHANNELS = [
+    { label: "Normal Channel", key: "EnemySpawnNormal" },
+    { label: "Boss Rush Channel", key: "EnemySpawnBR" },
+    { label: "Collab Channel", key: "EnemySpawnCollab" },
+    { label: "Custom Channel", key: "EnemySpawnCustom" }
+];
 let currentTab = "monster";
 let currentQuestCategory = "All";
 let currentLanguage = "en"; // en oder jp
@@ -100,7 +106,10 @@ async function loadCSV(name, path) {
 
 async function loadAll() {
 
-    await loadJSON("EnemySpawn", "datas/EnemySpawn.json");
+    await loadJSON("EnemySpawnNormal", "datas/EnemySpawn.json");
+	await loadJSON("EnemySpawnBR", "datas/EnemySpawnBR.json");
+	await loadJSON("EnemySpawnCollab", "datas/EnemySpawnCollab.json");
+	await loadJSON("EnemySpawnCustom", "datas/EnemySpawnCustom.json");
     await loadJSON("EnemyNames", "datas/enemy-names.json");
     await loadJSON("StageNames", "datas/stage-names.json");
     await loadJSON("Items", "datas/item_names.json");
@@ -349,7 +358,11 @@ function renderHome() {
 function renderMonsters(filter="") {
 
     const ids = new Set();
-    DATA.EnemySpawn?.enemies?.forEach(e => ids.add(e[5]));
+
+    SPAWN_CHANNELS.forEach(channel => {
+        const data = DATA[channel.key];
+        data?.enemies?.forEach(e => ids.add(e[5]));
+    });
 
     let html = "";
 
@@ -372,56 +385,69 @@ function renderMonsters(filter="") {
 
 function openMonster(id) {
 
-    const stageMap = new Map();
-    const dropIds = new Set();
-
-    DATA.EnemySpawn?.enemies?.forEach(e => {
-        if (String(e[5]) !== String(id)) return;
-
-        if (!stageMap.has(e[0])) stageMap.set(e[0], []);
-        stageMap.get(e[0]).push(e[9]);
-
-        if (e[27]) dropIds.add(e[27]);
-    });
-
     let body = "";
 
-    stageMap.forEach((levels, stageId) => {
+    SPAWN_CHANNELS.forEach(channel => {
 
-        levels.sort((a,b)=>a-b);
-        const min = levels[0];
-        const max = levels[levels.length-1];
+        const data = DATA[channel.key];
+        if (!data?.enemies) return;
 
-        body += `
-            <div onclick="navigate('?stage=${stageId}')"
-                 style="cursor:pointer">
-                ${getStageName(stageId)}
-                (Lv ${min}${min!==max?"-"+max:""})
-            </div>
-        `;
-    });
+        const stageMap = new Map();
+        const dropIds = new Set();
 
-    if (dropIds.size > 0) {
+        data.enemies.forEach(e => {
+            if (String(e[5]) !== String(id)) return;
 
-        body += "<strong>Drops</strong>";
+            if (!stageMap.has(e[0])) stageMap.set(e[0], []);
+            stageMap.get(e[0]).push(e[9]);
 
-        dropIds.forEach(dropId=>{
-            const table =
-                DATA.EnemySpawn?.dropsTables
-                    ?.find(t => t.id == dropId);
-
-            table?.items?.forEach(i=>{
-                body += `
-                    <div onclick="navigate('?item=${i[0]}')"
-                         style="cursor:pointer">
-                        ${getItemName(i[0])}
-                        (${i[1]}-${i[2]})
-                        - ${Math.round(i[5]*100)}%
-                    </div>
-                `;
-            });
+            if (e[27]) dropIds.add(e[27]);
         });
-    }
+
+        if (stageMap.size === 0 && dropIds.size === 0)
+            return;
+
+        body += `<strong>${channel.label}</strong>`;
+
+        stageMap.forEach((levels, stageId) => {
+
+            levels.sort((a,b)=>a-b);
+            const min = levels[0];
+            const max = levels[levels.length-1];
+
+            body += `
+                <div onclick="navigate('?stage=${stageId}')"
+                     style="cursor:pointer">
+                    ${getStageName(stageId)}
+                    (Lv ${min}${min!==max?"-"+max:""})
+                </div>
+            `;
+        });
+
+        if (dropIds.size > 0) {
+
+            body += "<br><em>Drops</em>";
+
+            dropIds.forEach(dropId=>{
+                const table =
+                    data?.dropsTables
+                        ?.find(t => t.id == dropId);
+
+                table?.items?.forEach(i=>{
+                    body += `
+                        <div onclick="navigate('?item=${i[0]}')"
+                             style="cursor:pointer">
+                            ${getItemName(i[0])}
+                            (${i[1]}-${i[2]})
+                            - ${Math.round(i[5]*100)}%
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        body += "<br>";
+    });
 
     document.getElementById("content").innerHTML =
         card(getEnemyName(id), body);
