@@ -3,15 +3,26 @@
 ========================================================= */
 
 const DATA = {};
+
 const SPAWN_CHANNELS = [
     { label: "Normal Channel", key: "EnemySpawnNormal" },
     { label: "Boss Rush Channel", key: "EnemySpawnBR" },
     { label: "Collab Channel", key: "EnemySpawnCollab" },
     { label: "Custom Channel", key: "EnemySpawnCustom" }
 ];
+
+const GATHERING_CHANNELS = [
+    { label: "Normal Channel", key: "GatheringNormal" },
+    { label: "Boss Rush Channel", key: "GatheringBR" },
+    { label: "Collab Channel", key: "GatheringCollab" },
+    { label: "Custom Channel", key: "GatheringCustom" }
+];
+
 let currentTab = "monster";
 let currentQuestCategory = "All";
 let currentLanguage = "en"; // en oder jp
+let currentChannelFilter = "all";
+
 const UI = {
     en: {
         tabs: {
@@ -118,7 +129,10 @@ async function loadAll() {
     await loadJSON("Special", "datas/SpecialShops.json");
     await loadJSON("Crafting", "datas/CraftingRecipes.json");
     await loadJSON("CraftingPlus", "datas/CraftingRecipesGradeUp.json");
-    await loadCSV("Gathering", "datas/GatheringItem.csv");
+    await loadCSV("GatheringNormal", "datas/GatheringItem.csv");
+	await loadCSV("GatheringBR", "datas/GatheringItemBR.csv");
+	await loadCSV("GatheringCollab", "datas/GatheringItemCollab.csv");
+	await loadCSV("GatheringCustom", "datas/GatheringItemCustom.csv");
 
 await loadQuests();
 buildItemMap();   // 🔥 NEU
@@ -248,6 +262,22 @@ function getShopNames(id) {
     return ["Shop " + key];
 }
 
+function getChannelBadge(channelLabel) {
+
+    let cls = "badge-normal";
+
+    if (channelLabel.includes("Boss"))
+        cls = "badge-br";
+
+    if (channelLabel.includes("Collab"))
+        cls = "badge-collab";
+
+    if (channelLabel.includes("Custom"))
+        cls = "badge-custom";
+
+    return `<div class="channel-badge ${cls}">${channelLabel}</div>`;
+}
+
 
 function card(title, html) {
     return `
@@ -330,6 +360,12 @@ document.getElementById("languageSelect")
     router(); // 🔥 wichtig!
 });
 
+document.getElementById("channelSelect")
+?.addEventListener("change", (e) => {
+    currentChannelFilter = e.target.value;
+    router();
+});
+
 /* =========================================================
    HOME
 ========================================================= */
@@ -360,6 +396,11 @@ function renderMonsters(filter="") {
     const ids = new Set();
 
     SPAWN_CHANNELS.forEach(channel => {
+
+    if (
+        currentChannelFilter !== "all" &&
+        currentChannelFilter !== channel.label
+    ) return;
         const data = DATA[channel.key];
         data?.enemies?.forEach(e => ids.add(e[5]));
     });
@@ -389,6 +430,11 @@ function openMonster(id) {
 
     SPAWN_CHANNELS.forEach(channel => {
 
+    if (
+        currentChannelFilter !== "all" &&
+        currentChannelFilter !== channel.label
+    ) return;
+
         const data = DATA[channel.key];
         if (!data?.enemies) return;
 
@@ -404,14 +450,12 @@ function openMonster(id) {
             if (e[27]) dropIds.add(e[27]);
         });
 
-body += `<strong>${channel.label}</strong>`;
+body += getChannelBadge(channel.label);
 
 if (stageMap.size === 0 && dropIds.size === 0) {
     body += `<div style="opacity:.5">No spawn in this channel</div><br>`;
     return;
 }
-
-        body += `<strong>${channel.label}</strong>`;
 
         stageMap.forEach((levels, stageId) => {
 
@@ -498,6 +542,11 @@ function openItem(id) {
 
     SPAWN_CHANNELS.forEach(channel => {
 
+    if (
+        currentChannelFilter !== "all" &&
+        currentChannelFilter !== channel.label
+    ) return;
+
         const data = DATA[channel.key];
         if (!data?.enemies) return;
 
@@ -556,19 +605,31 @@ function openItem(id) {
         });
     });
 
-    /* =========================
-       GATHERED
-    ========================== */
+/* =========================
+   GATHERED (CHANNEL AWARE)
+========================= */
 
-    body += `<br><strong>${UI[currentLanguage].gatheredAt}</strong>`;
+GATHERING_CHANNELS.forEach(channel => {
+
+    if (
+        currentChannelFilter !== "all" &&
+        currentChannelFilter !== channel.label
+    ) return;
+
+    const data = DATA[channel.key];
+    if (!data || data.length === 0) return;
 
     const gatheredStages = new Set();
 
-    DATA.Gathering?.forEach(r => {
+    data.forEach(r => {
         if (String(r[4]) === String(id)) {
             gatheredStages.add(r[0]);
         }
     });
+
+    if (gatheredStages.size === 0) return;
+
+    body += `<br><strong>${UI[currentLanguage].gatheredAt} – ${channel.label}</strong>`;
 
     gatheredStages.forEach(stage => {
         body += `
@@ -578,6 +639,7 @@ function openItem(id) {
             </div>
         `;
     });
+});
 
     /* =========================
        CRAFTED FROM
@@ -668,6 +730,11 @@ function openStage(id) {
 
     SPAWN_CHANNELS.forEach(channel => {
 
+    if (
+        currentChannelFilter !== "all" &&
+        currentChannelFilter !== channel.label
+    ) return;
+
         const data = DATA[channel.key];
         if (!data?.enemies) return;
 
@@ -682,7 +749,7 @@ function openStage(id) {
 
         if (map.size === 0) return;
 
-        body += `<strong>${channel.label}</strong>`;
+        body += getChannelBadge(channel.label);
 
         map.forEach((levels, enemyId) => {
 
@@ -797,42 +864,63 @@ body += `
    GATHERING
 ========================================================= */
 
-function renderGathering(filter=""){
+function renderGathering(filter="") {
 
-    const map=new Map();
+    let html = "";
 
-    DATA.Gathering?.forEach(r=>{
-        const stage=r[0];
-        const item=r[4];
+    GATHERING_CHANNELS.forEach(channel => {
 
-        const itemName = (getItemName(item) || "").toLowerCase();
-        const stageName = (getStageName(stage) || "").toLowerCase();
+    if (
+        currentChannelFilter !== "all" &&
+        currentChannelFilter !== channel.label
+    ) return;
 
-        if (
-            filter &&
-            !itemName.includes(filter) &&
-            !stageName.includes(filter)
-        ) return;
+        const data = DATA[channel.key];
+        if (!data || data.length === 0) return;
 
-        if(!map.has(stage)) map.set(stage,new Set());
-        map.get(stage).add(item);
-    });
+        const map = new Map();
 
-    let html="";
+        data.forEach(r => {
 
-    map.forEach((items,stage)=>{
-        let body="";
-        items.forEach(i=>{
-            body+=`
-                <div onclick="navigate('?item=${i}')"
-                     style="cursor:pointer">
-                    ${getItemName(i)}
-                </div>`;
+            const stage = r[0];
+            const item = r[4];
+
+            const itemName = (getItemName(item) || "").toLowerCase();
+            const stageName = (getStageName(stage) || "").toLowerCase();
+
+            if (
+                filter &&
+                !itemName.includes(filter) &&
+                !stageName.includes(filter)
+            ) return;
+
+            if (!map.has(stage)) map.set(stage, new Set());
+            map.get(stage).add(item);
         });
-        html+=card(getStageName(stage),body);
+
+        if (map.size === 0) return;
+
+        html += getChannelBadge(channel.label);
+
+        map.forEach((items, stage) => {
+
+            let body = "";
+
+            items.forEach(i => {
+                body += `
+                    <div onclick="navigate('?item=${i}')"
+                         style="cursor:pointer">
+                        ${getItemName(i)}
+                    </div>`;
+            });
+
+            html += card(getStageName(stage), body);
+        });
+
+        html += "<br>";
     });
 
-    document.getElementById("content").innerHTML=html;
+    document.getElementById("content").innerHTML = html;
 }
 
 /* =========================================================
