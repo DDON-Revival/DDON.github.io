@@ -886,6 +886,7 @@ function openStage(id) {
 function renderShops(filter="") {
 
     let html = "";
+    const renderedNpc = new Set();
 
     SHOP_CHANNELS.forEach(channel => {
 
@@ -909,9 +910,15 @@ function renderShops(filter="") {
 
                 if (!npcName.toLowerCase().includes(filter)) return;
 
+                // 🔥 Verhindert Duplikate
+                const uniqueKey = npcId + "_" + shopId;
+
+                if (renderedNpc.has(uniqueKey)) return;
+                renderedNpc.add(uniqueKey);
+
                 html += `
                     <div class="card">
-                        <h3 onclick="navigate('?shop=${shopId}&npc=${npcId}&channel=${channel.key}')"
+                        <h3 onclick="navigate('?shop=${shopId}&npc=${npcId}')"
                             style="cursor:pointer">
                             ${npcName}
                         </h3>
