@@ -679,7 +679,7 @@ function openItem(id) {
 
     body += `<strong>${UI[currentLanguage].soldIn}</strong>`;
 
-    SHOP_CHANNELS.forEach(channel => {
+SHOP_CHANNELS.forEach(channel => {
 
     if (
         currentChannelFilter !== "all" &&
@@ -706,6 +706,8 @@ function openItem(id) {
             }
         });
     });
+
+});
 
 /* =========================
    GATHERED (CHANNEL AWARE)
