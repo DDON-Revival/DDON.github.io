@@ -125,7 +125,9 @@ const WALLET_TYPES = {
 
 function getWalletDisplay(walletType) {
 
-    const wallet = WALLET_TYPES[walletType] || WALLET_TYPES[1];
+    const type = Number(walletType); 
+
+    const wallet = WALLET_TYPES[type] || WALLET_TYPES[1];
 
     return `
         <span style="
