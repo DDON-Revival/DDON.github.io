@@ -111,8 +111,9 @@ async function loadAll() {
     await loadJSON("CraftingPlus", "datas/CraftingRecipesGradeUp.json");
     await loadCSV("Gathering", "datas/GatheringItem.csv");
 
-    await loadQuests();
-    router();
+await loadQuests();
+buildItemMap();   // 🔥 NEU
+router();
 }
 
 loadAll();
@@ -147,7 +148,7 @@ async function loadQuests() {
 
 function getItemName(id) {
 
-    const found = DATA.Items?.item?.find(i => String(i.id) === String(id));
+    const found = DATA._itemMap?.[String(id)];
     if (!found) return String(id);
 
     if (typeof found === "string")
@@ -250,6 +251,14 @@ function card(title, html) {
     `;
 }
 
+function buildItemMap() {
+    DATA._itemMap = {};
+
+    DATA.Items?.item?.forEach(i => {
+        DATA._itemMap[String(i.id)] = i;
+    });
+}
+
 /* =========================================================
    ROUTING
 ========================================================= */
@@ -294,10 +303,17 @@ document.querySelectorAll(".tabs button").forEach(btn => {
    SEARCH LISTENER
 ========================================================= */
 
+let searchTimeout;
+
 document.getElementById("searchBox")
-    ?.addEventListener("input", () => {
+?.addEventListener("input", () => {
+
+    clearTimeout(searchTimeout);
+
+    searchTimeout = setTimeout(() => {
         renderHome();
-    });
+    }, 250); // wartet 250ms nach dem Tippen
+});
 	
 document.getElementById("languageSelect")
 ?.addEventListener("change", (e) => {
