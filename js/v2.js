@@ -1139,6 +1139,8 @@ function openQuest(id){
             }
         });
     }
+	
+	body += `</div>`;
 
     document.getElementById("content").innerHTML =
         card(getQuestName(q), body);
