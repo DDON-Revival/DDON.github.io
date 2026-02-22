@@ -930,34 +930,41 @@ function openShop(id) {
     const npcId = params.get("npc");
     const channelKey = params.get("channel");
 
-    let shops = [];
-
-    if (channelKey && DATA[channelKey])
-        shops = DATA[channelKey];
-    else
-        shops = DATA.ShopsNormal;
-
-    const shop =
-        shops?.find(s => String(s.ShopId) === String(id));
-
-    if (!shop) return;
-
     let body = "";
 
-    body += getChannelBadge(
-        SHOP_CHANNELS.find(c => c.key === channelKey)?.label
-        || "Normal Channel"
-    );
+    SHOP_CHANNELS.forEach(channel => {
 
-shop.Data?.GoodsParamList?.forEach(i => {
-    body += `
-        <div onclick="navigate('?item=${i.ItemId}')"
-             style="cursor:pointer">
-            ${getItemName(i.ItemId)}
-            - ${i.Price} ${getWalletDisplay(shop.Data.WalletType)}
-        </div>
-    `;
-});
+        if (
+            currentChannelFilter !== "all" &&
+            currentChannelFilter !== channel.label
+        ) return;
+
+        // Wenn URL channel gesetzt ist → nur diesen anzeigen
+        if (channelKey && channel.key !== channelKey)
+            return;
+
+        const shops = DATA[channel.key];
+        if (!shops) return;
+
+        const shop =
+            shops.find(s => String(s.ShopId) === String(id));
+
+        if (!shop) return;
+
+        body += getChannelBadge(channel.label);
+
+        shop.Data?.GoodsParamList?.forEach(i => {
+            body += `
+                <div onclick="navigate('?item=${i.ItemId}')"
+                     style="cursor:pointer">
+                    ${getItemName(i.ItemId)}
+                    - ${i.Price} ${getWalletDisplay(shop.Data.WalletType)}
+                </div>
+            `;
+        });
+
+        body += "<br>";
+    });
 
     const title = npcId ? getNpcName(npcId) : "Shop " + id;
 
