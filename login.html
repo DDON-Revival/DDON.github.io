@@ -5,6 +5,15 @@
 <script src="translations.js"></script>
 <title>DDON Account Panel</title>
 
+<meta http-equiv="Content-Security-Policy"
+content="
+default-src 'self';
+script-src 'self' 'unsafe-inline';
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+font-src https://fonts.gstatic.com;
+connect-src https://api.ddon.org;
+">
+
 <style>
 body{
     margin:0;
@@ -300,6 +309,7 @@ async function loadCharacters(){
 
     const lang = localStorage.getItem("lang") || "en";
     const t = translations[lang];
+    const container = document.getElementById("characters");
 
     try{
         const res = await fetch("https://api.ddon.org/api/characters",{
@@ -309,38 +319,56 @@ async function loadCharacters(){
         });
 
         if(!res.ok){
-            characters.innerHTML = `<p>${t.charactersLoadError}</p>`;
+            container.innerHTML = "";
+            const p = document.createElement("p");
+            p.textContent = t.charactersLoadError;
+            container.appendChild(p);
             return;
         }
 
         const chars = await res.json();
-        characters.innerHTML="";
+        container.innerHTML = "";
 
         if(!chars.length){
-            characters.innerHTML = `<p>${t.noCharacters}</p>`;
+            const p = document.createElement("p");
+            p.textContent = t.noCharacters;
+            container.appendChild(p);
             return;
         }
 
         chars.forEach(c => {
 
-            const jobList = c.jobs.map(j => {
+            const card = document.createElement("div");
+            card.className = "characterCard";
+
+            const name = document.createElement("h3");
+            name.textContent = c.name; // SAFE
+            card.appendChild(name);
+
+            const jobContainer = document.createElement("div");
+
+            c.jobs.forEach(j => {
+
+                const badge = document.createElement("span");
+                badge.className = "badge";
+
                 const jobName = jobMap[j.job] || j.job;
                 const translatedJob =
                     translations[lang]?.jobs?.[jobName] || jobName;
 
-                return `<span class="badge">${translatedJob} Lv.${j.level}</span>`;
-            }).join(" ");
+                badge.textContent = translatedJob + " Lv." + j.level; // SAFE
+                jobContainer.appendChild(badge);
+            });
 
-            characters.innerHTML += `
-                <div class="characterCard">
-                    <h3>${c.name}</h3>
-                    <div>${jobList}</div>
-                </div>
-            `;
+            card.appendChild(jobContainer);
+            container.appendChild(card);
         });
 
     }catch(e){
-        characters.innerHTML = `<p>${t.characterApiError}</p>`;
+        container.innerHTML = "";
+        const p = document.createElement("p");
+        p.textContent = t.characterApiError;
+        container.appendChild(p);
     }
 }
 

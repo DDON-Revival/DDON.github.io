@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DDON Leaderboard</title>
 
+<meta http-equiv="Content-Security-Policy"
+content="
+default-src 'self';
+script-src 'self' 'unsafe-inline';
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+font-src https://fonts.gstatic.com;
+connect-src https://api.ddon.org;
+">
+
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
@@ -213,11 +222,13 @@ function renderLeaderboard(){
     if(!leaderboardData) return;
 
     const t = translations[localStorage.getItem("lang") || "en"];
-    const container=document.getElementById("leaderboard");
-    container.innerHTML="";
+    const container = document.getElementById("leaderboard");
+    container.innerHTML = "";
 
-    if(!filteredPlayers || filteredPlayers.length===0){
-        container.innerHTML=`<p>${t.noPlayersFound}</p>`;
+    if(!filteredPlayers || filteredPlayers.length === 0){
+        const p = document.createElement("p");
+        p.textContent = t.noPlayersFound;
+        container.appendChild(p);
         return;
     }
 
@@ -226,45 +237,65 @@ function renderLeaderboard(){
     if(currentPage > totalPages) currentPage = totalPages;
     if(currentPage < 1) currentPage = 1;
 
-    const start = (currentPage-1) * playersPerPage;
+    const start = (currentPage - 1) * playersPerPage;
     const end = start + playersPerPage;
 
     const playersToShow = filteredPlayers.slice(start, end);
 
-    playersToShow.forEach(player=>{
+    playersToShow.forEach(player => {
 
-        const div=document.createElement("div");
-        div.className="card";
+        const card = document.createElement("div");
+        card.className = "card";
 
-        const highestLevel=Math.max(...player.classes.map(c=>c.level));
+        // NAME
+        const name = document.createElement("h3");
+        name.textContent = player.name; // SAFE
+        card.appendChild(name);
 
-        let extra="";
-        if(currentTab==="hc"){
-            extra=`
-                <p>${t.hcSince}: ${player.hardcore_since || "-"}</p>
-                <p>${t.hcStatus}: ${player.dead ? t.dead : t.alive}</p>
-            `;
+        // LEVEL
+        const highestLevel = Math.max(...player.classes.map(c => c.level));
+        const level = document.createElement("p");
+        level.textContent = t.level + ": " + highestLevel;
+        card.appendChild(level);
+
+        // CLASSES TITLE
+        const classesTitle = document.createElement("p");
+        classesTitle.innerHTML = "<strong>" + t.classes + ":</strong>";
+        card.appendChild(classesTitle);
+
+        // LIST
+        const ul = document.createElement("ul");
+
+        player.classes.forEach(c => {
+
+            const li = document.createElement("li");
+
+            const jobKey = jobMap[c.class] || c.class;
+            const jobName = t.jobs?.[jobKey] || jobKey;
+
+            li.textContent = jobName + " (" + t.level + " " + c.level + ")";
+            ul.appendChild(li);
+        });
+
+        card.appendChild(ul);
+
+        // HARDCORE INFO
+        if(currentTab === "hc"){
+
+            const hcSince = document.createElement("p");
+            hcSince.textContent = t.hcSince + ": " + (player.hardcore_since || "-");
+            card.appendChild(hcSince);
+
+            const hcStatus = document.createElement("p");
+            hcStatus.textContent = t.hcStatus + ": " + (player.dead ? t.dead : t.alive);
+            card.appendChild(hcStatus);
         }
 
-        div.innerHTML=`
-            <h3>${player.name}</h3>
-            <p>${t.level}: ${highestLevel}</p>
-            <p><strong>${t.classes}:</strong></p>
-            <ul>
-${player.classes.map(c=>{
-    const jobKey = jobMap[c.class] || c.class;
-    const jobName = t.jobs?.[jobKey] || jobKey;
-    return `<li>${jobName} (${t.level} ${c.level})</li>`;
-}).join("")}
-            </ul>
-            ${extra}
-        `;
-
-        container.appendChild(div);
+        container.appendChild(card);
     });
 
     document.getElementById("pageInfo").innerText =
-        `Page ${currentPage} / ${totalPages}`;
+        "Page " + currentPage + " / " + totalPages;
 }
 
 /* ===========================
