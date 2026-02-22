@@ -118,25 +118,30 @@ async function loadCSV(name, path) {
 async function loadAll() {
 
     await loadJSON("EnemySpawnNormal", "datas/EnemySpawn.json");
-	await loadJSON("EnemySpawnBR", "datas/EnemySpawnBR.json");
-	await loadJSON("EnemySpawnCollab", "datas/EnemySpawnCollab.json");
-	await loadJSON("EnemySpawnCustom", "datas/EnemySpawnCustom.json");
+    await loadJSON("EnemySpawnBR", "datas/EnemySpawnBR.json");
+    await loadJSON("EnemySpawnCollab", "datas/EnemySpawnCollab.json");
+    await loadJSON("EnemySpawnCustom", "datas/EnemySpawnCustom.json");
     await loadJSON("EnemyNames", "datas/enemy-names.json");
     await loadJSON("StageNames", "datas/stage-names.json");
     await loadJSON("Items", "datas/item_names.json");
     await loadJSON("Shops", "datas/Shop.json");
-    await loadJSON("ShopNames", "datas/shop-names.json");
+    await loadCSV("NpcNamesRaw", "datas/npc_names.csv");
+    await loadJSON("ShopFunctions", "datas/shops_function.json");
     await loadJSON("Special", "datas/SpecialShops.json");
     await loadJSON("Crafting", "datas/CraftingRecipes.json");
     await loadJSON("CraftingPlus", "datas/CraftingRecipesGradeUp.json");
     await loadCSV("GatheringNormal", "datas/GatheringItem.csv");
-	await loadCSV("GatheringBR", "datas/GatheringItemBR.csv");
-	await loadCSV("GatheringCollab", "datas/GatheringItemCollab.csv");
-	await loadCSV("GatheringCustom", "datas/GatheringItemCustom.csv");
+    await loadCSV("GatheringBR", "datas/GatheringItemBR.csv");
+    await loadCSV("GatheringCollab", "datas/GatheringItemCollab.csv");
+    await loadCSV("GatheringCustom", "datas/GatheringItemCustom.csv");
 
-await loadQuests();
-buildItemMap();   // 🔥 NEU
-router();
+    await loadQuests();
+
+    buildItemMap();
+    buildNpcMap();       // ✅ hier
+    buildShopNpcMap();   // ✅ hier
+
+    router();
 }
 
 loadAll();
@@ -233,35 +238,6 @@ function getQuestName(q) {
     return q.comment.en || "";
 }
 
-function getShopNames(id) {
-
-    const key = String(id);
-    const shop = DATA.ShopNames?.[key];
-
-    if (!shop)
-        return ["Shop " + key];
-
-    // 🔥 Alter Stil: Array
-    if (Array.isArray(shop))
-        return shop;
-
-    // 🔥 Alter Stil: String
-    if (typeof shop === "string")
-        return [shop];
-
-    // 🔥 Neuer Stil: { en:[], jp:[] }
-    if (typeof shop === "object") {
-
-        if (currentLanguage === "jp" && shop.jp && shop.jp.length)
-            return shop.jp;
-
-        if (shop.en && shop.en.length)
-            return shop.en;
-    }
-
-    return ["Shop " + key];
-}
-
 function getChannelBadge(channelLabel) {
 
     let cls = "badge-normal";
@@ -295,6 +271,39 @@ function buildItemMap() {
 
     DATA.Items?.item?.forEach(i => {
         DATA._itemMap[String(i.id)] = i;
+    });
+}
+
+function getNpcName(id) {
+
+    const npc = DATA._npcMap?.[String(id)];
+
+    if (!npc) return "NPC " + id;
+
+    if (currentLanguage === "jp" && npc.jp)
+        return npc.jp;
+
+    return npc.en || id;
+}
+
+function buildShopNpcMap() {
+
+    DATA._shopNpcMap = {};
+
+    if (!DATA.ShopFunctions) return;
+
+    Object.values(DATA.ShopFunctions).forEach(list => {
+
+        list.forEach(entry => {
+
+            const shopId = String(entry.ShopId);
+            const npcId = String(entry.NpcId);
+
+            if (!DATA._shopNpcMap[shopId])
+                DATA._shopNpcMap[shopId] = new Set();
+
+            DATA._shopNpcMap[shopId].add(npcId);
+        });
     });
 }
 
@@ -777,42 +786,48 @@ function openStage(id) {
    SHOPS
 ========================================================= */
 
-function renderShops(filter=""){
+function renderShops(filter="") {
 
-    let html="";
+    let html = "";
 
-    DATA.Shops?.forEach(shop=>{
-        getShopNames(shop.ShopId).forEach(name=>{
+    Object.keys(DATA._shopNpcMap || {}).forEach(shopId => {
 
-            if (!name.toLowerCase().includes(filter)) return;
+        const npcSet = DATA._shopNpcMap[shopId];
+        if (!npcSet) return;
+
+        npcSet.forEach(npcId => {
+
+            const npcName = getNpcName(npcId);
+
+            if (!npcName.toLowerCase().includes(filter)) return;
 
             html += `
                 <div class="card">
-                    <h3 onclick="navigate('?shop=${shop.ShopId}&npc=${encodeURIComponent(name)}')"
+                    <h3 onclick="navigate('?shop=${shopId}&npc=${npcId}')"
                         style="cursor:pointer">
-                        ${name}
+                        ${npcName}
                     </h3>
                 </div>
             `;
         });
     });
 
-    document.getElementById("content").innerHTML=html;
+    document.getElementById("content").innerHTML = html;
 }
 
-function openShop(id){
+function openShop(id) {
 
     const params = new URLSearchParams(window.location.search);
-    const npcName = params.get("npc");
+    const npcId = params.get("npc");
 
     const shop =
-        DATA.Shops?.find(s=>String(s.ShopId)===String(id));
+        DATA.Shops?.find(s => String(s.ShopId) === String(id));
 
-    if(!shop) return;
+    if (!shop) return;
 
-    let body="";
+    let body = "";
 
-    shop.Data?.GoodsParamList?.forEach(i=>{
+    shop.Data?.GoodsParamList?.forEach(i => {
         body += `
             <div onclick="navigate('?item=${i.ItemId}')"
                  style="cursor:pointer">
@@ -822,7 +837,7 @@ function openShop(id){
         `;
     });
 
-    const title = npcName || getShopNames(id)[0];
+    const title = npcId ? getNpcName(npcId) : "Shop " + id;
 
     document.getElementById("content").innerHTML =
         card(title, body);
