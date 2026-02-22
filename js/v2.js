@@ -949,15 +949,15 @@ function openShop(id) {
         || "Normal Channel"
     );
 
-    shop.Data?.GoodsParamList?.forEach(i => {
-        body += `
-            <div onclick="navigate('?item=${i.ItemId}')"
-                 style="cursor:pointer">
-                ${getItemName(i.ItemId)}
-                - ${i.Price} ${getWalletDisplay(i.WalletType)}
-            </div>
-        `;
-    });
+shop.Data?.GoodsParamList?.forEach(i => {
+    body += `
+        <div onclick="navigate('?item=${i.ItemId}')"
+             style="cursor:pointer">
+            ${getItemName(i.ItemId)}
+            - ${i.Price} ${getWalletDisplay(shop.Data.WalletType)}
+        </div>
+    `;
+});
 
     const title = npcId ? getNpcName(npcId) : "Shop " + id;
 
