@@ -271,6 +271,35 @@ function getEnemyName(id) {
     return enemy.en || key;
 }
 
+function getStageName(id) {
+
+    let key;
+
+    if (typeof id === "number") {
+        key = "0x" + id.toString(16).padStart(6, "0").toUpperCase();
+    } else if (String(id).startsWith("0x")) {
+        key = String(id).toUpperCase();
+    } else {
+        const num = Number(id);
+        if (!isNaN(num)) {
+            key = "0x" + num.toString(16).padStart(6, "0").toUpperCase();
+        } else {
+            return id;
+        }
+    }
+
+    const stage = DATA.StageNames?.[key];
+    if (!stage) return key;
+
+    if (typeof stage === "string")
+        return stage;
+
+    if (currentLanguage === "jp" && stage.jp)
+        return stage.jp;
+
+    return stage.en || key;
+}
+
 function getQuestName(q) {
 
     if (!q.comment) return "";
