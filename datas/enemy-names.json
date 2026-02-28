@@ -4,112 +4,112 @@
     "jp": "None"
   },
   "0x015230": {
-    "en": "Abaddon0",
-    "jp": "Abaddon0"
+    "en": "Abaddon",
+    "jp": "アバドーン"
   },
   "0x080800": {
-    "en": "Abbadon1",
-    "jp": "Abbadon1"
+    "en": "Abbadon 1",
+    "jp": "アバドーン 1"
   },
   "0x010911": {
-    "en": "AcidBlob",
-    "jp": "AcidBlobJP"
+    "en": "Acid Blob",
+    "jp": "アシッドブロブ"
   },
   "0x080801": {
     "en": "Albe",
-    "jp": "Albe"
+    "jp": "アルベ"
   },
   "0x011201": {
-    "en": "AlbeParasiticPoison",
-    "jp": "AlbeParasiticPoison"
+    "en": "Albe Parasitic Poison",
+    "jp": "アルベ寄生毒"
   },
   "0x077000": {
-    "en": "AlbeSNest",
-    "jp": "AlbeSNest"
+    "en": "Albes Nest",
+    "jp": "アルベス・ネスト"
   },
   "0x011120": {
-    "en": "AlchemizedGoblin",
-    "jp": "AlchemizedGoblin"
+    "en": "Alchemized Goblin",
+    "jp": "ゴブリンアルケミー"
   },
   "0x011121": {
-    "en": "AlchemizedGoblinFighter",
-    "jp": "AlchemizedGoblinFighter"
+    "en": "Alchemized Goblin Fighter",
+    "jp": "ゴブリンアルケミーファイター"
   },
   "0x015304": {
-    "en": "AlchemizedGriffin",
-    "jp": "AlchemizedGriffin"
+    "en": "Alchemized Griffin",
+    "jp": "グリフィンアルケミー"
   },
   "0x010606": {
-    "en": "AlchemizedHarpy",
-    "jp": "AlchemizedHarpy"
+    "en": "Alchemized Harpy",
+    "jp": "ハーピーアルケミー"
   },
   "0x010312": {
-    "en": "AlchemizedSkeleton",
-    "jp": "AlchemizedSkeleton"
+    "en": "Alchemized Skeleton",
+    "jp": "スケルトンアルケミー"
   },
   "0x011122": {
-    "en": "AlchemizedSlingGoblin",
-    "jp": "AlchemizedSlingGoblin"
+    "en": "Alchemized Sling Goblin",
+    "jp": "スリングゴブリンアルケミー"
   },
   "0x010207": {
-    "en": "AlchemizedWolf",
-    "jp": "AlchemizedWolf"
+    "en": "Alchemized Wolf",
+    "jp": "ウルフアルケミー"
   },
   "0x015420": {
-    "en": "AlchemyEye",
-    "jp": "AlchemyEye"
+    "en": "Alchemy Eye",
+    "jp": "アルケミーアイ"
   },
   "0x020403": {
-    "en": "AlteredZuhl",
-    "jp": "AlteredZuhl"
+    "en": "Altered Zuhl",
+    "jp": "アルタード・ズール"
   },
   "0x015831": {
-    "en": "AncestorOrc",
-    "jp": "AncestorOrc"
+    "en": "Ancestor Orc",
+    "jp": "アンセスターオーク"
   },
   "0x015833": {
-    "en": "AncestorOrcDifferentBones",
-    "jp": "AncestorOrcDifferentBones"
+    "en": "Ancestor Orc (Different Bones)",
+    "jp": "アンセスターオーク (異なる骨)"
   },
   "0x015832": {
-    "en": "AncestorOrcFighter",
-    "jp": "AncestorOrcFighter"
+    "en": "Ancestor Orc (Fighter)",
+    "jp": "アンセスターオーク (ファイター)"
   },
   "0x015870": {
-    "en": "AncestorOrigin",
-    "jp": "AncestorOrigin"
+    "en": "Ancestor Origin",
+    "jp": "アンセスターオリジン"
   },
   "0x015708": {
-    "en": "Angules0",
-    "jp": "Angules0"
+    "en": "Angules",
+    "jp": "アングルス"
   },
   "0x070920": {
-    "en": "Angules1",
-    "jp": "Angules1"
+    "en": "Angules 1",
+    "jp": "アングルス 1"
   },
   "0x010904": {
-    "en": "AquaJelly",
-    "jp": "AquaJelly"
+    "en": "Aqua Jelly",
+    "jp": "アクアジェリー"
   },
   "0x080504": {
-    "en": "ArisenOfTheBlackDragon",
-    "jp": "ArisenOfTheBlackDragon"
+    "en": "Arisen Of The Black Dragon",
+    "jp": "黒竜の復活"
   },
   "0x015002": {
-    "en": "ArmoredCyclops",
-    "jp": "ArmoredCyclops"
+    "en": "Armored Cyclops",
+    "jp": "アーマーサイクロプス"
   },
   "0x015003": {
-    "en": "ArmoredCyclopsClub",
-    "jp": "ArmoredCyclopsClub"
+    "en": "Armored Cyclops (Club)",
+    "jp": "アーマーサイクロプス (クラブ）"
   },
   "0x010820": {
-    "en": "ArmoredInsectBlue",
-    "jp": "ArmoredInsectBlue"
+    "en": "Armored Insect (Blue)",
+    "jp": "ヨロイムシ （ブルー）"
   },
   "0x010821": {
-    "en": "ArmoredInsectRed",
-    "jp": "ArmoredInsectRed"
+    "en": "Armored Insect (Red)",
+    "jp": "ヨロイムシ(レッド）"
   },
   "0x010822": {
     "en": "ArmoredInsectRedPassiveAi0",
@@ -708,8 +708,8 @@
     "jp": "ForestGoblinFighter"
   },
   "0x011044": {
-    "en": "FormerCommanderLeoFinalBoss",
-    "jp": "FormerCommanderLeoFinalBoss"
+    "en": "	Former Commander Leo (Final boss)",
+    "jp": "元覚者隊統率レオ （最終ボス）"
   },
   "0x010906": {
     "en": "FreezingSlime",
@@ -836,7 +836,7 @@
     "jp": "GoblinBomber"
   },
   "0x010101": {
-    "en": "GoblinFighter",
+    "en": "Goblin Fighter",
     "jp": "ゴブリンファイター"
   },
   "0x085010": {
@@ -1016,16 +1016,16 @@
     "jp": "Hellhound"
   },
   "0x010190": {
-    "en": "HighPixieBiff",
-    "jp": "HighPixieBiff"
+    "en": "High Pixie Biff",
+    "jp": "ハイピクシービフ"
   },
   "0x010192": {
-    "en": "HighPixiePow",
-    "jp": "HighPixiePow"
+    "en": "High Pixie Pow",
+    "jp": "ハイピクシーポウ"
   },
   "0x010191": {
-    "en": "HighPixieZolda",
-    "jp": "HighPixieZolda"
+    "en": "High Pixie Zolda",
+    "jp": "ハイピクシーゾルダ"
   },
   "0x010110": {
     "en": "Hobgoblin",
@@ -1040,8 +1040,8 @@
     "jp": "ホブゴブリンリーダー"
   },
   "0x011043": {
-    "en": "HoodedIris",
-    "jp": "HoodedIris"
+    "en": "Hooded Iris (???)",
+    "jp": "イリス フード付き（？）"
   },
   "0x020803": {
     "en": "Ifrit1stForm",
@@ -1392,44 +1392,44 @@
     "jp": "Ox"
   },
   "0x011054": {
-    "en": "PawnDefender",
-    "jp": "PawnDefender"
+    "en": "Pawn Defender",
+    "jp": "ポーンガーダー"
   },
   "0x011057": {
-    "en": "PawnElementArcher",
-    "jp": "PawnElementArcher"
+    "en": "Pawn Element Archer",
+    "jp": "ポーンエレメンター"
   },
   "0x011050": {
-    "en": "PawnFighter",
-    "jp": "PawnFighter"
+    "en": "Pawn Fighter",
+    "jp": "ポーンファイター"
   },
   "0x011053": {
-    "en": "PawnHealer",
-    "jp": "PawnHealer"
+    "en": "Pawn Healer",
+    "jp": "ポーンヒーラー"
   },
   "0x011052": {
-    "en": "PawnHunter",
-    "jp": "PawnHunter"
+    "en": "Pawn Hunter",
+    "jp": "ポーンハンター"
   },
   "0x011055": {
-    "en": "PawnMage",
-    "jp": "PawnMage"
+    "en": "Pawn Mage",
+    "jp": "ポーンメイジ"
   },
   "0x011051": {
-    "en": "PawnSeeker",
-    "jp": "PawnSeeker"
+    "en": "Pawn Seeker",
+    "jp": "ポーンシーカー"
   },
   "0x011056": {
-    "en": "PawnWarrior",
-    "jp": "PawnWarrior"
+    "en": "Pawn Warrior",
+    "jp": "ポーンウォリアー"
   },
   "0x011064": {
-    "en": "PhindymianDefender",
-    "jp": "PhindymianDefender"
+    "en": "Phindymian Defender",
+    "jp": "フィンドガーダー"
   },
   "0x011067": {
-    "en": "PhindymianElementArcher",
-    "jp": "PhindymianElementArcher"
+    "en": "Phindymian ElementArcher",
+    "jp": "フィンドエレメンター"
   },
   "0x015032": {
     "en": "PhindymianEnt0",
@@ -1440,28 +1440,28 @@
     "jp": "PhindymianEnt1"
   },
   "0x011060": {
-    "en": "PhindymianFighter",
-    "jp": "PhindymianFighter"
+    "en": "Phindymian Fighter",
+    "jp": "フィンドファイター"
   },
   "0x011062": {
-    "en": "PhindymianHunter",
-    "jp": "PhindymianHunter"
+    "en": "Phindymian Hunter",
+    "jp": "フィンドハンター"
   },
   "0x011063": {
-    "en": "PhindymianPriest",
-    "jp": "PhindymianPriest"
+    "en": "Phindymian Priest",
+    "jp": "フィンドプリースト"
   },
   "0x011061": {
-    "en": "PhindymianSeeker",
-    "jp": "PhindymianSeeker"
+    "en": "Phindymian Seeker",
+    "jp": "フィンドシーカー"
   },
   "0x011065": {
-    "en": "PhindymianSorcerer",
-    "jp": "PhindymianSorcerer"
+    "en": "Phindymian Sorcerer",
+    "jp": "フィンドソーサラー"
   },
   "0x011066": {
-    "en": "PhindymianWarrior",
-    "jp": "PhindymianWarrior"
+    "en": "Phindymian Warrior",
+    "jp": "フィンドウォリアー"
   },
   "0x010908": {
     "en": "PhotonSlime",
@@ -1600,52 +1600,52 @@
     "jp": "SaurianSage"
   },
   "0x011074": {
-    "en": "ScarletDefender",
-    "jp": "ScarletDefender"
+    "en": "Scarlet Defender",
+    "jp": "スカーレットガーダー"
   },
   "0x011070": {
-    "en": "ScarletFighter",
-    "jp": "ScarletFighter"
+    "en": "Scarlet Fighter",
+    "jp": "スカーレットファイター"
   },
   "0x011073": {
-    "en": "ScarletHealer",
-    "jp": "ScarletHealer"
+    "en": "Scarlet Healer",
+    "jp": "スカーレットヒーラー"
   },
   "0x011072": {
-    "en": "ScarletHunter",
-    "jp": "ScarletHunter"
+    "en": "Scarlet Hunter",
+    "jp": "スカーレットハンター"
   },
   "0x011075": {
-    "en": "ScarletMage",
-    "jp": "ScarletMage"
+    "en": "Scarlet Mage",
+    "jp": "スカーレットメイジ"
   },
   "0x011071": {
-    "en": "ScarletSeeker",
-    "jp": "ScarletSeeker"
+    "en": "Scarlet Seeker",
+    "jp": "スカーレットシーカー"
   },
   "0x011076": {
-    "en": "ScarletWarrior",
-    "jp": "ScarletWarrior"
+    "en": "Scarlet Warrior",
+    "jp": "スカーレットウォリアー"
   },
   "0x020601": {
-    "en": "Scourge0",
-    "jp": "Scourge0"
+    "en": "Scourge",
+    "jp": "スカージ"
   },
   "0x071310": {
-    "en": "Scourge1",
-    "jp": "Scourge1"
+    "en": "Scourge 1",
+    "jp": "スカージ 1"
   },
   "0x015717": {
-    "en": "SeverelyInfectedBehemoth",
-    "jp": "SeverelyInfectedBehemoth"
+    "en": "Severely Infected Behemoth",
+    "jp": "狂侵ベヘモット"
   },
   "0x015910": {
-    "en": "SeverelyInfectedDemon",
-    "jp": "SeverelyInfectedDemon"
+    "en": "Severely Infected Demon",
+    "jp": "狂侵デーモン"
   },
   "0x015017": {
-    "en": "SeverelyInfectedGorecyclops",
-    "jp": "SeverelyInfectedGorecyclops"
+    "en": "Severely Infected Gorecyclops",
+    "jp": "狂侵ゴアサイクロプス"
   },
   "0x015310": {
     "en": "SeverelyInfectedGriffin",
