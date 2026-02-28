@@ -1,58 +1,65 @@
-const DATA_PATH = "./datas/";
+Promise.all([
+  fetch("datas/EnemySpawn.json").then(r=>r.json()),
+  fetch("datas/enemy-names.json").then(r=>r.json()),
+  fetch("datas/stage-names.json").then(r=>r.json()),
+  fetch("datas/item_name.toml").then(r=>r.text())
+]).then(([spawnData, enemyNames, stageNames, itemToml]) => {
 
-let EnemySpawn = null;
-let EnemyNames = null;
-let StageNames = null;
-let ItemNames = null;
+    window.spawnData = spawnData;
+    window.enemyNames = enemyNames;
+    window.stageNames = stageNames;
+    window.itemNames = parseToml(itemToml);
 
-async function loadJSON(file){
-    const res = await fetch(DATA_PATH + file);
-    return await res.json();
-}
+    buildWiki();
+});
 
-async function loadText(file){
-    const res = await fetch(DATA_PATH + file);
-    return await res.text();
-}
+function buildEnemyIndex() {
 
-function parseTOML(text){
-    const lines = text.split("\n");
-    const items = {};
+    const enemyMap = {};
 
-    lines.forEach(line=>{
-        const match = line.match(/^(\d+)\s*=\s*"(.*)"/);
-        if(match){
-            items[parseInt(match[1])] = match[2];
+    spawnData.enemies.forEach(e => {
+
+        const stageId = e[0];
+        const enemyId = e[5];
+        const level = e[9];
+        const dropTableId = e[27];
+
+        if (!enemyMap[enemyId]) {
+            enemyMap[enemyId] = [];
         }
+
+        enemyMap[enemyId].push({
+            stageId,
+            level,
+            dropTableId
+        });
     });
 
-    return items;
+    return enemyMap;
 }
 
-async function initWiki(){
+function buildDropMap() {
 
-    console.log("Loading Wiki Data...");
+    const map = {};
 
-    EnemySpawn = await loadJSON("EnemySpawn.json");
-    EnemyNames = await loadJSON("enemy-names.json");
-    StageNames = await loadJSON("stage-names.json");
+    spawnData.dropsTables.forEach(table => {
+        map[table.id] = table.items;
+    });
 
-    const itemToml = await loadText("item_name.toml");
-    ItemNames = parseTOML(itemToml);
-
-    console.log("Wiki Data Loaded");
+    return map;
 }
 
-function getEnemyName(id){
-    return EnemyNames[id] || "Unknown";
-}
+function renderMonster(enemyId) {
 
-function getStageName(id){
-    if(StageNames[id])
-        return StageNames[id].en;
-    return "Unknown Stage";
-}
+    const hexKey = "0x" + Number(enemyId).toString(16).padStart(6, "0").toUpperCase();
+	const name = enemyNames[hexKey]?.en || enemyId;
+    const spawns = enemyIndex[enemyId];
 
-function getItemName(id){
-    return ItemNames[id] || "Unknown Item";
+    spawns.forEach(spawn => {
+
+        const stageName = stageNames[spawn.stageId]?.en || spawn.stageId;
+        const drops = dropMap[spawn.dropTableId];
+
+        // Hier baust du HTML
+    });
 }
