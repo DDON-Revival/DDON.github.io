@@ -279,18 +279,13 @@ function getEnemyName(id) {
 
 function getStageName(id) {
 
-    let num = Number(id);
+    if (id === undefined || id === null) return "";
 
-    if (isNaN(num)) return id;
+    const key = String(Number(id)); // wichtig: dezimaler Key
 
-    const hexUpper = "0x" + num.toString(16).padStart(6, "0").toUpperCase();
-    const hexLower = hexUpper.toLowerCase();
+    const stage = DATA.StageNames?.[key];
 
-    const stage =
-        DATA.StageNames?.[hexUpper] ||
-        DATA.StageNames?.[hexLower];
-
-    if (!stage) return hexUpper;
+    if (!stage) return key;
 
     if (typeof stage === "string")
         return stage;
@@ -298,7 +293,7 @@ function getStageName(id) {
     if (currentLanguage === "jp" && stage.jp)
         return stage.jp;
 
-    return stage.en || hexUpper;
+    return stage.en || key;
 }
 
 function getQuestName(q) {
