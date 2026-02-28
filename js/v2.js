@@ -244,23 +244,18 @@ function getItemName(id) {
 
 function getEnemyName(id) {
 
-    let key;
+    let num = Number(id);
 
-    if (typeof id === "number") {
-        key = "0x" + id.toString(16).padStart(6, "0").toUpperCase();
-    } else if (String(id).startsWith("0x")) {
-        key = String(id).toUpperCase();
-    } else {
-        const num = Number(id);
-        if (!isNaN(num)) {
-            key = "0x" + num.toString(16).padStart(6, "0").toUpperCase();
-        } else {
-            return id;
-        }
-    }
+    if (isNaN(num)) return id;
 
-    const enemy = DATA.EnemyNames?.[key];
-    if (!enemy) return key;
+    const hexUpper = "0x" + num.toString(16).padStart(6, "0").toUpperCase();
+    const hexLower = hexUpper.toLowerCase();
+
+    const enemy =
+        DATA.EnemyNames?.[hexUpper] ||
+        DATA.EnemyNames?.[hexLower];
+
+    if (!enemy) return hexUpper;
 
     if (typeof enemy === "string")
         return enemy;
@@ -268,28 +263,23 @@ function getEnemyName(id) {
     if (currentLanguage === "jp" && enemy.jp)
         return enemy.jp;
 
-    return enemy.en || key;
+    return enemy.en || hexUpper;
 }
 
 function getStageName(id) {
 
-    let key;
+    let num = Number(id);
 
-    if (typeof id === "number") {
-        key = "0x" + id.toString(16).padStart(6, "0").toUpperCase();
-    } else if (String(id).startsWith("0x")) {
-        key = String(id).toUpperCase();
-    } else {
-        const num = Number(id);
-        if (!isNaN(num)) {
-            key = "0x" + num.toString(16).padStart(6, "0").toUpperCase();
-        } else {
-            return id;
-        }
-    }
+    if (isNaN(num)) return id;
 
-    const stage = DATA.StageNames?.[key];
-    if (!stage) return key;
+    const hexUpper = "0x" + num.toString(16).padStart(6, "0").toUpperCase();
+    const hexLower = hexUpper.toLowerCase();
+
+    const stage =
+        DATA.StageNames?.[hexUpper] ||
+        DATA.StageNames?.[hexLower];
+
+    if (!stage) return hexUpper;
 
     if (typeof stage === "string")
         return stage;
@@ -297,7 +287,7 @@ function getStageName(id) {
     if (currentLanguage === "jp" && stage.jp)
         return stage.jp;
 
-    return stage.en || key;
+    return stage.en || hexUpper;
 }
 
 function getQuestName(q) {
