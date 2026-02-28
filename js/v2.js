@@ -4,6 +4,8 @@
 
 const DATA = {};
 
+const DEBUG = false;
+
 const SPAWN_CHANNELS = [
     { label: "Normal Channel", key: "EnemySpawnNormal" },
     { label: "Boss Rush Channel", key: "EnemySpawnBR" },
@@ -148,15 +150,18 @@ async function loadJSON(name, path) {
     try {
         const res = await fetch(path);
 
-        console.log("Loading:", path, "Status:", res.status);
+        if (DEBUG)
+            console.log("Loading:", path, "Status:", res.status);
 
         const text = await res.text();
 
-        console.log("Raw response for", name, ":", text.slice(0,100));
+        if (DEBUG)
+            console.log("Raw response for", name, ":", text.slice(0,100));
 
         DATA[name] = JSON.parse(text);
 
-        console.log(name, "loaded keys:", Object.keys(DATA[name]).length);
+        if (DEBUG)
+            console.log(name, "loaded keys:", Object.keys(DATA[name]).length);
 
     } catch (e) {
         console.error("FAILED loading", path, e);
