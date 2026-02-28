@@ -244,10 +244,23 @@ function getItemName(id) {
 
 function getEnemyName(id) {
 
-    const key = String(id);   // 🔥 DAS FEHLT
+    let key;
+
+    if (typeof id === "number") {
+        key = "0x" + id.toString(16).padStart(6, "0").toUpperCase();
+    } else if (String(id).startsWith("0x")) {
+        key = String(id).toUpperCase();
+    } else {
+        const num = Number(id);
+        if (!isNaN(num)) {
+            key = "0x" + num.toString(16).padStart(6, "0").toUpperCase();
+        } else {
+            return id;
+        }
+    }
 
     const enemy = DATA.EnemyNames?.[key];
-    if (!enemy) return id;
+    if (!enemy) return key;
 
     if (typeof enemy === "string")
         return enemy;
@@ -255,23 +268,7 @@ function getEnemyName(id) {
     if (currentLanguage === "jp" && enemy.jp)
         return enemy.jp;
 
-    return enemy.en || id;
-}
-
-function getStageName(id) {
-
-    const key = String(id);  // 🔥 DAS FEHLT
-
-    const stage = DATA.StageNames?.[key];
-    if (!stage) return id;
-
-    if (typeof stage === "string")
-        return stage;
-
-    if (currentLanguage === "jp" && stage.jp)
-        return stage.jp;
-
-    return stage.en || id;
+    return enemy.en || key;
 }
 
 function getQuestName(q) {
