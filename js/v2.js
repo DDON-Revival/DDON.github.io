@@ -147,8 +147,19 @@ function getWalletDisplay(walletType) {
 async function loadJSON(name, path) {
     try {
         const res = await fetch(path);
-        DATA[name] = await res.json();
-    } catch {
+
+        console.log("Loading:", path, "Status:", res.status);
+
+        const text = await res.text();
+
+        console.log("Raw response for", name, ":", text.slice(0,100));
+
+        DATA[name] = JSON.parse(text);
+
+        console.log(name, "loaded keys:", Object.keys(DATA[name]).length);
+
+    } catch (e) {
+        console.error("FAILED loading", path, e);
         DATA[name] = {};
     }
 }
