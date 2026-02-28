@@ -165,26 +165,26 @@ async function loadCSV(name, path) {
 
 async function loadAll() {
 
-    await loadJSON("EnemySpawnNormal", "datas/EnemySpawn.json");
-    await loadJSON("EnemySpawnBR", "datas/EnemySpawnBR.json");
-    await loadJSON("EnemySpawnCollab", "datas/EnemySpawnCollab.json");
-    await loadJSON("EnemySpawnCustom", "datas/EnemySpawnCustom.json");
-    await loadJSON("EnemyNames", "datas/enemy-names.json");
-    await loadJSON("StageNames", "datas/stage-names.json");
-    await loadJSON("Items", "datas/item_names.json");
-    await loadJSON("ShopsNormal", "datas/Shop.json");
-	await loadJSON("ShopsBR", "datas/ShopBR.json");
-	await loadJSON("ShopsCollab", "datas/ShopCollab.json");
-	await loadJSON("ShopsCustom", "datas/ShopCustom.json");
-    await loadCSV("NpcNamesRaw", "datas/npc_names.csv");
-    await loadJSON("ShopFunctions", "datas/shops_function.json");
-    await loadJSON("Special", "datas/SpecialShops.json");
-    await loadJSON("Crafting", "datas/CraftingRecipes.json");
-    await loadJSON("CraftingPlus", "datas/CraftingRecipesGradeUp.json");
-    await loadCSV("GatheringNormal", "datas/GatheringItem.csv");
-    await loadCSV("GatheringBR", "datas/GatheringItemBR.csv");
-    await loadCSV("GatheringCollab", "datas/GatheringItemCollab.csv");
-    await loadCSV("GatheringCustom", "datas/GatheringItemCustom.csv");
+    await loadJSON("EnemySpawnNormal", "/datas/EnemySpawn.json");
+    await loadJSON("EnemySpawnBR", "/datas/EnemySpawnBR.json");
+    await loadJSON("EnemySpawnCollab", "/datas/EnemySpawnCollab.json");
+    await loadJSON("EnemySpawnCustom", "/datas/EnemySpawnCustom.json");
+    await loadJSON("EnemyNames", "/datas/enemy-names.json");
+    await loadJSON("StageNames", "/datas/stage-names.json");
+    await loadJSON("Items", "/datas/item_names.json");
+    await loadJSON("ShopsNormal", "/datas/Shop.json");
+	await loadJSON("ShopsBR", "/datas/ShopBR.json");
+	await loadJSON("ShopsCollab", "/datas/ShopCollab.json");
+	await loadJSON("ShopsCustom", "/datas/ShopCustom.json");
+    await loadCSV("NpcNamesRaw", "/datas/npc_names.csv");
+    await loadJSON("ShopFunctions", "/datas/shops_function.json");
+    await loadJSON("Special", "/datas/SpecialShops.json");
+    await loadJSON("Crafting", "/datas/CraftingRecipes.json");
+    await loadJSON("CraftingPlus", "/datas/CraftingRecipesGradeUp.json");
+    await loadCSV("GatheringNormal", "/datas/GatheringItem.csv");
+    await loadCSV("GatheringBR", "/datas/GatheringItemBR.csv");
+    await loadCSV("GatheringCollab", "/datas/GatheringItemCollab.csv");
+    await loadCSV("GatheringCustom", "/datas/GatheringItemCustom.csv");
 
     await loadQuests();
 
