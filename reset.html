@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Reset Password</title>
+</head>
+<body>
+
+<h2>Reset Password</h2>
+
+<input id="newPassword" type="password" placeholder="New Password">
+<button onclick="resetPassword()">Reset</button>
+
+<p id="msg"></p>
+
+<script>
+
+function getToken(){
+    const params = new URLSearchParams(window.location.search);
+    return params.get("token");
+}
+
+async function resetPassword(){
+
+    const token = getToken();
+    const newPassword = document.getElementById("newPassword").value;
+
+    const res = await fetch("https://api.ddon.org/api/reset-password",{
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({
+            token,
+            newPassword
+        })
+    });
+
+    const data = await res.json();
+
+    document.getElementById("msg").textContent =
+        data.message || data.error;
+}
+
+</script>
+
+</body>
+</html>

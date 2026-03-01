@@ -217,6 +217,7 @@ button:hover{
 
             <button type="submit" data-key="login"></button>
 			<button type="button" onclick="register()" data-key="register"></button>
+			<button type="button" onclick="openResetModal()">Forgot Password?</button>
 
         </div>
     </form>
@@ -234,6 +235,20 @@ button:hover{
         <div class="card">
             <h2 data-key="dashboardTitle"></h2>
         </div>
+		
+		<div class="card">
+
+    <h2>Email Settings</h2>
+
+    <p id="emailStatus">Loading...</p>
+
+    <input id="newEmailInput" type="email" placeholder="Enter your real email">
+
+    <button onclick="setEmail()">Save Email</button>
+
+    <p id="emailMsg"></p>
+
+</div>
 
         <h2 data-key="charactersTitle"></h2>
         <div id="characters" class="charactersGrid"></div>
@@ -255,6 +270,20 @@ button:hover{
 
     <button data-key="save" onclick="changePassword()"></button>
     <button data-key="cancel" onclick="closeChangePassword()"></button>
+
+</div>
+
+<!-- Reset Password Modal -->
+<div id="resetModal" style="display:none;" class="card">
+
+    <h3>Password Reset</h3>
+
+    <input id="resetEmail" type="email" placeholder="Your email">
+
+    <p id="resetMsg"></p>
+
+    <button onclick="requestReset()">Send Reset Link</button>
+    <button onclick="closeResetModal()">Cancel</button>
 
 </div>
 
@@ -310,6 +339,7 @@ loginMsg.textContent = data.error || t.loginFailed;
         document.getElementById("dashboardContainer").style.display = "flex";
 
         loadCharacters();
+		loadEmail();
 
 }catch(e){
     loginMsg.textContent = t.connectionError;
@@ -423,6 +453,30 @@ async function loadCharacters(){
     }
 }
 
+async function loadEmail(){
+
+    const res = await fetch("https://api.ddon.org/api/me",{
+        credentials: "include"
+    });
+
+    if(!res.ok) return;
+
+    const data = await res.json();
+
+    const status = document.getElementById("emailStatus");
+
+if(!data.mail){
+    status.textContent = "No email set.";
+    status.style.color = "#ff6b6b";
+} else if(!data.mail_verified){
+    status.textContent = "Email: " + data.mail + " (Not verified)";
+    status.style.color = "#ffa726";
+} else {
+    status.textContent = "Email: " + data.mail + " (Verified)";
+    status.style.color = "#4caf50";
+}
+}
+
 async function logout(){
 
     await fetch("https://api.ddon.org/api/logout",{
@@ -519,6 +573,51 @@ function initLanguageSelector(){
     });
 }
 
+function openResetModal(){
+    document.getElementById("modalOverlay").style.display="block";
+    document.getElementById("resetModal").style.display="block";
+}
+
+function closeResetModal(){
+    document.getElementById("modalOverlay").style.display="none";
+    document.getElementById("resetModal").style.display="none";
+}
+
+async function requestReset(){
+
+    const email = document.getElementById("resetEmail").value;
+
+    const res = await fetch("https://api.ddon.org/api/request-reset",{
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+
+    document.getElementById("resetMsg").textContent =
+        data.message || data.error;
+}
+
+async function setEmail(){
+
+    const email = document.getElementById("newEmailInput").value;
+
+    const res = await fetch("https://api.ddon.org/api/set-email",{
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        credentials:"include",
+        body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+
+    document.getElementById("emailMsg").textContent =
+        data.message || data.error;
+
+    loadEmail();
+}
+
 window.onload = function(){
 
     initLanguageSelector();
@@ -528,8 +627,10 @@ window.onload = function(){
         credentials: "include"
     }).then(res => {
         if(res.ok){
-            document.getElementById("dashboardContainer").style.display = "flex";
-            loadCharacters();
+document.getElementById("dashboardContainer").style.display = "flex";
+
+loadCharacters();
+loadEmail();
         } else {
             document.getElementById("loginSection").style.display = "block";
         }
