@@ -2,16 +2,96 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Reset Password</title>
+<title>DDON - Reset Password</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:radial-gradient(circle at top,#121425 0%,#0a0b14 60%);
+    font-family:'Cinzel', serif;
+    color:#e6e6e6;
+}
+
+.card{
+    width:420px;
+    background:linear-gradient(145deg,#181a30,#101222);
+    border:1px solid #2a2e50;
+    box-shadow:0 0 40px rgba(0,0,0,0.8);
+    padding:40px;
+    text-align:center;
+}
+
+.card h2{
+    margin-top:0;
+    color:#c8a75d;
+    letter-spacing:1px;
+    border-bottom:1px solid #2a2e50;
+    padding-bottom:15px;
+    margin-bottom:25px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-bottom:20px;
+    background:#0f1020;
+    border:1px solid #2a2e50;
+    color:white;
+    font-size:14px;
+}
+
+input:focus{
+    outline:none;
+    border-color:#c8a75d;
+    box-shadow:0 0 10px rgba(200,167,93,0.5);
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:#c8a75d;
+    border:none;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    box-shadow:0 0 15px rgba(200,167,93,0.7);
+}
+
+#msg{
+    margin-top:20px;
+    font-size:14px;
+}
+
+.success{
+    color:#4caf50;
+}
+
+.error{
+    color:#ff6b6b;
+}
+</style>
 </head>
+
 <body>
 
-<h2>Reset Password</h2>
+<div class="card">
+    <h2>Reset Password</h2>
 
-<input id="newPassword" type="password" placeholder="New Password">
-<button onclick="resetPassword()">Reset</button>
+    <input id="newPassword" type="password" placeholder="New Password">
 
-<p id="msg"></p>
+    <button onclick="resetPassword()">Reset Password</button>
+
+    <p id="msg"></p>
+</div>
 
 <script>
 
@@ -24,6 +104,13 @@ async function resetPassword(){
 
     const token = getToken();
     const newPassword = document.getElementById("newPassword").value;
+    const msg = document.getElementById("msg");
+
+    if(!newPassword || newPassword.length < 6){
+        msg.textContent = "Password must be at least 6 characters.";
+        msg.className = "error";
+        return;
+    }
 
     const res = await fetch("https://api.ddon.org/api/reset-password",{
         method:"POST",
@@ -36,8 +123,13 @@ async function resetPassword(){
 
     const data = await res.json();
 
-    document.getElementById("msg").textContent =
-        data.message || data.error;
+    if(res.ok){
+        msg.textContent = data.message;
+        msg.className = "success";
+    }else{
+        msg.textContent = data.error || "Invalid token.";
+        msg.className = "error";
+    }
 }
 
 </script>
