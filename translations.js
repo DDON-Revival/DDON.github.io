@@ -103,6 +103,7 @@ SUCCESS_PASSWORD_RESET:"Password updated successfully.",
 LOGOUT_SUCCESS:"Logged out successfully.",
 
 NOT_LOGGED_IN:"You are not logged in.",
+forgotPassword: "Forgot Password?",
 
 UNKNOWN_ERROR:"Unknown error.",
 DATABASE_ERROR:"Database error.",

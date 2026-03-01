@@ -365,7 +365,7 @@ async function register(){
 
     const lang = localStorage.getItem("lang") || "en";
     const t = translations[lang];
-
+	const loginMsg = document.getElementById("loginMsg");
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value;
 
