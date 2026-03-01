@@ -229,7 +229,7 @@ button:hover{
 
             <button type="submit" data-key="login"></button>
 			<button type="button" onclick="register()" data-key="register"></button>
-			<button type="button" onclick="openResetModal()">Forgot Password?</button>
+			<button type="button" data-key="forgotPassword" onclick="openResetModal()"></button>
 
         </div>
     </form>
@@ -250,13 +250,13 @@ button:hover{
 		
 		<div class="card">
 
-    <h2>Email Settings</h2>
+    <h2 data-key="emailSettings"></h2>
 
-    <p id="emailStatus">Loading...</p>
+    <p id="emailStatus"></p>
 
-    <input id="newEmailInput" type="email" placeholder="Enter your real email">
+    <input id="newEmailInput" type="email" data-placeholder="enterEmail">
 
-    <button onclick="setEmail()">Save Email</button>
+    <button onclick="setEmail()" data-key="saveEmail"></button>
 
     <p id="emailMsg"></p>
 
@@ -288,14 +288,14 @@ button:hover{
 <!-- Reset Password Modal -->
 <div id="resetModal" style="display:none;" class="card">
 
-    <h3>Password Reset</h3>
+    <h3 data-key="resetPasswordTitle"></h3>
 
-    <input id="resetEmail" type="email" placeholder="Your email">
+    <input id="resetEmail" type="email" data-placeholder="email">
 
     <p id="resetMsg"></p>
 
-    <button onclick="requestReset()">Send Reset Link</button>
-    <button onclick="closeResetModal()">Cancel</button>
+    <button onclick="requestReset()" data-key="sendResetLink"></button>
+	<button onclick="closeResetModal()" data-key="cancel"></button>
 
 </div>
 
@@ -318,6 +318,8 @@ const jobMap = {
 async function login(event){
 
     if(event) event.preventDefault();
+
+    const loginMsg = document.getElementById("loginMsg");
 
     const lang = localStorage.getItem("lang") || "en";
     const t = translations[lang];
@@ -342,7 +344,7 @@ body:JSON.stringify({
             const lang = localStorage.getItem("lang") || "en";
 const t = translations[lang];
 
-loginMsg.textContent = data.error || t.loginFailed;
+loginMsg.textContent = t[data.error] || data.error || t.loginFailed;
             return;
         }
 
@@ -387,7 +389,9 @@ loginMsg.textContent = t.enterCredentials;
         const data = await res.json();
 
 if(res.status !== 200){
-    loginMsg.textContent = data.error || t.registerFailed;
+    loginMsg.textContent =
+    t[data.error] ||
+    t.registerFailed;
             return;
         }
 
@@ -467,6 +471,9 @@ async function loadCharacters(){
 
 async function loadEmail(){
 
+    const lang = localStorage.getItem("lang") || "en";
+    const t = translations[lang];
+
     const res = await fetch("https://api.ddon.org/api/me",{
         credentials: "include"
     });
@@ -474,19 +481,20 @@ async function loadEmail(){
     if(!res.ok) return;
 
     const data = await res.json();
-
     const status = document.getElementById("emailStatus");
 
-if(!data.mail){
-    status.textContent = "No email set.";
-    status.style.color = "#ff6b6b";
-} else if(!data.mail_verified){
-    status.textContent = "Email: " + data.mail + " (Not verified)";
-    status.style.color = "#ffa726";
-} else {
-    status.textContent = "Email: " + data.mail + " (Verified)";
-    status.style.color = "#4caf50";
-}
+    if(!data.mail){
+        status.textContent = t.noEmailSet;
+        status.style.color = "#ff6b6b";
+    }
+    else if(!data.mail_verified){
+        status.textContent = t.emailNotVerified.replace("{email}", data.mail);
+        status.style.color = "#ffa726";
+    }
+    else{
+        status.textContent = t.emailVerified.replace("{email}", data.mail);
+        status.style.color = "#4caf50";
+    }
 }
 
 async function logout(){
@@ -528,11 +536,14 @@ function closeChangePassword(){
 
 async function changePassword(){
 
-    if(newPass.value !== confirmPass.value){
-        const lang = localStorage.getItem("lang") || "en";
-const t = translations[lang];
+    const pwMsg = document.getElementById("pwMsg");
 
-pwMsg.textContent = t.passwordsDontMatch || "Passwords do not match.";
+    if(newPass.value !== confirmPass.value){
+
+        const lang = localStorage.getItem("lang") || "en";
+        const t = translations[lang];
+
+        pwMsg.textContent = t.passwordsDontMatch;
         return;
     }
 
@@ -553,10 +564,9 @@ const res = await fetch("https://api.ddon.org/api/change-password",{
 const t = translations[lang];
 
 pwMsg.textContent =
-    data.message ||
-    data.error ||
-    t.unknownError ||
-    "Unknown error.";
+    t[data.message] ||
+    t[data.error] ||
+    t.unknownError;
 }
 
 function initLanguageSelector(){
@@ -605,13 +615,20 @@ async function requestReset(){
     const res = await fetch("https://api.ddon.org/api/request-reset",{
         method:"POST",
         headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify({ email })
+        body: JSON.stringify({
+    email,
+    lang: localStorage.getItem("lang") || "en"
+})
     });
 
     const data = await res.json();
 
-    document.getElementById("resetMsg").textContent =
-        data.message || data.error;
+const lang = localStorage.getItem("lang") || "en";
+const t = translations[lang];
+
+document.getElementById("resetMsg").textContent =
+    t[data.message] ||
+    t[data.error];
 }
 
 async function setEmail(){
@@ -622,13 +639,20 @@ async function setEmail(){
         method:"POST",
         headers:{ "Content-Type":"application/json" },
         credentials:"include",
-        body: JSON.stringify({ email })
+        body: JSON.stringify({
+    email,
+    lang: localStorage.getItem("lang") || "en"
+})
     });
 
     const data = await res.json();
 
+    const lang = localStorage.getItem("lang") || "en";
+    const t = translations[lang];
+
     document.getElementById("emailMsg").textContent =
-        data.message || data.error;
+        t[data.message] ||
+        t[data.error];
 
     loadEmail();
 }

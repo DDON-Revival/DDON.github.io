@@ -84,14 +84,16 @@ button:hover{
 <body>
 
 <div class="card">
-    <h2>Reset Password</h2>
+    <h2 data-key="resetPasswordTitle"></h2>
 
-    <input id="newPassword" type="password" placeholder="New Password">
+    <input id="newPassword" type="password" data-placeholder="newPassword">
 
-    <button onclick="resetPassword()">Reset Password</button>
+    <button onclick="resetPassword()" data-key="resetPasswordBtn"></button>
 
     <p id="msg"></p>
 </div>
+
+<script src="translations.js"></script>
 
 <script>
 
@@ -106,11 +108,14 @@ async function resetPassword(){
     const newPassword = document.getElementById("newPassword").value;
     const msg = document.getElementById("msg");
 
-    if(!newPassword || newPassword.length < 6){
-        msg.textContent = "Password must be at least 6 characters.";
-        msg.className = "error";
-        return;
-    }
+const lang = localStorage.getItem("lang") || "en";
+const t = translations[lang];
+
+if(!newPassword || newPassword.length < 6){
+    msg.textContent = t.PASSWORD_TOO_SHORT;
+    msg.className = "error";
+    return;
+}
 
     const res = await fetch("https://api.ddon.org/api/reset-password",{
         method:"POST",
@@ -123,14 +128,32 @@ async function resetPassword(){
 
     const data = await res.json();
 
-    if(res.ok){
-        msg.textContent = data.message;
-        msg.className = "success";
-    }else{
-        msg.textContent = data.error || "Invalid token.";
-        msg.className = "error";
-    }
+if(res.ok){
+    msg.textContent = t[data.message] || data.message;
+    msg.className = "success";
+}else{
+    msg.textContent = t[data.error] || data.error;
+    msg.className = "error";
 }
+
+}
+
+function applyTranslations(){
+    const lang = localStorage.getItem("lang") || "en";
+    const t = translations[lang];
+
+    document.querySelectorAll("[data-key]").forEach(el=>{
+        const key = el.getAttribute("data-key");
+        if(t[key]) el.textContent = t[key];
+    });
+
+    document.querySelectorAll("[data-placeholder]").forEach(el=>{
+        const key = el.getAttribute("data-placeholder");
+        if(t[key]) el.placeholder = t[key];
+    });
+}
+
+window.onload = applyTranslations;
 
 </script>
 

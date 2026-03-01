@@ -61,9 +61,56 @@ noPlayersFound:"No players found",
 howToPlay:"How To Play",
 wiki:"Wiki",
 
+resetPasswordTitle:"Reset Password",
+resetPasswordBtn:"Reset Password",
+forgotPassword:"Forgot Password?",
+sendResetLink:"Send Reset Link",
+RESET_EMAIL_SENT_IF_EXISTS:"If the email exists, a reset link has been sent.",
+emailSettings:"Email Settings",
+enterEmail:"Enter your email address",
+saveEmail:"Save Email",
+noEmailSet:"No email address set.",
+emailNotVerified:"Email {email} is not verified.",
+emailVerified:"Email {email} is verified.",
+EMAIL_VERIFICATION_SENT:"Verification email sent.",
+SET_EMAIL_FAILED:"Failed to set email.",
+INVALID_EMAIL:"Invalid email address.",
+EMAIL_VERIFIED_SUCCESS:"Email verified successfully!",
+LEADERBOARD_FAILED:"Failed to load leaderboard.",
+CHANNEL_STATUS_FAILED:"Failed to load channel status.",
+email:"Email",
+
+LOGIN_SUCCESS:"Login successful.",
+LOGIN_FAILED:"Login failed.",
+LOGIN_SERVER_UNAVAILABLE:"Login server unavailable.",
+
+MISSING_FIELDS:"Missing fields.",
+INVALID_USERNAME:"Invalid username.",
+USER_NOT_FOUND:"User not found.",
+WRONG_PASSWORD:"Wrong password.",
+
+REGISTER_FAILED:"Registration failed.",
+REGISTER_SUCCESS:"Account created successfully. You can now login.",
+
+PASSWORD_CHANGED_SUCCESS:"Password changed successfully.",
+PASSWORD_TOO_SHORT:"Password must be at least 6 characters.",
+PASSWORDS_DONT_MATCH:"Passwords do not match.",
+
+INVALID_TOKEN:"Invalid or expired token.",
+NO_TOKEN:"No authentication token provided.",
+SUCCESS_PASSWORD_RESET:"Password updated successfully.",
+
+LOGOUT_SUCCESS:"Logged out successfully.",
+
+NOT_LOGGED_IN:"You are not logged in.",
+
+UNKNOWN_ERROR:"Unknown error.",
+DATABASE_ERROR:"Database error.",
+STATUS_FAILED:"Failed to fetch server status.",
+
+CONNECTION_ERROR:"Connection error.",
+
 register:"Register",
-registerFailed:"Registration failed.",
-registerSuccess:"Account created successfully. You can now login.",
 enterCredentials:"Please enter username and password.",
 
 dungeon1:"Shadolean Great Temple",
@@ -237,9 +284,56 @@ noPlayersFound:"プレイヤーが見つかりません",
 howToPlay:"遊び方",
 wiki:"ウィキ",
 
+resetPasswordTitle:"パスワードリセット",
+resetPasswordBtn:"パスワードをリセット",
+forgotPassword:"パスワードをお忘れですか？",
+sendResetLink:"リセットリンクを送信",
+RESET_EMAIL_SENT_IF_EXISTS:"メールアドレスが存在する場合、リセットリンクが送信されました。",
+
+emailSettings:"メール設定",
+enterEmail:"メールアドレスを入力してください",
+saveEmail:"メールを保存",
+noEmailSet:"メールアドレスが設定されていません。",
+emailNotVerified:"メール {email} は確認されていません。",
+emailVerified:"メール {email} は確認済みです。",
+EMAIL_VERIFICATION_SENT:"確認メールを送信しました。",
+SET_EMAIL_FAILED:"メールの設定に失敗しました。",
+INVALID_EMAIL:"無効なメールアドレスです。",
+EMAIL_VERIFIED_SUCCESS:"メール認証が完了しました！",
+
+LEADERBOARD_FAILED:"ランキングの読み込みに失敗しました。",
+CHANNEL_STATUS_FAILED:"チャンネル状態の読み込みに失敗しました。",
+email:"メール",
+
+LOGIN_SUCCESS:"ログイン成功。",
+LOGIN_FAILED:"ログイン失敗。",
+LOGIN_SERVER_UNAVAILABLE:"ログインサーバーは利用できません。",
+
+MISSING_FIELDS:"未入力の項目があります。",
+INVALID_USERNAME:"無効なユーザー名。",
+USER_NOT_FOUND:"ユーザーが見つかりません。",
+WRONG_PASSWORD:"パスワードが間違っています。",
+
+REGISTER_FAILED:"登録に失敗しました。",
+REGISTER_SUCCESS:"アカウントが作成されました。ログインしてください。",
+
+PASSWORD_CHANGED_SUCCESS:"パスワードが変更されました。",
+PASSWORD_TOO_SHORT:"パスワードは6文字以上必要です。",
+PASSWORDS_DONT_MATCH:"パスワードが一致しません。",
+
+INVALID_TOKEN:"無効または期限切れのトークンです。",
+NO_TOKEN:"認証トークンがありません。",
+SUCCESS_PASSWORD_RESET:"パスワードが更新されました。",
+
+LOGOUT_SUCCESS:"ログアウトしました。",
+NOT_LOGGED_IN:"ログインしていません。",
+
+UNKNOWN_ERROR:"不明なエラー。",
+DATABASE_ERROR:"データベースエラー。",
+STATUS_FAILED:"サーバーステータスの取得に失敗しました。",
+CONNECTION_ERROR:"接続エラー。",
+
 register:"登録",
-registerFailed:"登録に失敗しました。",
-registerSuccess:"アカウントが作成されました。ログインしてください。",
 enterCredentials:"ユーザー名とパスワードを入力してください。",
 
 dungeon1:"シャドリーン大神殿",
@@ -412,9 +506,56 @@ noPlayersFound:"未找到玩家",
 howToPlay:"游戏指南",
 wiki:"维基",
 
+resetPasswordTitle:"重置密码",
+resetPasswordBtn:"重置密码",
+forgotPassword:"忘记密码？",
+sendResetLink:"发送重置链接",
+RESET_EMAIL_SENT_IF_EXISTS:"如果邮箱存在，重置链接已发送。",
+
+emailSettings:"邮箱设置",
+enterEmail:"请输入您的邮箱地址",
+saveEmail:"保存邮箱",
+noEmailSet:"尚未设置邮箱地址。",
+emailNotVerified:"邮箱 {email} 尚未验证。",
+emailVerified:"邮箱 {email} 已验证。",
+EMAIL_VERIFICATION_SENT:"验证邮件已发送。",
+SET_EMAIL_FAILED:"设置邮箱失败。",
+INVALID_EMAIL:"无效的邮箱地址。",
+EMAIL_VERIFIED_SUCCESS:"邮箱验证成功！",
+
+LEADERBOARD_FAILED:"加载排行榜失败。",
+CHANNEL_STATUS_FAILED:"加载频道状态失败。",
+email:"邮箱",
+
+LOGIN_SUCCESS:"登录成功。",
+LOGIN_FAILED:"登录失败。",
+LOGIN_SERVER_UNAVAILABLE:"登录服务器不可用。",
+
+MISSING_FIELDS:"缺少必填字段。",
+INVALID_USERNAME:"无效的用户名。",
+USER_NOT_FOUND:"未找到用户。",
+WRONG_PASSWORD:"密码错误。",
+
+REGISTER_FAILED:"注册失败。",
+REGISTER_SUCCESS:"账户创建成功。现在可以登录。",
+
+PASSWORD_CHANGED_SUCCESS:"密码修改成功。",
+PASSWORD_TOO_SHORT:"密码必须至少6个字符。",
+PASSWORDS_DONT_MATCH:"密码不匹配。",
+
+INVALID_TOKEN:"无效或已过期的令牌。",
+NO_TOKEN:"未提供身份验证令牌。",
+SUCCESS_PASSWORD_RESET:"密码更新成功。",
+
+LOGOUT_SUCCESS:"已成功登出。",
+NOT_LOGGED_IN:"未登录。",
+
+UNKNOWN_ERROR:"未知错误。",
+DATABASE_ERROR:"数据库错误。",
+STATUS_FAILED:"无法获取服务器状态。",
+CONNECTION_ERROR:"连接错误。",
+
 register:"注册",
-registerFailed:"注册失败。",
-registerSuccess:"账户创建成功。现在可以登录。",
 enterCredentials:"请输入用户名和密码。",
 
 dungeon1:"沙多琳大神殿",
@@ -591,9 +732,56 @@ noPlayersFound:"Nenhum jogador encontrado",
 howToPlay:"Como Jogar",
 wiki:"Wiki",
 
+resetPasswordTitle:"Redefinir Senha",
+resetPasswordBtn:"Redefinir Senha",
+forgotPassword:"Esqueceu a senha?",
+sendResetLink:"Enviar Link de Redefinição",
+RESET_EMAIL_SENT_IF_EXISTS:"Se o email existir, um link de redefinição foi enviado.",
+
+emailSettings:"Configurações de Email",
+enterEmail:"Digite seu endereço de email",
+saveEmail:"Salvar Email",
+noEmailSet:"Nenhum email definido.",
+emailNotVerified:"O email {email} não está verificado.",
+emailVerified:"O email {email} está verificado.",
+EMAIL_VERIFICATION_SENT:"Email de verificação enviado.",
+SET_EMAIL_FAILED:"Falha ao definir o email.",
+INVALID_EMAIL:"Endereço de email inválido.",
+EMAIL_VERIFIED_SUCCESS:"Email verificado com sucesso!",
+
+LEADERBOARD_FAILED:"Falha ao carregar a classificação.",
+CHANNEL_STATUS_FAILED:"Falha ao carregar o status do canal.",
+email:"Email",
+
+LOGIN_SUCCESS:"Login bem-sucedido.",
+LOGIN_FAILED:"Falha no login.",
+LOGIN_SERVER_UNAVAILABLE:"Servidor de login indisponível.",
+
+MISSING_FIELDS:"Campos obrigatórios ausentes.",
+INVALID_USERNAME:"Nome de usuário inválido.",
+USER_NOT_FOUND:"Usuário não encontrado.",
+WRONG_PASSWORD:"Senha incorreta.",
+
+REGISTER_FAILED:"Falha no registro.",
+REGISTER_SUCCESS:"Conta criada com sucesso. Agora você pode entrar.",
+
+PASSWORD_CHANGED_SUCCESS:"Senha alterada com sucesso.",
+PASSWORD_TOO_SHORT:"A senha deve ter pelo menos 6 caracteres.",
+PASSWORDS_DONT_MATCH:"As senhas não coincidem.",
+
+INVALID_TOKEN:"Token inválido ou expirado.",
+NO_TOKEN:"Token de autenticação não fornecido.",
+SUCCESS_PASSWORD_RESET:"Senha atualizada com sucesso.",
+
+LOGOUT_SUCCESS:"Logout realizado com sucesso.",
+NOT_LOGGED_IN:"Você não está logado.",
+
+UNKNOWN_ERROR:"Erro desconhecido.",
+DATABASE_ERROR:"Erro no banco de dados.",
+STATUS_FAILED:"Falha ao obter status do servidor.",
+CONNECTION_ERROR:"Erro de conexão.",
+
 register:"Registrar",
-registerFailed:"Falha no registro.",
-registerSuccess:"Conta criada com sucesso. Você pode fazer login agora.",
 enterCredentials:"Digite usuário e senha.",
 
 accountPanelTitle:"Painel da Conta",
@@ -769,9 +957,56 @@ noPlayersFound:"No se encontraron jugadores",
 howToPlay:"Cómo Jugar",
 wiki:"Wiki",
 
+resetPasswordTitle:"Restablecer Contraseña",
+resetPasswordBtn:"Restablecer Contraseña",
+forgotPassword:"¿Olvidaste tu contraseña?",
+sendResetLink:"Enviar Enlace de Restablecimiento",
+RESET_EMAIL_SENT_IF_EXISTS:"Si el correo existe, se ha enviado un enlace de restablecimiento.",
+
+emailSettings:"Configuración de Correo",
+enterEmail:"Introduce tu dirección de correo",
+saveEmail:"Guardar Correo",
+noEmailSet:"No hay correo configurado.",
+emailNotVerified:"El correo {email} no está verificado.",
+emailVerified:"El correo {email} está verificado.",
+EMAIL_VERIFICATION_SENT:"Correo de verificación enviado.",
+SET_EMAIL_FAILED:"Error al establecer el correo.",
+INVALID_EMAIL:"Dirección de correo inválida.",
+EMAIL_VERIFIED_SUCCESS:"¡Correo verificado correctamente!",
+
+LEADERBOARD_FAILED:"Error al cargar la clasificación.",
+CHANNEL_STATUS_FAILED:"Error al cargar el estado del canal.",
+email:"Correo",
+
+LOGIN_SUCCESS:"Inicio de sesión exitoso.",
+LOGIN_FAILED:"Error al iniciar sesión.",
+LOGIN_SERVER_UNAVAILABLE:"Servidor de login no disponible.",
+
+MISSING_FIELDS:"Faltan campos obligatorios.",
+INVALID_USERNAME:"Nombre de usuario inválido.",
+USER_NOT_FOUND:"Usuario no encontrado.",
+WRONG_PASSWORD:"Contraseña incorrecta.",
+
+REGISTER_FAILED:"Error en el registro.",
+REGISTER_SUCCESS:"Cuenta creada con éxito. Ahora puedes iniciar sesión.",
+
+PASSWORD_CHANGED_SUCCESS:"Contraseña cambiada con éxito.",
+PASSWORD_TOO_SHORT:"La contraseña debe tener al menos 6 caracteres.",
+PASSWORDS_DONT_MATCH:"Las contraseñas no coinciden.",
+
+INVALID_TOKEN:"Token inválido o expirado.",
+NO_TOKEN:"No se proporcionó token de autenticación.",
+SUCCESS_PASSWORD_RESET:"Contraseña actualizada correctamente.",
+
+LOGOUT_SUCCESS:"Sesión cerrada correctamente.",
+NOT_LOGGED_IN:"No has iniciado sesión.",
+
+UNKNOWN_ERROR:"Error desconocido.",
+DATABASE_ERROR:"Error de base de datos.",
+STATUS_FAILED:"No se pudo obtener el estado del servidor.",
+CONNECTION_ERROR:"Error de conexión.",
+
 register:"Registrarse",
-registerFailed:"Error en el registro.",
-registerSuccess:"Cuenta creada con éxito. Ahora puedes iniciar sesión.",
 enterCredentials:"Ingrese usuario y contraseña.",
 
 accountPanelTitle:"Panel de Cuenta",
@@ -948,9 +1183,56 @@ noPlayersFound:"Игроки не найдены",
 howToPlay:"Как Играть",
 wiki:"Вики",
 
+resetPasswordTitle:"Сброс пароля",
+resetPasswordBtn:"Сбросить пароль",
+forgotPassword:"Забыли пароль?",
+sendResetLink:"Отправить ссылку для сброса",
+RESET_EMAIL_SENT_IF_EXISTS:"Если почта существует, ссылка для сброса отправлена.",
+
+emailSettings:"Настройки почты",
+enterEmail:"Введите адрес электронной почты",
+saveEmail:"Сохранить почту",
+noEmailSet:"Электронная почта не указана.",
+emailNotVerified:"Почта {email} не подтверждена.",
+emailVerified:"Почта {email} подтверждена.",
+EMAIL_VERIFICATION_SENT:"Письмо с подтверждением отправлено.",
+SET_EMAIL_FAILED:"Не удалось установить почту.",
+INVALID_EMAIL:"Неверный адрес электронной почты.",
+EMAIL_VERIFIED_SUCCESS:"Почта успешно подтверждена!",
+
+LEADERBOARD_FAILED:"Не удалось загрузить таблицу лидеров.",
+CHANNEL_STATUS_FAILED:"Не удалось загрузить статус канала.",
+email:"Почта",
+
+LOGIN_SUCCESS:"Вход выполнен успешно.",
+LOGIN_FAILED:"Ошибка входа.",
+LOGIN_SERVER_UNAVAILABLE:"Сервер входа недоступен.",
+
+MISSING_FIELDS:"Отсутствуют обязательные поля.",
+INVALID_USERNAME:"Неверное имя пользователя.",
+USER_NOT_FOUND:"Пользователь не найден.",
+WRONG_PASSWORD:"Неверный пароль.",
+
+REGISTER_FAILED:"Ошибка регистрации.",
+REGISTER_SUCCESS:"Аккаунт создан успешно. Теперь вы можете войти.",
+
+PASSWORD_CHANGED_SUCCESS:"Пароль успешно изменён.",
+PASSWORD_TOO_SHORT:"Пароль должен содержать минимум 6 символов.",
+PASSWORDS_DONT_MATCH:"Пароли не совпадают.",
+
+INVALID_TOKEN:"Недействительный или истёкший токен.",
+NO_TOKEN:"Токен аутентификации не предоставлен.",
+SUCCESS_PASSWORD_RESET:"Пароль успешно обновлён.",
+
+LOGOUT_SUCCESS:"Вы успешно вышли из системы.",
+NOT_LOGGED_IN:"Вы не вошли в систему.",
+
+UNKNOWN_ERROR:"Неизвестная ошибка.",
+DATABASE_ERROR:"Ошибка базы данных.",
+STATUS_FAILED:"Не удалось получить статус сервера.",
+CONNECTION_ERROR:"Ошибка соединения.",
+
 register:"Регистрация",
-registerFailed:"Ошибка регистрации.",
-registerSuccess:"Аккаунт успешно создан. Теперь вы можете войти.",
 enterCredentials:"Введите имя пользователя и пароль.",
 
 accountPanelTitle:"Панель Аккаунта",
@@ -1127,9 +1409,56 @@ noPlayersFound:"Oyuncu bulunamadı",
 howToPlay:"Nasıl Oynanır",
 wiki:"Wiki",
 
+resetPasswordTitle:"Şifre Sıfırlama",
+resetPasswordBtn:"Şifreyi Sıfırla",
+forgotPassword:"Şifrenizi mi unuttunuz?",
+sendResetLink:"Sıfırlama Bağlantısı Gönder",
+RESET_EMAIL_SENT_IF_EXISTS:"Eğer e-posta mevcutsa, sıfırlama bağlantısı gönderildi.",
+
+emailSettings:"E-posta Ayarları",
+enterEmail:"E-posta adresinizi girin",
+saveEmail:"E-postayı Kaydet",
+noEmailSet:"E-posta ayarlanmadı.",
+emailNotVerified:"{email} e-postası doğrulanmadı.",
+emailVerified:"{email} e-postası doğrulandı.",
+EMAIL_VERIFICATION_SENT:"Doğrulama e-postası gönderildi.",
+SET_EMAIL_FAILED:"E-posta ayarlanamadı.",
+INVALID_EMAIL:"Geçersiz e-posta adresi.",
+EMAIL_VERIFIED_SUCCESS:"E-posta başarıyla doğrulandı!",
+
+LEADERBOARD_FAILED:"Lider tablosu yüklenemedi.",
+CHANNEL_STATUS_FAILED:"Kanal durumu yüklenemedi.",
+email:"E-posta",
+
+LOGIN_SUCCESS:"Giriş başarılı.",
+LOGIN_FAILED:"Giriş başarısız.",
+LOGIN_SERVER_UNAVAILABLE:"Giriş sunucusu kullanılamıyor.",
+
+MISSING_FIELDS:"Zorunlu alanlar eksik.",
+INVALID_USERNAME:"Geçersiz kullanıcı adı.",
+USER_NOT_FOUND:"Kullanıcı bulunamadı.",
+WRONG_PASSWORD:"Yanlış şifre.",
+
+REGISTER_FAILED:"Kayıt başarısız.",
+REGISTER_SUCCESS:"Hesap başarıyla oluşturuldu. Şimdi giriş yapabilirsiniz.",
+
+PASSWORD_CHANGED_SUCCESS:"Şifre başarıyla değiştirildi.",
+PASSWORD_TOO_SHORT:"Şifre en az 6 karakter olmalıdır.",
+PASSWORDS_DONT_MATCH:"Şifreler eşleşmiyor.",
+
+INVALID_TOKEN:"Geçersiz veya süresi dolmuş token.",
+NO_TOKEN:"Kimlik doğrulama tokeni sağlanmadı.",
+SUCCESS_PASSWORD_RESET:"Şifre başarıyla güncellendi.",
+
+LOGOUT_SUCCESS:"Başarıyla çıkış yapıldı.",
+NOT_LOGGED_IN:"Giriş yapmadınız.",
+
+UNKNOWN_ERROR:"Bilinmeyen hata.",
+DATABASE_ERROR:"Veritabanı hatası.",
+STATUS_FAILED:"Sunucu durumu alınamadı.",
+CONNECTION_ERROR:"Bağlantı hatası.",
+
 register:"Kayıt Ol",
-registerFailed:"Kayıt başarısız.",
-registerSuccess:"Hesap başarıyla oluşturuldu. Şimdi giriş yapabilirsiniz.",
 enterCredentials:"Kullanıcı adı ve şifre girin.",
 
 dungeon1:"Shadolean Büyük Tapınağı",
@@ -1305,9 +1634,56 @@ noPlayersFound:"Nie znaleziono graczy",
 howToPlay:"Jak Grać",
 wiki:"Wiki",
 
+resetPasswordTitle:"Resetowanie Hasła",
+resetPasswordBtn:"Resetuj Hasło",
+forgotPassword:"Zapomniałeś hasła?",
+sendResetLink:"Wyślij Link Resetujący",
+RESET_EMAIL_SENT_IF_EXISTS:"Jeśli email istnieje, link resetujący został wysłany.",
+
+emailSettings:"Ustawienia Email",
+enterEmail:"Wprowadź adres email",
+saveEmail:"Zapisz Email",
+noEmailSet:"Brak ustawionego adresu email.",
+emailNotVerified:"Email {email} nie został zweryfikowany.",
+emailVerified:"Email {email} został zweryfikowany.",
+EMAIL_VERIFICATION_SENT:"Email weryfikacyjny wysłany.",
+SET_EMAIL_FAILED:"Nie udało się ustawić emaila.",
+INVALID_EMAIL:"Nieprawidłowy adres email.",
+EMAIL_VERIFIED_SUCCESS:"Email został zweryfikowany!",
+
+LEADERBOARD_FAILED:"Nie udało się załadować rankingu.",
+CHANNEL_STATUS_FAILED:"Nie udało się załadować statusu kanału.",
+email:"Email",
+
+LOGIN_SUCCESS:"Logowanie zakończone sukcesem.",
+LOGIN_FAILED:"Logowanie nie powiodło się.",
+LOGIN_SERVER_UNAVAILABLE:"Serwer logowania niedostępny.",
+
+MISSING_FIELDS:"Brak wymaganych pól.",
+INVALID_USERNAME:"Nieprawidłowa nazwa użytkownika.",
+USER_NOT_FOUND:"Nie znaleziono użytkownika.",
+WRONG_PASSWORD:"Nieprawidłowe hasło.",
+
+REGISTER_FAILED:"Rejestracja nie powiodła się.",
+REGISTER_SUCCESS:"Konto zostało utworzone. Możesz się teraz zalogować.",
+
+PASSWORD_CHANGED_SUCCESS:"Hasło zostało zmienione.",
+PASSWORD_TOO_SHORT:"Hasło musi mieć co najmniej 6 znaków.",
+PASSWORDS_DONT_MATCH:"Hasła nie są zgodne.",
+
+INVALID_TOKEN:"Nieprawidłowy lub wygasły token.",
+NO_TOKEN:"Nie podano tokenu uwierzytelniającego.",
+SUCCESS_PASSWORD_RESET:"Hasło zostało zaktualizowane.",
+
+LOGOUT_SUCCESS:"Wylogowano pomyślnie.",
+NOT_LOGGED_IN:"Nie jesteś zalogowany.",
+
+UNKNOWN_ERROR:"Nieznany błąd.",
+DATABASE_ERROR:"Błąd bazy danych.",
+STATUS_FAILED:"Nie udało się pobrać statusu serwera.",
+CONNECTION_ERROR:"Błąd połączenia.",
+
 register:"Zarejestruj się",
-registerFailed:"Rejestracja nie powiodła się.",
-registerSuccess:"Konto zostało utworzone. Możesz się teraz zalogować.",
 enterCredentials:"Wpisz nazwę użytkownika i hasło.",
 
 accountPanelTitle:"Panel Konta",
@@ -1483,9 +1859,56 @@ noPlayersFound:"플레이어를 찾을 수 없습니다",
 howToPlay:"플레이 방법",
 wiki:"위키",
 
+resetPasswordTitle:"비밀번호 재설정",
+resetPasswordBtn:"비밀번호 재설정",
+forgotPassword:"비밀번호를 잊으셨나요?",
+sendResetLink:"재설정 링크 보내기",
+RESET_EMAIL_SENT_IF_EXISTS:"이메일이 존재하면 재설정 링크가 전송되었습니다.",
+
+emailSettings:"이메일 설정",
+enterEmail:"이메일 주소를 입력하세요",
+saveEmail:"이메일 저장",
+noEmailSet:"설정된 이메일이 없습니다.",
+emailNotVerified:"이메일 {email} 은(는) 인증되지 않았습니다.",
+emailVerified:"이메일 {email} 은(는) 인증되었습니다.",
+EMAIL_VERIFICATION_SENT:"인증 이메일이 전송되었습니다.",
+SET_EMAIL_FAILED:"이메일 설정 실패.",
+INVALID_EMAIL:"잘못된 이메일 주소입니다.",
+EMAIL_VERIFIED_SUCCESS:"이메일 인증 완료!",
+
+LEADERBOARD_FAILED:"리더보드 로드 실패.",
+CHANNEL_STATUS_FAILED:"채널 상태 로드 실패.",
+email:"이메일",
+
+LOGIN_SUCCESS:"로그인 성공.",
+LOGIN_FAILED:"로그인 실패.",
+LOGIN_SERVER_UNAVAILABLE:"로그인 서버를 사용할 수 없습니다.",
+
+MISSING_FIELDS:"필수 항목이 누락되었습니다.",
+INVALID_USERNAME:"유효하지 않은 사용자 이름입니다.",
+USER_NOT_FOUND:"사용자를 찾을 수 없습니다.",
+WRONG_PASSWORD:"비밀번호가 올바르지 않습니다.",
+
+REGISTER_FAILED:"회원가입 실패.",
+REGISTER_SUCCESS:"계정이 생성되었습니다. 이제 로그인하세요.",
+
+PASSWORD_CHANGED_SUCCESS:"비밀번호가 성공적으로 변경되었습니다.",
+PASSWORD_TOO_SHORT:"비밀번호는 최소 6자 이상이어야 합니다.",
+PASSWORDS_DONT_MATCH:"비밀번호가 일치하지 않습니다.",
+
+INVALID_TOKEN:"유효하지 않거나 만료된 토큰입니다.",
+NO_TOKEN:"인증 토큰이 제공되지 않았습니다.",
+SUCCESS_PASSWORD_RESET:"비밀번호가 성공적으로 업데이트되었습니다.",
+
+LOGOUT_SUCCESS:"로그아웃되었습니다.",
+NOT_LOGGED_IN:"로그인되어 있지 않습니다.",
+
+UNKNOWN_ERROR:"알 수 없는 오류.",
+DATABASE_ERROR:"데이터베이스 오류.",
+STATUS_FAILED:"서버 상태를 가져오지 못했습니다.",
+CONNECTION_ERROR:"연결 오류.",
+
 register:"회원가입",
-registerFailed:"회원가입 실패.",
-registerSuccess:"계정이 생성되었습니다. 이제 로그인하세요.",
 enterCredentials:"사용자 이름과 비밀번호를 입력하세요.",
 
 dungeon1:"샤돌린 대사원",
@@ -1661,9 +2084,56 @@ noPlayersFound:"Nessun giocatore trovato",
 howToPlay:"Come Giocare",
 wiki:"Wiki",
 
-register:"S'inscrire",
-registerFailed:"Registrazione fallita.",
-registerSuccess:"Account creato con successo. Ora puoi accedere.",
+resetPasswordTitle:"Reimposta Password",
+resetPasswordBtn:"Reimposta Password",
+forgotPassword:"Password dimenticata?",
+sendResetLink:"Invia Link di Reimpostazione",
+RESET_EMAIL_SENT_IF_EXISTS:"Se l'email esiste, è stato inviato un link di reimpostazione.",
+
+emailSettings:"Impostazioni Email",
+enterEmail:"Inserisci il tuo indirizzo email",
+saveEmail:"Salva Email",
+noEmailSet:"Nessuna email impostata.",
+emailNotVerified:"L'email {email} non è verificata.",
+emailVerified:"L'email {email} è verificata.",
+EMAIL_VERIFICATION_SENT:"Email di verifica inviata.",
+SET_EMAIL_FAILED:"Impossibile impostare l'email.",
+INVALID_EMAIL:"Indirizzo email non valido.",
+EMAIL_VERIFIED_SUCCESS:"Email verificata con successo!",
+
+LEADERBOARD_FAILED:"Impossibile caricare la classifica.",
+CHANNEL_STATUS_FAILED:"Impossibile caricare lo stato del canale.",
+email:"Email",
+
+LOGIN_SUCCESS:"Accesso effettuato con successo.",
+LOGIN_FAILED:"Accesso fallito.",
+LOGIN_SERVER_UNAVAILABLE:"Server di login non disponibile.",
+
+MISSING_FIELDS:"Campi obbligatori mancanti.",
+INVALID_USERNAME:"Nome utente non valido.",
+USER_NOT_FOUND:"Utente non trovato.",
+WRONG_PASSWORD:"Password errata.",
+
+REGISTER_FAILED:"Registrazione fallita.",
+REGISTER_SUCCESS:"Account creato con successo. Ora puoi accedere.",
+
+PASSWORD_CHANGED_SUCCESS:"Password modificata con successo.",
+PASSWORD_TOO_SHORT:"La password deve contenere almeno 6 caratteri.",
+PASSWORDS_DONT_MATCH:"Le password non coincidono.",
+
+INVALID_TOKEN:"Token non valido o scaduto.",
+NO_TOKEN:"Token di autenticazione non fornito.",
+SUCCESS_PASSWORD_RESET:"Password aggiornata con successo.",
+
+LOGOUT_SUCCESS:"Disconnessione avvenuta con successo.",
+NOT_LOGGED_IN:"Non hai effettuato l'accesso.",
+
+UNKNOWN_ERROR:"Errore sconosciuto.",
+DATABASE_ERROR:"Errore del database.",
+STATUS_FAILED:"Impossibile ottenere lo stato del server.",
+CONNECTION_ERROR:"Errore di connessione.",
+
+register:"Registrati",
 enterCredentials:"Inserisci nome utente e password.",
 
 accountPanelTitle:"Pannello Account",
@@ -1839,9 +2309,56 @@ noPlayersFound:"Aucun joueur trouvé",
 howToPlay:"Comment Jouer",
 wiki:"Wiki",
 
+resetPasswordTitle:"Réinitialiser le mot de passe",
+resetPasswordBtn:"Réinitialiser le mot de passe",
+forgotPassword:"Mot de passe oublié ?",
+sendResetLink:"Envoyer le lien de réinitialisation",
+RESET_EMAIL_SENT_IF_EXISTS:"Si l'email existe, un lien de réinitialisation a été envoyé.",
+
+emailSettings:"Paramètres Email",
+enterEmail:"Entrez votre adresse email",
+saveEmail:"Enregistrer l'email",
+noEmailSet:"Aucune adresse email définie.",
+emailNotVerified:"L'email {email} n'est pas vérifié.",
+emailVerified:"L'email {email} est vérifié.",
+EMAIL_VERIFICATION_SENT:"Email de vérification envoyé.",
+SET_EMAIL_FAILED:"Échec de la définition de l'email.",
+INVALID_EMAIL:"Adresse email invalide.",
+EMAIL_VERIFIED_SUCCESS:"Email vérifié avec succès !",
+
+LEADERBOARD_FAILED:"Échec du chargement du classement.",
+CHANNEL_STATUS_FAILED:"Échec du chargement du statut du canal.",
+email:"Email",
+
+LOGIN_SUCCESS:"Connexion réussie.",
+LOGIN_FAILED:"Échec de la connexion.",
+LOGIN_SERVER_UNAVAILABLE:"Serveur de connexion indisponible.",
+
+MISSING_FIELDS:"Champs obligatoires manquants.",
+INVALID_USERNAME:"Nom d'utilisateur invalide.",
+USER_NOT_FOUND:"Utilisateur introuvable.",
+WRONG_PASSWORD:"Mot de passe incorrect.",
+
+REGISTER_FAILED:"Échec de l'inscription.",
+REGISTER_SUCCESS:"Compte créé avec succès. Vous pouvez maintenant vous connecter.",
+
+PASSWORD_CHANGED_SUCCESS:"Mot de passe modifié avec succès.",
+PASSWORD_TOO_SHORT:"Le mot de passe doit contenir au moins 6 caractères.",
+PASSWORDS_DONT_MATCH:"Les mots de passe ne correspondent pas.",
+
+INVALID_TOKEN:"Jeton invalide ou expiré.",
+NO_TOKEN:"Jeton d'authentification non fourni.",
+SUCCESS_PASSWORD_RESET:"Mot de passe mis à jour avec succès.",
+
+LOGOUT_SUCCESS:"Déconnexion réussie.",
+NOT_LOGGED_IN:"Vous n'êtes pas connecté.",
+
+UNKNOWN_ERROR:"Erreur inconnue.",
+DATABASE_ERROR:"Erreur de base de données.",
+STATUS_FAILED:"Impossible de récupérer le statut du serveur.",
+CONNECTION_ERROR:"Erreur de connexion.",
+
 register:"S'inscrire",
-registerFailed:"Échec de l'inscription.",
-registerSuccess:"Compte créé avec succès. Vous pouvez maintenant vous connecter.",
 enterCredentials:"Veuillez entrer le nom d'utilisateur et le mot de passe.",
 
 accountPanelTitle:"Panneau de Compte",
@@ -2018,9 +2535,56 @@ noPlayersFound:"Δεν βρέθηκαν παίκτες",
 howToPlay:"Πώς να Παίξεις",
 wiki:"Wiki",
 
+resetPasswordTitle:"Επαναφορά Κωδικού",
+resetPasswordBtn:"Επαναφορά Κωδικού",
+forgotPassword:"Ξεχάσατε τον κωδικό;",
+sendResetLink:"Αποστολή Συνδέσμου Επαναφοράς",
+RESET_EMAIL_SENT_IF_EXISTS:"Εάν το email υπάρχει, στάλθηκε σύνδεσμος επαναφοράς.",
+
+emailSettings:"Ρυθμίσεις Email",
+enterEmail:"Εισάγετε τη διεύθυνση email σας",
+saveEmail:"Αποθήκευση Email",
+noEmailSet:"Δεν έχει οριστεί email.",
+emailNotVerified:"Το email {email} δεν έχει επιβεβαιωθεί.",
+emailVerified:"Το email {email} έχει επιβεβαιωθεί.",
+EMAIL_VERIFICATION_SENT:"Το email επιβεβαίωσης στάλθηκε.",
+SET_EMAIL_FAILED:"Αποτυχία ορισμού email.",
+INVALID_EMAIL:"Μη έγκυρη διεύθυνση email.",
+EMAIL_VERIFIED_SUCCESS:"Το email επιβεβαιώθηκε επιτυχώς!",
+
+LEADERBOARD_FAILED:"Αποτυχία φόρτωσης πίνακα κατάταξης.",
+CHANNEL_STATUS_FAILED:"Αποτυχία φόρτωσης κατάστασης καναλιού.",
+email:"Email",
+
+LOGIN_SUCCESS:"Η σύνδεση ήταν επιτυχής.",
+LOGIN_FAILED:"Αποτυχία σύνδεσης.",
+LOGIN_SERVER_UNAVAILABLE:"Ο διακομιστής σύνδεσης δεν είναι διαθέσιμος.",
+
+MISSING_FIELDS:"Λείπουν υποχρεωτικά πεδία.",
+INVALID_USERNAME:"Μη έγκυρο όνομα χρήστη.",
+USER_NOT_FOUND:"Ο χρήστης δεν βρέθηκε.",
+WRONG_PASSWORD:"Λάθος κωδικός πρόσβασης.",
+
+REGISTER_FAILED:"Η εγγραφή απέτυχε.",
+REGISTER_SUCCESS:"Ο λογαριασμός δημιουργήθηκε επιτυχώς. Μπορείτε να συνδεθείτε.",
+
+PASSWORD_CHANGED_SUCCESS:"Ο κωδικός άλλαξε επιτυχώς.",
+PASSWORD_TOO_SHORT:"Ο κωδικός πρέπει να έχει τουλάχιστον 6 χαρακτήρες.",
+PASSWORDS_DONT_MATCH:"Οι κωδικοί δεν ταιριάζουν.",
+
+INVALID_TOKEN:"Μη έγκυρο ή ληγμένο token.",
+NO_TOKEN:"Δεν παρέχεται token αυθεντικοποίησης.",
+SUCCESS_PASSWORD_RESET:"Ο κωδικός ενημερώθηκε επιτυχώς.",
+
+LOGOUT_SUCCESS:"Αποσυνδεθήκατε επιτυχώς.",
+NOT_LOGGED_IN:"Δεν είστε συνδεδεμένος.",
+
+UNKNOWN_ERROR:"Άγνωστο σφάλμα.",
+DATABASE_ERROR:"Σφάλμα βάσης δεδομένων.",
+STATUS_FAILED:"Αποτυχία λήψης κατάστασης διακομιστή.",
+CONNECTION_ERROR:"Σφάλμα σύνδεσης.",
+
 register:"Εγγραφή",
-registerFailed:"Η εγγραφή απέτυχε.",
-registerSuccess:"Ο λογαριασμός δημιουργήθηκε επιτυχώς. Μπορείτε να συνδεθείτε.",
 enterCredentials:"Εισάγετε όνομα χρήστη και κωδικό πρόσβασης.",
 
 accountPanelTitle:"Πίνακας Λογαριασμού",
