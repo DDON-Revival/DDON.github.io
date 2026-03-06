@@ -625,7 +625,7 @@ async function loadItems(){
 
     const data = await res.json();
 
-    allItems = data.item;
+    allItems = data;
 
 }
 
@@ -678,7 +678,7 @@ if(search && !name.toLowerCase().includes(search))
 
     container.appendChild(row);
 
-});
+}
 
 }
 
