@@ -705,7 +705,7 @@ container.innerHTML = "";
 const lang = localStorage.getItem("lang") || "en";
 const t = translations[lang];
 
-counter.textContent = t.autolootBlocked + ": " + blockedItems.length;
+counter.textContent = t.Autoloot.autolootBlocked + ": " + blockedItems.length;
 
 // sort items (blocked first)
 const sortedItems = [...allItems].sort((a,b)=>{
