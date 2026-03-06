@@ -204,6 +204,47 @@ button:hover{
     z-index:999;
 }
 
+#itemList{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:10px;
+    margin-top:15px;
+}
+
+.itemRow{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#11142a;
+    border:1px solid #2a2e50;
+    padding:8px 12px;
+    transition:0.2s;
+}
+
+.blockedItem{
+    border-color:#c8a75d;
+    background:#1b1f3b;
+}
+
+.blockedItem .itemName{
+    color:#ffd97a;
+    font-weight:bold;
+}
+
+.itemRow:hover{
+    border-color:#c8a75d;
+    box-shadow:0 0 6px rgba(200,167,93,0.4);
+}
+
+.itemName{
+    flex:1;
+}
+
+.itemId{
+    color:#777;
+    font-size:12px;
+}
+
 </style>
 </head>
 
@@ -271,8 +312,19 @@ button:hover{
 		<div class="card" id="autolootCard" style="display:none">
 
 <h2>AutoLoot Config</h2>
+<div id="blockedCounter" style="color:#c8a75d;margin-bottom:10px;"></div>
 
-<input id="itemSearch" placeholder="Search item..." oninput="renderItems()">
+<input id="itemSearch"
+       placeholder="Search item..."
+       oninput="renderItems()"
+       style="
+       width:100%;
+       padding:8px;
+       background:#0f1020;
+       border:1px solid #2a2e50;
+       color:white;
+       margin-bottom:15px;
+       ">
 
 <div id="itemList" style="max-height:400px;overflow:auto;"></div>
 
@@ -645,39 +697,64 @@ function renderItems(){
 
 const container = document.getElementById("itemList");
 const search = document.getElementById("itemSearch").value.toLowerCase();
+const counter = document.getElementById("blockedCounter");
 
 container.innerHTML = "";
 
-for(const item of allItems){
+// counter
+counter.textContent = "Blocked Items: " + blockedItems.length;
+
+// sort items (blocked first)
+const sortedItems = [...allItems].sort((a,b)=>{
+
+    const aBlocked = blockedItems.includes(a.id);
+    const bBlocked = blockedItems.includes(b.id);
+
+    if(aBlocked && !bBlocked) return -1;
+    if(!aBlocked && bBlocked) return 1;
+
+    return 0;
+});
+
+for(const item of sortedItems){
 
     const lang = localStorage.getItem("lang") || "en";
 
-const name = lang === "jp"
-    ? item.old
-    : item.new;
+    const name = lang === "jp"
+        ? item.old
+        : item.new;
 
-if(!name) continue;
+    if(!name) continue;
 
-if(search && !name.toLowerCase().includes(search))
-    continue;
+    if(search && !name.toLowerCase().includes(search))
+        continue;
 
-    const row = document.createElement("div");
+    const card = document.createElement("div");
+    card.className = "itemRow";
+
+    if(blockedItems.includes(item.id)){
+        card.classList.add("blockedItem");
+    }
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-
     checkbox.checked = blockedItems.includes(item.id);
 
     checkbox.onchange = ()=>toggleItem(item.id, checkbox.checked);
 
     const label = document.createElement("span");
-    label.textContent = " " + name + " ("+item.id+")";
+    label.className = "itemName";
+    label.textContent = name;
 
-    row.appendChild(checkbox);
-    row.appendChild(label);
+    const id = document.createElement("span");
+    id.className = "itemId";
+    id.textContent = "#"+item.id;
 
-    container.appendChild(row);
+    card.appendChild(checkbox);
+    card.appendChild(label);
+    card.appendChild(id);
 
+    container.appendChild(card);
 }
 
 }
