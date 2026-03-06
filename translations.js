@@ -223,13 +223,14 @@ step7Title:"7️⃣ Beginning the Game",
 step7Text:"Complete the tutorial quests to unlock features and follow red markers for the main story."
 },
 
-Autoloot:
+Autoloot:{
 autolootTitle: "AutoLoot Configuration",
 autolootSearch: "Search Item...",
 autolootLanguage: "Item Language",
 autolootBlocked: "Blocked Items",
 autolootNoBlocked: "No blocked items",
-autolootLoading: "Loading items...",
+autolootLoading: "Loading items..."
+},
 
 
 downloadLinks:{
@@ -293,13 +294,14 @@ noPlayersFound:"プレイヤーが見つかりません",
 howToPlay:"遊び方",
 wiki:"ウィキ",
 
-Autoloot:
+Autoloot:{
 autolootTitle: "オートルート設定",
 autolootSearch: "アイテム検索...",
 autolootLanguage: "アイテム言語",
 autolootBlocked: "ブロックされたアイテム",
 autolootNoBlocked: "ブロックされたアイテムはありません",
-autolootLoading: "アイテムを読み込み中...",
+autolootLoading: "アイテムを読み込み中..."
+},
 
 resetPasswordTitle:"パスワードリセット",
 resetPasswordBtn:"パスワードをリセット",
