@@ -7,11 +7,12 @@
 
 <meta http-equiv="Content-Security-Policy"
 content="
-default-src 'self';
-script-src 'self' 'unsafe-inline';
-style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-font-src https://fonts.gstatic.com;
-connect-src https://api.ddon.org https://raw.githubusercontent.com;
+default-src 'self' https:;
+script-src 'self' 'unsafe-inline' https:;
+style-src 'self' 'unsafe-inline' https:;
+font-src 'self' https:;
+connect-src 'self' https://api.ddon.org https://raw.githubusercontent.com https:;
+img-src 'self' https: data:;
 ">
 
 <style>
@@ -624,7 +625,7 @@ async function loadItems(){
 
     const data = await res.json();
 
-    allItems = data.item;
+    allItems = data;
 
 }
 
@@ -655,8 +656,8 @@ const name = lang === "jp"
     ? item.old
     : item.new;
 
-    if(search && !name.toLowerCase().includes(search))
-        return;
+if(search && !name.toLowerCase().includes(search))
+    continue;
 
     const row = document.createElement("div");
 
