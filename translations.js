@@ -223,6 +223,8 @@ step7Title:"7️⃣ Beginning the Game",
 step7Text:"Complete the tutorial quests to unlock features and follow red markers for the main story."
 },
 
+autolootTitle:"AutoLoot Configuration",
+
 Autoloot:{
 autolootTitle: "AutoLoot Configuration",
 autolootSearch: "Search Item...",
@@ -293,6 +295,8 @@ dead:"死亡",
 noPlayersFound:"プレイヤーが見つかりません",
 howToPlay:"遊び方",
 wiki:"ウィキ",
+
+autolootTitle:"オートルート設定",
 
 Autoloot:{
 autolootTitle: "オートルート設定",
@@ -510,6 +514,8 @@ playersLabel:"玩家数",
 online:"在线",
 offline:"离线",
 totalPlayers:"当前在线人数",
+
+autolootTitle:"自动拾取设置",
 
 Autoloot:{
 autolootTitle:"自动拾取设置",
@@ -745,6 +751,8 @@ playersLabel:"Jogadores",
 online:"Online",
 offline:"Offline",
 totalPlayers:"Total de Jogadores Online",
+
+autolootTitle:"Configuração de AutoLoot",
 
 Autoloot:{
 autolootTitle:"Configuração de AutoLoot",
@@ -994,6 +1002,8 @@ noPlayersFound:"No se encontraron jugadores",
 howToPlay:"Cómo Jugar",
 wiki:"Wiki",
 
+autolootTitle:"Configuración de AutoLoot",
+
 Autoloot:{
 autolootTitle:"Configuración de AutoLoot",
 autolootSearch:"Buscar objeto...",
@@ -1228,6 +1238,8 @@ dead:"Мёртв",
 noPlayersFound:"Игроки не найдены",
 howToPlay:"Как Играть",
 wiki:"Вики",
+
+autolootTitle:"Настройки AutoLoot",
 
 Autoloot:{
 autolootTitle:"Настройки AutoLoot",
@@ -1464,6 +1476,8 @@ noPlayersFound:"Oyuncu bulunamadı",
 howToPlay:"Nasıl Oynanır",
 wiki:"Wiki",
 
+autolootTitle:"AutoLoot Ayarları",
+
 Autoloot:{
 autolootTitle:"AutoLoot Ayarları",
 autolootSearch:"Eşya ara...",
@@ -1697,6 +1711,8 @@ dead:"Martwy",
 noPlayersFound:"Nie znaleziono graczy",
 howToPlay:"Jak Grać",
 wiki:"Wiki",
+
+autolootTitle:"Ustawienia AutoLoot",
 
 Autoloot:{
 autolootTitle:"Ustawienia AutoLoot",
@@ -2047,6 +2063,8 @@ cf_6:"보너스 던전이 엔드게임 던전으로 변경",
 cf_7:"PP 상점에서 티켓 획득 가능",
 cf_8:"현재 던전: R, XP",
 
+autolootTitle:"자동 획득 설정",
+
 Autoloot:{
 autolootTitle:"자동 획득 설정",
 autolootSearch:"아이템 검색...",
@@ -2165,6 +2183,8 @@ dead:"Morto",
 noPlayersFound:"Nessun giocatore trovato",
 howToPlay:"Come Giocare",
 wiki:"Wiki",
+
+autolootTitle:"Configurazione AutoLoot",
 
 Autoloot:{
 autolootTitle:"Configurazione AutoLoot",
@@ -2399,6 +2419,8 @@ dead:"Mort",
 noPlayersFound:"Aucun joueur trouvé",
 howToPlay:"Comment Jouer",
 wiki:"Wiki",
+
+autolootTitle:"Configuration AutoLoot",
 
 Autoloot:{
 autolootTitle:"Configuration AutoLoot",
@@ -2696,6 +2718,8 @@ logout:"Αποσύνδεση",
 changePassword:"Αλλαγή Κωδικού",
 save:"Αποθήκευση",
 cancel:"Ακύρωση",
+
+autolootTitle:"Ρυθμίσεις AutoLoot",
 
 Autoloot:{
 autolootTitle:"Ρυθμίσεις AutoLoot",
