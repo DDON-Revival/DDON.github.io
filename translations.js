@@ -405,13 +405,6 @@ customContentText: "専用クエストと報酬。",
 eventsTitle: "特別イベント",
 eventsText: "サーバー限定イベント。",
 
-autolootTitle: "自动拾取设置",
-autolootSearch: "搜索物品...",
-autolootLanguage: "物品语言",
-autolootBlocked: "已屏蔽物品",
-autolootNoBlocked: "没有屏蔽物品",
-autolootLoading: "正在加载物品...",
-
 cf_block1:"カスタム機能",
 cf_1:"コース利用可能！",
 cf_2:"ストレージコース常時有効（拡張倉庫＋遠隔利用）",
@@ -517,6 +510,15 @@ playersLabel:"玩家数",
 online:"在线",
 offline:"离线",
 totalPlayers:"当前在线人数",
+
+Autoloot:{
+autolootTitle:"自动拾取设置",
+autolootSearch:"搜索物品...",
+autolootLanguage:"物品语言",
+autolootBlocked:"已屏蔽物品",
+autolootNoBlocked:"没有已屏蔽的物品",
+autolootLoading:"正在加载物品..."
+},
 
 leaderboardTitle:"排行榜",
 normalTab:"普通",
@@ -743,6 +745,15 @@ playersLabel:"Jogadores",
 online:"Online",
 offline:"Offline",
 totalPlayers:"Total de Jogadores Online",
+
+Autoloot:{
+autolootTitle:"Configuração de AutoLoot",
+autolootSearch:"Pesquisar item...",
+autolootLanguage:"Idioma dos itens",
+autolootBlocked:"Itens bloqueados",
+autolootNoBlocked:"Nenhum item bloqueado",
+autolootLoading:"Carregando itens..."
+},
 
 leaderboardTitle:"Classificação",
 normalTab:"Normal",
@@ -983,6 +994,15 @@ noPlayersFound:"No se encontraron jugadores",
 howToPlay:"Cómo Jugar",
 wiki:"Wiki",
 
+Autoloot:{
+autolootTitle:"Configuración de AutoLoot",
+autolootSearch:"Buscar objeto...",
+autolootLanguage:"Idioma de objetos",
+autolootBlocked:"Objetos bloqueados",
+autolootNoBlocked:"No hay objetos bloqueados",
+autolootLoading:"Cargando objetos..."
+},
+
 resetPasswordTitle:"Restablecer Contraseña",
 resetPasswordBtn:"Restablecer Contraseña",
 forgotPassword:"¿Olvidaste tu contraseña?",
@@ -1208,6 +1228,15 @@ dead:"Мёртв",
 noPlayersFound:"Игроки не найдены",
 howToPlay:"Как Играть",
 wiki:"Вики",
+
+Autoloot:{
+autolootTitle:"Настройки AutoLoot",
+autolootSearch:"Поиск предмета...",
+autolootLanguage:"Язык предметов",
+autolootBlocked:"Заблокированные предметы",
+autolootNoBlocked:"Нет заблокированных предметов",
+autolootLoading:"Загрузка предметов..."
+},
 
 resetPasswordTitle:"Сброс пароля",
 resetPasswordBtn:"Сбросить пароль",
@@ -1435,6 +1464,15 @@ noPlayersFound:"Oyuncu bulunamadı",
 howToPlay:"Nasıl Oynanır",
 wiki:"Wiki",
 
+Autoloot:{
+autolootTitle:"AutoLoot Ayarları",
+autolootSearch:"Eşya ara...",
+autolootLanguage:"Eşya dili",
+autolootBlocked:"Engellenen eşyalar",
+autolootNoBlocked:"Engellenmiş eşya yok",
+autolootLoading:"Eşyalar yükleniyor..."
+},
+
 resetPasswordTitle:"Şifre Sıfırlama",
 resetPasswordBtn:"Şifreyi Sıfırla",
 forgotPassword:"Şifrenizi mi unuttunuz?",
@@ -1659,6 +1697,15 @@ dead:"Martwy",
 noPlayersFound:"Nie znaleziono graczy",
 howToPlay:"Jak Grać",
 wiki:"Wiki",
+
+Autoloot:{
+autolootTitle:"Ustawienia AutoLoot",
+autolootSearch:"Szukaj przedmiotu...",
+autolootLanguage:"Język przedmiotów",
+autolootBlocked:"Zablokowane przedmioty",
+autolootNoBlocked:"Brak zablokowanych przedmiotów",
+autolootLoading:"Ładowanie przedmiotów..."
+},
 
 resetPasswordTitle:"Resetowanie Hasła",
 resetPasswordBtn:"Resetuj Hasło",
@@ -2000,6 +2047,15 @@ cf_6:"보너스 던전이 엔드게임 던전으로 변경",
 cf_7:"PP 상점에서 티켓 획득 가능",
 cf_8:"현재 던전: R, XP",
 
+Autoloot:{
+autolootTitle:"자동 획득 설정",
+autolootSearch:"아이템 검색...",
+autolootLanguage:"아이템 언어",
+autolootBlocked:"차단된 아이템",
+autolootNoBlocked:"차단된 아이템이 없습니다",
+autolootLoading:"아이템 로딩 중..."
+},
+
 cf_block3:"편의성 시스템",
 cf_9:"PP 상한 2,000,000",
 cf_10:"바자 기간 30일",
@@ -2109,6 +2165,15 @@ dead:"Morto",
 noPlayersFound:"Nessun giocatore trovato",
 howToPlay:"Come Giocare",
 wiki:"Wiki",
+
+Autoloot:{
+autolootTitle:"Configurazione AutoLoot",
+autolootSearch:"Cerca oggetto...",
+autolootLanguage:"Lingua oggetti",
+autolootBlocked:"Oggetti bloccati",
+autolootNoBlocked:"Nessun oggetto bloccato",
+autolootLoading:"Caricamento oggetti..."
+},
 
 resetPasswordTitle:"Reimposta Password",
 resetPasswordBtn:"Reimposta Password",
@@ -2334,6 +2399,15 @@ dead:"Mort",
 noPlayersFound:"Aucun joueur trouvé",
 howToPlay:"Comment Jouer",
 wiki:"Wiki",
+
+Autoloot:{
+autolootTitle:"Configuration AutoLoot",
+autolootSearch:"Rechercher un objet...",
+autolootLanguage:"Langue des objets",
+autolootBlocked:"Objets bloqués",
+autolootNoBlocked:"Aucun objet bloqué",
+autolootLoading:"Chargement des objets..."
+},
 
 resetPasswordTitle:"Réinitialiser le mot de passe",
 resetPasswordBtn:"Réinitialiser le mot de passe",
@@ -2622,6 +2696,15 @@ logout:"Αποσύνδεση",
 changePassword:"Αλλαγή Κωδικού",
 save:"Αποθήκευση",
 cancel:"Ακύρωση",
+
+Autoloot:{
+autolootTitle:"Ρυθμίσεις AutoLoot",
+autolootSearch:"Αναζήτηση αντικειμένου...",
+autolootLanguage:"Γλώσσα αντικειμένων",
+autolootBlocked:"Μπλοκαρισμένα αντικείμενα",
+autolootNoBlocked:"Δεν υπάρχουν μπλοκαρισμένα αντικείμενα",
+autolootLoading:"Φόρτωση αντικειμένων..."
+},
 
 username:"Όνομα χρήστη",
 password:"Κωδικός πρόσβασης",

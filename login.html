@@ -282,7 +282,7 @@ button:hover{
 <div class="sidebar">
     <button data-key="changePassword" onclick="openChangePassword()"></button>
 
-    <button onclick="openAutoLoot()">AutoLoot Config</button>
+    <button data-key="autolootTitle" onclick="openAutoLoot()"></button>
 
     <button data-key="logout" onclick="logout()"></button>
 </div>
@@ -311,11 +311,11 @@ button:hover{
         <div id="characters" class="charactersGrid"></div>
 		<div class="card" id="autolootCard" style="display:none">
 
-<h2>AutoLoot Config</h2>
+<h2 data-key="autolootTitle"></h2>
 <div id="blockedCounter" style="color:#c8a75d;margin-bottom:10px;"></div>
 
 <input id="itemSearch"
-       placeholder="Search item..."
+       data-placeholder="autolootSearch"
        oninput="renderItems()"
        style="
        width:100%;
@@ -702,7 +702,10 @@ const counter = document.getElementById("blockedCounter");
 container.innerHTML = "";
 
 // counter
-counter.textContent = "Blocked Items: " + blockedItems.length;
+const lang = localStorage.getItem("lang") || "en";
+const t = translations[lang];
+
+counter.textContent = t.Autoloot.autolootBlocked + ": " + blockedItems.length;
 
 // sort items (blocked first)
 const sortedItems = [...allItems].sort((a,b)=>{
@@ -774,11 +777,11 @@ async function toggleItem(id, block){
         body:JSON.stringify({itemId:id})
     });
 
-    if(block)
+if(block){
+    if(!blockedItems.includes(id))
         blockedItems.push(id);
-    else
-        blockedItems = blockedItems.filter(i=>i!==id);
-
+}else{
+    blockedItems = blockedItems.filter(i=>i!==id);
 }
 
 function openResetModal(){
