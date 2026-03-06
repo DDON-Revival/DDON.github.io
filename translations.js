@@ -223,6 +223,14 @@ step7Title:"7️⃣ Beginning the Game",
 step7Text:"Complete the tutorial quests to unlock features and follow red markers for the main story."
 },
 
+Autoloot:
+autolootTitle: "AutoLoot Configuration",
+autolootSearch: "Search Item...",
+autolootLanguage: "Item Language",
+autolootBlocked: "Blocked Items",
+autolootNoBlocked: "No blocked items",
+autolootLoading: "Loading items...",
+
 
 downloadLinks:{
     full:"https://onedrive.live.com/?cid=d03bbc39b7e96cf2&id=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&resid=D03BBC39B7E96CF2%21s41ce4966967e409aa3c76c91656cd3fd&e=MOHgnr&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3UvYy9kMDNiYmMzOWI3ZTk2Y2YyL0VXWkp6a0YtbHBwQW84ZHNrV1ZzMF8wQnV3Yi02cDhJZUdFejduLW5zeWFxa1E%5FZT1NT0hnbnI&v=validatepermission",
@@ -284,6 +292,14 @@ dead:"死亡",
 noPlayersFound:"プレイヤーが見つかりません",
 howToPlay:"遊び方",
 wiki:"ウィキ",
+
+Autoloot:
+autolootTitle: "オートルート設定",
+autolootSearch: "アイテム検索...",
+autolootLanguage: "アイテム言語",
+autolootBlocked: "ブロックされたアイテム",
+autolootNoBlocked: "ブロックされたアイテムはありません",
+autolootLoading: "アイテムを読み込み中...",
 
 resetPasswordTitle:"パスワードリセット",
 resetPasswordBtn:"パスワードをリセット",
@@ -386,6 +402,13 @@ customContentTitle: "カスタムコンテンツ",
 customContentText: "専用クエストと報酬。",
 eventsTitle: "特別イベント",
 eventsText: "サーバー限定イベント。",
+
+autolootTitle: "自动拾取设置",
+autolootSearch: "搜索物品...",
+autolootLanguage: "物品语言",
+autolootBlocked: "已屏蔽物品",
+autolootNoBlocked: "没有屏蔽物品",
+autolootLoading: "正在加载物品...",
 
 cf_block1:"カスタム機能",
 cf_1:"コース利用可能！",

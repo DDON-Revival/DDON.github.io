@@ -11,7 +11,7 @@ default-src 'self';
 script-src 'self' 'unsafe-inline';
 style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
 font-src https://fonts.gstatic.com;
-connect-src https://api.ddon.org;
+connect-src https://api.ddon.org https://raw.githubusercontent.com;
 ">
 
 <style>
@@ -237,10 +237,13 @@ button:hover{
 
 <div class="container" id="dashboardContainer" style="display:none;">
 
-    <div class="sidebar">
-        <button data-key="changePassword" onclick="openChangePassword()"></button>
-        <button data-key="logout" onclick="logout()"></button>
-    </div>
+<div class="sidebar">
+    <button data-key="changePassword" onclick="openChangePassword()"></button>
+
+    <button onclick="openAutoLoot()">AutoLoot Config</button>
+
+    <button data-key="logout" onclick="logout()"></button>
+</div>
 
     <div class="main">
 
@@ -264,6 +267,15 @@ button:hover{
 
         <h2 data-key="charactersTitle"></h2>
         <div id="characters" class="charactersGrid"></div>
+		<div class="card" id="autolootCard" style="display:none">
+
+<h2>AutoLoot Config</h2>
+
+<input id="itemSearch" placeholder="Search item..." oninput="renderItems()">
+
+<div id="itemList" style="max-height:400px;overflow:auto;"></div>
+
+</div>
 
     </div>
 
@@ -595,6 +607,100 @@ function initLanguageSelector(){
     });
 }
 
+async function openAutoLoot(){
+
+    document.getElementById("autolootCard").style.display = "block";
+
+    await loadItems();
+    await loadBlocked();
+
+}
+
+async function loadItems(){
+
+    const res = await fetch(
+        "https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/datas/item_names.json"
+    );
+
+    const data = await res.json();
+
+    allItems = data.item;
+
+}
+
+async function loadBlocked(){
+
+    const res = await fetch("https://api.ddon.org/api/autoloot/list",{
+        credentials:"include"
+    });
+
+    blockedItems = await res.json();
+
+    renderItems();
+
+}
+
+function renderItems(){
+
+const container = document.getElementById("itemList");
+const search = document.getElementById("itemSearch").value.toLowerCase();
+
+container.innerHTML = "";
+
+for(const item of allItems){
+
+    const lang = localStorage.getItem("lang") || "en";
+
+const name = lang === "jp"
+    ? item.old
+    : item.new;
+
+    if(search && !name.toLowerCase().includes(search))
+        return;
+
+    const row = document.createElement("div");
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+
+    checkbox.checked = blockedItems.includes(item.id);
+
+    checkbox.onchange = ()=>toggleItem(item.id, checkbox.checked);
+
+    const label = document.createElement("span");
+    label.textContent = " " + name + " ("+item.id+")";
+
+    row.appendChild(checkbox);
+    row.appendChild(label);
+
+    container.appendChild(row);
+
+});
+
+}
+
+async function toggleItem(id, block){
+
+    const url = block
+        ? "https://api.ddon.org/api/autoloot/block"
+        : "https://api.ddon.org/api/autoloot/unblock";
+
+    await fetch(url,{
+        method:"POST",
+        credentials:"include",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({itemId:id})
+    });
+
+    if(block)
+        blockedItems.push(id);
+    else
+        blockedItems = blockedItems.filter(i=>i!==id);
+
+}
+
 function openResetModal(){
     document.getElementById("modalOverlay").style.display="block";
     document.getElementById("resetModal").style.display="block";
@@ -676,6 +782,8 @@ loadEmail();
     });
 };
 
+let allItems = [];
+let blockedItems = [];
 </script>
 
 </body>
