@@ -777,11 +777,13 @@ async function toggleItem(id, block){
         body:JSON.stringify({itemId:id})
     });
 
-if(block){
-    if(!blockedItems.includes(id))
-        blockedItems.push(id);
-}else{
-    blockedItems = blockedItems.filter(i=>i!==id);
+    if(block){
+        if(!blockedItems.includes(id))
+            blockedItems.push(id);
+    }else{
+        blockedItems = blockedItems.filter(i=>i!==id);
+    }
+
 }
 
 function openResetModal(){
