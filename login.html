@@ -625,11 +625,7 @@ async function loadItems(){
 
     const data = await res.json();
 
-    // convert object -> array
-    allItems = Object.entries(data).map(([id, item]) => ({
-        id: parseInt(id),
-        ...item
-    }));
+    allItems = data.item || [];
 
 }
 
