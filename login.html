@@ -656,6 +656,8 @@ const name = lang === "jp"
     ? item.old
     : item.new;
 
+if(!name) continue;
+
 if(search && !name.toLowerCase().includes(search))
     continue;
 
