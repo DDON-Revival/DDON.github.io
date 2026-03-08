@@ -239,30 +239,6 @@ height: Number(row[2])
 
 }
 
-function findStageMapPrefix(stageId){
-
-for(const channel of SPAWN_CHANNELS){
-
-const data = DATA[channel.key];
-
-const enemy = data?.enemies?.find(e =>
-String(e[0]) === String(stageId)
-);
-
-if(enemy){
-
-const mapPrefix = enemy[1];
-
-if(mapPrefix) return mapPrefix;
-
-}
-
-}
-
-return null;
-
-}
-
 /* =========================================================
    QUEST LOADER
 ========================================================= */
@@ -1358,18 +1334,15 @@ loadStageMap(firstStage);
 
 function loadStageMap(stageId){
 
-const prefix = findStageMapPrefix(stageId);
+const stageNum = Number(stageId);
 
-if(!prefix){
-console.log("Map prefix not found",stageId);
-return;
-}
+const prefix = "field" + stageNum.toString().padStart(3,"0") + "_m00";
 
 const mapKey = Object.keys(DATA._mapIndex)
 .find(k => k.startsWith(prefix));
 
 if(!mapKey){
-console.log("Map not found for prefix",prefix);
+console.log("Map not found for stage",stageId,prefix);
 return;
 }
 
