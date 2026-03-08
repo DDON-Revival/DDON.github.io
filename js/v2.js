@@ -1314,7 +1314,7 @@ const stageNum = Math.floor(Number(stageId) / 100) - 1;
 const stageStr = stageNum.toString().padStart(3,"0");
 
 const mapRow = DATA.MapDimensions.find(r =>
-    r[0].match(new RegExp(stageStr + "$"))
+    r[0].includes("field" + stageStr)
 );
 
 if(!mapRow) return;
