@@ -1334,15 +1334,31 @@ loadStageMap(firstStage);
 
 function loadStageMap(stageId){
 
-const stageNum = Number(stageId);
+let mapPrefix = null;
 
-const prefix = "field" + stageNum.toString().padStart(3,"0") + "_m00";
+for(const channel of SPAWN_CHANNELS){
+
+const data = DATA[channel.key];
+
+const enemy = data?.enemies?.find(e => String(e[0]) === String(stageId));
+
+if(enemy){
+mapPrefix = enemy[1];
+break;
+}
+
+}
+
+if(!mapPrefix){
+console.log("Map prefix not found",stageId);
+return;
+}
 
 const mapKey = Object.keys(DATA._mapIndex)
-.find(k => k.startsWith(prefix));
+.find(k => k.startsWith(mapPrefix));
 
 if(!mapKey){
-console.log("Map not found for stage",stageId,prefix);
+console.log("Map not found",mapPrefix);
 return;
 }
 
