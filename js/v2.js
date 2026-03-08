@@ -3,6 +3,7 @@
 ========================================================= */
 
 const DATA = {};
+DATA._mapIndex = {};
 
 const DEBUG = false;
 
@@ -189,15 +190,18 @@ async function loadAll() {
     await loadJSON("StageNames", "/datas/stage-names.json");
     await loadJSON("Items", "/datas/item_names.json");
     await loadJSON("ShopsNormal", "/datas/Shop.json");
-	await loadJSON("ShopsBR", "/datas/ShopBR.json");
-	await loadJSON("ShopsCollab", "/datas/ShopCollab.json");
-	await loadJSON("ShopsCustom", "/datas/ShopCustom.json");
+    await loadJSON("ShopsBR", "/datas/ShopBR.json");
+    await loadJSON("ShopsCollab", "/datas/ShopCollab.json");
+    await loadJSON("ShopsCustom", "/datas/ShopCustom.json");
+
     await loadCSV("NpcNamesRaw", "/datas/npc_names.csv");
-	await loadCSV("MapDimensions", "/maps/dimensions.csv");
+    await loadCSV("MapDimensions", "/maps/dimensions.csv");
+
     await loadJSON("ShopFunctions", "/datas/shops_function.json");
     await loadJSON("Special", "/datas/SpecialShops.json");
     await loadJSON("Crafting", "/datas/CraftingRecipes.json");
     await loadJSON("CraftingPlus", "/datas/CraftingRecipesGradeUp.json");
+
     await loadCSV("GatheringNormal", "/datas/GatheringItem.csv");
     await loadCSV("GatheringBR", "/datas/GatheringItemBR.csv");
     await loadCSV("GatheringCollab", "/datas/GatheringItemCollab.csv");
@@ -205,14 +209,59 @@ async function loadAll() {
 
     await loadQuests();
 
+    buildMapIndex();  // ✅ HIER
+
     buildItemMap();
-    buildNpcMap();       // ✅ hier
-    buildShopNpcMap();   // ✅ hier
+    buildNpcMap();
+    buildShopNpcMap();
 
     router();
 }
 
 loadAll();
+
+function buildMapIndex(){
+
+DATA._mapIndex = {};
+
+DATA.MapDimensions?.forEach(row => {
+
+if(!row || !row[0]) return;
+
+const key = row[0];
+
+DATA._mapIndex[key] = {
+width: Number(row[1]),
+height: Number(row[2])
+};
+
+});
+
+}
+
+function findStageMapPrefix(stageId){
+
+for(const channel of SPAWN_CHANNELS){
+
+const data = DATA[channel.key];
+
+const enemy = data?.enemies?.find(e =>
+String(e[0]) === String(stageId)
+);
+
+if(enemy){
+
+const mapPrefix = enemy[1];
+
+if(mapPrefix) return mapPrefix;
+
+}
+
+}
+
+return null;
+
+}
 
 /* =========================================================
    QUEST LOADER
@@ -1309,34 +1358,27 @@ loadStageMap(firstStage);
 
 function loadStageMap(stageId){
 
-let mapPrefix = null;
+const prefix = findStageMapPrefix(stageId);
 
-for(const channel of SPAWN_CHANNELS){
-
-const data = DATA[channel.key];
-
-const enemy = data?.enemies?.find(e => String(e[0]) === String(stageId));
-
-if(enemy){
-mapPrefix = enemy[1];
-break;
-}
-
-}
-
-if(!mapPrefix){
-console.log("Map not found for stage",stageId);
+if(!prefix){
+console.log("Map prefix not found",stageId);
 return;
 }
 
-const mapRow = DATA.MapDimensions.find(r => r[0].includes(mapPrefix));
+const mapKey = Object.keys(DATA._mapIndex)
+.find(k => k.startsWith(prefix));
 
-if(!mapRow) return;
+if(!mapKey){
+console.log("Map not found for prefix",prefix);
+return;
+}
 
-const mapWidth = Number(mapRow[1]);
-const mapHeight = Number(mapRow[2]);
+const map = DATA._mapIndex[mapKey];
 
-const mapName = mapRow[0] + "_l0.png";
+const mapWidth = map.width;
+const mapHeight = map.height;
+
+const mapName = mapKey + "_l0.png";
 
 document.getElementById("mapImage").src = "/maps/" + mapName;
 
