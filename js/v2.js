@@ -1309,11 +1309,13 @@ loadStageMap(firstStage);
 
 function loadStageMap(stageId){
 
-const stageNum=Math.floor(Number(stageId)/100)-1;
+const stageNum = Math.floor(Number(stageId) / 100) - 1;
 
-const prefix="field"+stageNum.toString().padStart(3,"0");
+const stageStr = stageNum.toString().padStart(3,"0");
 
-const mapRow = DATA.MapDimensions.find(r => r[0].startsWith(prefix));
+const mapRow = DATA.MapDimensions.find(r =>
+    r[0].match(new RegExp(stageStr + "$"))
+);
 
 if(!mapRow) return;
 
@@ -1362,26 +1364,6 @@ spawnMarker(x,y,mapWidth,mapHeight,getEnemyName(e[5]),e[9]);
 });
 
 });
-
-}
-
-function spawnMarker(x,y,name,level){
-
-const marker=document.createElement("div");
-
-marker.className="enemy-marker";
-
-marker.style.left=(x/mapWidth*100)+"%";
-marker.style.top=(y/mapHeight*100)+"%";
-
-marker.title=name+" Lv"+level;
-
-marker.onclick=()=>{
-alert(name+" Lv "+level);
-};
-
-document.getElementById("mapContainer")
-.appendChild(marker);
 
 }
 
