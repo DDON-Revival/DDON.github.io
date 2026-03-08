@@ -1309,24 +1309,21 @@ loadStageMap(firstStage);
 
 function loadStageMap(stageId){
 
-const stageNum = Math.floor(Number(stageId) / 100) - 1;
-
-const stageStr = stageNum.toString().padStart(3,"0");
-
 const mapRow = DATA.MapDimensions.find(r =>
-    r[0].includes("field" + stageStr)
+    r[0].includes(stageId.toString().padStart(3,"0"))
 );
 
-if(!mapRow) return;
+if(!mapRow){
+console.log("No map found for stage",stageId);
+return;
+}
 
 const mapWidth = Number(mapRow[1]);
 const mapHeight = Number(mapRow[2]);
 
-const mapName=mapRow[0]+"_l0.png";
+const mapName = mapRow[0] + "_l0.png";
 
-document
-.getElementById("mapImage")
-.src="/maps/"+mapName;
+document.getElementById("mapImage").src = "/maps/" + mapName;
 
 spawnStageEnemies(stageId,mapWidth,mapHeight);
 
