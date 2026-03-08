@@ -182,6 +182,18 @@ header{
 .badge-collab { background: #9333ea; }
 .badge-custom { background: #16a34a; }
 
+.enemy-marker{
+position:absolute;
+width:8px;
+height:8px;
+background:red;
+border-radius:2px;
+border:2px solid white;
+cursor:pointer;
+transform:translate(-50%,-50%);
+z-index:5;
+}
+
 </style>
 </head>
 
@@ -216,6 +228,7 @@ header{
 <button data-tab="quest">Quests</button>
 <button data-tab="crafting">Crafting</button>
 <button data-tab="craftingPlus">Crafting+</button>
+<button data-tab="map">Interactive Map</button>
 </div>
 
 <div id="content"></div>

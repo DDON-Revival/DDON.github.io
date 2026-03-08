@@ -28,11 +28,14 @@ function buildEnemyIndex() {
             enemyMap[enemyId] = [];
         }
 
-        enemyMap[enemyId].push({
-            stageId,
-            level,
-            dropTableId
-        });
+enemyMap[enemyId].push({
+ stageId,
+ level,
+ groupId:e[2],
+ subGroupId:e[3],
+ posIndex:e[4],
+ dropTableId:e[27]
+});
     });
 
     return enemyMap;
@@ -49,17 +52,76 @@ function buildDropMap() {
     return map;
 }
 
-function renderMonster(enemyId) {
+function renderMonster(enemyId){
 
-    const hexKey = "0x" + Number(enemyId).toString(16).padStart(6, "0").toUpperCase();
-	const name = enemyNames[hexKey]?.en || enemyId;
-    const spawns = enemyIndex[enemyId];
+const hexKey="0x"+Number(enemyId).toString(16).padStart(6,"0").toUpperCase();
 
-    spawns.forEach(spawn => {
+const name=enemyNames[hexKey]?.[currentLang]||enemyNames[hexKey]?.en||enemyId;
 
-        const stageName = stageNames[spawn.stageId]?.en || spawn.stageId;
-        const drops = dropMap[spawn.dropTableId];
+const spawns=enemyIndex[enemyId];
 
-        // Hier baust du HTML
-    });
+let html=`
+<div class="card">
+<div class="card-title">${name}</div>
+<div class="card-body">
+<strong>${LANG.spawn_locations}</strong>
+`;
+
+spawns.forEach(spawn=>{
+
+const stageName=stageNames[spawn.stageId]?.[currentLang]||stageNames[spawn.stageId]?.en||spawn.stageId;
+
+html+=`
+<div>
+${stageName} — Lv ${spawn.level}
+</div>
+`;
+
+});
+
+html+=`</div></div>`;
+
+return html;
+
+}
+
+function renderMap(){
+
+const content=document.getElementById("content");
+
+content.innerHTML=`
+
+<div class="card">
+
+<div class="card-title">Interactive Map</div>
+
+<select id="mapStage"></select>
+
+<div id="mapContainer" style="position:relative">
+
+<img id="mapImage" style="width:100%">
+
+</div>
+
+</div>
+`;
+
+buildStageSelector();
+
+}
+
+function spawnMarker(x,y,name,level){
+
+const marker=document.createElement("div");
+
+marker.className="enemy-marker";
+
+marker.style.left=x+"px";
+marker.style.top=y+"px";
+
+marker.title=name+" Lv"+level;
+
+document.getElementById("mapContainer")
+.appendChild(marker);
+
 }
