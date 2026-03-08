@@ -193,6 +193,7 @@ async function loadAll() {
 	await loadJSON("ShopsCollab", "/datas/ShopCollab.json");
 	await loadJSON("ShopsCustom", "/datas/ShopCustom.json");
     await loadCSV("NpcNamesRaw", "/datas/npc_names.csv");
+	await loadCSV("MapDimensions", "/maps/dimensions.csv");
     await loadJSON("ShopFunctions", "/datas/shops_function.json");
     await loadJSON("Special", "/datas/SpecialShops.json");
     await loadJSON("Crafting", "/datas/CraftingRecipes.json");
@@ -506,6 +507,7 @@ function renderHome() {
     if (currentTab === "quest") return renderQuests(filter);
     if (currentTab === "crafting") return renderCrafting(filter);
     if (currentTab === "craftingPlus") return renderCraftingPlus(filter);
+    if (currentTab === "map") return renderMap();
 }
 
 /* =========================================================
@@ -1248,3 +1250,158 @@ if (!name.toLowerCase().includes(filter)) return;
 
     document.getElementById("content").innerHTML=html;
 }
+
+function renderMap(){
+
+let stageOptions="";
+
+Object.keys(DATA.StageNames||{}).forEach(id=>{
+
+stageOptions+=`
+<option value="${id}">
+${getStageName(id)}
+</option>
+`;
+
+});
+
+const html=`
+
+<div class="card">
+
+<div class="card-title">Interactive Map</div>
+
+<select id="mapStageSelect">
+
+${stageOptions}
+
+</select>
+
+<div id="mapContainer"
+style="
+position:relative;
+margin-top:10px;
+">
+
+<img id="mapImage"
+style="
+width:100%;
+display:block;
+">
+
+</div>
+
+</div>
+
+`;
+
+document.getElementById("content").innerHTML=html;
+
+document
+.getElementById("mapStageSelect")
+.onchange=e=>loadStageMap(e.target.value);
+
+const firstStage=Object.keys(DATA.StageNames)[0];
+
+loadStageMap(firstStage);
+
+}
+
+function loadStageMap(stageId){
+
+const stageNum=Math.floor(Number(stageId)/100)-1;
+
+const prefix="field"+stageNum.toString().padStart(3,"0");
+
+const mapRow = DATA.MapDimensions.find(r => r[0].startsWith(prefix));
+
+if(!mapRow) return;
+
+const mapWidth = Number(mapRow[1]);
+const mapHeight = Number(mapRow[2]);
+
+const mapName=mapRow[0]+"_l0.png";
+
+document
+.getElementById("mapImage")
+.src="/maps/"+mapName;
+
+spawnStageEnemies(stageId,mapWidth,mapHeight);
+
+}
+
+function spawnStageEnemies(stageId,mapWidth,mapHeight){
+
+const container=document.getElementById("mapContainer");
+
+container
+.querySelectorAll(".enemy-marker")
+.forEach(m=>m.remove());
+
+SPAWN_CHANNELS.forEach(channel=>{
+
+const data=DATA[channel.key];
+
+data?.enemies?.forEach(e=>{
+
+if(String(e[0])!==String(stageId)) return;
+
+const pos = Number(e[4]);
+
+const gridWidth = 64;
+const gridHeight = 64;
+
+const gridX = pos % gridWidth;
+const gridY = Math.floor(pos / gridWidth);
+
+const x = (gridX / gridWidth) * mapWidth;
+const y = (gridY / gridHeight) * mapHeight;
+
+spawnMarker(x,y,mapWidth,mapHeight,getEnemyName(e[5]),e[9]);
+
+});
+
+});
+
+}
+
+function spawnMarker(x,y,name,level){
+
+const marker=document.createElement("div");
+
+marker.className="enemy-marker";
+
+marker.style.left=(x/mapWidth*100)+"%";
+marker.style.top=(y/mapHeight*100)+"%";
+
+marker.title=name+" Lv"+level;
+
+marker.onclick=()=>{
+alert(name+" Lv "+level);
+};
+
+document.getElementById("mapContainer")
+.appendChild(marker);
+
+}
+
+function spawnMarker(x,y,mapWidth,mapHeight,name,level){
+
+const marker=document.createElement("div");
+
+marker.className="enemy-marker";
+
+marker.style.left=(x/mapWidth*100)+"%";
+marker.style.top=(y/mapHeight*100)+"%";
+
+marker.title=name+" Lv"+level;
+
+marker.onclick=()=>{
+alert(name+" Lv "+level);
+};
+
+document.getElementById("mapContainer")
+.appendChild(marker);
+
+}
+
