@@ -1309,14 +1309,29 @@ loadStageMap(firstStage);
 
 function loadStageMap(stageId){
 
-const mapRow = DATA.MapDimensions.find(r =>
-    r[0].includes(stageId.toString().padStart(3,"0"))
-);
+let mapPrefix = null;
 
-if(!mapRow){
-console.log("No map found for stage",stageId);
+for(const channel of SPAWN_CHANNELS){
+
+const data = DATA[channel.key];
+
+const enemy = data?.enemies?.find(e => String(e[0]) === String(stageId));
+
+if(enemy){
+mapPrefix = enemy[1];
+break;
+}
+
+}
+
+if(!mapPrefix){
+console.log("Map not found for stage",stageId);
 return;
 }
+
+const mapRow = DATA.MapDimensions.find(r => r[0].includes(mapPrefix));
+
+if(!mapRow) return;
 
 const mapWidth = Number(mapRow[1]);
 const mapHeight = Number(mapRow[2]);
