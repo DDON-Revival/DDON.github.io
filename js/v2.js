@@ -260,6 +260,7 @@ function buildStageMap(){
 
 DATA._stageMap = {};
 
+// Dungeon / Lobby maps
 DATA.StageRooms?.forEach(row=>{
 
 if(!row || !row[0]) return;
@@ -271,7 +272,24 @@ DATA._stageMap[stageId] = mapPath;
 
 });
 
-console.log("StageMap:", DATA._stageMap);
+// Field maps aus StageList
+DATA.StageList?.forEach(stage=>{
+
+const stageId = stage.StageNo;
+
+if(DATA._stageMap[stageId]) return;
+
+const mapId = stage.MapId;
+const mapType = stage.MapType || "field";
+
+const mapKey =
+mapType + String(mapId).padStart(3,"0") + "_m00";
+
+DATA._stageMap[stageId] = mapKey;
+
+});
+
+console.log("StageMap:",DATA._stageMap);
 
 }
 
