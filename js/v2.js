@@ -212,6 +212,7 @@ async function loadAll() {
     await loadCSV("MapDimensions", "/maps/dimensions.csv");	
 	await loadCSV("StageRooms", "/datas/StageRoom.csv");
 	await loadJSON("StageList", "/datas/StageList.json");
+	await loadJSON("StageMaps", "/datas/stage-maps.json");
 
 	console.log("StageList raw:", DATA.StageList);
 	
@@ -262,29 +263,35 @@ function buildStageMap(){
 
 DATA._stageMap = {};
 
-// Dungeon / Lobby maps (exakte Zuordnung)
+// 1️⃣ Manuelle Map Zuordnung aus stage-maps.json
+Object.entries(DATA.StageMaps || {}).forEach(([stageId,mapKey])=>{
+
+DATA._stageMap[stageId] = mapKey;
+
+});
+
+// 2️⃣ Dungeon maps fallback (falls nicht in JSON)
 DATA.StageRooms?.forEach(row=>{
 
 if(!row || !row[0]) return;
 
 const stageId = Number(row[0]);
-const mapPath = row[1];
 
-DATA._stageMap[stageId] = mapPath;
+if(DATA._stageMap[stageId]) return;
+
+DATA._stageMap[stageId] = row[1];
 
 });
 
-// Field maps fallback
+// 3️⃣ Field fallback (nur wenn noch nichts existiert)
 (DATA.StageList || []).forEach(stage=>{
 
 if(!stage) return;
 
 const stageId = Number(stage.StageNo);
 
-// wenn bereits map existiert -> skip
 if(DATA._stageMap[stageId]) return;
 
-// field maps
 const mapGroup = Math.floor(stageId / 100);
 
 const mapKey =
@@ -1361,7 +1368,11 @@ ${stageOptions}
 
 </select>
 
-<div id="mapContainer"
+<div id="mapContainer" style="
+position:relative;
+overflow:hidden;
+cursor:grab;
+">
 style="
 position:relative;
 margin-top:10px;
