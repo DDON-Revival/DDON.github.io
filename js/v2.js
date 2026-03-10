@@ -173,11 +173,21 @@ async function loadJSON(name, path) {
 
 async function loadCSV(name, path) {
     try {
+
         const res = await fetch(path);
         const text = await res.text();
-        DATA[name] = text.split("\n").slice(1).map(r => r.split(","));
-    } catch {
+
+        DATA[name] = text
+            .trim()
+            .split(/\r?\n/)
+            .slice(1)
+            .map(r => r.split(","));
+
+    } catch (e) {
+
+        console.error("CSV load failed", path, e);
         DATA[name] = [];
+
     }
 }
 
@@ -258,6 +268,8 @@ const mapPath = row[1];
 DATA._stageMap[stageId] = mapPath;
 
 });
+
+console.log("StageMap:", DATA._stageMap);
 
 }
 
