@@ -212,6 +212,8 @@ async function loadAll() {
     await loadCSV("MapDimensions", "/maps/dimensions.csv");	
 	await loadCSV("StageRooms", "/datas/StageRoom.csv");
 	await loadJSON("StageList", "/datas/StageList.json");
+
+	console.log("StageList raw:", DATA.StageList);
 	
 	buildMapIndex();
 	buildStageMap();
