@@ -267,7 +267,7 @@ DATA.StageRooms?.forEach(row=>{
 
 if(!row || !row[0]) return;
 
-const stageId = parseInt(row[0],10);
+const stageId = Number(row[0]);
 const mapPath = row[1];
 
 DATA._stageMap[stageId] = mapPath;
@@ -275,12 +275,13 @@ DATA._stageMap[stageId] = mapPath;
 });
 
 // Field maps
-Object.values(DATA.StageList || {}).forEach(stage=>{
+(DATA.StageList || []).forEach(stage=>{
 
 if(!stage || stage.StageNo === undefined) return;
 
 const stageId = Number(stage.StageNo);
 
+// wenn dungeon map existiert → skip
 if(DATA._stageMap[stageId]) return;
 
 const mapId = Math.floor(stageId / 100);
