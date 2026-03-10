@@ -1408,7 +1408,7 @@ return;
 
 }
 
-const map = DATA._mapIndex[mapKey];
+const map = DATA._mapIndex[mapKey.replace("_l0","")];
 
 if(!map){
 
