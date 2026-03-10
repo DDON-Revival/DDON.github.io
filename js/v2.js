@@ -262,7 +262,7 @@ function buildStageMap(){
 
 DATA._stageMap = {};
 
-// Dungeon / Lobby maps
+// Dungeon / Lobby maps (exakte Zuordnung)
 DATA.StageRooms?.forEach(row=>{
 
 if(!row || !row[0]) return;
@@ -274,26 +274,27 @@ DATA._stageMap[stageId] = mapPath;
 
 });
 
-// Field maps
+// Field maps fallback
 (DATA.StageList || []).forEach(stage=>{
 
-if(!stage || stage.StageNo === undefined) return;
+if(!stage) return;
 
 const stageId = Number(stage.StageNo);
 
-// wenn dungeon map existiert → skip
+// wenn bereits map existiert -> skip
 if(DATA._stageMap[stageId]) return;
 
-const mapId = Math.floor(stageId / 100);
+// field maps
+const mapGroup = Math.floor(stageId / 100);
 
 const mapKey =
-"field" + String(mapId).padStart(3,"0") + "_m00";
+"field" + String(mapGroup).padStart(3,"0") + "_m00";
 
 DATA._stageMap[stageId] = mapKey;
 
 });
 
-console.log("StageMap:",DATA._stageMap);
+console.log("StageMap built:",DATA._stageMap);
 
 }
 
