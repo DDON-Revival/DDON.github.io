@@ -198,7 +198,7 @@ async function loadAll() {
 
     await loadCSV("NpcNamesRaw", "/datas/npc_names.csv");
     await loadCSV("MapDimensions", "/maps/dimensions.csv");	
-	await loadCSV("StageRooms", "/datas/stage_room.csv");
+	await loadCSV("StageRooms", "/datas/StageRoom.csv");
 	await loadJSON("StageList", "/datas/StageList.json");
 	
 	buildMapIndex();
