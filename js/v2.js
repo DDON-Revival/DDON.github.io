@@ -1372,6 +1372,7 @@ ${stageOptions}
 style="
 width:100%;
 display:block;
+position:relative;
 ">
 
 </div>
