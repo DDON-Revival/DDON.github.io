@@ -4,6 +4,7 @@
 
 const DATA = {};
 DATA._mapIndex = {};
+DATA._stageMap = {};
 
 const DEBUG = false;
 
@@ -186,6 +187,7 @@ async function loadAll() {
     await loadJSON("EnemySpawnBR", "/datas/EnemySpawnBR.json");
     await loadJSON("EnemySpawnCollab", "/datas/EnemySpawnCollab.json");
     await loadJSON("EnemySpawnCustom", "/datas/EnemySpawnCustom.json");
+	
     await loadJSON("EnemyNames", "/datas/enemy-names.json");
     await loadJSON("StageNames", "/datas/stage-names.json");
     await loadJSON("Items", "/datas/item_names.json");
@@ -195,7 +197,11 @@ async function loadAll() {
     await loadJSON("ShopsCustom", "/datas/ShopCustom.json");
 
     await loadCSV("NpcNamesRaw", "/datas/npc_names.csv");
-    await loadCSV("MapDimensions", "/maps/dimensions.csv");
+    await loadCSV("MapDimensions", "/maps/dimensions.csv");	
+	await loadJSON("StageList", "/datas/StageList.json");
+	
+	buildMapIndex();
+	buildStageMap();
 
     await loadJSON("ShopFunctions", "/datas/shops_function.json");
     await loadJSON("Special", "/datas/SpecialShops.json");
@@ -208,8 +214,6 @@ async function loadAll() {
     await loadCSV("GatheringCustom", "/datas/GatheringItemCustom.csv");
 
     await loadQuests();
-
-    buildMapIndex();  // ✅ HIER
 
     buildItemMap();
     buildNpcMap();
@@ -234,6 +238,28 @@ DATA._mapIndex[key] = {
 width: Number(row[1]),
 height: Number(row[2])
 };
+
+});
+
+}
+
+function buildStageMap(){
+
+DATA._stageMap = {};
+
+DATA.StageList?.forEach(stage=>{
+
+const stageId = stage.StageNo;
+const mapId = stage.MapId;
+const type = stage.MapType || "field";
+
+const mapKey = type + String(mapId).padStart(3,"0");
+
+if(DATA._mapIndex[mapKey]){
+
+DATA._stageMap[stageId] = mapKey;
+
+}
 
 });
 
@@ -1334,26 +1360,29 @@ loadStageMap(firstStage);
 
 function loadStageMap(stageId){
 
-const stageNum = Number(stageId);
-
-const fieldPrefix = "field" + stageNum.toString().padStart(3,"0");
-
-const mapKey = Object.keys(DATA._mapIndex)
-.find(k => k.startsWith(fieldPrefix));
+const mapKey = DATA._stageMap[stageId];
 
 if(!mapKey){
-console.log("Map not found for stage", stageId);
+
+console.log("Stage has no map:",stageId);
 return;
+
 }
 
 const map = DATA._mapIndex[mapKey];
 
+if(!map){
+
+console.log("Map dimensions missing:",mapKey);
+return;
+
+}
+
 const mapWidth = map.width;
 const mapHeight = map.height;
 
-const mapName = mapKey + "_l0.png";
-
-document.getElementById("mapImage").src = "/maps/" + mapName;
+document.getElementById("mapImage").src =
+"/maps/" + mapKey + "_m00.png";
 
 spawnStageEnemies(stageId,mapWidth,mapHeight);
 
