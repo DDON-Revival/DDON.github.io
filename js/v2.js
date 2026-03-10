@@ -198,6 +198,7 @@ async function loadAll() {
 
     await loadCSV("NpcNamesRaw", "/datas/npc_names.csv");
     await loadCSV("MapDimensions", "/maps/dimensions.csv");	
+	await loadCSV("StageRooms", "/datas/stage_room.csv");
 	await loadJSON("StageList", "/datas/StageList.json");
 	
 	buildMapIndex();
@@ -247,19 +248,14 @@ function buildStageMap(){
 
 DATA._stageMap = {};
 
-DATA.StageList?.forEach(stage=>{
+DATA.StageRooms?.forEach(row=>{
 
-const stageId = stage.StageNo;
-const mapId = stage.MapId;
-const type = stage.MapType || "field";
+if(!row || !row[0]) return;
 
-const mapKey = type + String(mapId).padStart(3,"0");
+const stageId = Number(row[0]);
+const mapPath = row[1];
 
-if(DATA._mapIndex[mapKey]){
-
-DATA._stageMap[stageId] = mapKey;
-
-}
+DATA._stageMap[stageId] = mapPath;
 
 });
 
@@ -1382,7 +1378,7 @@ const mapWidth = map.width;
 const mapHeight = map.height;
 
 document.getElementById("mapImage").src =
-"/maps/" + mapKey + "_m00.png";
+"/maps/" + mapKey + ".png";
 
 spawnStageEnemies(stageId,mapWidth,mapHeight);
 
