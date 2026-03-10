@@ -172,6 +172,7 @@ async function loadJSON(name, path) {
 }
 
 async function loadCSV(name, path) {
+
     try {
 
         const res = await fetch(path);
@@ -181,7 +182,7 @@ async function loadCSV(name, path) {
             .trim()
             .split(/\r?\n/)
             .slice(1)
-            .map(r => r.split(","));
+            .map(r => r.split(",").map(v => v.trim()));
 
     } catch (e) {
 
@@ -189,6 +190,7 @@ async function loadCSV(name, path) {
         DATA[name] = [];
 
     }
+
 }
 
 async function loadAll() {
@@ -262,7 +264,7 @@ DATA.StageRooms?.forEach(row=>{
 
 if(!row || !row[0]) return;
 
-const stageId = Number(row[0]);
+const stageId = parseInt(row[0],10);
 const mapPath = row[1];
 
 DATA._stageMap[stageId] = mapPath;
