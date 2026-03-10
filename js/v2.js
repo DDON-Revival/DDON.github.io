@@ -1316,7 +1316,7 @@ function renderMap(){
 
 let stageOptions="";
 
-Object.keys(DATA.StageNames||{}).forEach(id=>{
+Object.keys(DATA._stageMap).forEach(id=>{
 
 stageOptions+=`
 <option value="${id}">
@@ -1362,7 +1362,7 @@ document
 .getElementById("mapStageSelect")
 .onchange=e=>loadStageMap(e.target.value);
 
-const firstStage=Object.keys(DATA.StageNames)[0];
+const firstStage=Object.keys(DATA._stageMap)[0];
 
 loadStageMap(firstStage);
 
