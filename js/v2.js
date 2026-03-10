@@ -1363,20 +1363,10 @@ const html=`
 <div class="card-title">Interactive Map</div>
 
 <select id="mapStageSelect">
-
 ${stageOptions}
-
 </select>
 
-<div id="mapContainer" style="
-position:relative;
-overflow:hidden;
-cursor:grab;
-">
-style="
-position:relative;
-margin-top:10px;
-">
+<div id="mapContainer" style="position:relative;margin-top:10px;">
 
 <img id="mapImage"
 style="
