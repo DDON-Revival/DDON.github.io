@@ -1378,15 +1378,19 @@ display:block;
 
 `;
 
-document.getElementById("content").innerHTML=html;
+document.getElementById("content").innerHTML = html;
+
+setTimeout(()=>{
 
 document
 .getElementById("mapStageSelect")
-.onchange=e=>loadStageMap(e.target.value);
+.onchange = e => loadStageMap(e.target.value);
 
-const firstStage=Object.keys(DATA._stageMap)[0];
+const firstStage = Object.keys(DATA._stageMap)[0];
 
 loadStageMap(firstStage);
+
+},10);
 
 }
 
