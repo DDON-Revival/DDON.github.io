@@ -1414,7 +1414,7 @@ const mapWidth = map.width;
 const mapHeight = map.height;
 
 document.getElementById("mapImage").src =
-"/maps/" + mapKey + ".png";
+"/maps/" + mapKey + "_l0.png";
 
 spawnStageEnemies(stageId,mapWidth,mapHeight);
 
