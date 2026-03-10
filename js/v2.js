@@ -273,13 +273,15 @@ DATA._stageMap[stageId] = mapPath;
 });
 
 // Field maps
-DATA.StageList?.forEach(stage=>{
+Object.values(DATA.StageList || {}).forEach(stage=>{
 
-const stageId = stage.StageNo;
+if(!stage || stage.StageNo === undefined) return;
+
+const stageId = Number(stage.StageNo);
 
 if(DATA._stageMap[stageId]) return;
 
-const mapId = Math.floor(stage.StageNo / 100);
+const mapId = Math.floor(stageId / 100);
 
 const mapKey =
 "field" + String(mapId).padStart(3,"0") + "_m00";
