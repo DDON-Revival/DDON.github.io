@@ -272,18 +272,17 @@ DATA._stageMap[stageId] = mapPath;
 
 });
 
-// Field maps aus StageList
+// Field maps
 DATA.StageList?.forEach(stage=>{
 
 const stageId = stage.StageNo;
 
 if(DATA._stageMap[stageId]) return;
 
-const mapId = stage.MapId;
-const mapType = stage.MapType || "field";
+const mapId = Math.floor(stage.StageNo / 100);
 
 const mapKey =
-mapType + String(mapId).padStart(3,"0") + "_m00";
+"field" + String(mapId).padStart(3,"0") + "_m00";
 
 DATA._stageMap[stageId] = mapKey;
 
