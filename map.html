@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>DDON Interactive Map</title>
+
+<style>
+
+body{
+background:#0f0f12;
+margin:0;
+font-family:sans-serif;
+color:white;
+}
+
+#topbar{
+padding:10px;
+background:#18181d;
+border-bottom:1px solid #333;
+}
+
+#mapContainer{
+position:relative;
+width:100%;
+height:calc(100vh - 50px);
+overflow:hidden;
+}
+
+#mapImage{
+width:100%;
+height:auto;
+display:block;
+}
+
+.marker{
+position:absolute;
+width:12px;
+height:12px;
+background:red;
+border-radius:50%;
+transform:translate(-50%,-50%);
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="topbar">
+
+<select id="stageSelect"></select>
+
+</div>
+
+<div id="mapContainer">
+
+<img id="mapImage">
+
+</div>
+
+<script src="map.js"></script>
+
+</body>
+</html>
