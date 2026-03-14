@@ -646,7 +646,7 @@ function _fitToMarkers(groups, sx, sy, realH) {
   if (!groups?.length) return;
   if (!sx) sx=1; if (!sy) sy=1; if (!realH) realH=MAP_DATA[curStage]?.baseH||512;
   const pad = realH * 0.02;
-  const lats = groups.map(g => g.py * sy);
+  const lats = groups.map(g => realH - g.py * sy);
   const lngs = groups.map(g => g.px * sx);
   leafMap.fitBounds(
     [[Math.min(...lats)-pad, Math.min(...lngs)-pad],
@@ -666,7 +666,7 @@ function placeMarkers(allGroups, sx, sy, realH) {
   const list = applyFilter(allGroups);
   list.forEach((g) => {
     const lng = g.px * sx;          // scale to real image pixels
-    const lat = g.py * sy;  // py increases northward, Leaflet lat=0 is south
+    const lat = realH - g.py * sy;  // invert Y for Leaflet
     const boss = g.isBoss;
 
     // ── Marker Icon ─────────────────────────────────────────
