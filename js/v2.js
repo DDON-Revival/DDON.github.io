@@ -235,8 +235,6 @@ async function loadAll() {
     router();
 }
 
-loadAll();
-
 function buildMapIndex(){
 
 DATA._mapIndex = {};
@@ -1469,6 +1467,8 @@ alert(name+" Lv "+level);
 
 document.getElementById("mapContainer")
 .appendChild(marker);
+
+loadAll();
 
 }
 
