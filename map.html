@@ -396,6 +396,7 @@ let MAP_DATA     = null;
 let ENEMY_NAMES  = {};   // { "0x010100": { en:"Goblin", jp:"ゴブリン" }, … }
 let STAGE_NAMES  = {};   // { "42": { en:"Betland Plains", jp:"…" }, … }
 let ITEM_NAMES   = {};   // { 34: { en:"Healing Potion", jp:"癒しの薬" }, … }
+let DROPS_DATA   = null; // { mapKeyToStageId, dropTables, enemyDropMap }
 
 function enemyName(id) {
   const e = ENEMY_NAMES[id];
@@ -470,6 +471,12 @@ async function boot() {
         ITEM_NAMES[item.id] = { en: item.new || item.old, jp: item.old };
       });
     } catch(e) { console.warn('item_names.json not found'); }
+
+    msg.textContent = 'Loading drop data…';
+    try {
+      const rDr = await fetch('./datas/drops_data.json');
+      DROPS_DATA = await rDr.json();
+    } catch(e) { console.warn('drops_data.json not found'); }
 
   } catch(err) {
     document.getElementById('loading').innerHTML =
@@ -616,6 +623,8 @@ function flattenEnemies(groups) {
         isBoss:  g.isBoss,
         exp:     g.exp,
         gno:     g.gno ?? gi,
+        gid:     g.gid ?? gi,
+        sgid:    g.sgid ?? 0,
         count:   g.count,
         groupIds: ids,          // all enemies in this spawn group
         groupIdx: idx,
@@ -758,15 +767,25 @@ function buildEnemyPopup(e) {
   // Other enemies in the same spawn group
   const siblings = e.groupIds.filter(id => id !== e.id);
 
-  // Drops — if map_data has drop data per enemy in future
-  const drops = e.drops || null;
+  // Drops — look up via DROPS_DATA: (stageId, gid, sgid, enemyId)
+  let drops = null;
+  if (DROPS_DATA && curStage) {
+    const stageId = DROPS_DATA.mapKeyToStageId[curStage];
+    if (stageId !== undefined) {
+      const key = `${stageId}_${e.gid}_${e.sgid}_${e.id}`;
+      const dtid = DROPS_DATA.enemyDropMap[key];
+      if (dtid) drops = DROPS_DATA.dropTables[dtid] || null;
+    }
+  }
 
   let dropsHtml = '';
   if (drops && drops.length > 0) {
     const rows = drops.map(d => {
+      const name = itemName(d.itemId);
       const rateClass = d.rate >= 50 ? 'common' : d.rate >= 10 ? 'rare' : 'veryR';
+      const numStr = d.maxNum > 1 ? ` ×${d.num}–${d.maxNum}` : (d.num > 1 ? ` ×${d.num}` : '');
       return `<tr>
-        <td class="d-name">${itemName(d.itemId)}</td>
+        <td class="d-name">${name}<span style="color:var(--text-mute);font-size:10px">${numStr}</span></td>
         <td class="d-rate ${rateClass}">${d.rate}%</td>
       </tr>`;
     }).join('');
