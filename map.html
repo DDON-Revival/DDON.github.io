@@ -31,11 +31,12 @@
   --font-head: 'Cinzel', 'Noto Serif JP', serif;
 }
 
+/* ── RESET ─────────────────────────────────────────── */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html, body { height:100%; overflow:hidden; }
 body { font-family:var(--font-body); background:var(--bg); color:var(--text); display:flex; flex-direction:column; }
 
-/* ── LOADING ── */
+/* ── LOADING ────────────────────────────────────────── */
 #loading {
   position:fixed; inset:0; z-index:9999;
   background:var(--bg);
@@ -45,7 +46,7 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
 .ld-text  { font-family:var(--font-head); font-size:11px; letter-spacing:4px; color:var(--text-dim); text-transform:uppercase; animation:breathe 1.6s ease-in-out infinite; }
 @keyframes breathe { 0%,100%{opacity:.25} 50%{opacity:1} }
 
-/* ── HEADER ── */
+/* ── HEADER ─────────────────────────────────────────── */
 #header {
   height:54px; flex-shrink:0;
   background:var(--surface);
@@ -58,6 +59,8 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
   background:linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold) 70%, transparent 100%);
   opacity:.35;
 }
+
+/* Logo */
 .logo {
   padding:0 20px;
   font-family:var(--font-head); font-weight:900; font-size:15px; letter-spacing:3px;
@@ -66,8 +69,11 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
 }
 .logo-cross { color:var(--red); font-size:14px; }
 .logo-sub   { font-size:9px; letter-spacing:2px; color:var(--text-dim); font-weight:400; }
+
+/* Dividers */
 .hdiv { width:1px; height:30px; background:var(--border); flex-shrink:0; margin:0 4px; }
 
+/* Zone select */
 .zone-wrap { display:flex; align-items:center; gap:10px; padding:0 12px; }
 .zone-label { font-family:var(--font-head); font-size:10px; letter-spacing:2px; color:var(--text-dim); text-transform:uppercase; white-space:nowrap; }
 .zone-select {
@@ -83,6 +89,7 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
 .zone-select optgroup { background:var(--surface2); color:var(--text-dim); font-size:11px; }
 .zone-select option  { background:var(--surface2); color:var(--text); }
 
+/* Filter buttons */
 .filters { display:flex; align-items:center; gap:6px; padding:0 12px; }
 .fbtn {
   font-family:var(--font-head); font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
@@ -94,10 +101,12 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
 .fbtn.on              { border-color:var(--gold); color:var(--gold); background:var(--gold-dim); }
 .fbtn.boss-f.on       { border-color:var(--boss); color:var(--boss); background:var(--boss-dim); }
 
+/* Right side */
 .hright { margin-left:auto; display:flex; align-items:center; gap:8px; padding:0 16px; }
 .stat-badge { font-family:var(--font-head); font-size:10px; letter-spacing:1px; color:var(--text-dim); white-space:nowrap; }
 .stat-badge strong { color:var(--gold2); }
 
+/* Language toggle */
 .lang-btn {
   font-family:var(--font-head); font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
   padding:4px 10px; border:1px solid var(--border); background:transparent;
@@ -106,10 +115,10 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
 .lang-btn.active { border-color:var(--gold); color:var(--gold); background:var(--gold-dim); }
 .lang-btn:hover  { border-color:var(--border2); color:var(--text); }
 
-/* ── LAYOUT ── */
+/* ── LAYOUT ──────────────────────────────────────────── */
 #app { flex:1; display:flex; overflow:hidden; }
 
-/* ── SIDEBAR ── */
+/* ── SIDEBAR ─────────────────────────────────────────── */
 #sidebar {
   width:272px; flex-shrink:0;
   background:var(--surface); border-right:1px solid var(--border);
@@ -161,10 +170,11 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
 .ei-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; background:var(--red); box-shadow:0 0 4px rgba(192,57,43,.6); }
 .ei-dot.b { background:var(--boss); box-shadow:0 0 5px rgba(232,124,62,.7); }
 
-/* ── MAP AREA ── */
+/* ── MAP AREA ────────────────────────────────────────── */
 #mapwrap { flex:1; position:relative; display:flex; }
 #map { flex:1; background:#08070504; }
 
+/* No image overlay */
 #no-img {
   position:absolute; inset:0; z-index:400;
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
@@ -175,7 +185,7 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
 #no-img .ni-file  { font-family:monospace; font-size:13px; color:var(--gold); }
 #no-img .ni-hint  { font-size:12px; color:var(--text-mute); }
 
-/* ── LEAFLET OVERRIDES ── */
+/* ── LEAFLET OVERRIDES ───────────────────────────────── */
 .leaflet-container     { font-family:var(--font-body); background:#08070504; }
 .leaflet-control-zoom  { border:1px solid var(--border) !important; border-radius:var(--radius) !important; }
 .leaflet-control-zoom a {
@@ -190,75 +200,30 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
   border-radius:4px; box-shadow:0 12px 40px rgba(0,0,0,.7); padding:0;
 }
 .leaflet-popup-tip-container { display:none; }
-.leaflet-popup-content       { margin:0; min-width:240px; max-width:320px; }
+.leaflet-popup-content       { margin:0; min-width:220px; }
 
-/* ── ENEMY POPUP ── */
-.pop { padding:14px 16px; }
-.pop-header {
-  display:flex; align-items:flex-start; justify-content:space-between; gap:8px;
-  border-bottom:1px solid var(--border); padding-bottom:10px; margin-bottom:10px;
-}
+.pop { padding:13px 15px; }
 .pop-title {
   font-family:var(--font-head); font-size:13px; letter-spacing:.5px; color:var(--gold2);
-  line-height:1.4;
+  border-bottom:1px solid var(--border); padding-bottom:8px; margin-bottom:8px;
 }
-.pop-title-jp { font-size:11px; color:var(--text-dim); margin-top:2px; font-family:'Noto Serif JP', serif; }
-.pop-id { font-family:monospace; font-size:10px; color:var(--text-mute); margin-top:3px; }
-.pop-boss-badge {
-  flex-shrink:0; background:var(--boss-dim); border:1px solid var(--boss);
-  color:var(--boss); font-family:var(--font-head); font-size:9px; letter-spacing:1.5px;
-  padding:2px 7px; border-radius:2px; white-space:nowrap; margin-top:2px;
+.pop-row { display:flex; justify-content:space-between; align-items:baseline; font-size:13px; padding:2px 0; }
+.pop-row .pk { color:var(--text-dim); }
+.pop-row .pv { color:var(--text); }
+.pop-boss {
+  display:inline-block; margin-top:8px;
+  background:var(--boss-dim); border:1px solid var(--boss);
+  color:var(--boss); font-family:var(--font-head); font-size:9px; letter-spacing:2px;
+  padding:3px 8px; border-radius:2px;
 }
 
-.pop-stats { display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; margin-bottom:10px; }
-.pop-stat { display:flex; flex-direction:column; }
-.pop-stat .pk { font-size:10px; color:var(--text-mute); font-family:var(--font-head); letter-spacing:1px; text-transform:uppercase; }
-.pop-stat .pv { font-size:13px; color:var(--text); }
-
-/* Drop table */
-.pop-drops-title {
-  font-family:var(--font-head); font-size:10px; letter-spacing:2px; text-transform:uppercase;
-  color:var(--text-dim); border-bottom:1px solid var(--border); padding-bottom:5px; margin-bottom:8px;
-  display:flex; align-items:center; gap:6px;
-}
-.pop-drops-title::before { content:'◆'; color:var(--gold); font-size:9px; }
-
-.drop-table { width:100%; border-collapse:collapse; font-size:12px; }
-.drop-table tr + tr td { border-top:1px solid var(--border); }
-.drop-table td { padding:4px 0; }
-.drop-table .d-name { color:var(--text); flex:1; }
-.drop-table .d-rate {
-  color:var(--gold); font-family:var(--font-head); font-size:11px; font-weight:600;
-  text-align:right; padding-left:8px; white-space:nowrap;
-}
-.drop-table .d-rate.common { color:#7eb87e; }
-.drop-table .d-rate.rare   { color:var(--gold2); }
-.drop-table .d-rate.veryR  { color:var(--boss); }
-
-.drop-none { font-size:12px; color:var(--text-mute); font-style:italic; padding:4px 0; }
-
-/* Also in group badge (inside group popup) */
-.pop-group-members {
-  margin-bottom:10px;
-}
-.pop-group-title {
-  font-family:var(--font-head); font-size:10px; letter-spacing:2px; text-transform:uppercase;
-  color:var(--text-dim); margin-bottom:6px;
-}
-.pop-member {
-  display:flex; align-items:center; gap:6px;
-  padding:3px 0; border-top:1px solid var(--border);
-}
-.pop-member:first-child { border-top:none; }
-.pm-dot { width:5px; height:5px; border-radius:50%; background:var(--red); flex-shrink:0; }
-.pm-name { font-size:12px; color:var(--text); flex:1; }
-
-/* ── MARKERS ── */
-.emarker {
+/* ── MARKERS ────────────────────────────────────────── */
+/* ── GROUP MARKERS (DDOn-Tool style labels) ────────── */
+.gmarker {
   background: rgba(130,20,20,.88);
   border: 1.5px solid rgba(192,57,43,.75);
   border-radius: 3px;
-  padding: 2px 6px 2px 5px;
+  padding: 2px 6px 2px 4px;
   display: inline-flex; align-items: center; gap: 4px;
   white-space: nowrap;
   box-shadow: 0 1px 4px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.06);
@@ -266,14 +231,35 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
   transition: transform .12s, box-shadow .12s;
   font-size: 11px; line-height: 1.3;
 }
-.emarker:hover { transform: scale(1.08); box-shadow: 0 2px 8px rgba(200,60,40,.7); }
-.emarker.boss  { background: rgba(160,60,10,.9); border-color: rgba(232,124,62,.85); }
-.emarker.hi    { background: rgba(160,130,20,.95) !important; border-color: var(--gold) !important; box-shadow: 0 0 8px var(--gold), 0 0 16px rgba(201,168,76,.4) !important; }
-.em-name { color: #f2d0c8; max-width: 120px; overflow:hidden; text-overflow:ellipsis; }
-.em-lv   { color: rgba(255,255,255,.55); font-size: 10px; font-family:'Cinzel',serif; }
+.gmarker:hover { transform: scale(1.08); box-shadow: 0 2px 8px rgba(200,60,40,.7); }
+.gmarker.boss  { background: rgba(160,60,10,.9); border-color: rgba(232,124,62,.85); }
+.gmarker.hi    { background: rgba(160,130,20,.95) !important; border-color: var(--gold) !important; box-shadow: 0 0 8px var(--gold), 0 0 16px rgba(201,168,76,.4) !important; }
+.gm-count { color: #ffffff; font-weight: 700; font-size: 12px; min-width: 12px; text-align:right; font-family:'Cinzel',serif; }
+.gm-sep   { color: rgba(255,255,255,.4); font-size: 10px; }
+.gm-name  { color: #f2d0c8; max-width: 110px; overflow:hidden; text-overflow:ellipsis; }
+.gm-lv    { color: rgba(255,255,255,.5); font-size: 10px; font-family:'Cinzel',serif; }
 .leaflet-marker-icon { overflow: visible !important; }
 
-/* ── RESPONSIVE ── */
+/* ── DROPS IN POPUP ─────────────────────────────────── */
+.pop-drops-title {
+  font-family:var(--font-head); font-size:10px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--text-dim); border-top:1px solid var(--border);
+  padding-top:8px; margin-top:8px; margin-bottom:6px;
+  display:flex; align-items:center; gap:6px;
+}
+.pop-drops-title::before { content:'◆'; color:var(--gold); font-size:9px; }
+.drop-table { width:100%; border-collapse:collapse; font-size:12px; }
+.drop-table tr+tr td { border-top:1px solid var(--border); }
+.drop-table td { padding:3px 0; }
+.drop-name { color:var(--text); }
+.drop-num  { color:var(--text-dim); font-size:10px; padding-left:4px; }
+.drop-rate { text-align:right; padding-left:8px; font-family:var(--font-head); font-size:11px; font-weight:600; white-space:nowrap; }
+.drop-rate.c { color:#7eb87e; }
+.drop-rate.r { color:var(--gold2); }
+.drop-rate.v { color:var(--boss); }
+.drop-none { font-size:12px; color:var(--text-mute); font-style:italic; padding:4px 0; }
+
+/* ── RESPONSIVE ──────────────────────────────────────── */
 @media(max-width:720px) {
   #sidebar, .filters, .zone-label { display:none; }
   .zone-select { min-width:160px; }
@@ -305,10 +291,10 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
   <div class="hdiv"></div>
 
   <div class="filters">
-    <button class="fbtn on"     id="f-all"   onclick="setFilter('all')"   data-i18n="filter.all">All</button>
-    <button class="fbtn"        id="f-day"   onclick="setFilter('day')"   data-i18n="filter.day">Day</button>
-    <button class="fbtn"        id="f-night" onclick="setFilter('night')" data-i18n="filter.night">Night</button>
-    <button class="fbtn boss-f" id="f-boss"  onclick="setFilter('boss')"  data-i18n="filter.boss">Boss</button>
+    <button class="fbtn on"    id="f-all"   onclick="setFilter('all')"   data-i18n="filter.all">All</button>
+    <button class="fbtn"       id="f-day"   onclick="setFilter('day')"   data-i18n="filter.day">Day</button>
+    <button class="fbtn"       id="f-night" onclick="setFilter('night')" data-i18n="filter.night">Night</button>
+    <button class="fbtn boss-f" id="f-boss" onclick="setFilter('boss')"  data-i18n="filter.boss">Boss</button>
   </div>
 
   <div class="hright">
@@ -327,7 +313,7 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
       <span class="sb-count" id="sb-cnt">0</span>
     </div>
     <div class="sb-search">
-      <input id="search" placeholder="Search by name or level…" oninput="filterList()">
+      <input id="search" data-i18n-ph="sidebar.search" placeholder="Search by name or level…" oninput="filterList()">
     </div>
     <div id="elist"></div>
   </aside>
@@ -335,9 +321,9 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
   <div id="mapwrap">
     <div id="map"></div>
     <div id="no-img">
-      <div class="ni-title">Map image not found</div>
+      <div class="ni-title" data-i18n="noimg.title">Map image not found</div>
       <code class="ni-file" id="ni-path"></code>
-      <div class="ni-hint">Place the image in the maps/ folder</div>
+      <div class="ni-hint" data-i18n="noimg.hint">Place the image in the maps/ folder</div>
     </div>
   </div>
 </div>
@@ -349,145 +335,211 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
 // ════════════════════════════════════════════════════════════════
 const I18N = {
   en: {
-    'header.subtitle':'Enemy Map','header.zone':'Zone',
-    'filter.all':'All','filter.day':'Day','filter.night':'Night','filter.boss':'Boss',
-    'sidebar.title':'Enemies','sidebar.search':'Search by name or level…',
-    'stat': n => `<strong>${n}</strong> enemies`,
-    'optgroup.main':'Open World','optgroup.dungeon':'Dungeons',
-    'popup.level':'Level','popup.spawn':'Spawn','popup.exp':'EXP',
-    'popup.group':'Group','popup.pos':'World Pos','popup.boss':'⚔ AREA BOSS',
-    'popup.drops':'Drops','popup.nodedrops':'No drop data available',
-    'popup.groupmembers':'Also in this spawn group',
+    'header.subtitle': 'Enemy Map',
+    'header.zone':     'Zone',
+    'filter.all':      'All',
+    'filter.day':      'Day',
+    'filter.night':    'Night',
+    'filter.boss':     'Boss',
+    'sidebar.title':   'Enemies',
+    'sidebar.search':  'Search by name or level…',
+    'noimg.title':     'Map image not found',
+    'noimg.hint':      'Place the image in the maps/ folder',
+    'stat':            (n) => `<strong>${n}</strong> enemies`,
+    'loading':         'Loading map data…',
+    'popup.id':        'Enemy ID',
+    'popup.level':     'Level',
+    'popup.spawn':     'Spawn Time',
+    'popup.exp':       'Experience',
+    'popup.group':     'Group',
+    'popup.pos':       'World Pos',
+    'popup.boss':      '⚔ AREA BOSS',
+    'optgroup.main':   'Open World',
+    'optgroup.dungeon':'Dungeons',
   },
   jp: {
-    'header.subtitle':'エネミーマップ','header.zone':'ゾーン',
-    'filter.all':'すべて','filter.day':'昼','filter.night':'夜','filter.boss':'ボス',
-    'sidebar.title':'エネミー','sidebar.search':'名前またはレベルで検索…',
-    'stat': n => `<strong>${n}</strong> 体`,
-    'optgroup.main':'オープンワールド','optgroup.dungeon':'ダンジョン',
-    'popup.level':'レベル','popup.spawn':'スポーン時間','popup.exp':'経験値',
-    'popup.group':'グループ','popup.pos':'座標','popup.boss':'⚔ エリアボス',
-    'popup.drops':'ドロップ','popup.nodedrops':'ドロップデータなし',
-    'popup.groupmembers':'同グループの他エネミー',
+    'header.subtitle': 'エネミーマップ',
+    'header.zone':     'ゾーン',
+    'filter.all':      'すべて',
+    'filter.day':      '昼',
+    'filter.night':    '夜',
+    'filter.boss':     'ボス',
+    'sidebar.title':   'エネミー',
+    'sidebar.search':  '名前またはレベルで検索…',
+    'noimg.title':     'マップ画像が見つかりません',
+    'noimg.hint':      'maps/ フォルダに画像を配置してください',
+    'stat':            (n) => `<strong>${n}</strong> 体`,
+    'loading':         'マップデータを読み込んでいます…',
+    'popup.id':        'エネミーID',
+    'popup.level':     'レベル',
+    'popup.spawn':     'スポーン時間',
+    'popup.exp':       '経験値',
+    'popup.group':     'グループ',
+    'popup.pos':       '座標',
+    'popup.boss':      '⚔ エリアボス',
+    'optgroup.main':   'オープンワールド',
+    'optgroup.dungeon':'ダンジョン',
   }
 };
 
 let lang = 'en';
-function t(key) { return I18N[lang]?.[key] || I18N.en[key] || key; }
+
+function t(key) { return I18N[lang][key] || I18N.en[key] || key; }
 
 function setLang(l) {
   lang = l;
   document.documentElement.lang = l === 'jp' ? 'ja' : 'en';
+  // Button states
   document.getElementById('l-en').classList.toggle('active', l==='en');
   document.getElementById('l-jp').classList.toggle('active', l==='jp');
+  // Translate all data-i18n elements
   document.querySelectorAll('[data-i18n]').forEach(el => {
-    const v = t(el.dataset.i18n);
-    if (typeof v === 'string') el.textContent = v;
+    el.textContent = t(el.dataset.i18n);
   });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    el.placeholder = t(el.dataset.i18nPh);
+  });
+  // Stat badge
   updateStat();
+  // Rebuild dropdown labels
   rebuildDropdown();
-  if (curStage) rebuildStage();
+  // Rebuild list
+  if (curStage) rebuildList();
 }
 
 // ════════════════════════════════════════════════════════════════
-//  DATA — loaded dynamically from ./datas/
+//  STAGE NAMES  (EN / JP)
+//  Add more as needed!
 // ════════════════════════════════════════════════════════════════
-let MAP_DATA     = null;
-let ENEMY_NAMES  = {};   // { "0x010100": { en:"Goblin", jp:"ゴブリン" }, … }
-let STAGE_NAMES  = {};   // { "42": { en:"Betland Plains", jp:"…" }, … }
-let ITEM_NAMES   = {};   // { 34: { en:"Healing Potion", jp:"癒しの薬" }, … }
-let DROPS_DATA   = null; // { mapKeyToStageId, dropTables, enemyDropMap }
+const ZONE_NAMES = {
+  en: {
+    '1':   'Lestania',
+    '2':   'Isle of Denial',
+    '3':   'Mysree Grove',
+    '4':   'Betland Plains',
+    '5':   'Bloodbane Isle',
+    '7':   'Whitewyrm Nest',
+    '31':  'Dungeon 31',
+    '32':  'Dungeon 32',
+    '33':  'Dungeon 33',
+    '34':  'Dungeon 34',
+    '36':  'Stage 36',
+  },
+  jp: {
+    '1':   'レスタニア',
+    '2':   '孤島',
+    '3':   'ミスリの森',
+    '4':   'ベットランド平原',
+    '5':   '血の島',
+    '7':   '白竜の巣',
+    '31':  'ダンジョン31',
+    '32':  'ダンジョン32',
+    '33':  'ダンジョン33',
+    '34':  'ダンジョン34',
+    '36':  'ステージ36',
+  }
+};
+
+// ════════════════════════════════════════════════════════════════
+//  ENEMY NAMES  (EN / JP)
+//  Extend as needed!
+// ════════════════════════════════════════════════════════════════
+const ENEMY_NAMES = {
+  en: {
+    '0x010100':'Hobgoblin',           '0x010101':'Hobgoblin (Large)',
+    '0x010102':'Hobgoblin Chief',     '0x010200':'Goblin',
+    '0x010201':'Goblin Scout',        '0x010300':'Wolf',
+    '0x010301':'Dark Wolf',           '0x010400':'Striges',
+    '0x010500':'Cyclops',             '0x010502':'Cyclops (Armed)',
+    '0x010503':'Cyclops Shaman',      '0x010600':'Hydra',
+    '0x010700':'Griffin',             '0x010800':'Wyvern',
+    '0x011000':'Skeleton',            '0x011002':'Skeleton Warrior',
+    '0x011003':'Skeleton Mage',       '0x011005':'Skeleton Archer',
+    '0x011006':'Bone Dragon Head',    '0x015800':'Golem',
+    '0x015801':'Metal Golem',         '0x018000':'Saurian',
+    '0x010110':'Hobgoblin (Night)',   '0x011010':'Undead Guard',
+    '0x010501':'Cyclops (Blind)',     '0x010900':'Chimera',
+    '0x010a00':'Cockatrice',          '0x010b00':'Ogre',
+    '0x010b01':'Ogre (Red)',          '0x010c00':'Gorechimera',
+    '0x010d00':'Dragon',              '0x010d01':'Elder Dragon',
+    '0x010e00':'Lich',               '0x010f00':'Undead Dragon',
+  },
+  jp: {
+    '0x010100':'ホブゴブリン',         '0x010101':'ホブゴブリン（大）',
+    '0x010102':'ホブゴブリン族長',     '0x010200':'ゴブリン',
+    '0x010201':'ゴブリン偵察兵',       '0x010300':'ウルフ',
+    '0x010301':'ダークウルフ',         '0x010400':'ストリガ',
+    '0x010500':'サイクロプス',         '0x010502':'サイクロプス（武装）',
+    '0x010503':'サイクロプスシャーマン','0x010600':'ヒュドラ',
+    '0x010700':'グリフィン',           '0x010800':'ワイバーン',
+    '0x011000':'スケルトン',           '0x011002':'スケルトン戦士',
+    '0x011003':'スケルトン魔導士',     '0x011005':'スケルトン弓兵',
+    '0x011006':'骨竜の頭部',           '0x015800':'ゴーレム',
+    '0x015801':'メタルゴーレム',       '0x018000':'サウリアン',
+    '0x010110':'ホブゴブリン（夜）',   '0x011010':'アンデッドガード',
+    '0x010501':'サイクロプス（盲）',   '0x010900':'キメラ',
+    '0x010a00':'コカトリス',           '0x010b00':'オーガ',
+    '0x010b01':'オーガ（赤）',         '0x010c00':'ゴアキメラ',
+    '0x010d00':'ドラゴン',             '0x010d01':'エルダードラゴン',
+    '0x010e00':'リッチ',              '0x010f00':'アンデッドドラゴン',
+  }
+};
 
 function enemyName(id) {
-  const e = ENEMY_NAMES[id];
-  if (!e) return id;
-  return e[lang] || e.en || id;
+  return ENEMY_NAMES[lang]?.[id] || ENEMY_NAMES.en[id] || id;
 }
-function enemyNameBoth(id) {
-  const e = ENEMY_NAMES[id];
-  if (!e) return { en: id, jp: id };
-  return { en: e.en || id, jp: e.jp || e.en || id };
+function zoneName(sid) {
+  return ZONE_NAMES[lang]?.[String(sid)] || ZONE_NAMES.en[String(sid)] || `Stage ${sid}`;
 }
-function itemName(id) {
-  const item = ITEM_NAMES[String(id)] || ITEM_NAMES[Number(id)];
-  if (!item) return `Item #${id}`;
-  return lang === 'jp' ? (item.jp || item.en) : (item.en || item.jp);
-}
-function stageName(mapKey) {
-  // Try to match mapKey to known STAGE_NAMES
-  // mapKey examples: "field000_m00", "rm004_m00", "pd_12"
-  const entry = STAGE_NAMES_BY_KEY[mapKey];
-  if (entry) return entry[lang] || entry.en || mapKey;
-  return mapKey;
-}
-
-// We also build a map from map_key → stage name from stage-names.json
-// The stage-names.json uses numeric IDs — we'll match them at build time
-let STAGE_NAMES_BY_KEY = {};
 
 // ════════════════════════════════════════════════════════════════
 //  STATE
 // ════════════════════════════════════════════════════════════════
-let leafMap  = null;
-let imgOvl   = null;
-let mkrs     = [];
-let filter   = 'all';
-let curStage = null;
-let hlMkr    = null;
+let MAP_DATA  = null;
+let leafMap   = null;
+let imgOvl    = null;
+let mkrs      = [];
+let filter    = 'all';
+let curStage  = null;
+let hlMkr     = null;
+let DROPS_DATA  = null; // { mapKeyToStageId, dropTables, enemyDropMap }
+let ITEM_NAMES  = {};   // { id: { en, jp } }
 
 // ════════════════════════════════════════════════════════════════
 //  BOOT
 // ════════════════════════════════════════════════════════════════
 async function boot() {
-  const msg = document.getElementById('ld-msg');
-
   try {
-    msg.textContent = 'Loading map data…';
-    const rMap = await fetch('./datas/map_data.json');
-    if (!rMap.ok) throw new Error('datas/map_data.json not found (status ' + rMap.status + ')');
-    MAP_DATA = await rMap.json();
-
-    msg.textContent = 'Loading enemy names…';
-    try {
-      const rEn = await fetch('./datas/enemy-names.json');
-      ENEMY_NAMES = await rEn.json();
-    } catch(e) { console.warn('enemy-names.json not found, using raw IDs'); }
-
-    msg.textContent = 'Loading stage names…';
-    try {
-      const rSt = await fetch('./datas/stage-names.json');
-      const rawStages = await rSt.json();
-      STAGE_NAMES = rawStages;
-      buildStageNameMap();
-    } catch(e) { console.warn('stage-names.json not found'); }
-
-    msg.textContent = 'Loading item names…';
-    try {
-      const rIt = await fetch('./datas/item_names.json');
-      const rawItems = await rIt.json();
-      // Normalize: { id, old (jp), new (en) } → { id: { en, jp } }
-      const arr = rawItems.item || [];
-      arr.forEach(item => {
-        ITEM_NAMES[item.id] = { en: item.new || item.old, jp: item.old };
-      });
-    } catch(e) { console.warn('item_names.json not found'); }
-
-    msg.textContent = 'Loading drop data…';
-    try {
-      const rDr = await fetch('./datas/drops_data.json');
-      DROPS_DATA = await rDr.json();
-    } catch(e) { console.warn('drops_data.json not found'); }
-
+    // Data path: ./datas/map_data.json  (your GitHub Pages structure)
+    const r = await fetch('./datas/map_data.json');
+    if (!r.ok) throw new Error('datas/map_data.json not found  (status ' + r.status + ')');
+    MAP_DATA = await r.json();
   } catch(err) {
     document.getElementById('loading').innerHTML =
       `<div style="text-align:center">
         <div style="color:var(--gold);font-family:var(--font-head);letter-spacing:3px;font-size:13px;margin-bottom:12px">ERROR</div>
         <div style="color:var(--text-dim);font-size:14px">${err.message}</div>
-        <div style="color:var(--text-mute);font-size:12px;margin-top:8px">Check browser console for details.</div>
+        <div style="color:var(--text-mute);font-size:12px;margin-top:8px">Check your browser console for details.</div>
        </div>`;
     return;
   }
 
+  // Load item names (for drop popup)
+  try {
+    const ri = await fetch('./datas/item_names.json');
+    const raw = await ri.json();
+    (raw.item || []).forEach(item => {
+      ITEM_NAMES[item.id] = { en: item.new || item.old, jp: item.old };
+    });
+  } catch(e) { console.warn('item_names.json not loaded'); }
+
+  // Load drop data
+  try {
+    const rd = await fetch('./datas/drops_data.json');
+    DROPS_DATA = await rd.json();
+  } catch(e) { console.warn('drops_data.json not loaded'); }
+
+  // Init Leaflet
   leafMap = L.map('map', {
     crs: L.CRS.Simple,
     zoomSnap: 0.25, zoomDelta: 0.5,
@@ -496,143 +548,86 @@ async function boot() {
   });
 
   rebuildDropdown();
-  const firstOpt = document.getElementById('zone-sel').options[0];
-  if (firstOpt) { document.getElementById('zone-sel').value = firstOpt.value; loadStage(firstOpt.value); }
+  const firstSid = document.getElementById('zone-sel').options[0]?.value;
+  if (firstSid) { document.getElementById('zone-sel').value = firstSid; loadStage(firstSid); }
+
   document.getElementById('zone-sel').addEventListener('change', e => loadStage(e.target.value));
   document.getElementById('loading').style.display = 'none';
 }
 
 // ════════════════════════════════════════════════════════════════
-//  BUILD stage-name lookup:  mapKey → { en, jp }
-//  field000_m00 → stage ID 1 "Lestania" etc.
-//  We do a simple heuristic: extract numeric part and try to match
+//  DROPDOWN  — now keyed by map_key (e.g. "field000_m00")
 // ════════════════════════════════════════════════════════════════
-function buildStageNameMap() {
-  // Explicit known mappings (mapKey → stageNameId)
-  const KNOWN = {
-    'field000_m00': '1',   // Lestania
-    'field001_m00': '52',  // try
-    'field002_m00': '53',
-    'field003_m00': '54',
-    'field004_m00': '55',
-    'field005_m00': '56',
-    'field006_m00': '57',
-    'field007_m00': '58',
-  };
+const MAP_DISPLAY_NAMES = {
+  en: {
+    'field000_m00':'Lestania',            'field004_m00':'Betland Plains',
+    'field007_m00':'Whitewyrm Nest',      'field001_m00':'Isle of Denial',
+    'field002_m00':'Mysree Grove',        'field005_m00':'Bloodbane Isle',
+  },
+  jp: {
+    'field000_m00':'レスタニア',          'field004_m00':'ベットランド平原',
+    'field007_m00':'白竜の巣',            'field001_m00':'孤島',
+    'field002_m00':'ミスリの森',          'field005_m00':'血の島',
+  }
+};
 
-  Object.keys(MAP_DATA).forEach(mk => {
-    if (KNOWN[mk] && STAGE_NAMES[KNOWN[mk]]) {
-      STAGE_NAMES_BY_KEY[mk] = STAGE_NAMES[KNOWN[mk]];
-      return;
-    }
-    // Try to extract number from mapKey (rm004 → 4, pd_12 → 12)
-    const num = mk.replace(/[^0-9]/g,'');
-    if (num && STAGE_NAMES[num]) {
-      STAGE_NAMES_BY_KEY[mk] = STAGE_NAMES[num];
-    }
-  });
+function mapDisplayName(mapKey) {
+  return MAP_DISPLAY_NAMES[lang]?.[mapKey] || MAP_DISPLAY_NAMES.en[mapKey] || mapKey;
 }
 
-// ════════════════════════════════════════════════════════════════
-//  DROPDOWN
-// ════════════════════════════════════════════════════════════════
 function rebuildDropdown() {
   const sel = document.getElementById('zone-sel');
   const prev = sel.value;
   sel.innerHTML = '';
 
-  const fields = [], rooms = [], pdGroups = {};
+  const fields   = [];
+  const rooms    = [];
+  const pdGroups = {}; // pdName → [mapKeys]
 
   Object.keys(MAP_DATA)
-    .filter(mk => MAP_DATA[mk].groups?.length > 0)
+    .filter(mk => MAP_DATA[mk].groups.length > 0)
     .sort()
     .forEach(mk => {
       const d = MAP_DATA[mk];
-      const type = d.type || 'field';
-      if (type === 'field') fields.push(mk);
-      else if (type === 'room') rooms.push(mk);
-      else if (type === 'pd') {
+      if (d.type === 'field') fields.push(mk);
+      else if (d.type === 'room') rooms.push(mk);
+      else if (d.type === 'pd') {
         const pn = d.pdName || 'pd';
-        (pdGroups[pn] = pdGroups[pn] || []).push(mk);
+        if (!pdGroups[pn]) pdGroups[pn] = [];
+        pdGroups[pn].push(mk);
       }
     });
 
-  const addOptGroup = (label, keys, nameFn) => {
+  const addGroup = (label, keys, nameFn) => {
     if (!keys.length) return;
     const og = document.createElement('optgroup');
     og.label = label;
     keys.forEach(mk => {
       const d = MAP_DATA[mk];
-      const enemyCount = countEnemies(d.groups);
       const o = document.createElement('option');
       o.value = mk;
-      o.textContent = `${nameFn(mk)}  ·  ${enemyCount} enemies`;
+      o.textContent = `${nameFn(mk, d)}  ·  ${d.groups.length} groups`;
       og.appendChild(o);
     });
     sel.appendChild(og);
   };
 
-  addOptGroup(t('optgroup.main'), fields, mk => {
-    const sn = STAGE_NAMES_BY_KEY[mk];
-    return (sn ? sn[lang] || sn.en : null) || mk;
-  });
-  addOptGroup(t('optgroup.dungeon') + ' (rooms)', rooms, mk => {
-    const sn = STAGE_NAMES_BY_KEY[mk];
-    return (sn ? sn[lang] || sn.en : null) || mk;
-  });
+  addGroup(t('optgroup.main'), fields, mk => mapDisplayName(mk));
+  addGroup(t('optgroup.dungeon') + ' (rooms)', rooms, mk => mk);
+
+  // pd-Dungeons grouped by pd-set
   Object.keys(pdGroups).sort().forEach(pn => {
-    const keys = pdGroups[pn].sort();
-    addOptGroup(`${t('optgroup.dungeon')} [${pn}]`, keys, mk => {
-      const sn = STAGE_NAMES_BY_KEY[mk];
-      return (sn ? sn[lang] || sn.en : null) || mk;
+    const keys = pdGroups[pn].sort((a,b) => {
+      const na = parseInt(a.replace('pd_','')), nb = parseInt(b.replace('pd_',''));
+      return na-nb;
+    });
+    addGroup(`${t('optgroup.dungeon')} [${pn}]`, keys, (mk, d) => {
+      const sno = mk.replace('pd_','');
+      return `${pn} #${sno}`;
     });
   });
 
   if (prev && MAP_DATA[prev]) sel.value = prev;
-}
-
-// Count total individual enemies (each id in each group = 1 enemy)
-function countEnemies(groups) {
-  if (!groups) return 0;
-  return groups.reduce((s, g) => s + (g.ids?.length || 1), 0);
-}
-
-// ════════════════════════════════════════════════════════════════
-//  FLATTEN groups → individual enemy entries
-//  Each entry: { id, level, levelMax, spawn, isBoss, exp, gno, px, py, groupIds, groupIdx }
-//  groupIds = all ids in the same group (for "also spawns" info in popup)
-// ════════════════════════════════════════════════════════════════
-function flattenEnemies(groups) {
-  const out = [];
-  groups.forEach((g, gi) => {
-    const ids   = g.ids || [];
-    const lvMin = g.levels?.[0] ?? 1;
-    const lvMax = g.levels?.[g.levels.length - 1] ?? lvMin;
-
-    // Per-id offset to avoid 100% overlap when multiple ids share same px/py
-    ids.forEach((id, idx) => {
-      // Tiny spiral offset so markers don't stack perfectly
-      const angle  = (idx / Math.max(ids.length, 1)) * 2 * Math.PI;
-      const radius = ids.length > 1 ? 3 : 0;  // 3px offset in image-pixel space
-      out.push({
-        id,
-        px:      g.px + Math.cos(angle) * radius,
-        py:      g.py + Math.sin(angle) * radius,
-        lvMin, lvMax,
-        spawn:   g.spawn,
-        isBoss:  g.isBoss,
-        exp:     g.exp,
-        gno:     g.gno ?? gi,
-        gid:     g.gid ?? gi,
-        sgid:    g.sgid ?? 0,
-        count:   g.count,
-        groupIds: ids,          // all enemies in this spawn group
-        groupIdx: idx,
-        rawX: g.x, rawZ: g.z,
-      });
-    });
-  });
-  return out;
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -656,7 +651,7 @@ function loadStage(mapKey) {
     loadPdTiles(data, imgBounds);
     leafMap.fitBounds(imgBounds, {animate:false});
     placeMarkers(data.groups, 1, 1, H);
-    fitToMarkers(data.groups, 1, 1, H);
+    _fitToMarkers(data.groups, 1, 1, H);
   } else {
     const url = './maps/' + data.imgFile;
     const img = new Image();
@@ -664,27 +659,29 @@ function loadStage(mapKey) {
       const realW = img.naturalWidth, realH = img.naturalHeight;
       const baseW = data.baseW || realW, baseH = data.baseH || realH;
       const sx = realW / baseW, sy = realH / baseH;
-      data._sx = sx; data._sy = sy; data._realH = realH;
-      imgOvl = L.imageOverlay(url, [[0,0],[realH,realW]]).addTo(leafMap);
+      data._sx = sx; data._sy = sy; data._realH = realH;  // store for filter/rebuild
+      const imgBounds = [[0,0],[realH,realW]];
+      imgOvl = L.imageOverlay(url, imgBounds).addTo(leafMap);
       document.getElementById('no-img').classList.remove('show');
-      leafMap.fitBounds([[0,0],[realH,realW]], {animate:false});
+      leafMap.fitBounds(imgBounds, {animate:false});
       placeMarkers(data.groups, sx, sy, realH);
-      fitToMarkers(data.groups, sx, sy, realH);
+      _fitToMarkers(data.groups, sx, sy, realH);
     };
     img.onerror = () => {
       document.getElementById('no-img').classList.add('show');
       document.getElementById('ni-path').textContent = url;
       const H = data.baseH || 512;
       placeMarkers(data.groups, 1, 1, H);
-      fitToMarkers(data.groups, 1, 1, H);
+      _fitToMarkers(data.groups, 1, 1, H);
     };
     img.src = url;
   }
 }
 
-function fitToMarkers(groups, sx, sy, realH) {
+function _fitToMarkers(groups, sx, sy, realH) {
   if (!groups?.length) return;
-  const pad = (realH || 512) * 0.02;
+  if (!sx) sx=1; if (!sy) sy=1; if (!realH) realH=MAP_DATA[curStage]?.baseH||512;
+  const pad = realH * 0.02;
   const lats = groups.map(g => realH - g.py * sy);
   const lngs = groups.map(g => g.px * sx);
   leafMap.fitBounds(
@@ -695,54 +692,65 @@ function fitToMarkers(groups, sx, sy, realH) {
 }
 
 // ════════════════════════════════════════════════════════════════
-//  PLACE MARKERS — one marker per individual enemy
+//  PLACE MARKERS  — one marker per group (like DDOn-Tool)
 // ════════════════════════════════════════════════════════════════
 function placeMarkers(allGroups, sx, sy, realH) {
   mkrs.forEach(m => leafMap.removeLayer(m.lm));
   mkrs = [];
   document.getElementById('elist').innerHTML = '';
-  if (!sx) sx=1; if (!sy) sy=1; if (!realH) realH = MAP_DATA[curStage]?.baseH || 512;
+  if (!sx) sx=1; if (!sy) sy=1; if (!realH) realH = MAP_DATA[curStage]?.baseH||512;
+  const list = applyFilter(allGroups);
+  list.forEach((g) => {
+    const lng = g.px * sx;          // scale to real image pixels
+    const lat = realH - g.py * sy;  // invert Y for Leaflet
+    const boss = g.isBoss;
 
-  const filtered = applyFilter(allGroups);
-  const enemies  = flattenEnemies(filtered);
+    // ── Marker Icon ─────────────────────────────────────────
+    // Shows: group count + primary enemy name (like DDOn-Tool labels)
+    const primaryId   = g.ids[0] || '';
+    const primaryName = enemyName(primaryId);
+    const shortName   = primaryName.length > 14 ? primaryName.slice(0,13)+'…' : primaryName;
+    const lvRange     = g.levels.length > 1
+      ? `${g.levels[0]}-${g.levels[g.levels.length-1]}`
+      : String(g.levels[0] || '?');
 
-  enemies.forEach(e => {
-    const lat = realH - e.py * sy;
-    const lng = e.px * sx;
-    const boss = e.isBoss;
-    const name = enemyName(e.id);
-    const shortName = name.length > 16 ? name.slice(0,15)+'…' : name;
-    const lvStr = e.lvMin === e.lvMax ? `Lv${e.lvMin}` : `Lv${e.lvMin}-${e.lvMax}`;
+    const iconHtml = `
+      <div class="gmarker${boss?' boss':''}">
+        <span class="gm-count">${g.count}</span>
+        <span class="gm-name">${shortName}</span>
+        <span class="gm-lv">Lv${lvRange}</span>
+      </div>`;
 
-    const iconHtml = `<div class="emarker${boss?' boss':''}">
-      <span class="em-name">${shortName}</span>
-      <span class="em-lv">${lvStr}</span>
-    </div>`;
+    const icon = L.divIcon({
+      className: '',
+      html: iconHtml,
+      iconAnchor: [0, 10],
+    });
 
-    const icon = L.divIcon({ className:'', html:iconHtml, iconAnchor:[0,10] });
     const lm = L.marker([lat, lng], { icon, zIndexOffset: boss ? 100 : 0 });
-    lm.bindPopup(() => buildEnemyPopup(e), { maxWidth:340, minWidth:260 });
+    lm.bindPopup(buildGroupPopup(g), { maxWidth:300, minWidth:240 });
     lm.addTo(leafMap);
-    mkrs.push({ lm, e });
+    mkrs.push({ lm, g });
 
-    // ── Sidebar entry ──
+    // ── Sidebar entry ────────────────────────────────────────
     const item = document.createElement('div');
-    item.className = `ei${boss?' boss-item':''}`;
-    item.dataset.name  = name.toLowerCase();
-    item.dataset.level = String(e.lvMin);
+    item.className = `ei${boss ? ' boss-item' : ''}`;
+    item.dataset.name  = primaryName.toLowerCase();
+    item.dataset.level = String(g.levels[0] || 0);
     item.innerHTML = `
-      <div class="ei-lv${boss?' b':''}">${lvStr}</div>
+      <div class="ei-lv${boss?' b':''}">Lv${lvRange}</div>
       <div class="ei-info">
-        <div class="ei-name">${name}</div>
-        <div class="ei-meta">Group ${e.gno} · ${e.spawn}</div>
+        <div class="ei-name">${primaryName}${g.ids.length>1 ? ` +${g.ids.length-1}` : ''}</div>
+        <div class="ei-meta">Group ${g.gno} · ${g.count} spawns · ${g.spawn}</div>
       </div>
       <div class="ei-dot${boss?' b':''}"></div>`;
 
     item.addEventListener('click', () => {
-      if (hlMkr) hlMkr.getElement()?.querySelector('.emarker')?.classList.remove('hi');
-      lm.getElement()?.querySelector('.emarker')?.classList.add('hi');
+      if (hlMkr) hlMkr.getElement()?.querySelector('.gmarker')?.classList.remove('hi');
+      const dot = lm.getElement()?.querySelector('.gmarker');
+      if (dot) dot.classList.add('hi');
       hlMkr = lm;
-      leafMap.setView([lat, lng], 1, { animate:true });
+      leafMap.setView([lat, lng], 1, { animate: true });
       lm.openPopup();
       document.querySelectorAll('.ei').forEach(x => x.classList.remove('sel'));
       item.classList.add('sel');
@@ -752,84 +760,82 @@ function placeMarkers(allGroups, sx, sy, realH) {
     document.getElementById('elist').appendChild(item);
   });
 
-  document.getElementById('sb-cnt').textContent = enemies.length;
-  updateStat(enemies.length);
+  document.getElementById('sb-cnt').textContent = list.length;
+  updateStat(list.length);
 }
 
-// ════════════════════════════════════════════════════════════════
-//  ENEMY POPUP  (with drop table + group members)
-// ════════════════════════════════════════════════════════════════
-function buildEnemyPopup(e) {
-  const names  = enemyNameBoth(e.id);
-  const lvStr  = e.lvMin === e.lvMax ? `${e.lvMin}` : `${e.lvMin} – ${e.lvMax}`;
-  const boss   = e.isBoss;
+function itemName(id) {
+  const item = ITEM_NAMES[id] || ITEM_NAMES[Number(id)];
+  if (!item) return `Item #${id}`;
+  return lang === 'jp' ? (item.jp || item.en) : (item.en || item.jp);
+}
 
-  // Other enemies in the same spawn group
-  const siblings = e.groupIds.filter(id => id !== e.id);
+function getDropsForEnemy(enemyId, gid, sgid) {
+  if (!DROPS_DATA || !curStage) return null;
+  const stageId = DROPS_DATA.mapKeyToStageId[curStage];
+  if (stageId === undefined) return null;
+  const key = `${stageId}_${gid}_${sgid}_${enemyId}`;
+  const dtid = DROPS_DATA.enemyDropMap[key];
+  if (!dtid) return null;
+  return DROPS_DATA.dropTables[dtid] || null;
+}
 
-  // Drops — look up via DROPS_DATA: (stageId, gid, sgid, enemyId)
-  let drops = null;
-  if (DROPS_DATA && curStage) {
-    const stageId = DROPS_DATA.mapKeyToStageId[curStage];
-    if (stageId !== undefined) {
-      const key = `${stageId}_${e.gid}_${e.sgid}_${e.id}`;
-      const dtid = DROPS_DATA.enemyDropMap[key];
-      if (dtid) drops = DROPS_DATA.dropTables[dtid] || null;
-    }
-  }
+function buildDropsHtml(drops) {
+  if (!drops || drops.length === 0)
+    return `<div class="pop-drops-title">Drops</div><div class="drop-none">No drop data</div>`;
+  const rows = drops.map(d => {
+    const cls = d.rate >= 50 ? 'c' : d.rate >= 10 ? 'r' : 'v';
+    const numStr = d.maxNum > 1 ? `×${d.num}–${d.maxNum}` : (d.num > 1 ? `×${d.num}` : '');
+    return `<tr>
+      <td class="drop-name">${itemName(d.itemId)}</td>
+      <td class="drop-num">${numStr}</td>
+      <td class="drop-rate ${cls}">${d.rate}%</td>
+    </tr>`;
+  }).join('');
+  return `<div class="pop-drops-title">Drops</div>
+    <table class="drop-table">${rows}</table>`;
+}
 
+function buildGroupPopup(g) {
+  const names = g.ids.map(id => enemyName(id)).join(', ');
+  const lvRange = g.levels.length > 1
+    ? `${g.levels[0]} – ${g.levels[g.levels.length-1]}`
+    : String(g.levels[0] || '?');
+
+  // Build drops per unique enemy in this group
+  const gid  = g.gid  ?? g.gno ?? 0;
+  const sgid = g.sgid ?? 0;
+  const uniqueIds = [...new Set(g.ids)];
   let dropsHtml = '';
-  if (drops && drops.length > 0) {
-    const rows = drops.map(d => {
-      const name = itemName(d.itemId);
-      const rateClass = d.rate >= 50 ? 'common' : d.rate >= 10 ? 'rare' : 'veryR';
-      const numStr = d.maxNum > 1 ? ` ×${d.num}–${d.maxNum}` : (d.num > 1 ? ` ×${d.num}` : '');
-      return `<tr>
-        <td class="d-name">${name}<span style="color:var(--text-mute);font-size:10px">${numStr}</span></td>
-        <td class="d-rate ${rateClass}">${d.rate}%</td>
-      </tr>`;
-    }).join('');
-    dropsHtml = `
-      <div class="pop-drops-title">${t('popup.drops')}</div>
-      <table class="drop-table">${rows}</table>`;
+  if (uniqueIds.length === 1) {
+    // Single enemy type — show drops directly
+    const drops = getDropsForEnemy(uniqueIds[0], gid, sgid);
+    dropsHtml = buildDropsHtml(drops);
   } else {
-    dropsHtml = `
-      <div class="pop-drops-title">${t('popup.drops')}</div>
-      <div class="drop-none">${t('popup.nodedrops')}</div>`;
-  }
-
-  let siblingsHtml = '';
-  if (siblings.length > 0) {
-    const rows = siblings.map(id => {
-      const n = enemyName(id);
-      return `<div class="pop-member"><div class="pm-dot"></div><div class="pm-name">${n}</div></div>`;
+    // Multiple enemy types — show drops per enemy
+    dropsHtml = uniqueIds.map(id => {
+      const drops = getDropsForEnemy(id, gid, sgid);
+      const inner = drops && drops.length > 0
+        ? drops.map(d => {
+            const cls = d.rate >= 50 ? 'c' : d.rate >= 10 ? 'r' : 'v';
+            const numStr = d.maxNum > 1 ? `×${d.num}–${d.maxNum}` : (d.num > 1 ? `×${d.num}` : '');
+            return `<tr><td class="drop-name">${itemName(d.itemId)}</td><td class="drop-num">${numStr}</td><td class="drop-rate ${cls}">${d.rate}%</td></tr>`;
+          }).join('')
+        : `<tr><td colspan="3" class="drop-none">No drops</td></tr>`;
+      return `<div class="pop-drops-title" style="margin-top:6px">${enemyName(id)}</div>
+        <table class="drop-table">${inner}</table>`;
     }).join('');
-    siblingsHtml = `
-      <div class="pop-group-members">
-        <div class="pop-group-title">${t('popup.groupmembers')}</div>
-        ${rows}
-      </div>`;
   }
 
   return `<div class="pop">
-    <div class="pop-header">
-      <div>
-        <div class="pop-title">${names.en}</div>
-        ${names.jp !== names.en ? `<div class="pop-title-jp">${names.jp}</div>` : ''}
-        <div class="pop-id">${e.id}</div>
-      </div>
-      ${boss ? `<div class="pop-boss-badge">${t('popup.boss')}</div>` : ''}
-    </div>
-
-    <div class="pop-stats">
-      <div class="pop-stat"><span class="pk">${t('popup.level')}</span><span class="pv">${lvStr}</span></div>
-      <div class="pop-stat"><span class="pk">${t('popup.exp')}</span><span class="pv">${e.exp} XP</span></div>
-      <div class="pop-stat"><span class="pk">${t('popup.spawn')}</span><span class="pv">${e.spawn}</span></div>
-      <div class="pop-stat"><span class="pk">${t('popup.group')}</span><span class="pv">#${e.gno}</span></div>
-      ${e.rawX !== undefined ? `<div class="pop-stat"><span class="pk">${t('popup.pos')}</span><span class="pv">${Math.round(e.rawX)}, ${Math.round(e.rawZ)}</span></div>` : ''}
-    </div>
-
-    ${siblingsHtml}
+    <div class="pop-title">${names}</div>
+    <div class="pop-row"><span class="pk">${t('popup.group')}</span><span class="pv">${g.gno}</span></div>
+    <div class="pop-row"><span class="pk">${t('popup.level')}</span><span class="pv">${lvRange}</span></div>
+    <div class="pop-row"><span class="pk">Spawns</span><span class="pv">${g.count}</span></div>
+    <div class="pop-row"><span class="pk">${t('popup.spawn')}</span><span class="pv">${g.spawn}</span></div>
+    <div class="pop-row"><span class="pk">${t('popup.exp')}</span><span class="pv">${g.exp} XP</span></div>
+    <div class="pop-row"><span class="pk">${t('popup.pos')}</span><span class="pv">${Math.round(g.x)}, ${Math.round(g.z)}</span></div>
+    ${g.isBoss ? `<div class="pop-boss">${t('popup.boss')}</div>` : ''}
     ${dropsHtml}
   </div>`;
 }
@@ -838,16 +844,99 @@ function buildEnemyPopup(e) {
 //  FILTER
 // ════════════════════════════════════════════════════════════════
 function applyFilter(groups) {
-  if (filter === 'boss') return groups.filter(g => g.isBoss);
-  if (filter === 'day') return groups.filter(g => {
-    const s = g.spawn;
-    return s === '00:00,23:59' || s.startsWith('06:') || s.includes(',17:59') || s.includes(',18:');
+  if (filter === 'boss')  return groups.filter(g => g.isBoss);
+  if (filter === 'day')   return groups.filter(g => {
+    const tm = g.spawn;
+    return tm === '00:00,23:59' || tm.startsWith('06:') || tm.includes(',17:59') || tm.includes(',18:');
   });
   if (filter === 'night') return groups.filter(g => {
-    const s = g.spawn;
-    return s.startsWith('18:') || s.startsWith('22:') || s.includes('05:59');
+    const tm = g.spawn;
+    return tm.startsWith('18:') || tm.startsWith('22:') || tm.includes('05:59');
   });
   return groups;
+}
+
+// ════════════════════════════════════════════════════════════════
+//  PD DUNGEON TILE LOADER
+//  Stacks tile PNGs vertically on a canvas, adds as Leaflet overlay
+// ════════════════════════════════════════════════════════════════
+function loadPdTiles(data, imgBounds) {
+  const W = data.imgW, H = data.imgH;
+  const canvas = document.createElement('canvas');
+  canvas.width  = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  let loaded = 0;
+  const total = data.tiles.length;
+  let hasAnyImage = false;
+
+  data.tiles.forEach(tile => {
+    const img = new Image();
+    img.onload = () => {
+      // Center tile horizontally within max width
+      const xOff = Math.floor((W - tile.w) / 2);
+      ctx.drawImage(img, xOff, tile.y_offset, tile.w, tile.h);
+      hasAnyImage = true;
+      loaded++;
+      if (loaded === total) {
+        // All tiles drawn — create data URL overlay
+        const url = canvas.toDataURL('image/png');
+        imgOvl = L.imageOverlay(url, imgBounds).addTo(leafMap);
+        document.getElementById('no-img').classList.remove('show');
+      }
+    };
+    img.onerror = () => {
+      loaded++;
+      // Show missing tile hint after all attempted
+      if (loaded === total && !hasAnyImage) {
+        document.getElementById('no-img').classList.add('show');
+        document.getElementById('ni-path').textContent =
+          `maps/${data.tiles[0]?.file} (and ${total-1} more tiles)`;
+      } else if (loaded === total && hasAnyImage) {
+        // Partial — still render what we have
+        const url = canvas.toDataURL('image/png');
+        imgOvl = L.imageOverlay(url, imgBounds).addTo(leafMap);
+      }
+    };
+    img.src = './maps/' + tile.file;
+  });
+
+  // Show pending indicator if tiles take time
+  if (total > 3) {
+    document.getElementById('ni-path').textContent = `Loading ${total} tiles…`;
+    document.getElementById('no-img').classList.add('show');
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+//  COORDINATE TRANSFORM
+// ════════════════════════════════════════════════════════════════
+function getW2P(d) {
+  const W = d.imgW||1024, H = d.imgH||1024;
+
+  if (d.type === 'room') {
+    // ROOM: pixel = world/10 + offset
+    const ox = d.offsetX||0, oy = d.offsetY||0;
+    return (wx,wz) => [wz/10 + (H + oy),  wx/10 + ox];
+  }
+
+  if (d.type === 'pd') {
+    const {zMax, zMin, xMin, xMax} = d;
+    const zRange = zMax - zMin || 1;
+    const xRange = xMax - xMin || 1;
+    return (wx,wz) => [
+      (zMax - wz) / zRange * H,
+      (wx - xMin) / xRange * W
+    ];
+  }
+
+  // FIELD (open world):
+  // Origin ox/oz = map corner in world coords, extracted from _nonfreq.arc files
+  //   px = (wx - ox) / S
+  //   py = (wz - oz) / S
+  const {ox, oz, S} = d;
+  return (wx,wz) => [(wz - oz) / S,  (wx - ox) / S];
 }
 
 function setFilter(f) {
@@ -855,62 +944,26 @@ function setFilter(f) {
   document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
   document.getElementById('f-'+f).classList.add('on');
   if (!curStage) return;
-  rebuildStage();
+  const d = MAP_DATA[curStage];
+  const sx = d._sx||1, sy = d._sy||1, rH = d._realH||d.baseH||512;
+  placeMarkers(d.groups, sx, sy, rH);
+  _fitToMarkers(applyFilter(d.groups), sx, sy, rH);
 }
-
-function rebuildStage() {
+function filterList() {
+  const q = document.getElementById('search').value.toLowerCase();
+  document.querySelectorAll('.ei').forEach(i => {
+    i.style.display=(i.dataset.name.includes(q)||i.dataset.level.includes(q))?'':'none';
+  });
+}
+function rebuildList() {
   if (!curStage) return;
   const d = MAP_DATA[curStage];
   placeMarkers(d.groups, d._sx||1, d._sy||1, d._realH||d.baseH||512);
 }
 
-function filterList() {
-  const q = document.getElementById('search').value.toLowerCase();
-  document.querySelectorAll('.ei').forEach(i => {
-    i.style.display = (i.dataset.name.includes(q) || i.dataset.level.includes(q)) ? '' : 'none';
-  });
-}
-
 function updateStat(n) {
-  const count = (n != null) ? n : (parseInt(document.getElementById('sb-cnt').textContent) || 0);
+  const count = (n !== undefined && n !== null) ? n : (parseInt(document.getElementById('sb-cnt').textContent) || 0);
   document.getElementById('stat').innerHTML = t('stat')(count);
-}
-
-// ════════════════════════════════════════════════════════════════
-//  PD DUNGEON TILES
-// ════════════════════════════════════════════════════════════════
-function loadPdTiles(data, imgBounds) {
-  const W = data.imgW, H = data.imgH;
-  const canvas = document.createElement('canvas');
-  canvas.width = W; canvas.height = H;
-  const ctx = canvas.getContext('2d');
-  let loaded = 0, hasAny = false;
-  const total = data.tiles?.length || 0;
-  if (!total) { document.getElementById('no-img').classList.add('show'); return; }
-
-  data.tiles.forEach(tile => {
-    const img = new Image();
-    img.onload = () => {
-      const xOff = Math.floor((W - tile.w) / 2);
-      ctx.drawImage(img, xOff, tile.y_offset, tile.w, tile.h);
-      hasAny = true;
-      if (++loaded === total) {
-        imgOvl = L.imageOverlay(canvas.toDataURL('image/png'), imgBounds).addTo(leafMap);
-        document.getElementById('no-img').classList.remove('show');
-      }
-    };
-    img.onerror = () => {
-      if (++loaded === total) {
-        if (hasAny) {
-          imgOvl = L.imageOverlay(canvas.toDataURL('image/png'), imgBounds).addTo(leafMap);
-        } else {
-          document.getElementById('no-img').classList.add('show');
-          document.getElementById('ni-path').textContent = `maps/${data.tiles[0]?.file}`;
-        }
-      }
-    };
-    img.src = './maps/' + tile.file;
-  });
 }
 
 // ════════════════════════════════════════════════════════════════
