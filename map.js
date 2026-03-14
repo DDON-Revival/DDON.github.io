@@ -9,7 +9,9 @@ async function loadStages(){
 const stages = await fetch("https://api.ddon.org/api/stages")
 .then(r=>r.json())
 
-Object.entries(stages).forEach(([id,data])=>{
+Object.entries(stages)
+.sort((a,b)=>Number(a[0]) - Number(b[0]))
+.forEach(([id,data])=>{
 
 const opt = document.createElement("option")
 opt.value = id
