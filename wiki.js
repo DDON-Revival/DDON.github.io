@@ -2,13 +2,13 @@ Promise.all([
   fetch("datas/EnemySpawn.json").then(r=>r.json()),
   fetch("datas/enemy-names.json").then(r=>r.json()),
   fetch("datas/stage-names.json").then(r=>r.json()),
-  fetch("datas/item_names.json").then(r=>r.text())
-]).then(([spawnData, enemyNames, stageNames, itemToml]) => {
+  fetch("datas/item_names.json").then(r=>r.json())
+]).then(([spawnData, enemyNames, stageNames, itemNames]) => {
 
     window.spawnData = spawnData;
     window.enemyNames = enemyNames;
     window.stageNames = stageNames;
-    window.itemNames = parseToml(itemToml);
+    window.itemNames = itemNames;
 
     buildWiki();
 });
