@@ -209,9 +209,12 @@ async function loadAll() {
     await loadJSON("ShopsCustom", "/datas/ShopCustom.json");
 
     await loadCSV("NpcNamesRaw", "/datas/npc_names.csv");
+    await loadCSV("MapDimensions", "/maps/dimensions.csv");	
 	await loadCSV("StageRooms", "/datas/StageRoom.csv");
 	await loadJSON("StageList", "/datas/StageList.json");
-	await loadJSON("StageMaps", "/datas/stage-maps.json");
+	
+	buildMapIndex();
+	buildStageMap();
 
     await loadJSON("ShopFunctions", "/datas/shops_function.json");
     await loadJSON("Special", "/datas/SpecialShops.json");
@@ -257,45 +260,36 @@ function buildStageMap(){
 
 DATA._stageMap = {};
 
-// 1️⃣ Manuelle Map Zuordnung aus stage-maps.json
-Object.entries(DATA.StageMaps || {}).forEach(([stageId,mapKey])=>{
-
-DATA._stageMap[stageId] = mapKey;
-
-});
-
-// 2️⃣ Dungeon maps fallback (falls nicht in JSON)
+// Dungeon / Lobby maps
 DATA.StageRooms?.forEach(row=>{
 
 if(!row || !row[0]) return;
 
-const stageId = Number(row[0]);
+const stageId = parseInt(row[0],10);
+const mapPath = row[1];
 
-if(DATA._stageMap[stageId]) return;
-
-DATA._stageMap[stageId] = row[1];
+DATA._stageMap[stageId] = mapPath;
 
 });
 
-// 3️⃣ Field fallback (nur wenn noch nichts existiert)
-(DATA.StageList || []).forEach(stage=>{
+// Field maps aus StageList
+DATA.StageList?.forEach(stage=>{
 
-if(!stage) return;
-
-const stageId = Number(stage.StageNo);
+const stageId = stage.StageNo;
 
 if(DATA._stageMap[stageId]) return;
 
-const mapGroup = Math.floor(stageId / 100);
+const mapId = stage.MapId;
+const mapType = stage.MapType || "field";
 
 const mapKey =
-"field" + String(mapGroup).padStart(3,"0") + "_m00";
+mapType + String(mapId).padStart(3,"0") + "_m00";
 
 DATA._stageMap[stageId] = mapKey;
 
 });
 
-console.log("StageMap built:",DATA._stageMap);
+console.log("StageMap:",DATA._stageMap);
 
 }
 
@@ -592,6 +586,7 @@ function renderHome() {
     if (currentTab === "quest") return renderQuests(filter);
     if (currentTab === "crafting") return renderCrafting(filter);
     if (currentTab === "craftingPlus") return renderCraftingPlus(filter);
+    if (currentTab === "map") return renderMap();
 }
 
 /* =========================================================
@@ -1333,5 +1328,146 @@ if (!name.toLowerCase().includes(filter)) return;
     });
 
     document.getElementById("content").innerHTML=html;
+}
+
+function renderMap(){
+
+let stageOptions="";
+
+Object.keys(DATA._stageMap).forEach(id=>{
+
+stageOptions+=`
+<option value="${id}">
+${getStageName(id)}
+</option>
+`;
+
+});
+
+const html=`
+
+<div class="card">
+
+<div class="card-title">Interactive Map</div>
+
+<select id="mapStageSelect">
+
+${stageOptions}
+
+</select>
+
+<div id="mapContainer"
+style="
+position:relative;
+margin-top:10px;
+">
+
+<img id="mapImage"
+style="
+width:100%;
+display:block;
+">
+
+</div>
+
+</div>
+
+`;
+
+document.getElementById("content").innerHTML=html;
+
+document
+.getElementById("mapStageSelect")
+.onchange=e=>loadStageMap(e.target.value);
+
+const firstStage=Object.keys(DATA._stageMap)[0];
+
+loadStageMap(firstStage);
+
+}
+
+function loadStageMap(stageId){
+
+const mapKey = DATA._stageMap[stageId];
+
+if(!mapKey){
+
+console.log("Stage has no map:",stageId);
+return;
+
+}
+
+const map = DATA._mapIndex[mapKey];
+
+if(!map){
+
+console.log("Map dimensions missing:",mapKey);
+return;
+
+}
+
+const mapWidth = map.width;
+const mapHeight = map.height;
+
+document.getElementById("mapImage").src =
+"/maps/" + mapKey + ".png";
+
+spawnStageEnemies(stageId,mapWidth,mapHeight);
+
+}
+
+function spawnStageEnemies(stageId,mapWidth,mapHeight){
+
+const container=document.getElementById("mapContainer");
+
+container
+.querySelectorAll(".enemy-marker")
+.forEach(m=>m.remove());
+
+SPAWN_CHANNELS.forEach(channel=>{
+
+const data=DATA[channel.key];
+
+data?.enemies?.forEach(e=>{
+
+if(String(e[0])!==String(stageId)) return;
+
+const pos = Number(e[4]);
+
+const gridWidth = 64;
+const gridHeight = 64;
+
+const gridX = pos % gridWidth;
+const gridY = Math.floor(pos / gridWidth);
+
+const x = (gridX / gridWidth) * mapWidth;
+const y = (gridY / gridHeight) * mapHeight;
+
+spawnMarker(x,y,mapWidth,mapHeight,getEnemyName(e[5]),e[9]);
+
+});
+
+});
+
+}
+
+function spawnMarker(x,y,mapWidth,mapHeight,name,level){
+
+const marker=document.createElement("div");
+
+marker.className="enemy-marker";
+
+marker.style.left=(x/mapWidth*100)+"%";
+marker.style.top=(y/mapHeight*100)+"%";
+
+marker.title=name+" Lv"+level;
+
+marker.onclick=()=>{
+alert(name+" Lv "+level);
+};
+
+document.getElementById("mapContainer")
+.appendChild(marker);
+
 }
 
