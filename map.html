@@ -639,20 +639,22 @@ function loadStage(mapKey) {
     }
   }
 
-  leafMap.fitBounds(imgBounds, { padding:[20,20], animate:false });
+  leafMap.fitBounds(imgBounds, { padding:[0,0], animate:false });
 
-  // ── DDON Coordinate Transform ──────────────────────────────
-  // FIELD:  px = (wx - cx)/100 + W/2   (positive X = east = right on map)
-  //         py = (wz - cz)/100 + H/2   (positive Z = south = bottom on map)
-  //         py = (wz - cz)/100 + H/2
-  //
-  // ROOM:   px = wx/10 + offsetX
-  //         py = wz/10 + H + offsetY   (offsetY negative)
-  //
-  // PD:     px = (wx - xMin)/(xMax - xMin) * maxTileW  (centered)
-  //         py = (zMax - wz)/(zMax - zMin) * totalH    (linear Z→Y)
-  //
   placeMarkers(data.groups);
+
+  // Zoom to the actual marker area (markers occupy only a fraction of the image)
+  _fitToMarkers(data.groups);
+}
+
+function _fitToMarkers(groups) {
+  if (!groups || !groups.length) return;
+  const pad = 25;
+  const minPy = Math.min(...groups.map(g => g.py)) - pad;
+  const maxPy = Math.max(...groups.map(g => g.py)) + pad;
+  const minPx = Math.min(...groups.map(g => g.px)) - pad;
+  const maxPx = Math.max(...groups.map(g => g.px)) + pad;
+  leafMap.fitBounds([[minPy, minPx], [maxPy, maxPx]], { animate: false, padding: [10, 10] });
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -851,7 +853,9 @@ function setFilter(f) {
   document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
   document.getElementById('f-'+f).classList.add('on');
   if (!curStage) return;
-  placeMarkers(MAP_DATA[curStage].groups);
+  const groups = MAP_DATA[curStage].groups;
+  placeMarkers(groups);
+  _fitToMarkers(applyFilter(groups));
 }
 
 function filterList() {
