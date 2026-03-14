@@ -509,55 +509,71 @@ async function boot() {
 }
 
 // ════════════════════════════════════════════════════════════════
-//  DROPDOWN
+//  DROPDOWN  — now keyed by map_key (e.g. "field000_m00")
 // ════════════════════════════════════════════════════════════════
+const MAP_DISPLAY_NAMES = {
+  en: {
+    'field000_m00':'Lestania',            'field004_m00':'Betland Plains',
+    'field007_m00':'Whitewyrm Nest',      'field001_m00':'Isle of Denial',
+    'field002_m00':'Mysree Grove',        'field005_m00':'Bloodbane Isle',
+  },
+  jp: {
+    'field000_m00':'レスタニア',          'field004_m00':'ベットランド平原',
+    'field007_m00':'白竜の巣',            'field001_m00':'孤島',
+    'field002_m00':'ミスリの森',          'field005_m00':'血の島',
+  }
+};
+
+function mapDisplayName(mapKey) {
+  return MAP_DISPLAY_NAMES[lang]?.[mapKey] || MAP_DISPLAY_NAMES.en[mapKey] || mapKey;
+}
+
 function rebuildDropdown() {
   const sel = document.getElementById('zone-sel');
   const prev = sel.value;
   sel.innerHTML = '';
 
-  // Group: stages with image (open world fields) vs rest
-  const withImg    = [];
-  const withoutImg = [];
+  const fields   = [];
+  const dungeons = [];
   Object.keys(MAP_DATA)
-    .filter(sid => MAP_DATA[sid].enemies.length > 0)
-    .sort((a,b) => parseInt(a)-parseInt(b))
-    .forEach(sid => {
-      (MAP_DATA[sid].imgW ? withImg : withoutImg).push(sid);
+    .filter(mk => MAP_DATA[mk].enemies.length > 0)
+    .sort()
+    .forEach(mk => {
+      (MAP_DATA[mk].type === 'field' ? fields : dungeons).push(mk);
     });
 
-  const addGroup = (label, sids) => {
-    if (!sids.length) return;
+  const addGroup = (label, keys) => {
+    if (!keys.length) return;
     const og = document.createElement('optgroup');
     og.label = label;
-    sids.forEach(sid => {
-      const d = MAP_DATA[sid];
+    keys.forEach(mk => {
+      const d = MAP_DATA[mk];
       const o = document.createElement('option');
-      o.value = sid;
-      o.textContent = `${zoneName(sid)}  ·  ${d.enemies.length} enemies`;
+      o.value = mk;
+      o.textContent = `${mapDisplayName(mk)}  ·  ${d.enemies.length}`;
       og.appendChild(o);
     });
     sel.appendChild(og);
   };
 
-  addGroup(t('optgroup.main'),    withImg);
-  addGroup(t('optgroup.dungeon'), withoutImg);
+  addGroup(t('optgroup.main'),    fields);
+  addGroup(t('optgroup.dungeon'), dungeons);
 
   if (prev && MAP_DATA[prev]) sel.value = prev;
 }
 
 // ════════════════════════════════════════════════════════════════
-//  LOAD STAGE
+//  LOAD STAGE  — accepts map_key now
 // ════════════════════════════════════════════════════════════════
-function loadStage(sid) {
-  if (!sid || !MAP_DATA[sid]) return;
-  curStage = sid;
+function loadStage(mapKey) {
+  if (!mapKey || !MAP_DATA[mapKey]) return;
+  curStage = mapKey;
   filter = 'all';
   document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
   document.getElementById('f-all').classList.add('on');
   document.getElementById('search').value = '';
 
-  const data = MAP_DATA[sid];
+  const data = MAP_DATA[mapKey];
 
   // Remove old overlay + markers
   if (imgOvl) { leafMap.removeLayer(imgOvl); imgOvl = null; }
@@ -583,7 +599,7 @@ function loadStage(sid) {
     probe.src = imgUrl;
   } else {
     document.getElementById('no-img').classList.add('show');
-    document.getElementById('ni-path').textContent = `(no image mapped for Stage ${sid})`;
+    document.getElementById('ni-path').textContent = `(no image: maps/${data.imgFile})`;
   }
 
   leafMap.fitBounds(imgBounds, { padding:[20,20], animate:false });
