@@ -610,44 +610,44 @@ function loadStage(mapKey) {
   mkrs.forEach(m => leafMap.removeLayer(m.lm)); mkrs = [];
 
   if (data.type === 'pd') {
-    const W = data.imgW, H = data.imgH;
+    const W = data.baseW, H = data.baseH;
     const imgBounds = [[0,0],[H,W]];
     loadPdTiles(data, imgBounds);
     leafMap.fitBounds(imgBounds, {animate:false});
-    placeMarkers(data.groups, H);
-    _fitToMarkers(data.groups, H);
+    placeMarkers(data.groups, 1, 1, H);
+    _fitToMarkers(data.groups, 1, 1, H);
   } else {
-    // Always load image to get real pixel dimensions — avoids imgH=0 from old JSON
     const url = './maps/' + data.imgFile;
     const img = new Image();
     img.onload = () => {
-      const W = img.naturalWidth, H = img.naturalHeight;
-      data.imgW = W; data.imgH = H;  // update in-memory
-      const imgBounds = [[0,0],[H,W]];
+      const realW = img.naturalWidth, realH = img.naturalHeight;
+      const baseW = data.baseW || realW, baseH = data.baseH || realH;
+      const sx = realW / baseW, sy = realH / baseH;
+      data._sx = sx; data._sy = sy; data._realH = realH;  // store for filter/rebuild
+      const imgBounds = [[0,0],[realH,realW]];
       imgOvl = L.imageOverlay(url, imgBounds).addTo(leafMap);
       document.getElementById('no-img').classList.remove('show');
       leafMap.fitBounds(imgBounds, {animate:false});
-      placeMarkers(data.groups, H);
-      _fitToMarkers(data.groups, H);
+      placeMarkers(data.groups, sx, sy, realH);
+      _fitToMarkers(data.groups, sx, sy, realH);
     };
     img.onerror = () => {
-      // No image — place markers using stored dims (or fallback)
-      const H = data.imgH || 559, W = data.imgW || 427;
       document.getElementById('no-img').classList.add('show');
       document.getElementById('ni-path').textContent = url;
-      placeMarkers(data.groups, H);
-      _fitToMarkers(data.groups, H);
+      const H = data.baseH || 512;
+      placeMarkers(data.groups, 1, 1, H);
+      _fitToMarkers(data.groups, 1, 1, H);
     };
     img.src = url;
   }
 }
 
-function _fitToMarkers(groups, H) {
+function _fitToMarkers(groups, sx, sy, realH) {
   if (!groups?.length) return;
-  if (!H) H = MAP_DATA[curStage]?.imgH || 1024;
-  const pad = 15;
-  const lats = groups.map(g => H - g.py);
-  const lngs = groups.map(g => g.px);
+  if (!sx) sx=1; if (!sy) sy=1; if (!realH) realH=MAP_DATA[curStage]?.baseH||512;
+  const pad = realH * 0.02;
+  const lats = groups.map(g => realH - g.py * sy);
+  const lngs = groups.map(g => g.px * sx);
   leafMap.fitBounds(
     [[Math.min(...lats)-pad, Math.min(...lngs)-pad],
      [Math.max(...lats)+pad, Math.max(...lngs)+pad]],
@@ -658,15 +658,15 @@ function _fitToMarkers(groups, H) {
 // ════════════════════════════════════════════════════════════════
 //  PLACE MARKERS  — one marker per group (like DDOn-Tool)
 // ════════════════════════════════════════════════════════════════
-function placeMarkers(allGroups, H) {
+function placeMarkers(allGroups, sx, sy, realH) {
   mkrs.forEach(m => leafMap.removeLayer(m.lm));
   mkrs = [];
   document.getElementById('elist').innerHTML = '';
-  if (!H) H = MAP_DATA[curStage]?.imgH || 1024;
+  if (!sx) sx=1; if (!sy) sy=1; if (!realH) realH = MAP_DATA[curStage]?.baseH||512;
   const list = applyFilter(allGroups);
   list.forEach((g) => {
-    const lat = H - g.py;   // image pixel → Leaflet lat
-    const lng = g.px;
+    const lng = g.px * sx;          // scale to real image pixels
+    const lat = realH - g.py * sy;  // invert Y for Leaflet
     const boss = g.isBoss;
 
     // ── Marker Icon ─────────────────────────────────────────
@@ -849,20 +849,21 @@ function setFilter(f) {
   document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
   document.getElementById('f-'+f).classList.add('on');
   if (!curStage) return;
-  const data = MAP_DATA[curStage];
-  placeMarkers(data.groups, data.imgH);
-  _fitToMarkers(applyFilter(data.groups), data.imgH);
+  const d = MAP_DATA[curStage];
+  const sx = d._sx||1, sy = d._sy||1, rH = d._realH||d.baseH||512;
+  placeMarkers(d.groups, sx, sy, rH);
+  _fitToMarkers(applyFilter(d.groups), sx, sy, rH);
 }
 function filterList() {
   const q = document.getElementById('search').value.toLowerCase();
   document.querySelectorAll('.ei').forEach(i => {
-    i.style.display = (i.dataset.name.includes(q)||i.dataset.level.includes(q)) ? '' : 'none';
+    i.style.display=(i.dataset.name.includes(q)||i.dataset.level.includes(q))?'':'none';
   });
 }
 function rebuildList() {
   if (!curStage) return;
-  const data = MAP_DATA[curStage];
-  placeMarkers(data.groups, data.imgH);
+  const d = MAP_DATA[curStage];
+  placeMarkers(d.groups, d._sx||1, d._sy||1, d._realH||d.baseH||512);
 }
 
 function updateStat(n) {
