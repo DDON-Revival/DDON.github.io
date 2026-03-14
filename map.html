@@ -218,16 +218,27 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
 }
 
 /* ── MARKERS ────────────────────────────────────────── */
-.mk {
-  border-radius:50%; cursor:pointer;
-  background:var(--red); border:1.5px solid rgba(192,57,43,.5);
-  box-shadow:0 0 4px rgba(192,57,43,.5), 0 0 9px rgba(192,57,43,.2);
-  transition:transform .12s;
-  width:9px; height:9px;
+/* ── GROUP MARKERS (DDOn-Tool style labels) ────────── */
+.gmarker {
+  background: rgba(130,20,20,.88);
+  border: 1.5px solid rgba(192,57,43,.75);
+  border-radius: 3px;
+  padding: 2px 6px 2px 4px;
+  display: inline-flex; align-items: center; gap: 4px;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.06);
+  cursor: pointer;
+  transition: transform .12s, box-shadow .12s;
+  font-size: 11px; line-height: 1.3;
 }
-.mk:hover   { transform:scale(1.7); }
-.mk.boss    { width:13px; height:13px; background:var(--boss); border-color:rgba(232,124,62,.6); box-shadow:0 0 7px rgba(232,124,62,.7),0 0 14px rgba(232,124,62,.35); }
-.mk.hi      { background:var(--gold2) !important; border-color:var(--gold) !important; box-shadow:0 0 10px var(--gold),0 0 22px rgba(201,168,76,.45) !important; transform:scale(1.5) !important; z-index:900 !important; }
+.gmarker:hover { transform: scale(1.08); box-shadow: 0 2px 8px rgba(200,60,40,.7); }
+.gmarker.boss  { background: rgba(160,60,10,.9); border-color: rgba(232,124,62,.85); }
+.gmarker.hi    { background: rgba(160,130,20,.95) !important; border-color: var(--gold) !important; box-shadow: 0 0 8px var(--gold), 0 0 16px rgba(201,168,76,.4) !important; }
+.gm-count { color: #ffffff; font-weight: 700; font-size: 12px; min-width: 12px; text-align:right; font-family:'Cinzel',serif; }
+.gm-sep   { color: rgba(255,255,255,.4); font-size: 10px; }
+.gm-name  { color: #f2d0c8; max-width: 110px; overflow:hidden; text-overflow:ellipsis; }
+.gm-lv    { color: rgba(255,255,255,.5); font-size: 10px; font-family:'Cinzel',serif; }
+.leaflet-marker-icon { overflow: visible !important; }
 
 /* ── RESPONSIVE ──────────────────────────────────────── */
 @media(max-width:720px) {
@@ -538,7 +549,7 @@ function rebuildDropdown() {
   const pdGroups = {}; // pdName → [mapKeys]
 
   Object.keys(MAP_DATA)
-    .filter(mk => MAP_DATA[mk].enemies.length > 0)
+    .filter(mk => MAP_DATA[mk].groups.length > 0)
     .sort()
     .forEach(mk => {
       const d = MAP_DATA[mk];
@@ -559,7 +570,7 @@ function rebuildDropdown() {
       const d = MAP_DATA[mk];
       const o = document.createElement('option');
       o.value = mk;
-      o.textContent = `${nameFn(mk, d)}  ·  ${d.enemies.length}`;
+      o.textContent = `${nameFn(mk, d)}  ·  ${d.groups.length} groups`;
       og.appendChild(o);
     });
     sel.appendChild(og);
@@ -640,69 +651,70 @@ function loadStage(mapKey) {
   // PD:     px = (wx - xMin)/(xMax - xMin) * maxTileW  (centered)
   //         py = (zMax - wz)/(zMax - zMin) * totalH    (linear Z→Y)
   //
-  let w2p;
-  if (data.type === 'room') {
-    const ox = data.offsetX || 0;
-    const oy = data.offsetY || 0;
-    w2p = (wx, wz) => [wz / 10 + (H + oy),  wx / 10 + ox];
-  } else {
-    const {cx, cz} = data;
-    w2p = (wx, wz) => [(wz - cz) / 100 + H / 2,  (cx - wx) / 100 + W / 2];
-  }
-
-  placeMarkers(data.enemies, getW2P(data));
+  placeMarkers(data.groups, getW2P(data));
 }
 
 // ════════════════════════════════════════════════════════════════
-//  PLACE MARKERS
+//  PLACE MARKERS  — one marker per group (like DDOn-Tool)
 // ════════════════════════════════════════════════════════════════
-function placeMarkers(allEnemies, w2p) {
+function placeMarkers(allGroups, w2p) {
   mkrs.forEach(m => leafMap.removeLayer(m.lm));
   mkrs = [];
   document.getElementById('elist').innerHTML = '';
 
-  const list = applyFilter(allEnemies);
+  const list = applyFilter(allGroups);
 
-  list.forEach((e) => {
-    const [py, px] = w2p(e.x, e.z);
-    const boss  = e.isBoss;
-    const name  = enemyName(e.enemyId);
+  list.forEach((g) => {
+    const [py, px] = w2p(g.x, g.z);
+    const boss  = g.isBoss;
+
+    // ── Marker Icon ─────────────────────────────────────────
+    // Shows: group count + primary enemy name (like DDOn-Tool labels)
+    const primaryId   = g.ids[0] || '';
+    const primaryName = enemyName(primaryId);
+    const shortName   = primaryName.length > 14 ? primaryName.slice(0,13)+'…' : primaryName;
+    const lvRange     = g.levels.length > 1
+      ? `${g.levels[0]}-${g.levels[g.levels.length-1]}`
+      : String(g.levels[0] || '?');
+
+    const iconHtml = `
+      <div class="gmarker${boss?' boss':''}">
+        <span class="gm-count">${g.count}</span>
+        <span class="gm-name">${shortName}</span>
+        <span class="gm-lv">Lv${lvRange}</span>
+      </div>`;
 
     const icon = L.divIcon({
       className: '',
-      html: `<div class="mk${boss?' boss':''}"></div>`,
-      iconSize:   [boss?13:9, boss?13:9],
-      iconAnchor: [boss? 6:4, boss? 6:4],
+      html: iconHtml,
+      iconAnchor: [0, 10],
     });
 
     const lm = L.marker([py, px], { icon, zIndexOffset: boss ? 100 : 0 });
-    lm.bindPopup(buildPopup(e, name), { maxWidth:280, minWidth:230 });
+    lm.bindPopup(buildGroupPopup(g), { maxWidth:300, minWidth:240 });
     lm.addTo(leafMap);
-    mkrs.push({ lm, e });
+    mkrs.push({ lm, g });
 
-    // Sidebar entry
+    // ── Sidebar entry ────────────────────────────────────────
     const item = document.createElement('div');
     item.className = `ei${boss ? ' boss-item' : ''}`;
-    item.dataset.name  = name.toLowerCase();
-    item.dataset.level = String(e.level);
+    item.dataset.name  = primaryName.toLowerCase();
+    item.dataset.level = String(g.levels[0] || 0);
     item.innerHTML = `
-      <div class="ei-lv${boss?' b':''}">${e.level}</div>
+      <div class="ei-lv${boss?' b':''}">Lv${lvRange}</div>
       <div class="ei-info">
-        <div class="ei-name">${name}</div>
-        <div class="ei-meta">${e.spawnTime} · ${e.exp} XP</div>
+        <div class="ei-name">${primaryName}${g.ids.length>1 ? ` +${g.ids.length-1}` : ''}</div>
+        <div class="ei-meta">Group ${g.gno} · ${g.count} spawns · ${g.spawn}</div>
       </div>
       <div class="ei-dot${boss?' b':''}"></div>`;
 
     item.addEventListener('click', () => {
-      // Unhighlight previous
-      if (hlMkr) hlMkr.getElement()?.querySelector('.mk')?.classList.remove('hi');
-      const dot = lm.getElement()?.querySelector('.mk');
+      if (hlMkr) hlMkr.getElement()?.querySelector('.gmarker')?.classList.remove('hi');
+      const dot = lm.getElement()?.querySelector('.gmarker');
       if (dot) dot.classList.add('hi');
       hlMkr = lm;
-
       leafMap.setView([py, px], 1, { animate: true });
       lm.openPopup();
-
       document.querySelectorAll('.ei').forEach(x => x.classList.remove('sel'));
       item.classList.add('sel');
       item.scrollIntoView({ block:'nearest', behavior:'smooth' });
@@ -715,33 +727,37 @@ function placeMarkers(allEnemies, w2p) {
   updateStat(list.length);
 }
 
-function buildPopup(e, name) {
+function buildGroupPopup(g) {
+  const names = g.ids.map(id => enemyName(id)).join(', ');
+  const lvRange = g.levels.length > 1
+    ? `${g.levels[0]} – ${g.levels[g.levels.length-1]}`
+    : String(g.levels[0] || '?');
   return `<div class="pop">
-    <div class="pop-title">${name}</div>
-    <div class="pop-row"><span class="pk">${t('popup.id')}</span><span class="pv">${e.enemyId}</span></div>
-    <div class="pop-row"><span class="pk">${t('popup.level')}</span><span class="pv">${e.level}</span></div>
-    <div class="pop-row"><span class="pk">${t('popup.spawn')}</span><span class="pv">${e.spawnTime}</span></div>
-    <div class="pop-row"><span class="pk">${t('popup.exp')}</span><span class="pv">${e.exp} XP</span></div>
-    <div class="pop-row"><span class="pk">${t('popup.group')}</span><span class="pv">${e.groupId}</span></div>
-    <div class="pop-row"><span class="pk">${t('popup.pos')}</span><span class="pv">${Math.round(e.x)}, ${Math.round(e.z)}</span></div>
-    ${e.isBoss ? `<div class="pop-boss">${t('popup.boss')}</div>` : ''}
+    <div class="pop-title">${names}</div>
+    <div class="pop-row"><span class="pk">${t('popup.group')}</span><span class="pv">${g.gno}</span></div>
+    <div class="pop-row"><span class="pk">${t('popup.level')}</span><span class="pv">${lvRange}</span></div>
+    <div class="pop-row"><span class="pk">Spawns</span><span class="pv">${g.count}</span></div>
+    <div class="pop-row"><span class="pk">${t('popup.spawn')}</span><span class="pv">${g.spawn}</span></div>
+    <div class="pop-row"><span class="pk">${t('popup.exp')}</span><span class="pv">${g.exp} XP</span></div>
+    <div class="pop-row"><span class="pk">${t('popup.pos')}</span><span class="pv">${Math.round(g.x)}, ${Math.round(g.z)}</span></div>
+    ${g.isBoss ? `<div class="pop-boss">${t('popup.boss')}</div>` : ''}
   </div>`;
 }
 
 // ════════════════════════════════════════════════════════════════
 //  FILTER
 // ════════════════════════════════════════════════════════════════
-function applyFilter(enemies) {
-  if (filter === 'boss')  return enemies.filter(e => e.isBoss);
-  if (filter === 'day')   return enemies.filter(e => {
-    const tm = e.spawnTime;
+function applyFilter(groups) {
+  if (filter === 'boss')  return groups.filter(g => g.isBoss);
+  if (filter === 'day')   return groups.filter(g => {
+    const tm = g.spawn;
     return tm === '00:00,23:59' || tm.startsWith('06:') || tm.includes(',17:59') || tm.includes(',18:');
   });
-  if (filter === 'night') return enemies.filter(e => {
-    const tm = e.spawnTime;
+  if (filter === 'night') return groups.filter(g => {
+    const tm = g.spawn;
     return tm.startsWith('18:') || tm.startsWith('22:') || tm.includes('05:59');
   });
-  return enemies;
+  return groups;
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -810,16 +826,13 @@ function getW2P(d) {
   }
 
   if (d.type === 'pd') {
-    // PD DUNGEON: linear interpolation between zMax(top) and zMin(bottom)
-    // X: centered horizontally per max tile width
     const {zMax, zMin, xMin, xMax} = d;
     const zRange = zMax - zMin || 1;
     const xRange = xMax - xMin || 1;
-    return (wx,wz) => {
-      const py = (zMax - wz) / zRange * H;
-      const px = (wx - xMin) / xRange * W;
-      return [py, px];
-    };
+    return (wx,wz) => [
+      (zMax - wz) / zRange * H,
+      (wx - xMin) / xRange * W
+    ];
   }
 
   // FIELD (open world): X mirrored, centered on cx/cz
@@ -832,8 +845,7 @@ function setFilter(f) {
   document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
   document.getElementById('f-'+f).classList.add('on');
   if (!curStage) return;
-  const d = MAP_DATA[curStage];
-  placeMarkers(d.enemies, getW2P(d));
+  placeMarkers(MAP_DATA[curStage].groups, getW2P(MAP_DATA[curStage]));
 }
 
 function filterList() {
@@ -845,8 +857,7 @@ function filterList() {
 
 function rebuildList() {
   if (!curStage) return;
-  const d = MAP_DATA[curStage];
-  placeMarkers(d.enemies, getW2P(d));
+  placeMarkers(MAP_DATA[curStage].groups, getW2P(MAP_DATA[curStage]));
 }
 
 function updateStat(n) {
