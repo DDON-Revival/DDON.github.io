@@ -609,28 +609,37 @@ function loadStage(mapKey) {
   if (imgOvl) { leafMap.removeLayer(imgOvl); imgOvl = null; }
   mkrs.forEach(m => leafMap.removeLayer(m.lm)); mkrs = [];
 
-  const W = data.imgW, H = data.imgH;
-  // Leaflet CRS.Simple: [lat, lng] = [row from bottom, col from left]
-  // Image pixel (px, py): px=col, py=row from top → lat = H - py
-  const imgBounds = [[0, 0], [H, W]];
-
   if (data.type === 'pd') {
+    const W = data.imgW, H = data.imgH;
+    const imgBounds = [[0,0],[H,W]];
     loadPdTiles(data, imgBounds);
+    leafMap.fitBounds(imgBounds, {animate:false});
+    placeMarkers(data.groups, H);
+    _fitToMarkers(data.groups, H);
   } else {
+    // Always load image to get real pixel dimensions — avoids imgH=0 from old JSON
     const url = './maps/' + data.imgFile;
-    imgOvl = L.imageOverlay(url, imgBounds).addTo(leafMap);
-    document.getElementById('no-img').classList.remove('show');
-    const probe = new Image();
-    probe.onerror = () => {
+    const img = new Image();
+    img.onload = () => {
+      const W = img.naturalWidth, H = img.naturalHeight;
+      data.imgW = W; data.imgH = H;  // update in-memory
+      const imgBounds = [[0,0],[H,W]];
+      imgOvl = L.imageOverlay(url, imgBounds).addTo(leafMap);
+      document.getElementById('no-img').classList.remove('show');
+      leafMap.fitBounds(imgBounds, {animate:false});
+      placeMarkers(data.groups, H);
+      _fitToMarkers(data.groups, H);
+    };
+    img.onerror = () => {
+      // No image — place markers using stored dims (or fallback)
+      const H = data.imgH || 559, W = data.imgW || 427;
       document.getElementById('no-img').classList.add('show');
       document.getElementById('ni-path').textContent = url;
+      placeMarkers(data.groups, H);
+      _fitToMarkers(data.groups, H);
     };
-    probe.src = url;
+    img.src = url;
   }
-
-  leafMap.fitBounds(imgBounds, { animate: false });
-  placeMarkers(data.groups, H);
-  _fitToMarkers(data.groups, H);
 }
 
 function _fitToMarkers(groups, H) {
