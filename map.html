@@ -595,7 +595,7 @@ function rebuildDropdown() {
 }
 
 // ════════════════════════════════════════════════════════════════
-//  LOAD STAGE  — accepts map_key now
+//  LOAD STAGE
 // ════════════════════════════════════════════════════════════════
 function loadStage(mapKey) {
   if (!mapKey || !MAP_DATA[mapKey]) return;
@@ -607,72 +607,81 @@ function loadStage(mapKey) {
 
   const data = MAP_DATA[mapKey];
 
-  // Remove old overlay + markers
   if (imgOvl) { leafMap.removeLayer(imgOvl); imgOvl = null; }
   mkrs.forEach(m => leafMap.removeLayer(m.lm));
   mkrs = [];
-
-  // Image size (fall back to 1024×1024)
-  const W = data.imgW || 1024;
-  const H = data.imgH || 1024;
-  const imgBounds = [[0,0],[H,W]];
-
   document.getElementById('no-img').classList.remove('show');
 
   if (data.type === 'pd') {
-    // ── PD DUNGEON: render stacked tiles via canvas ──────────
+    // PD: stacked canvas tiles — we know exact pixel dims
+    const W = data.imgW, H = data.imgH;
+    const imgBounds = [[0,0],[H,W]];
     loadPdTiles(data, imgBounds);
+    leafMap.fitBounds(imgBounds, {animate:false});
+    _placeAndFit(data.groups, H);
+
   } else {
-    const imgUrl = data.imgFile ? ('./maps/' + data.imgFile) : null;
-    if (imgUrl) {
+    // Field / Room: load real PNG to get actual pixel dimensions
+    const imgUrl = './maps/' + data.imgFile;
+    const probe = new Image();
+    probe.onload = () => {
+      const W = probe.naturalWidth;
+      const H = probe.naturalHeight;
+      // Store real dims for later use (filter/rebuild)
+      data._realW = W;
+      data._realH = H;
+      const imgBounds = [[0,0],[H,W]];
       imgOvl = L.imageOverlay(imgUrl, imgBounds).addTo(leafMap);
-      const probe = new Image();
-      probe.onload  = () => document.getElementById('no-img').classList.remove('show');
-      probe.onerror = () => {
-        document.getElementById('no-img').classList.add('show');
-        document.getElementById('ni-path').textContent = imgUrl;
-      };
-      probe.src = imgUrl;
-    } else {
+      leafMap.fitBounds(imgBounds, {animate:false});
+      _placeAndFit(data.groups, H);
+    };
+    probe.onerror = () => {
       document.getElementById('no-img').classList.add('show');
-      document.getElementById('ni-path').textContent = `maps/${data.imgFile}`;
-    }
+      document.getElementById('ni-path').textContent = imgUrl;
+      // Still place markers using stored imgH as fallback
+      const H = data.imgH || 1024;
+      _placeAndFit(data.groups, H);
+    };
+    probe.src = imgUrl;
   }
-
-  leafMap.fitBounds(imgBounds, { padding:[0,0], animate:false });
-
-  placeMarkers(data.groups);
-
-  // Zoom to the actual marker area (markers occupy only a fraction of the image)
-  _fitToMarkers(data.groups);
 }
 
-function _fitToMarkers(groups) {
+function _placeAndFit(groups, realH) {
+  placeMarkers(groups, realH);
+  _fitToMarkers(groups, realH);
+}
+
+function _fitToMarkers(groups, realH) {
   if (!groups || !groups.length) return;
-  const pad = 25;
-  const lats = groups.map(g => g.lat);
-  const lngs = groups.map(g => g.lng);
+  const H = realH || MAP_DATA[curStage]?._realH || MAP_DATA[curStage]?.imgH || 1024;
+  const pad = 15;
+  const lats = groups.map(g => H - g.py);
+  const lngs = groups.map(g => g.px);
   leafMap.fitBounds(
     [[Math.min(...lats)-pad, Math.min(...lngs)-pad],
      [Math.max(...lats)+pad, Math.max(...lngs)+pad]],
-    { animate: false, padding: [10, 10] }
+    { animate: false, padding: [10,10] }
   );
 }
 
 // ════════════════════════════════════════════════════════════════
 //  PLACE MARKERS  — one marker per group (like DDOn-Tool)
 // ════════════════════════════════════════════════════════════════
-function placeMarkers(allGroups) {
+function placeMarkers(allGroups, realH) {
   mkrs.forEach(m => leafMap.removeLayer(m.lm));
   mkrs = [];
   document.getElementById('elist').innerHTML = '';
 
+  // Use realH from loaded image; fall back to stored imgH
+  const H = realH || MAP_DATA[curStage]?._realH || MAP_DATA[curStage]?.imgH || 1024;
+
   const list = applyFilter(allGroups);
 
   list.forEach((g) => {
-    // lat/lng are pre-computed Leaflet coordinates (stored in map_data.json)
-    // lat = imgH - py  (CRS.Simple: lat=0 at bottom, lat=H at top)
-    const lat = g.lat, lng = g.lng;
+    // px/py are image pixels (y=0 at top).
+    // Leaflet CRS.Simple: lat=0 at bottom → lat = H - py
+    const lat = H - g.py;
+    const lng = g.px;
     const boss = g.isBoss;
 
     // ── Marker Icon ─────────────────────────────────────────
@@ -855,9 +864,11 @@ function setFilter(f) {
   document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
   document.getElementById('f-'+f).classList.add('on');
   if (!curStage) return;
-  const groups = MAP_DATA[curStage].groups;
-  placeMarkers(groups);
-  _fitToMarkers(applyFilter(groups));
+  const data = MAP_DATA[curStage];
+  const H = data._realH || data.imgH || 1024;
+  const groups = data.groups;
+  placeMarkers(groups, H);
+  _fitToMarkers(applyFilter(groups), H);
 }
 
 function filterList() {
@@ -869,7 +880,8 @@ function filterList() {
 
 function rebuildList() {
   if (!curStage) return;
-  placeMarkers(MAP_DATA[curStage].groups);
+  const data = MAP_DATA[curStage];
+  placeMarkers(data.groups, data._realH || data.imgH || 1024);
 }
 
 function updateStat(n) {
