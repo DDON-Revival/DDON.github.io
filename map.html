@@ -28,6 +28,7 @@ overflow:hidden;
 
 #map{
 position:relative;
+transform-origin: top left;
 }
 
 #map img{
@@ -64,6 +65,7 @@ border-radius:4px;
 font-size:12px;
 pointer-events:none;
 display:none;
+z-index:999;
 }
 
 </style>
@@ -82,11 +84,7 @@ display:none;
 
 <div id="map-wrapper">
 
-<div id="map">
-
-<img id="mapImage">
-
-</div>
+<div id="map"></div>
 
 <div id="tooltip" class="tooltip"></div>
 
