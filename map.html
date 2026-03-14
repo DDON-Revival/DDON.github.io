@@ -590,8 +590,10 @@ function loadStage(sid) {
 
   // Coordinate transform: world XZ → pixel XY on image
   const {xmin, xmax, zmin, zmax} = data.bounds;
+  const invertX = data.invertX === true;
   function w2p(wx, wz) {
-    const px = ((wx - xmin) / (xmax - xmin)) * W;
+    let px = ((wx - xmin) / (xmax - xmin)) * W;
+    if (invertX) px = W - px;   // X-axis mirror (DDON world vs image orientation)
     const py = H - ((wz - zmin) / (zmax - zmin)) * H;
     return [py, px];   // Leaflet [lat, lng] == [row, col] == [y, x]
   }
@@ -698,7 +700,12 @@ function setFilter(f) {
   const d = MAP_DATA[curStage];
   const {xmin,xmax,zmin,zmax} = d.bounds;
   const W = d.imgW || 1024, H = d.imgH || 1024;
-  placeMarkers(d.enemies, (wx,wz) => [H-((wz-zmin)/(zmax-zmin))*H, ((wx-xmin)/(xmax-xmin))*W]);
+  const invertX = d.invertX === true;
+  placeMarkers(d.enemies, (wx,wz) => {
+    let px = ((wx-xmin)/(xmax-xmin))*W;
+    if (invertX) px = W - px;
+    return [H-((wz-zmin)/(zmax-zmin))*H, px];
+  });
 }
 
 function filterList() {
@@ -713,7 +720,12 @@ function rebuildList() {
   const d = MAP_DATA[curStage];
   const {xmin,xmax,zmin,zmax} = d.bounds;
   const W = d.imgW||1024, H = d.imgH||1024;
-  placeMarkers(d.enemies, (wx,wz)=>[H-((wz-zmin)/(zmax-zmin))*H,((wx-xmin)/(xmax-xmin))*W]);
+  const invertX = d.invertX === true;
+  placeMarkers(d.enemies, (wx,wz) => {
+    let px = ((wx-xmin)/(xmax-xmin))*W;
+    if (invertX) px = W - px;
+    return [H-((wz-zmin)/(zmax-zmin))*H, px];
+  });
 }
 
 function updateStat(n) {
