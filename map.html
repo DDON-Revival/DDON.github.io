@@ -534,15 +534,24 @@ function rebuildDropdown() {
   sel.innerHTML = '';
 
   const fields   = [];
-  const dungeons = [];
+  const rooms    = [];
+  const pdGroups = {}; // pdName → [mapKeys]
+
   Object.keys(MAP_DATA)
     .filter(mk => MAP_DATA[mk].enemies.length > 0)
     .sort()
     .forEach(mk => {
-      (MAP_DATA[mk].type === 'field' ? fields : dungeons).push(mk);
+      const d = MAP_DATA[mk];
+      if (d.type === 'field') fields.push(mk);
+      else if (d.type === 'room') rooms.push(mk);
+      else if (d.type === 'pd') {
+        const pn = d.pdName || 'pd';
+        if (!pdGroups[pn]) pdGroups[pn] = [];
+        pdGroups[pn].push(mk);
+      }
     });
 
-  const addGroup = (label, keys) => {
+  const addGroup = (label, keys, nameFn) => {
     if (!keys.length) return;
     const og = document.createElement('optgroup');
     og.label = label;
@@ -550,14 +559,26 @@ function rebuildDropdown() {
       const d = MAP_DATA[mk];
       const o = document.createElement('option');
       o.value = mk;
-      o.textContent = `${mapDisplayName(mk)}  ·  ${d.enemies.length}`;
+      o.textContent = `${nameFn(mk, d)}  ·  ${d.enemies.length}`;
       og.appendChild(o);
     });
     sel.appendChild(og);
   };
 
-  addGroup(t('optgroup.main'),    fields);
-  addGroup(t('optgroup.dungeon'), dungeons);
+  addGroup(t('optgroup.main'), fields, mk => mapDisplayName(mk));
+  addGroup(t('optgroup.dungeon') + ' (rooms)', rooms, mk => mk);
+
+  // pd-Dungeons grouped by pd-set
+  Object.keys(pdGroups).sort().forEach(pn => {
+    const keys = pdGroups[pn].sort((a,b) => {
+      const na = parseInt(a.replace('pd_','')), nb = parseInt(b.replace('pd_',''));
+      return na-nb;
+    });
+    addGroup(`${t('optgroup.dungeon')} [${pn}]`, keys, (mk, d) => {
+      const sno = mk.replace('pd_','');
+      return `${pn} #${sno}`;
+    });
+  });
 
   if (prev && MAP_DATA[prev]) sel.value = prev;
 }
@@ -580,40 +601,44 @@ function loadStage(mapKey) {
   mkrs.forEach(m => leafMap.removeLayer(m.lm));
   mkrs = [];
 
-  // Image size  (fall back to 1024×1024)
+  // Image size (fall back to 1024×1024)
   const W = data.imgW || 1024;
   const H = data.imgH || 1024;
   const imgBounds = [[0,0],[H,W]];
 
-  // Image path: ./maps/<imgFile>
-  const imgUrl = data.imgFile ? ('./maps/' + data.imgFile) : null;
+  document.getElementById('no-img').classList.remove('show');
 
-  if (imgUrl) {
-    imgOvl = L.imageOverlay(imgUrl, imgBounds).addTo(leafMap);
-    const probe = new Image();
-    probe.onload  = () => document.getElementById('no-img').classList.remove('show');
-    probe.onerror = () => {
-      document.getElementById('no-img').classList.add('show');
-      document.getElementById('ni-path').textContent = imgUrl;
-    };
-    probe.src = imgUrl;
+  if (data.type === 'pd') {
+    // ── PD DUNGEON: render stacked tiles via canvas ──────────
+    loadPdTiles(data, imgBounds);
   } else {
-    document.getElementById('no-img').classList.add('show');
-    document.getElementById('ni-path').textContent = `(no image: maps/${data.imgFile})`;
+    const imgUrl = data.imgFile ? ('./maps/' + data.imgFile) : null;
+    if (imgUrl) {
+      imgOvl = L.imageOverlay(imgUrl, imgBounds).addTo(leafMap);
+      const probe = new Image();
+      probe.onload  = () => document.getElementById('no-img').classList.remove('show');
+      probe.onerror = () => {
+        document.getElementById('no-img').classList.add('show');
+        document.getElementById('ni-path').textContent = imgUrl;
+      };
+      probe.src = imgUrl;
+    } else {
+      document.getElementById('no-img').classList.add('show');
+      document.getElementById('ni-path').textContent = `maps/${data.imgFile}`;
+    }
   }
 
   leafMap.fitBounds(imgBounds, { padding:[20,20], animate:false });
 
   // ── DDON Coordinate Transform ──────────────────────────────
-  // Two stage types have different transforms:
+  // FIELD:  px = (cx - wx)/100 + W/2   (X mirrored)
+  //         py = (wz - cz)/100 + H/2
   //
-  // FIELD stages (open world):
-  //   px = (cx - world_x) / 100 + W/2   ← X is mirrored
-  //   py = (world_z - cz) / 100 + H/2
+  // ROOM:   px = wx/10 + offsetX
+  //         py = wz/10 + H + offsetY   (offsetY negative)
   //
-  // ROOM stages (dungeons, from StageRoom.csv):
-  //   px = world_x / 10 + offsetX
-  //   py = world_z / 10 + (H + offsetY)  ← offsetY is negative
+  // PD:     px = (wx - xMin)/(xMax - xMin) * maxTileW  (centered)
+  //         py = (zMax - wz)/(zMax - zMin) * totalH    (linear Z→Y)
   //
   let w2p;
   if (data.type === 'room') {
@@ -719,15 +744,85 @@ function applyFilter(enemies) {
   return enemies;
 }
 
-// Build the correct world→pixel transform for a stage
+// ════════════════════════════════════════════════════════════════
+//  PD DUNGEON TILE LOADER
+//  Stacks tile PNGs vertically on a canvas, adds as Leaflet overlay
+// ════════════════════════════════════════════════════════════════
+function loadPdTiles(data, imgBounds) {
+  const W = data.imgW, H = data.imgH;
+  const canvas = document.createElement('canvas');
+  canvas.width  = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  let loaded = 0;
+  const total = data.tiles.length;
+  let hasAnyImage = false;
+
+  data.tiles.forEach(tile => {
+    const img = new Image();
+    img.onload = () => {
+      // Center tile horizontally within max width
+      const xOff = Math.floor((W - tile.w) / 2);
+      ctx.drawImage(img, xOff, tile.y_offset, tile.w, tile.h);
+      hasAnyImage = true;
+      loaded++;
+      if (loaded === total) {
+        // All tiles drawn — create data URL overlay
+        const url = canvas.toDataURL('image/png');
+        imgOvl = L.imageOverlay(url, imgBounds).addTo(leafMap);
+        document.getElementById('no-img').classList.remove('show');
+      }
+    };
+    img.onerror = () => {
+      loaded++;
+      // Show missing tile hint after all attempted
+      if (loaded === total && !hasAnyImage) {
+        document.getElementById('no-img').classList.add('show');
+        document.getElementById('ni-path').textContent =
+          `maps/${data.tiles[0]?.file} (and ${total-1} more tiles)`;
+      } else if (loaded === total && hasAnyImage) {
+        // Partial — still render what we have
+        const url = canvas.toDataURL('image/png');
+        imgOvl = L.imageOverlay(url, imgBounds).addTo(leafMap);
+      }
+    };
+    img.src = './maps/' + tile.file;
+  });
+
+  // Show pending indicator if tiles take time
+  if (total > 3) {
+    document.getElementById('ni-path').textContent = `Loading ${total} tiles…`;
+    document.getElementById('no-img').classList.add('show');
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+//  COORDINATE TRANSFORM
+// ════════════════════════════════════════════════════════════════
 function getW2P(d) {
   const W = d.imgW||1024, H = d.imgH||1024;
+
   if (d.type === 'room') {
-    // DUNGEON: pixel = world/10 + offset  (offsetY is negative, so H+offsetY centers it)
+    // ROOM: pixel = world/10 + offset
     const ox = d.offsetX||0, oy = d.offsetY||0;
     return (wx,wz) => [wz/10 + (H + oy),  wx/10 + ox];
   }
-  // FIELD (open world): pixel = (center - world)/100 + imageCenter, X is mirrored
+
+  if (d.type === 'pd') {
+    // PD DUNGEON: linear interpolation between zMax(top) and zMin(bottom)
+    // X: centered horizontally per max tile width
+    const {zMax, zMin, xMin, xMax} = d;
+    const zRange = zMax - zMin || 1;
+    const xRange = xMax - xMin || 1;
+    return (wx,wz) => {
+      const py = (zMax - wz) / zRange * H;
+      const px = (wx - xMin) / xRange * W;
+      return [py, px];
+    };
+  }
+
+  // FIELD (open world): X mirrored, centered on cx/cz
   const {cx, cz} = d;
   return (wx,wz) => [(wz-cz)/100 + H/2,  (cx-wx)/100 + W/2];
 }
