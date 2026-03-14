@@ -240,7 +240,7 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
 .gm-lv    { color: rgba(255,255,255,.5); font-size: 10px; font-family:'Cinzel',serif; }
 .leaflet-marker-icon { overflow: visible !important; }
 
-/* ── DROPS ───────────────────────────────────────────── */
+/* ── DROPS IN POPUP ─────────────────────────────────── */
 .pop-drops-title {
   font-family:var(--font-head); font-size:10px; letter-spacing:2px; text-transform:uppercase;
   color:var(--text-dim); border-top:1px solid var(--border);
@@ -251,7 +251,7 @@ body { font-family:var(--font-body); background:var(--bg); color:var(--text); di
 .drop-table { width:100%; border-collapse:collapse; font-size:12px; }
 .drop-table tr+tr td { border-top:1px solid var(--border); }
 .drop-table td { padding:3px 0; }
-.drop-name { color:var(--text); flex:1; }
+.drop-name { color:var(--text); }
 .drop-num  { color:var(--text-dim); font-size:10px; padding:0 6px; white-space:nowrap; }
 .drop-rate { text-align:right; font-family:var(--font-head); font-size:11px; font-weight:600; white-space:nowrap; }
 .drop-rate.c { color:#7eb87e; }
@@ -441,52 +441,15 @@ const ZONE_NAMES = {
 };
 
 // ════════════════════════════════════════════════════════════════
-//  ENEMY NAMES  (EN / JP)
-//  Extend as needed!
+//  ENEMY NAMES — loaded dynamically from ./datas/enemy-names.json
+//  Format: { "0x010100": { en: "Goblin", jp: "ゴブリン" }, … }
 // ════════════════════════════════════════════════════════════════
-const ENEMY_NAMES = {
-  en: {
-    '0x010100':'Hobgoblin',           '0x010101':'Hobgoblin (Large)',
-    '0x010102':'Hobgoblin Chief',     '0x010200':'Goblin',
-    '0x010201':'Goblin Scout',        '0x010300':'Wolf',
-    '0x010301':'Dark Wolf',           '0x010400':'Striges',
-    '0x010500':'Cyclops',             '0x010502':'Cyclops (Armed)',
-    '0x010503':'Cyclops Shaman',      '0x010600':'Hydra',
-    '0x010700':'Griffin',             '0x010800':'Wyvern',
-    '0x011000':'Skeleton',            '0x011002':'Skeleton Warrior',
-    '0x011003':'Skeleton Mage',       '0x011005':'Skeleton Archer',
-    '0x011006':'Bone Dragon Head',    '0x015800':'Golem',
-    '0x015801':'Metal Golem',         '0x018000':'Saurian',
-    '0x010110':'Hobgoblin (Night)',   '0x011010':'Undead Guard',
-    '0x010501':'Cyclops (Blind)',     '0x010900':'Chimera',
-    '0x010a00':'Cockatrice',          '0x010b00':'Ogre',
-    '0x010b01':'Ogre (Red)',          '0x010c00':'Gorechimera',
-    '0x010d00':'Dragon',              '0x010d01':'Elder Dragon',
-    '0x010e00':'Lich',               '0x010f00':'Undead Dragon',
-  },
-  jp: {
-    '0x010100':'ホブゴブリン',         '0x010101':'ホブゴブリン（大）',
-    '0x010102':'ホブゴブリン族長',     '0x010200':'ゴブリン',
-    '0x010201':'ゴブリン偵察兵',       '0x010300':'ウルフ',
-    '0x010301':'ダークウルフ',         '0x010400':'ストリガ',
-    '0x010500':'サイクロプス',         '0x010502':'サイクロプス（武装）',
-    '0x010503':'サイクロプスシャーマン','0x010600':'ヒュドラ',
-    '0x010700':'グリフィン',           '0x010800':'ワイバーン',
-    '0x011000':'スケルトン',           '0x011002':'スケルトン戦士',
-    '0x011003':'スケルトン魔導士',     '0x011005':'スケルトン弓兵',
-    '0x011006':'骨竜の頭部',           '0x015800':'ゴーレム',
-    '0x015801':'メタルゴーレム',       '0x018000':'サウリアン',
-    '0x010110':'ホブゴブリン（夜）',   '0x011010':'アンデッドガード',
-    '0x010501':'サイクロプス（盲）',   '0x010900':'キメラ',
-    '0x010a00':'コカトリス',           '0x010b00':'オーガ',
-    '0x010b01':'オーガ（赤）',         '0x010c00':'ゴアキメラ',
-    '0x010d00':'ドラゴン',             '0x010d01':'エルダードラゴン',
-    '0x010e00':'リッチ',              '0x010f00':'アンデッドドラゴン',
-  }
-};
+let ENEMY_NAMES = {};  // populated in boot()
 
 function enemyName(id) {
-  return ENEMY_NAMES[lang]?.[id] || ENEMY_NAMES.en[id] || id;
+  const e = ENEMY_NAMES[id];
+  if (!e) return id;
+  return e[lang] || e.en || id;
 }
 function zoneName(sid) {
   return ZONE_NAMES[lang]?.[String(sid)] || ZONE_NAMES.en[String(sid)] || `Stage ${sid}`;
@@ -502,8 +465,8 @@ let mkrs      = [];
 let filter    = 'all';
 let curStage  = null;
 let hlMkr     = null;
-let DROPS_DATA  = null;
-let ITEM_NAMES  = {};
+let DROPS_DATA = null;
+let ITEM_NAMES = {};
 
 // ════════════════════════════════════════════════════════════════
 //  BOOT
@@ -524,7 +487,13 @@ async function boot() {
     return;
   }
 
-  // Load item names & drop data (optional — map still works without them)
+  // Load enemy names from JSON (531 enemies, EN + JP)
+  try {
+    const re = await fetch('./datas/enemy-names.json');
+    ENEMY_NAMES = await re.json();  // { "0x010100": { en, jp }, … }
+  } catch(e) { console.warn('enemy-names.json not loaded'); }
+
+  // Load item names (for drop popup)
   try {
     const ri = await fetch('./datas/item_names.json');
     const raw = await ri.json();
@@ -533,6 +502,7 @@ async function boot() {
     });
   } catch(e) { console.warn('item_names.json not loaded'); }
 
+  // Load drop data
   try {
     const rd = await fetch('./datas/drops_data.json');
     DROPS_DATA = await rd.json();
@@ -740,7 +710,7 @@ function placeMarkers(allGroups, sx, sy, realH) {
       <div class="ei-lv${boss?' b':''}">Lv${lvRange}</div>
       <div class="ei-info">
         <div class="ei-name">${primaryName}${g.ids.length>1 ? ` +${g.ids.length-1}` : ''}</div>
-        <div class="ei-meta">Group ${g.gid} · ${g.count} spawns · ${g.spawn}</div>
+        <div class="ei-meta">Group ${g.gid ?? 0} · ${g.count} spawns · ${g.spawn}</div>
       </div>
       <div class="ei-dot${boss?' b':''}"></div>`;
 
@@ -795,16 +765,15 @@ function buildGroupPopup(g) {
   const lvRange = g.levels.length > 1
     ? `${g.levels[0]} – ${g.levels[g.levels.length-1]}`
     : String(g.levels[0] || '?');
-
-  // Build drops per unique enemy type
   const gid  = g.gid  ?? 0;
   const sgid = g.sgid ?? 0;
-  const uniqueIds = [...new Set(g.ids)];
+
+  // Build drops section per unique enemy type in this group
   let dropsHtml = '';
   if (DROPS_DATA) {
+    const uniqueIds = [...new Set(g.ids)];
     if (uniqueIds.length === 1) {
-      const drops = getDropsForEnemy(uniqueIds[0], gid, sgid);
-      dropsHtml = buildDropsHtml(drops);
+      dropsHtml = buildDropsHtml(getDropsForEnemy(uniqueIds[0], gid, sgid));
     } else {
       dropsHtml = uniqueIds.map(id => {
         const drops = getDropsForEnemy(id, gid, sgid);
@@ -815,7 +784,7 @@ function buildGroupPopup(g) {
               return `<tr><td class="drop-name">${itemName(d.itemId)}</td><td class="drop-num">${numStr}</td><td class="drop-rate ${cls}">${d.rate}%</td></tr>`;
             }).join('')
           : `<tr><td colspan="3" class="drop-none">No drops</td></tr>`;
-        return `<div class="pop-drops-title" style="margin-top:6px">${enemyName(id)}</div>
+        return `<div class="pop-drops-title" style="margin-top:4px">${enemyName(id)}</div>
           <table class="drop-table">${inner}</table>`;
       }).join('');
     }
