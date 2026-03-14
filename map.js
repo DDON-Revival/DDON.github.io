@@ -58,8 +58,8 @@ const marker = document.createElement("div")
 marker.className="enemy-marker"
 marker.style.position="absolute"
 
-marker.style.left = (s.x * scale)+"px"
-marker.style.top  = (s.y * scale)+"px"
+marker.style.left = (s.x * 10 * scale) + "px"
+marker.style.top  = (s.y * 10 * scale) + "px"
 
 marker.onmouseenter=(e)=>{
 tooltip.style.display="block"
