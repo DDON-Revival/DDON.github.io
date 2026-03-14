@@ -589,23 +589,27 @@ function loadStage(sid) {
   leafMap.fitBounds(imgBounds, { padding:[20,20], animate:false });
 
   // ── DDON Coordinate Transform ──────────────────────────────
-  // Formula confirmed by DDOn-Tools creator:
-  //   map_coord = world / 1000
-  //   pixel     = map_coord * 10  →  pixel = world / 100
-  // X-axis is mirrored (world X increases east, image X increases west)
-  // Z-axis maps directly to image Y (no inversion needed for field maps)
+  // Two stage types have different transforms:
   //
-  //   px = (cx - world_x) / 100 + W/2
+  // FIELD stages (open world):
+  //   px = (cx - world_x) / 100 + W/2   ← X is mirrored
   //   py = (world_z - cz) / 100 + H/2
   //
-  const {cx, cz} = data;
-  function w2p(wx, wz) {
-    const px = (cx - wx) / 100 + W / 2;
-    const py = (wz - cz) / 100 + H / 2;
-    return [py, px];  // Leaflet [lat=row=y, lng=col=x]
+  // ROOM stages (dungeons, from StageRoom.csv):
+  //   px = world_x / 10 + offsetX
+  //   py = world_z / 10 + (H + offsetY)  ← offsetY is negative
+  //
+  let w2p;
+  if (data.type === 'room') {
+    const ox = data.offsetX || 0;
+    const oy = data.offsetY || 0;
+    w2p = (wx, wz) => [wz / 10 + (H + oy),  wx / 10 + ox];
+  } else {
+    const {cx, cz} = data;
+    w2p = (wx, wz) => [(wz - cz) / 100 + H / 2,  (cx - wx) / 100 + W / 2];
   }
 
-  placeMarkers(data.enemies, w2p);
+  placeMarkers(data.enemies, getW2P(data));
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -699,15 +703,26 @@ function applyFilter(enemies) {
   return enemies;
 }
 
+// Build the correct world→pixel transform for a stage
+function getW2P(d) {
+  const W = d.imgW||1024, H = d.imgH||1024;
+  if (d.type === 'room') {
+    // DUNGEON: pixel = world/10 + offset  (offsetY is negative, so H+offsetY centers it)
+    const ox = d.offsetX||0, oy = d.offsetY||0;
+    return (wx,wz) => [wz/10 + (H + oy),  wx/10 + ox];
+  }
+  // FIELD (open world): pixel = (center - world)/100 + imageCenter, X is mirrored
+  const {cx, cz} = d;
+  return (wx,wz) => [(wz-cz)/100 + H/2,  (cx-wx)/100 + W/2];
+}
+
 function setFilter(f) {
   filter = f;
   document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
   document.getElementById('f-'+f).classList.add('on');
   if (!curStage) return;
   const d = MAP_DATA[curStage];
-  const W = d.imgW||1024, H = d.imgH||1024;
-  const {cx, cz} = d;
-  placeMarkers(d.enemies, (wx,wz) => [(wz-cz)/100+H/2, (cx-wx)/100+W/2]);
+  placeMarkers(d.enemies, getW2P(d));
 }
 
 function filterList() {
@@ -720,9 +735,7 @@ function filterList() {
 function rebuildList() {
   if (!curStage) return;
   const d = MAP_DATA[curStage];
-  const W = d.imgW||1024, H = d.imgH||1024;
-  const {cx, cz} = d;
-  placeMarkers(d.enemies, (wx,wz) => [(wz-cz)/100+H/2, (cx-wx)/100+W/2]);
+  placeMarkers(d.enemies, getW2P(d));
 }
 
 function updateStat(n) {
