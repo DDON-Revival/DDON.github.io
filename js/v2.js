@@ -3,8 +3,6 @@
 ========================================================= */
 
 const DATA = {};
-DATA._mapIndex = {};
-DATA._stageMap = {};
 
 const DEBUG = false;
 
@@ -172,25 +170,13 @@ async function loadJSON(name, path) {
 }
 
 async function loadCSV(name, path) {
-
     try {
-
         const res = await fetch(path);
         const text = await res.text();
-
-        DATA[name] = text
-            .trim()
-            .split(/\r?\n/)
-            .slice(1)
-            .map(r => r.split(",").map(v => v.trim()));
-
-    } catch (e) {
-
-        console.error("CSV load failed", path, e);
+        DATA[name] = text.split("\n").slice(1).map(r => r.split(","));
+    } catch {
         DATA[name] = [];
-
     }
-
 }
 
 async function loadAll() {
@@ -199,29 +185,19 @@ async function loadAll() {
     await loadJSON("EnemySpawnBR", "/datas/EnemySpawnBR.json");
     await loadJSON("EnemySpawnCollab", "/datas/EnemySpawnCollab.json");
     await loadJSON("EnemySpawnCustom", "/datas/EnemySpawnCustom.json");
-	
     await loadJSON("EnemyNames", "/datas/enemy-names.json");
     await loadJSON("StageNames", "/datas/stage-names.json");
     await loadJSON("Items", "/datas/item_names.json");
-	buildItemMap();
     await loadJSON("ShopsNormal", "/datas/Shop.json");
-    await loadJSON("ShopsBR", "/datas/ShopBR.json");
-    await loadJSON("ShopsCollab", "/datas/ShopCollab.json");
-    await loadJSON("ShopsCustom", "/datas/ShopCustom.json");
-
+	await loadJSON("ShopsBR", "/datas/ShopBR.json");
+	await loadJSON("ShopsCollab", "/datas/ShopCollab.json");
+	await loadJSON("ShopsCustom", "/datas/ShopCustom.json");
     await loadCSV("NpcNamesRaw", "/datas/npc_names.csv");
-    await loadCSV("MapDimensions", "/maps/dimensions.csv");	
-	await loadCSV("StageRooms", "/datas/StageRoom.csv");
-	await loadJSON("StageList", "/datas/StageList.json");
-	
-	buildMapIndex();
-	buildStageMap();
-
+	await loadCSV("MapDimensions", "/maps/dimensions.csv");
     await loadJSON("ShopFunctions", "/datas/shops_function.json");
     await loadJSON("Special", "/datas/SpecialShops.json");
     await loadJSON("Crafting", "/datas/CraftingRecipes.json");
     await loadJSON("CraftingPlus", "/datas/CraftingRecipesGradeUp.json");
-
     await loadCSV("GatheringNormal", "/datas/GatheringItem.csv");
     await loadCSV("GatheringBR", "/datas/GatheringItemBR.csv");
     await loadCSV("GatheringCollab", "/datas/GatheringItemCollab.csv");
@@ -229,67 +205,14 @@ async function loadAll() {
 
     await loadQuests();
 
-    buildNpcMap();
-    buildShopNpcMap();
+    buildItemMap();
+    buildNpcMap();       // ✅ hier
+    buildShopNpcMap();   // ✅ hier
 
     router();
 }
 
-function buildMapIndex(){
-
-DATA._mapIndex = {};
-
-DATA.MapDimensions?.forEach(row => {
-
-if(!row || !row[0]) return;
-
-const key = row[0];
-
-DATA._mapIndex[key] = {
-width: Number(row[1]),
-height: Number(row[2])
-};
-
-});
-
-}
-
-function buildStageMap(){
-
-DATA._stageMap = {};
-
-// Dungeon / Lobby maps
-DATA.StageRooms?.forEach(row=>{
-
-if(!row || !row[0]) return;
-
-const stageId = parseInt(row[0],10);
-const mapPath = row[1];
-
-DATA._stageMap[stageId] = mapPath;
-
-});
-
-// Field maps aus StageList
-Object.values(DATA.StageList || {}).forEach(stage=>{
-
-const stageId = stage.StageNo;
-
-if(DATA._stageMap[stageId]) return;
-
-const mapId = stage.MapId;
-const mapType = stage.MapType || "field";
-
-const mapKey =
-mapType + String(mapId).padStart(3,"0") + "_m00";
-
-DATA._stageMap[stageId] = mapKey;
-
-});
-
-console.log("StageMap:",DATA._stageMap);
-
-}
+loadAll();
 
 /* =========================================================
    QUEST LOADER
@@ -319,22 +242,21 @@ async function loadQuests() {
    HELPERS
 ========================================================= */
 
-function getItemName(id){
+function getItemName(id) {
 
-    const num = Number(id);
+    const found = DATA._itemMap?.[String(id)];
+    if (!found) return String(id);
 
-    if(isNaN(num))
-        return String(id);
+    if (typeof found === "string")
+        return found;
 
-    const item = DATA._itemMap?.[String(num)];
+    if (currentLanguage === "jp" && found.old)
+        return String(found.old);
 
-    if(!item)
-        return String(num);
+    if (found.new)
+        return String(found.new);
 
-    if(currentLanguage === "jp" && item.old)
-        return item.old;
-
-    return item.new || String(num);
+    return String(id);
 }
 
 function getEnemyName(id) {
@@ -1333,7 +1255,7 @@ function renderMap(){
 
 let stageOptions="";
 
-Object.keys(DATA._stageMap).forEach(id=>{
+Object.keys(DATA.StageNames||{}).forEach(id=>{
 
 stageOptions+=`
 <option value="${id}">
@@ -1379,7 +1301,7 @@ document
 .getElementById("mapStageSelect")
 .onchange=e=>loadStageMap(e.target.value);
 
-const firstStage=Object.keys(DATA._stageMap)[0];
+const firstStage=Object.keys(DATA.StageNames)[0];
 
 loadStageMap(firstStage);
 
@@ -1387,29 +1309,24 @@ loadStageMap(firstStage);
 
 function loadStageMap(stageId){
 
-const mapKey = DATA._stageMap[stageId];
+const stageNum = Math.floor(Number(stageId) / 100) - 1;
 
-if(!mapKey){
+const stageStr = stageNum.toString().padStart(3,"0");
 
-console.log("Stage has no map:",stageId);
-return;
+const mapRow = DATA.MapDimensions.find(r =>
+    r[0].match(new RegExp(stageStr + "$"))
+);
 
-}
+if(!mapRow) return;
 
-const map = DATA._mapIndex[mapKey];
+const mapWidth = Number(mapRow[1]);
+const mapHeight = Number(mapRow[2]);
 
-if(!map){
+const mapName=mapRow[0]+"_l0.png";
 
-console.log("Map dimensions missing:",mapKey);
-return;
-
-}
-
-const mapWidth = map.width;
-const mapHeight = map.height;
-
-document.getElementById("mapImage").src =
-"/maps/" + mapKey + ".png";
+document
+.getElementById("mapImage")
+.src="/maps/"+mapName;
 
 spawnStageEnemies(stageId,mapWidth,mapHeight);
 
@@ -1469,6 +1386,4 @@ document.getElementById("mapContainer")
 .appendChild(marker);
 
 }
-
-loadAll();
 
