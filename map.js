@@ -42,14 +42,46 @@ img.id="mapImage"
 
 map.appendChild(img)
 
+img.onload = ()=>{
+
+data.spawns.forEach(s=>{
+    const marker = document.createElement("div")
+    marker.className="enemy-marker"
+
+    const scale = img.clientWidth / 4096
+
+    marker.style.left = (s.x * scale)+"px"
+    marker.style.top  = (s.y * scale)+"px"
+
+    marker.onmouseenter=(e)=>{
+        tooltip.style.display="block"
+        tooltip.textContent = s.enemy+" Lv."+s.level
+    }
+
+    marker.onmousemove=(e)=>{
+        tooltip.style.left=e.pageX+10+"px"
+        tooltip.style.top=e.pageY+10+"px"
+    }
+
+    marker.onmouseleave=()=>{
+        tooltip.style.display="none"
+    }
+
+    map.appendChild(marker)
+})
+
+}
+
 data.spawns.forEach(s=>{
 
 const marker = document.createElement("div")
 
 marker.className="enemy-marker"
 
-marker.style.left = s.x+"px"
-marker.style.top = s.y+"px"
+const scale = img.clientWidth / 4096
+
+marker.style.left = (s.x * scale) + "px"
+marker.style.top  = (s.y * scale) + "px"
 
 marker.onmouseenter=(e)=>{
 tooltip.style.display="block"
@@ -75,8 +107,10 @@ const marker = document.createElement("div")
 
 marker.className="gather-marker"
 
-marker.style.left = g.x+"px"
-marker.style.top = g.y+"px"
+const scale = img.clientWidth / 4096
+
+marker.style.left = (g.x * scale) + "px"
+marker.style.top  = (g.y * scale) + "px"
 
 map.appendChild(marker)
 
