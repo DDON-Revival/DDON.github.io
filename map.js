@@ -19,11 +19,12 @@ stageSelect.appendChild(opt)
 
 })
 
-loadStage(1)
+stageSelect.value = 100
+loadStage(100)
 
 }
 
-stageSelect.onchange = ()=>loadStage(stageSelect.value)
+stageSelect.onchange = ()=>loadStage(Number(stageSelect.value))
 
 async function loadStage(stage){
 
@@ -33,6 +34,11 @@ const data = await fetch("https://api.ddon.org/api/map/"+stage)
 map.innerHTML=""
 
 const img = document.createElement("img")
+if(!data.map){
+console.log("NO MAP:", data)
+return
+}
+
 img.src = "https://api.ddon.org/maps/"+data.map
 
 map.appendChild(img)
