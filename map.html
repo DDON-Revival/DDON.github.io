@@ -650,11 +650,13 @@ function loadStage(mapKey) {
 function _fitToMarkers(groups) {
   if (!groups || !groups.length) return;
   const pad = 25;
-  const minPy = Math.min(...groups.map(g => g.py)) - pad;
-  const maxPy = Math.max(...groups.map(g => g.py)) + pad;
-  const minPx = Math.min(...groups.map(g => g.px)) - pad;
-  const maxPx = Math.max(...groups.map(g => g.px)) + pad;
-  leafMap.fitBounds([[minPy, minPx], [maxPy, maxPx]], { animate: false, padding: [10, 10] });
+  const lats = groups.map(g => g.lat);
+  const lngs = groups.map(g => g.lng);
+  leafMap.fitBounds(
+    [[Math.min(...lats)-pad, Math.min(...lngs)-pad],
+     [Math.max(...lats)+pad, Math.max(...lngs)+pad]],
+    { animate: false, padding: [10, 10] }
+  );
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -668,10 +670,10 @@ function placeMarkers(allGroups) {
   const list = applyFilter(allGroups);
 
   list.forEach((g) => {
-    // px/py are pre-computed image pixels from map_data.json
-    // using the exact DDOn-Tool transform from MapControl.gd
-    const py = g.py, px = g.px;
-    const boss  = g.isBoss;
+    // lat/lng are pre-computed Leaflet coordinates (stored in map_data.json)
+    // lat = imgH - py  (CRS.Simple: lat=0 at bottom, lat=H at top)
+    const lat = g.lat, lng = g.lng;
+    const boss = g.isBoss;
 
     // ── Marker Icon ─────────────────────────────────────────
     // Shows: group count + primary enemy name (like DDOn-Tool labels)
@@ -695,7 +697,7 @@ function placeMarkers(allGroups) {
       iconAnchor: [0, 10],
     });
 
-    const lm = L.marker([py, px], { icon, zIndexOffset: boss ? 100 : 0 });
+    const lm = L.marker([lat, lng], { icon, zIndexOffset: boss ? 100 : 0 });
     lm.bindPopup(buildGroupPopup(g), { maxWidth:300, minWidth:240 });
     lm.addTo(leafMap);
     mkrs.push({ lm, g });
@@ -718,7 +720,7 @@ function placeMarkers(allGroups) {
       const dot = lm.getElement()?.querySelector('.gmarker');
       if (dot) dot.classList.add('hi');
       hlMkr = lm;
-      leafMap.setView([py, px], 1, { animate: true });
+      leafMap.setView([lat, lng], 1, { animate: true });
       lm.openPopup();
       document.querySelectorAll('.ei').forEach(x => x.classList.remove('sel'));
       item.classList.add('sel');
