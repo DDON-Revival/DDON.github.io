@@ -1,1918 +1,1918 @@
 {
   "100": {
     "stage": "st0100",
-    "map": null
+    "map": "field000_m00_l0.png"
   },
   "101": {
     "stage": "st0101",
-    "map": null
+    "map": "field000_m01_l0.png"
   },
   "103": {
     "stage": "st0103",
-    "map": null
+    "map": "field000_m03_l0.png"
   },
   "110": {
     "stage": "st0110",
-    "map": null
+    "map": "field000_m10_l0.png"
   },
   "111": {
     "stage": "st0111",
-    "map": null
+    "map": "field000_m11_l0.png"
   },
   "112": {
     "stage": "st0112",
-    "map": null
+    "map": "field000_m12_l0.png"
   },
   "113": {
     "stage": "st0113",
-    "map": null
+    "map": "field000_m13_l0.png"
   },
   "114": {
     "stage": "st0114",
-    "map": null
+    "map": "field000_m14_l0.png"
   },
   "120": {
     "stage": "st0120",
-    "map": null
+    "map": "field000_m20_l0.png"
   },
   "121": {
     "stage": "st0121",
-    "map": null
+    "map": "field000_m21_l0.png"
   },
   "122": {
     "stage": "st0122",
-    "map": null
+    "map": "field000_m22_l0.png"
   },
   "123": {
     "stage": "st0123",
-    "map": null
+    "map": "field000_m23_l0.png"
   },
   "124": {
     "stage": "st0124",
-    "map": null
+    "map": "field000_m24_l0.png"
   },
   "130": {
     "stage": "st0130",
-    "map": null
+    "map": "field000_m30_l0.png"
   },
   "131": {
     "stage": "st0131",
-    "map": null
+    "map": "field000_m31_l0.png"
   },
   "132": {
     "stage": "st0132",
-    "map": null
+    "map": "field000_m32_l0.png"
   },
   "133": {
     "stage": "st0133",
-    "map": null
+    "map": "field000_m33_l0.png"
   },
   "134": {
     "stage": "st0134",
-    "map": null
+    "map": "field000_m34_l0.png"
   },
   "135": {
     "stage": "st0135",
-    "map": null
+    "map": "field000_m35_l0.png"
   },
   "136": {
     "stage": "st0136",
-    "map": null
+    "map": "field000_m36_l0.png"
   },
   "137": {
     "stage": "st0137",
-    "map": null
+    "map": "field000_m37_l0.png"
   },
   "138": {
     "stage": "st0138",
-    "map": null
+    "map": "field000_m38_l0.png"
   },
   "139": {
     "stage": "st0139",
-    "map": null
+    "map": "field000_m39_l0.png"
   },
   "140": {
     "stage": "st0140",
-    "map": null
+    "map": "field000_m40_l0.png"
   },
   "141": {
     "stage": "st0141",
-    "map": null
+    "map": "field000_m41_l0.png"
   },
   "150": {
     "stage": "st0150",
-    "map": null
+    "map": "field000_m50_l0.png"
   },
   "151": {
     "stage": "st0151",
-    "map": null
+    "map": "field000_m51_l0.png"
   },
   "152": {
     "stage": "st0152",
-    "map": null
+    "map": "field000_m52_l0.png"
   },
   "160": {
     "stage": "st0160",
-    "map": null
+    "map": "field000_m60_l0.png"
   },
   "200": {
     "stage": "st0200",
-    "map": null
+    "map": "field001_m00_l0.png"
   },
   "201": {
     "stage": "st0201",
-    "map": null
+    "map": "field001_m01_l0.png"
   },
   "202": {
     "stage": "st0202",
-    "map": null
+    "map": "field001_m02_l0.png"
   },
   "203": {
     "stage": "st0203",
-    "map": null
+    "map": "field001_m03_l0.png"
   },
   "210": {
     "stage": "st0210",
-    "map": null
+    "map": "field001_m10_l0.png"
   },
   "211": {
     "stage": "st0211",
-    "map": null
+    "map": "field001_m11_l0.png"
   },
   "212": {
     "stage": "st0212",
-    "map": null
+    "map": "field001_m12_l0.png"
   },
   "213": {
     "stage": "st0213",
-    "map": null
+    "map": "field001_m13_l0.png"
   },
   "300": {
     "stage": "st0300",
-    "map": null
+    "map": "field002_m00_l0.png"
   },
   "301": {
     "stage": "st0301",
-    "map": null
+    "map": "field002_m01_l0.png"
   },
   "302": {
     "stage": "st0302",
-    "map": null
+    "map": "field002_m02_l0.png"
   },
   "303": {
     "stage": "st0303",
-    "map": null
+    "map": "field002_m03_l0.png"
   },
   "304": {
     "stage": "st0304",
-    "map": null
+    "map": "field002_m04_l0.png"
   },
   "305": {
     "stage": "st0305",
-    "map": null
+    "map": "field002_m05_l0.png"
   },
   "306": {
     "stage": "st0306",
-    "map": null
+    "map": "field002_m06_l0.png"
   },
   "307": {
     "stage": "st0307",
-    "map": null
+    "map": "field002_m07_l0.png"
   },
   "308": {
     "stage": "st0308",
-    "map": null
+    "map": "field002_m08_l0.png"
   },
   "310": {
     "stage": "st0310",
-    "map": null
+    "map": "field002_m10_l0.png"
   },
   "311": {
     "stage": "st0311",
-    "map": null
+    "map": "field002_m11_l0.png"
   },
   "312": {
     "stage": "st0312",
-    "map": null
+    "map": "field002_m12_l0.png"
   },
   "313": {
     "stage": "st0313",
-    "map": null
+    "map": "field002_m13_l0.png"
   },
   "314": {
     "stage": "st0314",
-    "map": null
+    "map": "field002_m14_l0.png"
   },
   "315": {
     "stage": "st0315",
-    "map": null
+    "map": "field002_m15_l0.png"
   },
   "321": {
     "stage": "st0321",
-    "map": null
+    "map": "field002_m21_l0.png"
   },
   "322": {
     "stage": "st0322",
-    "map": null
+    "map": "field002_m22_l0.png"
   },
   "330": {
     "stage": "st0330",
-    "map": null
+    "map": "field002_m30_l0.png"
   },
   "331": {
     "stage": "st0331",
-    "map": null
+    "map": "field002_m31_l0.png"
   },
   "340": {
     "stage": "st0340",
-    "map": null
+    "map": "field002_m40_l0.png"
   },
   "341": {
     "stage": "st0341",
-    "map": null
+    "map": "field002_m41_l0.png"
   },
   "342": {
     "stage": "st0342",
-    "map": null
+    "map": "field002_m42_l0.png"
   },
   "343": {
     "stage": "st0343",
-    "map": null
+    "map": "field002_m43_l0.png"
   },
   "344": {
     "stage": "st0344",
-    "map": null
+    "map": "field002_m44_l0.png"
   },
   "345": {
     "stage": "st0345",
-    "map": null
+    "map": "field002_m45_l0.png"
   },
   "350": {
     "stage": "st0350",
-    "map": null
+    "map": "field002_m50_l0.png"
   },
   "351": {
     "stage": "st0351",
-    "map": null
+    "map": "field002_m51_l0.png"
   },
   "352": {
     "stage": "st0352",
-    "map": null
+    "map": "field002_m52_l0.png"
   },
   "353": {
     "stage": "st0353",
-    "map": null
+    "map": "field002_m53_l0.png"
   },
   "354": {
     "stage": "st0354",
-    "map": null
+    "map": "field002_m54_l0.png"
   },
   "355": {
     "stage": "st0355",
-    "map": null
+    "map": "field002_m55_l0.png"
   },
   "356": {
     "stage": "st0356",
-    "map": null
+    "map": "field002_m56_l0.png"
   },
   "357": {
     "stage": "st0357",
-    "map": null
+    "map": "field002_m57_l0.png"
   },
   "358": {
     "stage": "st0358",
-    "map": null
+    "map": "field002_m58_l0.png"
   },
   "360": {
     "stage": "st0360",
-    "map": null
+    "map": "field002_m60_l0.png"
   },
   "361": {
     "stage": "st0361",
-    "map": null
+    "map": "field002_m61_l0.png"
   },
   "362": {
     "stage": "st0362",
-    "map": null
+    "map": "field002_m62_l0.png"
   },
   "363": {
     "stage": "st0363",
-    "map": null
+    "map": "field002_m63_l0.png"
   },
   "364": {
     "stage": "st0364",
-    "map": null
+    "map": "field002_m64_l0.png"
   },
   "365": {
     "stage": "st0365",
-    "map": null
+    "map": "field002_m65_l0.png"
   },
   "370": {
     "stage": "st0370",
-    "map": null
+    "map": "field002_m70_l0.png"
   },
   "371": {
     "stage": "st0371",
-    "map": null
+    "map": "field002_m71_l0.png"
   },
   "372": {
     "stage": "st0372",
-    "map": null
+    "map": "field002_m72_l0.png"
   },
   "373": {
     "stage": "st0373",
-    "map": null
+    "map": "field002_m73_l0.png"
   },
   "380": {
     "stage": "st0380",
-    "map": null
+    "map": "field002_m80_l0.png"
   },
   "381": {
     "stage": "st0381",
-    "map": null
+    "map": "field002_m81_l0.png"
   },
   "400": {
     "stage": "st0400",
-    "map": null
+    "map": "field003_m00_l0.png"
   },
   "401": {
     "stage": "st0401",
-    "map": null
+    "map": "field003_m01_l0.png"
   },
   "402": {
     "stage": "st0402",
-    "map": null
+    "map": "field003_m02_l0.png"
   },
   "403": {
     "stage": "st0403",
-    "map": null
+    "map": "field003_m03_l0.png"
   },
   "404": {
     "stage": "st0404",
-    "map": null
+    "map": "field003_m04_l0.png"
   },
   "405": {
     "stage": "st0405",
-    "map": null
+    "map": "field003_m05_l0.png"
   },
   "406": {
     "stage": "st0406",
-    "map": null
+    "map": "field003_m06_l0.png"
   },
   "407": {
     "stage": "st0407",
-    "map": null
+    "map": "field003_m07_l0.png"
   },
   "408": {
     "stage": "st0408",
-    "map": null
+    "map": "field003_m08_l0.png"
   },
   "409": {
     "stage": "st0409",
-    "map": null
+    "map": "field003_m09_l0.png"
   },
   "410": {
     "stage": "st0410",
-    "map": null
+    "map": "field003_m10_l0.png"
   },
   "411": {
     "stage": "st0411",
-    "map": null
+    "map": "field003_m11_l0.png"
   },
   "412": {
     "stage": "st0412",
-    "map": null
+    "map": "field003_m12_l0.png"
   },
   "413": {
     "stage": "st0413",
-    "map": null
+    "map": "field003_m13_l0.png"
   },
   "414": {
     "stage": "st0414",
-    "map": null
+    "map": "field003_m14_l0.png"
   },
   "415": {
     "stage": "st0415",
-    "map": null
+    "map": "field003_m15_l0.png"
   },
   "416": {
     "stage": "st0416",
-    "map": null
+    "map": "field003_m16_l0.png"
   },
   "417": {
     "stage": "st0417",
-    "map": null
+    "map": "field003_m17_l0.png"
   },
   "418": {
     "stage": "st0418",
-    "map": null
+    "map": "field003_m18_l0.png"
   },
   "419": {
     "stage": "st0419",
-    "map": null
+    "map": "field003_m19_l0.png"
   },
   "421": {
     "stage": "st0421",
-    "map": null
+    "map": "field003_m21_l0.png"
   },
   "422": {
     "stage": "st0422",
-    "map": null
+    "map": "field003_m22_l0.png"
   },
   "423": {
     "stage": "st0423",
-    "map": null
+    "map": "field003_m23_l0.png"
   },
   "424": {
     "stage": "st0424",
-    "map": null
+    "map": "field003_m24_l0.png"
   },
   "430": {
     "stage": "st0430",
-    "map": null
+    "map": "field003_m30_l0.png"
   },
   "431": {
     "stage": "st0431",
-    "map": null
+    "map": "field003_m31_l0.png"
   },
   "432": {
     "stage": "st0432",
-    "map": null
+    "map": "field003_m32_l0.png"
   },
   "433": {
     "stage": "st0433",
-    "map": null
+    "map": "field003_m33_l0.png"
   },
   "434": {
     "stage": "st0434",
-    "map": null
+    "map": "field003_m34_l0.png"
   },
   "435": {
     "stage": "st0435",
-    "map": null
+    "map": "field003_m35_l0.png"
   },
   "436": {
     "stage": "st0436",
-    "map": null
+    "map": "field003_m36_l0.png"
   },
   "437": {
     "stage": "st0437",
-    "map": null
+    "map": "field003_m37_l0.png"
   },
   "438": {
     "stage": "st0438",
-    "map": null
+    "map": "field003_m38_l0.png"
   },
   "439": {
     "stage": "st0439",
-    "map": null
+    "map": "field003_m39_l0.png"
   },
   "440": {
     "stage": "st0440",
-    "map": null
+    "map": "field003_m40_l0.png"
   },
   "441": {
     "stage": "st0441",
-    "map": null
+    "map": "field003_m41_l0.png"
   },
   "442": {
     "stage": "st0442",
-    "map": null
+    "map": "field003_m42_l0.png"
   },
   "443": {
     "stage": "st0443",
-    "map": null
+    "map": "field003_m43_l0.png"
   },
   "444": {
     "stage": "st0444",
-    "map": null
+    "map": "field003_m44_l0.png"
   },
   "445": {
     "stage": "st0445",
-    "map": null
+    "map": "field003_m45_l0.png"
   },
   "446": {
     "stage": "st0446",
-    "map": null
+    "map": "field003_m46_l0.png"
   },
   "447": {
     "stage": "st0447",
-    "map": null
+    "map": "field003_m47_l0.png"
   },
   "448": {
     "stage": "st0448",
-    "map": null
+    "map": "field003_m48_l0.png"
   },
   "450": {
     "stage": "st0450",
-    "map": null
+    "map": "field003_m50_l0.png"
   },
   "451": {
     "stage": "st0451",
-    "map": null
+    "map": "field003_m51_l0.png"
   },
   "460": {
     "stage": "st0460",
-    "map": null
+    "map": "field003_m60_l0.png"
   },
   "461": {
     "stage": "st0461",
-    "map": null
+    "map": "field003_m61_l0.png"
   },
   "462": {
     "stage": "st0462",
-    "map": null
+    "map": "field003_m62_l0.png"
   },
   "463": {
     "stage": "st0463",
-    "map": null
+    "map": "field003_m63_l0.png"
   },
   "464": {
     "stage": "st0464",
-    "map": null
+    "map": "field003_m64_l0.png"
   },
   "465": {
     "stage": "st0465",
-    "map": null
+    "map": "field003_m65_l0.png"
   },
   "466": {
     "stage": "st0466",
-    "map": null
+    "map": "field003_m66_l0.png"
   },
   "467": {
     "stage": "st0467",
-    "map": null
+    "map": "field003_m67_l0.png"
   },
   "468": {
     "stage": "st0468",
-    "map": null
+    "map": "field003_m68_l0.png"
   },
   "470": {
     "stage": "st0470",
-    "map": null
+    "map": "field003_m70_l0.png"
   },
   "471": {
     "stage": "st0471",
-    "map": null
+    "map": "field003_m71_l0.png"
   },
   "472": {
     "stage": "st0472",
-    "map": null
+    "map": "field003_m72_l0.png"
   },
   "473": {
     "stage": "st0473",
-    "map": null
+    "map": "field003_m73_l0.png"
   },
   "474": {
     "stage": "st0474",
-    "map": null
+    "map": "field003_m74_l0.png"
   },
   "475": {
     "stage": "st0475",
-    "map": null
+    "map": "field003_m75_l0.png"
   },
   "476": {
     "stage": "st0476",
-    "map": null
+    "map": "field003_m76_l0.png"
   },
   "477": {
     "stage": "st0477",
-    "map": null
+    "map": "field003_m77_l0.png"
   },
   "478": {
     "stage": "st0478",
-    "map": null
+    "map": "field003_m78_l0.png"
   },
   "479": {
     "stage": "st0479",
-    "map": null
+    "map": "field003_m79_l0.png"
   },
   "480": {
     "stage": "st0480",
-    "map": null
+    "map": "field003_m80_l0.png"
   },
   "481": {
     "stage": "st0481",
-    "map": null
+    "map": "field003_m81_l0.png"
   },
   "482": {
     "stage": "st0482",
-    "map": null
+    "map": "field003_m82_l0.png"
   },
   "500": {
     "stage": "st0500",
-    "map": null
+    "map": "field004_m00_l0.png"
   },
   "501": {
     "stage": "st0501",
-    "map": null
+    "map": "field004_m01_l0.png"
   },
   "502": {
     "stage": "st0502",
-    "map": null
+    "map": "field004_m02_l0.png"
   },
   "503": {
     "stage": "st0503",
-    "map": null
+    "map": "field004_m03_l0.png"
   },
   "504": {
     "stage": "st0504",
-    "map": null
+    "map": "field004_m04_l0.png"
   },
   "505": {
     "stage": "st0505",
-    "map": null
+    "map": "field004_m05_l0.png"
   },
   "506": {
     "stage": "st0506",
-    "map": null
+    "map": "field004_m06_l0.png"
   },
   "507": {
     "stage": "st0507",
-    "map": null
+    "map": "field004_m07_l0.png"
   },
   "508": {
     "stage": "st0508",
-    "map": null
+    "map": "field004_m08_l0.png"
   },
   "509": {
     "stage": "st0509",
-    "map": null
+    "map": "field004_m09_l0.png"
   },
   "510": {
     "stage": "st0510",
-    "map": null
+    "map": "field004_m10_l0.png"
   },
   "511": {
     "stage": "st0511",
-    "map": null
+    "map": "field004_m11_l0.png"
   },
   "512": {
     "stage": "st0512",
-    "map": null
+    "map": "field004_m12_l0.png"
   },
   "513": {
     "stage": "st0513",
-    "map": null
+    "map": "field004_m13_l0.png"
   },
   "514": {
     "stage": "st0514",
-    "map": null
+    "map": "field004_m14_l0.png"
   },
   "515": {
     "stage": "st0515",
-    "map": null
+    "map": "field004_m15_l0.png"
   },
   "516": {
     "stage": "st0516",
-    "map": null
+    "map": "field004_m16_l0.png"
   },
   "517": {
     "stage": "st0517",
-    "map": null
+    "map": "field004_m17_l0.png"
   },
   "518": {
     "stage": "st0518",
-    "map": null
+    "map": "field004_m18_l0.png"
   },
   "519": {
     "stage": "st0519",
-    "map": null
+    "map": "field004_m19_l0.png"
   },
   "520": {
     "stage": "st0520",
-    "map": null
+    "map": "field004_m20_l0.png"
   },
   "521": {
     "stage": "st0521",
-    "map": null
+    "map": "field004_m21_l0.png"
   },
   "522": {
     "stage": "st0522",
-    "map": null
+    "map": "field004_m22_l0.png"
   },
   "523": {
     "stage": "st0523",
-    "map": null
+    "map": "field004_m23_l0.png"
   },
   "524": {
     "stage": "st0524",
-    "map": null
+    "map": "field004_m24_l0.png"
   },
   "525": {
     "stage": "st0525",
-    "map": null
+    "map": "field004_m25_l0.png"
   },
   "526": {
     "stage": "st0526",
-    "map": null
+    "map": "field004_m26_l0.png"
   },
   "527": {
     "stage": "st0527",
-    "map": null
+    "map": "field004_m27_l0.png"
   },
   "528": {
     "stage": "st0528",
-    "map": null
+    "map": "field004_m28_l0.png"
   },
   "529": {
     "stage": "st0529",
-    "map": null
+    "map": "field004_m29_l0.png"
   },
   "530": {
     "stage": "st0530",
-    "map": null
+    "map": "field004_m30_l0.png"
   },
   "531": {
     "stage": "st0531",
-    "map": null
+    "map": "field004_m31_l0.png"
   },
   "532": {
     "stage": "st0532",
-    "map": null
+    "map": "field004_m32_l0.png"
   },
   "533": {
     "stage": "st0533",
-    "map": null
+    "map": "field004_m33_l0.png"
   },
   "534": {
     "stage": "st0534",
-    "map": null
+    "map": "field004_m34_l0.png"
   },
   "535": {
     "stage": "st0535",
-    "map": null
+    "map": "field004_m35_l0.png"
   },
   "536": {
     "stage": "st0536",
-    "map": null
+    "map": "field004_m36_l0.png"
   },
   "537": {
     "stage": "st0537",
-    "map": null
+    "map": "field004_m37_l0.png"
   },
   "538": {
     "stage": "st0538",
-    "map": null
+    "map": "field004_m38_l0.png"
   },
   "539": {
     "stage": "st0539",
-    "map": null
+    "map": "field004_m39_l0.png"
   },
   "540": {
     "stage": "st0540",
-    "map": null
+    "map": "field004_m40_l0.png"
   },
   "541": {
     "stage": "st0541",
-    "map": null
+    "map": "field004_m41_l0.png"
   },
   "542": {
     "stage": "st0542",
-    "map": null
+    "map": "field004_m42_l0.png"
   },
   "543": {
     "stage": "st0543",
-    "map": null
+    "map": "field004_m43_l0.png"
   },
   "544": {
     "stage": "st0544",
-    "map": null
+    "map": "field004_m44_l0.png"
   },
   "545": {
     "stage": "st0545",
-    "map": null
+    "map": "field004_m45_l0.png"
   },
   "546": {
     "stage": "st0546",
-    "map": null
+    "map": "field004_m46_l0.png"
   },
   "547": {
     "stage": "st0547",
-    "map": null
+    "map": "field004_m47_l0.png"
   },
   "548": {
     "stage": "st0548",
-    "map": null
+    "map": "field004_m48_l0.png"
   },
   "549": {
     "stage": "st0549",
-    "map": null
+    "map": "field004_m49_l0.png"
   },
   "550": {
     "stage": "st0550",
-    "map": null
+    "map": "field004_m50_l0.png"
   },
   "551": {
     "stage": "st0551",
-    "map": null
+    "map": "field004_m51_l0.png"
   },
   "552": {
     "stage": "st0552",
-    "map": null
+    "map": "field004_m52_l0.png"
   },
   "553": {
     "stage": "st0553",
-    "map": null
+    "map": "field004_m53_l0.png"
   },
   "554": {
     "stage": "st0554",
-    "map": null
+    "map": "field004_m54_l0.png"
   },
   "560": {
     "stage": "st0560",
-    "map": null
+    "map": "field004_m60_l0.png"
   },
   "562": {
     "stage": "st0562",
-    "map": null
+    "map": "field004_m62_l0.png"
   },
   "565": {
     "stage": "st0565",
-    "map": null
+    "map": "field004_m65_l0.png"
   },
   "570": {
     "stage": "st0570",
-    "map": null
+    "map": "field004_m70_l0.png"
   },
   "571": {
     "stage": "st0571",
-    "map": null
+    "map": "field004_m71_l0.png"
   },
   "572": {
     "stage": "st0572",
-    "map": null
+    "map": "field004_m72_l0.png"
   },
   "573": {
     "stage": "st0573",
-    "map": null
+    "map": "field004_m73_l0.png"
   },
   "574": {
     "stage": "st0574",
-    "map": null
+    "map": "field004_m74_l0.png"
   },
   "575": {
     "stage": "st0575",
-    "map": null
+    "map": "field004_m75_l0.png"
   },
   "576": {
     "stage": "st0576",
-    "map": null
+    "map": "field004_m76_l0.png"
   },
   "577": {
     "stage": "st0577",
-    "map": null
+    "map": "field004_m77_l0.png"
   },
   "580": {
     "stage": "st0580",
-    "map": null
+    "map": "field004_m80_l0.png"
   },
   "581": {
     "stage": "st0581",
-    "map": null
+    "map": "field004_m81_l0.png"
   },
   "582": {
     "stage": "st0582",
-    "map": null
+    "map": "field004_m82_l0.png"
   },
   "583": {
     "stage": "st0583",
-    "map": null
+    "map": "field004_m83_l0.png"
   },
   "584": {
     "stage": "st0584",
-    "map": null
+    "map": "field004_m84_l0.png"
   },
   "585": {
     "stage": "st0585",
-    "map": null
+    "map": "field004_m85_l0.png"
   },
   "586": {
     "stage": "st0586",
-    "map": null
+    "map": "field004_m86_l0.png"
   },
   "587": {
     "stage": "st0587",
-    "map": null
+    "map": "field004_m87_l0.png"
   },
   "588": {
     "stage": "st0588",
-    "map": null
+    "map": "field004_m88_l0.png"
   },
   "589": {
     "stage": "st0589",
-    "map": null
+    "map": "field004_m89_l0.png"
   },
   "590": {
     "stage": "st0590",
-    "map": null
+    "map": "field004_m90_l0.png"
   },
   "591": {
     "stage": "st0591",
-    "map": null
+    "map": "field004_m91_l0.png"
   },
   "592": {
     "stage": "st0592",
-    "map": null
+    "map": "field004_m92_l0.png"
   },
   "600": {
     "stage": "st0600",
-    "map": null
+    "map": "field005_m00_l0.png"
   },
   "601": {
     "stage": "st0601",
-    "map": null
+    "map": "field005_m01_l0.png"
   },
   "602": {
     "stage": "st0602",
-    "map": null
+    "map": "field005_m02_l0.png"
   },
   "610": {
     "stage": "st0610",
-    "map": null
+    "map": "field005_m10_l0.png"
   },
   "611": {
     "stage": "st0611",
-    "map": null
+    "map": "field005_m11_l0.png"
   },
   "612": {
     "stage": "st0612",
-    "map": null
+    "map": "field005_m12_l0.png"
   },
   "613": {
     "stage": "st0613",
-    "map": null
+    "map": "field005_m13_l0.png"
   },
   "620": {
     "stage": "st0620",
-    "map": null
+    "map": "field005_m20_l0.png"
   },
   "621": {
     "stage": "st0621",
-    "map": null
+    "map": "field005_m21_l0.png"
   },
   "622": {
     "stage": "st0622",
-    "map": null
+    "map": "field005_m22_l0.png"
   },
   "623": {
     "stage": "st0623",
-    "map": null
+    "map": "field005_m23_l0.png"
   },
   "624": {
     "stage": "st0624",
-    "map": null
+    "map": "field005_m24_l0.png"
   },
   "625": {
     "stage": "st0625",
-    "map": null
+    "map": "field005_m25_l0.png"
   },
   "630": {
     "stage": "st0630",
-    "map": null
+    "map": "field005_m30_l0.png"
   },
   "631": {
     "stage": "st0631",
-    "map": null
+    "map": "field005_m31_l0.png"
   },
   "632": {
     "stage": "st0632",
-    "map": null
+    "map": "field005_m32_l0.png"
   },
   "633": {
     "stage": "st0633",
-    "map": null
+    "map": "field005_m33_l0.png"
   },
   "634": {
     "stage": "st0634",
-    "map": null
+    "map": "field005_m34_l0.png"
   },
   "635": {
     "stage": "st0635",
-    "map": null
+    "map": "field005_m35_l0.png"
   },
   "636": {
     "stage": "st0636",
-    "map": null
+    "map": "field005_m36_l0.png"
   },
   "637": {
     "stage": "st0637",
-    "map": null
+    "map": "field005_m37_l0.png"
   },
   "700": {
     "stage": "st0700",
-    "map": null
+    "map": "field006_m00_l0.png"
   },
   "701": {
     "stage": "st0701",
-    "map": null
+    "map": "field006_m01_l0.png"
   },
   "702": {
     "stage": "st0702",
-    "map": null
+    "map": "field006_m02_l0.png"
   },
   "710": {
     "stage": "st0710",
-    "map": null
+    "map": "field006_m10_l0.png"
   },
   "720": {
     "stage": "st0720",
-    "map": null
+    "map": "field006_m20_l0.png"
   },
   "721": {
     "stage": "st0721",
-    "map": null
+    "map": "field006_m21_l0.png"
   },
   "722": {
     "stage": "st0722",
-    "map": null
+    "map": "field006_m22_l0.png"
   },
   "723": {
     "stage": "st0723",
-    "map": null
+    "map": "field006_m23_l0.png"
   },
   "724": {
     "stage": "st0724",
-    "map": null
+    "map": "field006_m24_l0.png"
   },
   "725": {
     "stage": "st0725",
-    "map": null
+    "map": "field006_m25_l0.png"
   },
   "726": {
     "stage": "st0726",
-    "map": null
+    "map": "field006_m26_l0.png"
   },
   "727": {
     "stage": "st0727",
-    "map": null
+    "map": "field006_m27_l0.png"
   },
   "728": {
     "stage": "st0728",
-    "map": null
+    "map": "field006_m28_l0.png"
   },
   "730": {
     "stage": "st0730",
-    "map": null
+    "map": "field006_m30_l0.png"
   },
   "731": {
     "stage": "st0731",
-    "map": null
+    "map": "field006_m31_l0.png"
   },
   "732": {
     "stage": "st0732",
-    "map": null
+    "map": "field006_m32_l0.png"
   },
   "733": {
     "stage": "st0733",
-    "map": null
+    "map": "field006_m33_l0.png"
   },
   "734": {
     "stage": "st0734",
-    "map": null
+    "map": "field006_m34_l0.png"
   },
   "800": {
     "stage": "st0800",
-    "map": null
+    "map": "field007_m00_l0.png"
   },
   "801": {
     "stage": "st0801",
-    "map": null
+    "map": "field007_m01_l0.png"
   },
   "802": {
     "stage": "st0802",
-    "map": null
+    "map": "field007_m02_l0.png"
   },
   "803": {
     "stage": "st0803",
-    "map": null
+    "map": "field007_m03_l0.png"
   },
   "804": {
     "stage": "st0804",
-    "map": null
+    "map": "field007_m04_l0.png"
   },
   "805": {
     "stage": "st0805",
-    "map": null
+    "map": "field007_m05_l0.png"
   },
   "806": {
     "stage": "st0806",
-    "map": null
+    "map": "field007_m06_l0.png"
   },
   "807": {
     "stage": "st0807",
-    "map": null
+    "map": "field007_m07_l0.png"
   },
   "808": {
     "stage": "st0808",
-    "map": null
+    "map": "field007_m08_l0.png"
   },
   "809": {
     "stage": "st0809",
-    "map": null
+    "map": "field007_m09_l0.png"
   },
   "810": {
     "stage": "st0810",
-    "map": null
+    "map": "field007_m10_l0.png"
   },
   "812": {
     "stage": "st0812",
-    "map": null
+    "map": "field007_m12_l0.png"
   },
   "813": {
     "stage": "st0813",
-    "map": null
+    "map": "field007_m13_l0.png"
   },
   "814": {
     "stage": "st0814",
-    "map": null
+    "map": "field007_m14_l0.png"
   },
   "815": {
     "stage": "st0815",
-    "map": null
+    "map": "field007_m15_l0.png"
   },
   "816": {
     "stage": "st0816",
-    "map": null
+    "map": "field007_m16_l0.png"
   },
   "817": {
     "stage": "st0817",
-    "map": null
+    "map": "field007_m17_l0.png"
   },
   "818": {
     "stage": "st0818",
-    "map": null
+    "map": "field007_m18_l0.png"
   },
   "819": {
     "stage": "st0819",
-    "map": null
+    "map": "field007_m19_l0.png"
   },
   "820": {
     "stage": "st0820",
-    "map": null
+    "map": "field007_m20_l0.png"
   },
   "821": {
     "stage": "st0821",
-    "map": null
+    "map": "field007_m21_l0.png"
   },
   "822": {
     "stage": "st0822",
-    "map": null
+    "map": "field007_m22_l0.png"
   },
   "823": {
     "stage": "st0823",
-    "map": null
+    "map": "field007_m23_l0.png"
   },
   "824": {
     "stage": "st0824",
-    "map": null
+    "map": "field007_m24_l0.png"
   },
   "825": {
     "stage": "st0825",
-    "map": null
+    "map": "field007_m25_l0.png"
   },
   "826": {
     "stage": "st0826",
-    "map": null
+    "map": "field007_m26_l0.png"
   },
   "827": {
     "stage": "st0827",
-    "map": null
+    "map": "field007_m27_l0.png"
   },
   "829": {
     "stage": "st0829",
-    "map": null
+    "map": "field007_m29_l0.png"
   },
   "830": {
     "stage": "st0830",
-    "map": null
+    "map": "field007_m30_l0.png"
   },
   "831": {
     "stage": "st0831",
-    "map": null
+    "map": "field007_m31_l0.png"
   },
   "832": {
     "stage": "st0832",
-    "map": null
+    "map": "field007_m32_l0.png"
   },
   "840": {
     "stage": "st0840",
-    "map": null
+    "map": "field007_m40_l0.png"
   },
   "841": {
     "stage": "st0841",
-    "map": null
+    "map": "field007_m41_l0.png"
   },
   "842": {
     "stage": "st0842",
-    "map": null
+    "map": "field007_m42_l0.png"
   },
   "843": {
     "stage": "st0843",
-    "map": null
+    "map": "field007_m43_l0.png"
   },
   "844": {
     "stage": "st0844",
-    "map": null
+    "map": "field007_m44_l0.png"
   },
   "845": {
     "stage": "st0845",
-    "map": null
+    "map": "field007_m45_l0.png"
   },
   "847": {
     "stage": "st0847",
-    "map": null
+    "map": "field007_m47_l0.png"
   },
   "850": {
     "stage": "st0850",
-    "map": null
+    "map": "field007_m50_l0.png"
   },
   "851": {
     "stage": "st0851",
-    "map": null
+    "map": "field007_m51_l0.png"
   },
   "860": {
     "stage": "st0860",
-    "map": null
+    "map": "field007_m60_l0.png"
   },
   "861": {
     "stage": "st0861",
-    "map": null
+    "map": "field007_m61_l0.png"
   },
   "862": {
     "stage": "st0862",
-    "map": null
+    "map": "field007_m62_l0.png"
   },
   "863": {
     "stage": "st0863",
-    "map": null
+    "map": "field007_m63_l0.png"
   },
   "865": {
     "stage": "st0865",
-    "map": null
+    "map": "field007_m65_l0.png"
   },
   "866": {
     "stage": "st0866",
-    "map": null
+    "map": "field007_m66_l0.png"
   },
   "867": {
     "stage": "st0867",
-    "map": null
+    "map": "field007_m67_l0.png"
   },
   "870": {
     "stage": "st0870",
-    "map": null
+    "map": "field007_m70_l0.png"
   },
   "871": {
     "stage": "st0871",
-    "map": null
+    "map": "field007_m71_l0.png"
   },
   "872": {
     "stage": "st0872",
-    "map": null
+    "map": "field007_m72_l0.png"
   },
   "873": {
     "stage": "st0873",
-    "map": null
+    "map": "field007_m73_l0.png"
   },
   "880": {
     "stage": "st0880",
-    "map": null
+    "map": "field007_m80_l0.png"
   },
   "881": {
     "stage": "st0881",
-    "map": null
+    "map": "field007_m81_l0.png"
   },
   "882": {
     "stage": "st0882",
-    "map": null
+    "map": "field007_m82_l0.png"
   },
   "883": {
     "stage": "st0883",
-    "map": null
+    "map": "field007_m83_l0.png"
   },
   "884": {
     "stage": "st0884",
-    "map": null
+    "map": "field007_m84_l0.png"
   },
   "885": {
     "stage": "st0885",
-    "map": null
+    "map": "field007_m85_l0.png"
   },
   "886": {
     "stage": "st0886",
-    "map": null
+    "map": "field007_m86_l0.png"
   },
   "887": {
     "stage": "st0887",
-    "map": null
+    "map": "field007_m87_l0.png"
   },
   "888": {
     "stage": "st0888",
-    "map": null
+    "map": "field007_m88_l0.png"
   },
   "889": {
     "stage": "st0889",
-    "map": null
+    "map": "field007_m89_l0.png"
   },
   "890": {
     "stage": "st0890",
-    "map": null
+    "map": "field007_m90_l0.png"
   },
   "901": {
     "stage": "st0901",
-    "map": null
+    "map": "field008_m01_l0.png"
   },
   "905": {
     "stage": "st0905",
-    "map": null
+    "map": "field008_m05_l0.png"
   },
   "906": {
     "stage": "st0906",
-    "map": null
+    "map": "field008_m06_l0.png"
   },
   "907": {
     "stage": "st0907",
-    "map": null
+    "map": "field008_m07_l0.png"
   },
   "908": {
     "stage": "st0908",
-    "map": null
+    "map": "field008_m08_l0.png"
   },
   "909": {
     "stage": "st0909",
-    "map": null
+    "map": "field008_m09_l0.png"
   },
   "910": {
     "stage": "st0910",
-    "map": null
+    "map": "field008_m10_l0.png"
   },
   "911": {
     "stage": "st0911",
-    "map": null
+    "map": "field008_m11_l0.png"
   },
   "912": {
     "stage": "st0912",
-    "map": null
+    "map": "field008_m12_l0.png"
   },
   "913": {
     "stage": "st0913",
-    "map": null
+    "map": "field008_m13_l0.png"
   },
   "914": {
     "stage": "st0914",
-    "map": null
+    "map": "field008_m14_l0.png"
   },
   "920": {
     "stage": "st0920",
-    "map": null
+    "map": "field008_m20_l0.png"
   },
   "921": {
     "stage": "st0921",
-    "map": null
+    "map": "field008_m21_l0.png"
   },
   "930": {
     "stage": "st0930",
-    "map": null
+    "map": "field008_m30_l0.png"
   },
   "940": {
     "stage": "st0940",
-    "map": null
+    "map": "field008_m40_l0.png"
   },
   "950": {
     "stage": "st0950",
-    "map": null
+    "map": "field008_m50_l0.png"
   },
   "951": {
     "stage": "st0951",
-    "map": null
+    "map": "field008_m51_l0.png"
   },
   "952": {
     "stage": "st0952",
-    "map": null
+    "map": "field008_m52_l0.png"
   },
   "960": {
     "stage": "st0960",
-    "map": null
+    "map": "field008_m60_l0.png"
   },
   "1000": {
     "stage": "st1000",
-    "map": null
+    "map": "field009_m00_l0.png"
   },
   "1001": {
     "stage": "st1001",
-    "map": null
+    "map": "field009_m01_l0.png"
   },
   "1002": {
     "stage": "st1002",
-    "map": null
+    "map": "field009_m02_l0.png"
   },
   "1003": {
     "stage": "st1003",
-    "map": null
+    "map": "field009_m03_l0.png"
   },
   "1004": {
     "stage": "st1004",
-    "map": null
+    "map": "field009_m04_l0.png"
   },
   "1005": {
     "stage": "st1005",
-    "map": null
+    "map": "field009_m05_l0.png"
   },
   "1006": {
     "stage": "st1006",
-    "map": null
+    "map": "field009_m06_l0.png"
   },
   "1007": {
     "stage": "st1007",
-    "map": null
+    "map": "field009_m07_l0.png"
   },
   "1020": {
     "stage": "st1020",
-    "map": null
+    "map": "field009_m20_l0.png"
   },
   "1021": {
     "stage": "st1021",
-    "map": null
+    "map": "field009_m21_l0.png"
   },
   "1022": {
     "stage": "st1022",
-    "map": null
+    "map": "field009_m22_l0.png"
   },
   "1023": {
     "stage": "st1023",
-    "map": null
+    "map": "field009_m23_l0.png"
   },
   "1024": {
     "stage": "st1024",
-    "map": null
+    "map": "field009_m24_l0.png"
   },
   "1025": {
     "stage": "st1025",
-    "map": null
+    "map": "field009_m25_l0.png"
   },
   "1026": {
     "stage": "st1026",
-    "map": null
+    "map": "field009_m26_l0.png"
   },
   "1040": {
     "stage": "st1040",
-    "map": null
+    "map": "field009_m40_l0.png"
   },
   "1043": {
     "stage": "st1043",
-    "map": null
+    "map": "field009_m43_l0.png"
   },
   "1060": {
     "stage": "st1060",
-    "map": null
+    "map": "field009_m60_l0.png"
   },
   "1061": {
     "stage": "st1061",
-    "map": null
+    "map": "field009_m61_l0.png"
   },
   "1063": {
     "stage": "st1063",
-    "map": null
+    "map": "field009_m63_l0.png"
   },
   "1064": {
     "stage": "st1064",
-    "map": null
+    "map": "field009_m64_l0.png"
   },
   "1080": {
     "stage": "st1080",
-    "map": null
+    "map": "field009_m80_l0.png"
   },
   "1091": {
     "stage": "st1091",
-    "map": null
+    "map": "field009_m91_l0.png"
   },
   "1092": {
     "stage": "st1092",
-    "map": null
+    "map": "field009_m92_l0.png"
   },
   "1093": {
     "stage": "st1093",
-    "map": null
+    "map": "field009_m93_l0.png"
   },
   "1094": {
     "stage": "st1094",
-    "map": null
+    "map": "field009_m94_l0.png"
   },
   "1095": {
     "stage": "st1095",
-    "map": null
+    "map": "field009_m95_l0.png"
   },
   "1096": {
     "stage": "st1096",
-    "map": null
+    "map": "field009_m96_l0.png"
   },
   "1097": {
     "stage": "st1097",
-    "map": null
+    "map": "field009_m97_l0.png"
   },
   "1098": {
     "stage": "st1098",
-    "map": null
+    "map": "field009_m98_l0.png"
   },
   "1100": {
     "stage": "st1100",
-    "map": null
+    "map": "field010_m00_l0.png"
   },
   "1101": {
     "stage": "st1101",
-    "map": null
+    "map": "field010_m01_l0.png"
   },
   "1102": {
     "stage": "st1102",
-    "map": null
+    "map": "field010_m02_l0.png"
   },
   "1103": {
     "stage": "st1103",
-    "map": null
+    "map": "field010_m03_l0.png"
   },
   "1104": {
     "stage": "st1104",
-    "map": null
+    "map": "field010_m04_l0.png"
   },
   "1105": {
     "stage": "st1105",
-    "map": null
+    "map": "field010_m05_l0.png"
   },
   "1106": {
     "stage": "st1106",
-    "map": null
+    "map": "field010_m06_l0.png"
   },
   "1120": {
     "stage": "st1120",
-    "map": null
+    "map": "field010_m20_l0.png"
   },
   "1121": {
     "stage": "st1121",
-    "map": null
+    "map": "field010_m21_l0.png"
   },
   "1122": {
     "stage": "st1122",
-    "map": null
+    "map": "field010_m22_l0.png"
   },
   "1123": {
     "stage": "st1123",
-    "map": null
+    "map": "field010_m23_l0.png"
   },
   "1124": {
     "stage": "st1124",
-    "map": null
+    "map": "field010_m24_l0.png"
   },
   "1125": {
     "stage": "st1125",
-    "map": null
+    "map": "field010_m25_l0.png"
   },
   "1126": {
     "stage": "st1126",
-    "map": null
+    "map": "field010_m26_l0.png"
   },
   "1127": {
     "stage": "st1127",
-    "map": null
+    "map": "field010_m27_l0.png"
   },
   "1128": {
     "stage": "st1128",
-    "map": null
+    "map": "field010_m28_l0.png"
   },
   "1140": {
     "stage": "st1140",
-    "map": null
+    "map": "field010_m40_l0.png"
   },
   "1141": {
     "stage": "st1141",
-    "map": null
+    "map": "field010_m41_l0.png"
   },
   "1142": {
     "stage": "st1142",
-    "map": null
+    "map": "field010_m42_l0.png"
   },
   "1143": {
     "stage": "st1143",
-    "map": null
+    "map": "field010_m43_l0.png"
   },
   "1144": {
     "stage": "st1144",
-    "map": null
+    "map": "field010_m44_l0.png"
   },
   "1145": {
     "stage": "st1145",
-    "map": null
+    "map": "field010_m45_l0.png"
   },
   "1146": {
     "stage": "st1146",
-    "map": null
+    "map": "field010_m46_l0.png"
   },
   "1147": {
     "stage": "st1147",
-    "map": null
+    "map": "field010_m47_l0.png"
   },
   "1148": {
     "stage": "st1148",
-    "map": null
+    "map": "field010_m48_l0.png"
   },
   "1149": {
     "stage": "st1149",
-    "map": null
+    "map": "field010_m49_l0.png"
   },
   "1150": {
     "stage": "st1150",
-    "map": null
+    "map": "field010_m50_l0.png"
   },
   "1151": {
     "stage": "st1151",
-    "map": null
+    "map": "field010_m51_l0.png"
   },
   "1152": {
     "stage": "st1152",
-    "map": null
+    "map": "field010_m52_l0.png"
   },
   "1154": {
     "stage": "st1154",
-    "map": null
+    "map": "field010_m54_l0.png"
   },
   "1155": {
     "stage": "st1155",
-    "map": null
+    "map": "field010_m55_l0.png"
   },
   "1156": {
     "stage": "st1156",
-    "map": null
+    "map": "field010_m56_l0.png"
   },
   "1157": {
     "stage": "st1157",
-    "map": null
+    "map": "field010_m57_l0.png"
   },
   "1158": {
     "stage": "st1158",
-    "map": null
+    "map": "field010_m58_l0.png"
   },
   "1200": {
     "stage": "st1200",
-    "map": null
+    "map": "field011_m00_l0.png"
   },
   "1201": {
     "stage": "st1201",
-    "map": null
+    "map": "field011_m01_l0.png"
   },
   "1202": {
     "stage": "st1202",
-    "map": null
+    "map": "field011_m02_l0.png"
   },
   "1250": {
     "stage": "st1250",
-    "map": null
+    "map": "field011_m50_l0.png"
   },
   "1251": {
     "stage": "st1251",
-    "map": null
+    "map": "field011_m51_l0.png"
   },
   "1252": {
     "stage": "st1252",
-    "map": null
+    "map": "field011_m52_l0.png"
   },
   "1300": {
     "stage": "st1300",
-    "map": null
+    "map": "field012_m00_l0.png"
   },
   "2000": {
     "stage": "st2000",
-    "map": null
+    "map": "field019_m00_l0.png"
   },
   "2001": {
     "stage": "st2001",
-    "map": null
+    "map": "field019_m01_l0.png"
   },
   "2002": {
     "stage": "st2002",
-    "map": null
+    "map": "field019_m02_l0.png"
   },
   "2003": {
     "stage": "st2003",
-    "map": null
+    "map": "field019_m03_l0.png"
   },
   "2004": {
     "stage": "st2004",
-    "map": null
+    "map": "field019_m04_l0.png"
   },
   "2005": {
     "stage": "st2005",
-    "map": null
+    "map": "field019_m05_l0.png"
   },
   "2006": {
     "stage": "st2006",
-    "map": null
+    "map": "field019_m06_l0.png"
   },
   "2007": {
     "stage": "st2007",
-    "map": null
+    "map": "field019_m07_l0.png"
   },
   "2008": {
     "stage": "st2008",
-    "map": null
+    "map": "field019_m08_l0.png"
   },
   "2009": {
     "stage": "st2009",
-    "map": null
+    "map": "field019_m09_l0.png"
   },
   "2010": {
     "stage": "st2010",
-    "map": null
+    "map": "field019_m10_l0.png"
   },
   "2011": {
     "stage": "st2011",
-    "map": null
+    "map": "field019_m11_l0.png"
   },
   "2012": {
     "stage": "st2012",
-    "map": null
+    "map": "field019_m12_l0.png"
   },
   "2013": {
     "stage": "st2013",
-    "map": null
+    "map": "field019_m13_l0.png"
   },
   "2014": {
     "stage": "st2014",
-    "map": null
+    "map": "field019_m14_l0.png"
   },
   "2015": {
     "stage": "st2015",
-    "map": null
+    "map": "field019_m15_l0.png"
   },
   "2016": {
     "stage": "st2016",
-    "map": null
+    "map": "field019_m16_l0.png"
   },
   "2017": {
     "stage": "st2017",
-    "map": null
+    "map": "field019_m17_l0.png"
   },
   "2018": {
     "stage": "st2018",
-    "map": null
+    "map": "field019_m18_l0.png"
   },
   "2019": {
     "stage": "st2019",
-    "map": null
+    "map": "field019_m19_l0.png"
   },
   "2020": {
     "stage": "st2020",
-    "map": null
+    "map": "field019_m20_l0.png"
   },
   "2021": {
     "stage": "st2021",
-    "map": null
+    "map": "field019_m21_l0.png"
   },
   "2022": {
     "stage": "st2022",
-    "map": null
+    "map": "field019_m22_l0.png"
   },
   "2023": {
     "stage": "st2023",
-    "map": null
+    "map": "field019_m23_l0.png"
   },
   "2024": {
     "stage": "st2024",
-    "map": null
+    "map": "field019_m24_l0.png"
   },
   "2025": {
     "stage": "st2025",
-    "map": null
+    "map": "field019_m25_l0.png"
   },
   "2026": {
     "stage": "st2026",
-    "map": null
+    "map": "field019_m26_l0.png"
   },
   "2027": {
     "stage": "st2027",
-    "map": null
+    "map": "field019_m27_l0.png"
   },
   "2028": {
     "stage": "st2028",
-    "map": null
+    "map": "field019_m28_l0.png"
   },
   "2029": {
     "stage": "st2029",
-    "map": null
+    "map": "field019_m29_l0.png"
   },
   "2030": {
     "stage": "st2030",
-    "map": null
+    "map": "field019_m30_l0.png"
   },
   "2031": {
     "stage": "st2031",
-    "map": null
+    "map": "field019_m31_l0.png"
   },
   "2032": {
     "stage": "st2032",
-    "map": null
+    "map": "field019_m32_l0.png"
   },
   "2033": {
     "stage": "st2033",
-    "map": null
+    "map": "field019_m33_l0.png"
   },
   "2034": {
     "stage": "st2034",
-    "map": null
+    "map": "field019_m34_l0.png"
   },
   "2035": {
     "stage": "st2035",
-    "map": null
+    "map": "field019_m35_l0.png"
   },
   "2036": {
     "stage": "st2036",
-    "map": null
+    "map": "field019_m36_l0.png"
   },
   "2037": {
     "stage": "st2037",
-    "map": null
+    "map": "field019_m37_l0.png"
   },
   "2038": {
     "stage": "st2038",
-    "map": null
+    "map": "field019_m38_l0.png"
   },
   "2039": {
     "stage": "st2039",
-    "map": null
+    "map": "field019_m39_l0.png"
   },
   "3000": {
     "stage": "st3000",
-    "map": null
+    "map": "field029_m00_l0.png"
   },
   "3100": {
     "stage": "st3100",
-    "map": null
+    "map": "field030_m00_l0.png"
   },
   "3110": {
     "stage": "st3110",
-    "map": null
+    "map": "field030_m10_l0.png"
   },
   "3111": {
     "stage": "st3111",
-    "map": null
+    "map": "field030_m11_l0.png"
   },
   "3200": {
     "stage": "st3200",
-    "map": null
+    "map": "field031_m00_l0.png"
   },
   "3210": {
     "stage": "st3210",
-    "map": null
+    "map": "field031_m10_l0.png"
   },
   "3211": {
     "stage": "st3211",
-    "map": null
+    "map": "field031_m11_l0.png"
   },
   "3212": {
     "stage": "st3212",
-    "map": null
+    "map": "field031_m12_l0.png"
   },
   "3213": {
     "stage": "st3213",
-    "map": null
+    "map": "field031_m13_l0.png"
   },
   "3300": {
     "stage": "st3300",
-    "map": null
+    "map": "field032_m00_l0.png"
   },
   "3310": {
     "stage": "st3310",
-    "map": null
+    "map": "field032_m10_l0.png"
   },
   "3311": {
     "stage": "st3311",
-    "map": null
+    "map": "field032_m11_l0.png"
   },
   "3400": {
     "stage": "st3400",
-    "map": null
+    "map": "field033_m00_l0.png"
   },
   "3410": {
     "stage": "st3410",
-    "map": null
+    "map": "field033_m10_l0.png"
   },
   "3411": {
     "stage": "st3411",
-    "map": null
+    "map": "field033_m11_l0.png"
   },
   "3500": {
     "stage": "st3500",
-    "map": null
+    "map": "field034_m00_l0.png"
   },
   "3600": {
     "stage": "st3600",
-    "map": null
+    "map": "field035_m00_l0.png"
   },
   "3601": {
     "stage": "st3601",
-    "map": null
+    "map": "field035_m01_l0.png"
   },
   "3602": {
     "stage": "st3602",
-    "map": null
+    "map": "field035_m02_l0.png"
   }
 }
