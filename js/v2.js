@@ -203,6 +203,7 @@ async function loadAll() {
     await loadJSON("EnemyNames", "/datas/enemy-names.json");
     await loadJSON("StageNames", "/datas/stage-names.json");
     await loadJSON("Items", "/datas/item_names.json");
+	buildItemMap();
     await loadJSON("ShopsNormal", "/datas/Shop.json");
     await loadJSON("ShopsBR", "/datas/ShopBR.json");
     await loadJSON("ShopsCollab", "/datas/ShopCollab.json");
@@ -228,7 +229,6 @@ async function loadAll() {
 
     await loadQuests();
 
-    buildItemMap();
     buildNpcMap();
     buildShopNpcMap();
 
@@ -273,7 +273,7 @@ DATA._stageMap[stageId] = mapPath;
 });
 
 // Field maps aus StageList
-DATA.StageList?.forEach(stage=>{
+Object.values(DATA.StageList || {}).forEach(stage=>{
 
 const stageId = stage.StageNo;
 
