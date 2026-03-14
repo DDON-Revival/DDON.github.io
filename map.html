@@ -642,7 +642,8 @@ function loadStage(mapKey) {
   leafMap.fitBounds(imgBounds, { padding:[20,20], animate:false });
 
   // ── DDON Coordinate Transform ──────────────────────────────
-  // FIELD:  px = (cx - wx)/100 + W/2   (X mirrored)
+  // FIELD:  px = (wx - cx)/100 + W/2   (positive X = east = right on map)
+  //         py = (wz - cz)/100 + H/2   (positive Z = south = bottom on map)
   //         py = (wz - cz)/100 + H/2
   //
   // ROOM:   px = wx/10 + offsetX
@@ -837,7 +838,7 @@ function getW2P(d) {
 
   // FIELD (open world): X mirrored, centered on cx/cz
   const {cx, cz} = d;
-  return (wx,wz) => [(wz-cz)/100 + H/2,  (cx-wx)/100 + W/2];
+  return (wx,wz) => [(wz-cz)/100 + H/2,  (wx-cx)/100 + W/2];
 }
 
 function setFilter(f) {
