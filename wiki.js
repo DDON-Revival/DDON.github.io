@@ -2,7 +2,7 @@ Promise.all([
   fetch("datas/EnemySpawn.json").then(r=>r.json()),
   fetch("datas/enemy-names.json").then(r=>r.json()),
   fetch("datas/stage-names.json").then(r=>r.json()),
-  fetch("datas/item_name.toml").then(r=>r.text())
+  fetch("datas/item_names.json").then(r=>r.text())
 ]).then(([spawnData, enemyNames, stageNames, itemToml]) => {
 
     window.spawnData = spawnData;
