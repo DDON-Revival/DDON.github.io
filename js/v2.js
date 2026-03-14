@@ -1468,7 +1468,7 @@ alert(name+" Lv "+level);
 document.getElementById("mapContainer")
 .appendChild(marker);
 
-loadAll();
-
 }
+
+loadAll();
 
