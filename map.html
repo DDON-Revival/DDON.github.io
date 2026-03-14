@@ -652,13 +652,13 @@ function loadStage(mapKey) {
   // PD:     px = (wx - xMin)/(xMax - xMin) * maxTileW  (centered)
   //         py = (zMax - wz)/(zMax - zMin) * totalH    (linear Z→Y)
   //
-  placeMarkers(data.groups, getW2P(data));
+  placeMarkers(data.groups);
 }
 
 // ════════════════════════════════════════════════════════════════
 //  PLACE MARKERS  — one marker per group (like DDOn-Tool)
 // ════════════════════════════════════════════════════════════════
-function placeMarkers(allGroups, w2p) {
+function placeMarkers(allGroups) {
   mkrs.forEach(m => leafMap.removeLayer(m.lm));
   mkrs = [];
   document.getElementById('elist').innerHTML = '';
@@ -666,7 +666,9 @@ function placeMarkers(allGroups, w2p) {
   const list = applyFilter(allGroups);
 
   list.forEach((g) => {
-    const [py, px] = w2p(g.x, g.z);
+    // px/py are pre-computed image pixels from map_data.json
+    // using the exact DDOn-Tool transform from MapControl.gd
+    const py = g.py, px = g.px;
     const boss  = g.isBoss;
 
     // ── Marker Icon ─────────────────────────────────────────
@@ -849,7 +851,7 @@ function setFilter(f) {
   document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
   document.getElementById('f-'+f).classList.add('on');
   if (!curStage) return;
-  placeMarkers(MAP_DATA[curStage].groups, getW2P(MAP_DATA[curStage]));
+  placeMarkers(MAP_DATA[curStage].groups);
 }
 
 function filterList() {
@@ -861,7 +863,7 @@ function filterList() {
 
 function rebuildList() {
   if (!curStage) return;
-  placeMarkers(MAP_DATA[curStage].groups, getW2P(MAP_DATA[curStage]));
+  placeMarkers(MAP_DATA[curStage].groups);
 }
 
 function updateStat(n) {
