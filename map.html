@@ -717,7 +717,7 @@ function rebuildList() {
 }
 
 function updateStat(n) {
-  const count = n ?? parseInt(document.getElementById('sb-cnt').textContent) || 0;
+  const count = (n !== undefined && n !== null) ? n : (parseInt(document.getElementById('sb-cnt').textContent) || 0);
   document.getElementById('stat').innerHTML = t('stat')(count);
 }
 
