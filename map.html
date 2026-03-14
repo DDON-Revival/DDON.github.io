@@ -836,9 +836,12 @@ function getW2P(d) {
     ];
   }
 
-  // FIELD (open world): X mirrored, centered on cx/cz
-  const {cx, cz} = d;
-  return (wx,wz) => [(wz-cz)/100 + H/2,  (wx-cx)/100 + W/2];
+  // FIELD (open world):
+  // Origin ox/oz = map corner in world coords, extracted from _nonfreq.arc files
+  //   px = (wx - ox) / S
+  //   py = (wz - oz) / S
+  const {ox, oz, S} = d;
+  return (wx,wz) => [(wz - oz) / S,  (wx - ox) / S];
 }
 
 function setFilter(f) {
