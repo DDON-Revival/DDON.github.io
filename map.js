@@ -1,69 +1,97 @@
-const API = "https://api.ddon.org/api"
+const map = document.getElementById("map")
+const mapImage = document.getElementById("mapImage")
+const stageSelect = document.getElementById("stageSelect")
+const tooltip = document.getElementById("tooltip")
 
-let stages = {}
+let zoom = 1
 
-async function init(){
+async function loadStages(){
 
-const res = await fetch(API + "/stages")
-stages = await res.json()
+const stages = await fetch("https://api.ddon.org/api/stages")
+.then(r=>r.json())
 
-const select = document.getElementById("stageSelect")
-
-Object.keys(stages).forEach(id=>{
+Object.entries(stages).forEach(([id,data])=>{
 
 const opt = document.createElement("option")
-
 opt.value = id
-opt.textContent = stages[id].en || id
+opt.textContent = data.en
 
-select.appendChild(opt)
+stageSelect.appendChild(opt)
 
 })
 
-select.onchange = ()=>loadStage(select.value)
-
-loadStage(Object.keys(stages)[0])
+loadStage(1)
 
 }
 
-async function loadStage(stageId){
-
-const mapImage = document.getElementById("mapImage")
-
-mapImage.src =
-"/maps/field000_m00_l0.png" // später dynamisch
-
-loadSpawns(stageId)
-
+stageSelect.onchange = ()=>{
+loadStage(stageSelect.value)
 }
 
-async function loadSpawns(stageId){
+async function loadStage(stage){
 
-const res = await fetch(API + "/spawns/" + stageId)
-const spawns = await res.json()
+const data = await fetch("https://api.ddon.org/api/map/"+stage)
+.then(r=>r.json())
 
-const container = document.getElementById("mapContainer")
+map.innerHTML=""
 
-document.querySelectorAll(".marker").forEach(e=>e.remove())
+const img = document.createElement("img")
 
-spawns.forEach(s=>{
+img.src = "/maps/"+data.map
+img.id="mapImage"
+
+map.appendChild(img)
+
+data.spawns.forEach(s=>{
 
 const marker = document.createElement("div")
 
-marker.className = "marker"
+marker.className="enemy-marker"
 
-const gridX = s.pos % 64
-const gridY = Math.floor(s.pos / 64)
+marker.style.left = s.x+"px"
+marker.style.top = s.y+"px"
 
-marker.style.left = (gridX/64*100)+"%"
-marker.style.top = (gridY/64*100)+"%"
+marker.onmouseenter=(e)=>{
+tooltip.style.display="block"
+tooltip.textContent = s.enemy+" Lv."+s.level
+}
 
-marker.title = "Enemy " + s.enemyId + " Lv " + s.level
+marker.onmousemove=(e)=>{
+tooltip.style.left=e.pageX+10+"px"
+tooltip.style.top=e.pageY+10+"px"
+}
 
-container.appendChild(marker)
+marker.onmouseleave=()=>{
+tooltip.style.display="none"
+}
+
+map.appendChild(marker)
+
+})
+
+data.gathering.forEach(g=>{
+
+const marker = document.createElement("div")
+
+marker.className="gather-marker"
+
+marker.style.left = g.x+"px"
+marker.style.top = g.y+"px"
+
+map.appendChild(marker)
 
 })
 
 }
 
-init()
+function zoomIn(){
+zoom+=0.1
+map.style.transform="scale("+zoom+")"
+}
+
+function zoomOut(){
+zoom-=0.1
+map.style.transform="scale("+zoom+")"
+}
+
+loadStages()
