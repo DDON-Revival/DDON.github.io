@@ -321,21 +321,22 @@ async function loadQuests() {
    HELPERS
 ========================================================= */
 
-function getItemName(id) {
+function getItemName(id){
 
-    const found = DATA._itemMap?.[String(id)];
-    if (!found) return String(id);
+    const num = Number(id);
 
-    if (typeof found === "string")
-        return found;
+    if(isNaN(num))
+        return String(id);
 
-    if (currentLanguage === "jp" && found.old)
-        return String(found.old);
+    const item = DATA._itemMap?.[String(num)];
 
-    if (found.new)
-        return String(found.new);
+    if(!item)
+        return String(num);
 
-    return String(id);
+    if(currentLanguage === "jp" && item.old)
+        return item.old;
+
+    return item.new || String(num);
 }
 
 function getEnemyName(id) {
