@@ -162,6 +162,20 @@ function setLang(l){
   document.getElementById('l-en').classList.toggle('active',l==='en');
   document.getElementById('l-jp').classList.toggle('active',l==='jp');
   document.querySelectorAll('[data-i18n]').forEach(el=>{const v=I18N[l][el.dataset.i18n]||I18N.en[el.dataset.i18n];if(v&&typeof v==='string')el.textContent=v;});
+  
+  leafMap.on('click', function(e) {
+    const d = MAP_DATA[curStage];
+    if(!d||!d._sx) return;
+    const sx=d._sx, sy=d._sy, realH=d._realH||d.baseH;
+    const py = (realH - e.latlng.lat) / sy;
+    const px = e.latlng.lng / sx;
+    if(curStage&&curStage.startsWith('field000')){
+      const wx=(px-F1_OX)/F1_SX, wz=(py-F1_OY)/F1_SY;
+      const dbg=document.getElementById('dbg');
+      dbg.style.display='block';
+      dbg.textContent='coord('+px.toFixed(1)+', '+py.toFixed(1)+') world('+Math.round(wx)+', '+Math.round(wz)+')';
+    }
+  });
   rebuildDropdown();rebuildList();
 }
 
@@ -197,6 +211,20 @@ async function boot(){
   try{const r=await fetch('./datas/stage-names.json');if(r.ok){const raw=await r.json();if(Array.isArray(raw)){raw.forEach(s=>{const key=s.id||s.key||s.mapKey;if(key)STAGE_NAMES[String(key)]={en:s.en||s.name,jp:s.jp};});}else{Object.entries(raw).forEach(([k,v])=>{STAGE_NAMES[k]=typeof v==='string'?{en:v,jp:v}:v;});}}}catch(e){console.warn('stage-names.json:',e.message);}
 
   leafMap=L.map('map',{crs:L.CRS.Simple,zoomSnap:.25,zoomDelta:.5,minZoom:-5,maxZoom:5,attributionControl:false});
+  
+  leafMap.on('click', function(e) {
+    const d = MAP_DATA[curStage];
+    if(!d||!d._sx) return;
+    const sx=d._sx, sy=d._sy, realH=d._realH||d.baseH;
+    const py = (realH - e.latlng.lat) / sy;
+    const px = e.latlng.lng / sx;
+    if(curStage&&curStage.startsWith('field000')){
+      const wx=(px-F1_OX)/F1_SX, wz=(py-F1_OY)/F1_SY;
+      const dbg=document.getElementById('dbg');
+      dbg.style.display='block';
+      dbg.textContent='coord('+px.toFixed(1)+', '+py.toFixed(1)+') world('+Math.round(wx)+', '+Math.round(wz)+')';
+    }
+  });
   rebuildDropdown();
   const first=document.getElementById('zone-sel').options[0]?.value;
   if(first){document.getElementById('zone-sel').value=first;loadStage(first);}
@@ -392,22 +420,6 @@ function getInverseTransform() {
 
 boot();
 
-// Debug click handler - add after leafMap is created
-leafMap.on('click', function(e) {
-  const d = MAP_DATA[curStage];
-  if(!d||!d._sx) return;
-  const sx=d._sx, sy=d._sy, realH=d._realH||d.baseH;
-  // Convert Leaflet lat/lng back to transform coords
-  const py = (realH - e.latlng.lat) / sy;
-  const px = e.latlng.lng / sx;
-  // Inverse field1 transform
-  if(curStage&&curStage.startsWith('field000')){
-    const wx=(px-F1_OX)/F1_SX, wz=(py-F1_OY)/F1_SY;
-    const dbg=document.getElementById('dbg');
-    dbg.style.display='block';
-    dbg.textContent=`Click → coord(${px.toFixed(1)}, ${py.toFixed(1)}) world(${Math.round(wx)}, ${Math.round(wz)})`;
-  }
-});
 
 </script>
 </body>
