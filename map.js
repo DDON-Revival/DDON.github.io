@@ -39,16 +39,15 @@ let _spawnByKey  = {};  // 'stageNo:groupId' → [{lv, dtid, boss, eid, spawn}, 
             data.dropsTables.forEach(dt => {
                 _dropsByDtid[dt.id] = dt.items.map(it => [it[0], it[1], Math.round(it[5]*100*10)/10]);
             });
-            // Build spawn lookup: stageNo:groupId → entries
-            let sidToSno = {};
-            try {
-                const slr = await fetch('./datas/StageList.json');
-                if (slr.ok) {
-                    const sl = await slr.json();
-                    const arr = Array.isArray(sl) ? sl : (sl?.StageListInfoList ?? []);
-                    sidToSno = Object.fromEntries(arr.filter(s=>s.ID!=null).map(s=>[s.ID, s.StageNo]));
+            // Build StageId→StageNo from map_params stage_ids (no extra fetch needed)
+                const sidToSno = {};
+                for (const info of Object.values(mapParams)) {
+                    const ids = info.stage_ids;
+                    if (!ids) continue;
+                    for (const [stid, sid] of Object.entries(ids)) {
+                        sidToSno[sid] = parseInt(stid.slice(2), 10);
+                    }
                 }
-            } catch(e) { console.warn('StageList load error:', e); }
             data.enemies.forEach(e => {
                 const sno = sidToSno[e[idx.StageId]];
                 if (!sno) return;
