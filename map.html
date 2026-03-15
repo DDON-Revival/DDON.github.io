@@ -270,47 +270,43 @@ function loadStage(mapKey){
   if(imgOvl){leafMap.removeLayer(imgOvl);imgOvl=null;}
   mkrs.forEach(m=>leafMap.removeLayer(m.lm));mkrs=[];
   if(data.type==='pd'){
-    const W=data.baseW,H=data.baseH,imgBounds=[[0,0],[H,W]];
+    const W=data.imgW||512,H=data.imgH||512,imgBounds=[[0,0],[H,W]];
     loadPdTiles(data,imgBounds);leafMap.fitBounds(imgBounds,{animate:false});
-    placeMarkers(data.markers,1,1,H);_fitToMarkers(data.markers,1,1,H);
+    placeMarkers(data.markers);_fitToMarkers(data.markers);
   }else{
     const url='./maps/'+data.imgFile,img=new Image();
     img.onload=()=>{
-      const realW=img.naturalWidth,realH=img.naturalHeight;
-      const baseW=data.baseW||realW,baseH=data.baseH||realH;
-      const sx=realW/baseW,sy=realH/baseH;
-      data._sx=sx;data._sy=sy;data._realH=realH;
-      const imgBounds=[[0,0],[realH,realW]];
+      const imgW=data.imgW||img.naturalWidth,imgH=data.imgH||img.naturalHeight;
+      data._imgW=imgW;data._imgH=imgH;
+      const imgBounds=[[0,0],[imgH,imgW]];
       imgOvl=L.imageOverlay(url,imgBounds).addTo(leafMap);
       document.getElementById('no-img').classList.remove('show');
       leafMap.fitBounds(imgBounds,{animate:false});
-      placeMarkers(data.markers,sx,sy,realH);_fitToMarkers(data.markers,sx,sy,realH);
+      placeMarkers(data.markers);_fitToMarkers(data.markers);
     };
     img.onerror=()=>{
       document.getElementById('no-img').classList.add('show');
       document.getElementById('ni-path').textContent=url;
-      const H=data.baseH||512;placeMarkers(data.markers,1,1,H);_fitToMarkers(data.markers,1,1,H);
+      placeMarkers(data.markers);_fitToMarkers(data.markers);
     };
     img.src=url;
   }
 }
 
-function _fitToMarkers(markers,sx,sy,realH){
+function _fitToMarkers(markers){
   if(!markers?.length)return;
-  if(!sx)sx=1;if(!sy)sy=1;if(!realH)realH=MAP_DATA[curStage]?.baseH||512;
   const f=applyFilter(markers);if(!f.length)return;
-  const pad=realH*.02;
-  const lats=f.map(e=>realH-e.py*sy),lngs=f.map(e=>e.px*sx);
+  const lats=f.map(m=>m.lat),lngs=f.map(m=>m.lng);
+  const pad=(Math.max(...lats)-Math.min(...lats))*.02||10;
   leafMap.fitBounds([[Math.min(...lats)-pad,Math.min(...lngs)-pad],[Math.max(...lats)+pad,Math.max(...lngs)+pad]],{animate:false,padding:[10,10]});
 }
 
-function placeMarkers(allMarkers,sx,sy,realH){
+function placeMarkers(allMarkers){
   mkrs.forEach(m=>leafMap.removeLayer(m.lm));mkrs=[];
   document.getElementById('elist').innerHTML='';
-  if(!sx)sx=1;if(!sy)sy=1;if(!realH)realH=MAP_DATA[curStage]?.baseH||512;
   const list=applyFilter(allMarkers);
   list.forEach(m=>{
-    const lng=m.px*sx,lat=realH-m.py*sy;
+    const lng=m.lng,lat=m.lat;
     const boss=!!m.boss;
     // Primary enemy for label display
     const primary=m.enemies[0]||{eid:'?',lv:'?'};
@@ -391,8 +387,8 @@ function setFilter(f){
   filter=f;document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));
   document.getElementById('f-'+f).classList.add('on');
   if(!curStage)return;const d=MAP_DATA[curStage];
-  placeMarkers(d.markers,d._sx||1,d._sy||1,d._realH||d.baseH||512);
-  _fitToMarkers(d.markers,d._sx||1,d._sy||1,d._realH||d.baseH||512);
+  placeMarkers(d.markers);
+  _fitToMarkers(d.markers);
 }
 function filterList(){
   const q=document.getElementById('search').value.toLowerCase();
@@ -400,7 +396,7 @@ function filterList(){
 }
 function rebuildList(){
   if(!curStage)return;const d=MAP_DATA[curStage];
-  placeMarkers(d.markers,d._sx||1,d._sy||1,d._realH||d.baseH||512);
+  placeMarkers(d.markers);
 }
 
 // DEBUG: click on map to see world coordinates
