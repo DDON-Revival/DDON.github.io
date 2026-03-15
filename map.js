@@ -115,8 +115,10 @@ async function switchChannel(channelId) {
         await _loadChannelFile(CHANNELS[channelId].file);
         await _loadGatherFile(CHANNELS[channelId].gather);
     } catch(e) { console.warn('Channel load error:', e); return; }
-    if (_loadedMapName && mapParams[_loadedMapName])
+    if (_loadedMapName && mapParams[_loadedMapName]) {
         loadEnemySpawns(mapParams[_loadedMapName], _loadedStid);
+        loadGathering(mapParams[_loadedMapName], _loadedStid);
+    }
 }
 
 function _updateChannelUI() {
@@ -162,8 +164,11 @@ function _updateChannelUI() {
         await _loadGatherFile(CHANNELS[_activeChannel].gather);
     } catch(e) { console.warn('EnemySpawn load error:', e); }
     _enemyDataReady = true;
-    if (_loadedMapName && mapParams[_loadedMapName])
+    // Re-render current map now that data is ready
+    if (_loadedMapName && mapParams[_loadedMapName]) {
         loadEnemySpawns(mapParams[_loadedMapName], _loadedStid);
+        loadGathering(mapParams[_loadedMapName], _loadedStid);
+    }
 })();
 
 function getEnemyName(emId, lang) {
