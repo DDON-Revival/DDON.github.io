@@ -97,6 +97,9 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);display
 .drop-rate.high{color:#8fc97a;}
 .drop-rate.mid{color:var(--gold);}
 .drop-rate.low{color:var(--text-dim);}
+.pop-enemy{margin-bottom:4px;}
+.pop-ename{font-family:var(--font-head);font-size:12px;letter-spacing:.3px;color:var(--gold2);margin-bottom:4px;}
+.pop-divider{border-top:1px solid var(--border);margin:8px 0;}
 .gmarker{background:rgba(130,20,20,.88);border:1.5px solid rgba(192,57,43,.75);border-radius:3px;padding:2px 6px 2px 5px;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06);cursor:pointer;transition:transform .12s,box-shadow .12s;font-size:11px;line-height:1.3;}
 .gmarker:hover{transform:scale(1.08);box-shadow:0 2px 8px rgba(200,60,40,.7);}
 .gmarker.boss{background:rgba(160,60,10,.9);border-color:rgba(232,124,62,.85);}
@@ -204,7 +207,7 @@ function rebuildDropdown(){
   const sel=document.getElementById('zone-sel');
   const prev=sel.value;sel.innerHTML='';
   const fields=[],rooms=[],pdGroups={};
-  Object.keys(MAP_DATA).filter(mk=>mk!=='_drops'&&MAP_DATA[mk].enemies?.length>0).sort().forEach(mk=>{
+  Object.keys(MAP_DATA).filter(mk=>mk!=='_drops'&&MAP_DATA[mk].markers?.length>0).sort().forEach(mk=>{
     const d=MAP_DATA[mk];
     if(d.type==='field')fields.push(mk);
     else if(d.type==='room')rooms.push(mk);
@@ -215,7 +218,7 @@ function rebuildDropdown(){
     const og=document.createElement('optgroup');og.label=label;
     keys.forEach(mk=>{
       const o=document.createElement('option');o.value=mk;
-      o.textContent=`${nameFn(mk)}  ·  ${MAP_DATA[mk].enemies.length} enemies`;
+      o.textContent=`${nameFn(mk)}  ·  ${MAP_DATA[mk].markers.length} enemies`;
       og.appendChild(o);
     });
     sel.appendChild(og);
@@ -241,7 +244,7 @@ function loadStage(mapKey){
   if(data.type==='pd'){
     const W=data.baseW,H=data.baseH,imgBounds=[[0,0],[H,W]];
     loadPdTiles(data,imgBounds);leafMap.fitBounds(imgBounds,{animate:false});
-    placeMarkers(data.enemies,1,1,H);_fitToMarkers(data.enemies,1,1,H);
+    placeMarkers(data.markers,1,1,H);_fitToMarkers(data.markers,1,1,H);
   }else{
     const url='./maps/'+data.imgFile,img=new Image();
     img.onload=()=>{
@@ -253,43 +256,50 @@ function loadStage(mapKey){
       imgOvl=L.imageOverlay(url,imgBounds).addTo(leafMap);
       document.getElementById('no-img').classList.remove('show');
       leafMap.fitBounds(imgBounds,{animate:false});
-      placeMarkers(data.enemies,sx,sy,realH);_fitToMarkers(data.enemies,sx,sy,realH);
+      placeMarkers(data.markers,sx,sy,realH);_fitToMarkers(data.markers,sx,sy,realH);
     };
     img.onerror=()=>{
       document.getElementById('no-img').classList.add('show');
       document.getElementById('ni-path').textContent=url;
-      const H=data.baseH||512;placeMarkers(data.enemies,1,1,H);_fitToMarkers(data.enemies,1,1,H);
+      const H=data.baseH||512;placeMarkers(data.markers,1,1,H);_fitToMarkers(data.markers,1,1,H);
     };
     img.src=url;
   }
 }
 
-function _fitToMarkers(enemies,sx,sy,realH){
-  if(!enemies?.length)return;
+function _fitToMarkers(markers,sx,sy,realH){
+  if(!markers?.length)return;
   if(!sx)sx=1;if(!sy)sy=1;if(!realH)realH=MAP_DATA[curStage]?.baseH||512;
-  const f=applyFilter(enemies);if(!f.length)return;
+  const f=applyFilter(markers);if(!f.length)return;
   const pad=realH*.02;
   const lats=f.map(e=>realH-e.py*sy),lngs=f.map(e=>e.px*sx);
   leafMap.fitBounds([[Math.min(...lats)-pad,Math.min(...lngs)-pad],[Math.max(...lats)+pad,Math.max(...lngs)+pad]],{animate:false,padding:[10,10]});
 }
 
-function placeMarkers(allEnemies,sx,sy,realH){
+function placeMarkers(allMarkers,sx,sy,realH){
   mkrs.forEach(m=>leafMap.removeLayer(m.lm));mkrs=[];
   document.getElementById('elist').innerHTML='';
   if(!sx)sx=1;if(!sy)sy=1;if(!realH)realH=MAP_DATA[curStage]?.baseH||512;
-  const list=applyFilter(allEnemies);
-  list.forEach(e=>{
-    const lng=e.px*sx,lat=realH-e.py*sy;
-    const boss=!!e.boss,name=enemyName(e.eid);
+  const list=applyFilter(allMarkers);
+  list.forEach(m=>{
+    const lng=m.px*sx,lat=realH-m.py*sy;
+    const boss=!!m.boss;
+    // Primary enemy for label display
+    const primary=m.enemies[0]||{eid:'?',lv:'?'};
+    const name=enemyName(primary.eid);
     const short=name.length>16?name.slice(0,15)+'…':name;
-    const icon=L.divIcon({className:'',html:`<div class="gmarker${boss?' boss':''}"><span class="gm-name">${short}</span><span class="gm-lv">Lv${e.lv}</span></div>`,iconAnchor:[0,10]});
+    const extra=m.enemies.length>1?` +${m.enemies.length-1}`:'';
+    const lvs=[...new Set(m.enemies.map(e=>e.lv))].sort((a,b)=>a-b);
+    const lvLabel=lvs.length>1?`Lv${lvs[0]}-${lvs[lvs.length-1]}`:`Lv${lvs[0]||'?'}`;
+    const icon=L.divIcon({className:'',html:`<div class="gmarker${boss?' boss':''}"><span class="gm-name">${short}${extra}</span><span class="gm-lv">${lvLabel}</span></div>`,iconAnchor:[0,10]});
     const lm=L.marker([lat,lng],{icon,zIndexOffset:boss?100:0});
-    lm.bindPopup(buildPopup(e),{maxWidth:320,minWidth:240});
-    lm.addTo(leafMap);mkrs.push({lm,e});
+    lm.bindPopup(buildPopup(m),{maxWidth:320,minWidth:240});
+    lm.addTo(leafMap);mkrs.push({lm,m});
     const item=document.createElement('div');
     item.className=`ei${boss?' boss-item':''}`;
-    item.dataset.name=name.toLowerCase();item.dataset.level=String(e.lv);
-    item.innerHTML=`<div class="ei-lv${boss?' b':''}">Lv${e.lv}</div><div class="ei-info"><div class="ei-name">${name}</div><div class="ei-meta">${e.spawn||'—'}</div></div><div class="ei-dot${boss?' b':''}"></div>`;
+    item.dataset.name=m.enemies.map(e=>enemyName(e.eid)).join(' ').toLowerCase();
+    item.dataset.level=String(lvs[0]||0);
+    item.innerHTML=`<div class="ei-lv${boss?' b':''}">${lvLabel}</div><div class="ei-info"><div class="ei-name">${name}${extra}</div><div class="ei-meta">${m.spawn||'—'}</div></div><div class="ei-dot${boss?' b':''}"></div>`;
     item.addEventListener('click',()=>{
       if(hlMkr)hlMkr.getElement()?.querySelector('.gmarker')?.classList.remove('hi');
       lm.getElement()?.querySelector('.gmarker')?.classList.add('hi');
@@ -303,30 +313,37 @@ function placeMarkers(allEnemies,sx,sy,realH){
   document.getElementById('stat').innerHTML=t('stat')(list.length);
 }
 
-function buildPopup(e){
-  const name=enemyName(e.eid);
-  let drops='';
-  const dt=MAP_DATA._drops?.[String(e.dtid)];
-  if(dt&&dt.length){
-    const rows=dt.map(([id,qty,rate])=>{
-      const cls=rate>=80?'high':rate>=30?'mid':'low';
-      const q=qty>1?`<span class="drop-qty">×${qty}</span>`:'';
-      return `<div class="drop-row"><span class="drop-name">${itemName(id)}</span>${q}<span class="drop-rate ${cls}">${rate}%</span></div>`;
-    }).join('');
-    drops=`<div class="pop-drops-title">${t('popup.drops')}</div>${rows}`;
-  }
-  return `<div class="pop"><div class="pop-title">${name}</div>
-    <div class="pop-row"><span class="pk">ID</span><span class="pv" style="font-family:monospace;font-size:11px">${e.eid}</span></div>
-    <div class="pop-row"><span class="pk">${t('popup.level')}</span><span class="pv">${e.lv}</span></div>
-    <div class="pop-row"><span class="pk">${t('popup.spawn')}</span><span class="pv">${e.spawn||'—'}</span></div>
-    ${e.boss?`<div class="pop-boss">${t('popup.boss')}</div>`:''}${drops}</div>`;
+function buildPopup(m){
+  // Build one section per unique enemy type at this position
+  const sections=m.enemies.map(e=>{
+    const name=enemyName(e.eid);
+    let drops='';
+    const dt=MAP_DATA._drops?.[String(e.dtid)];
+    if(dt&&dt.length){
+      const rows=dt.map(([id,qty,rate])=>{
+        const cls=rate>=80?'high':rate>=30?'mid':'low';
+        const q=qty>1?`<span class="drop-qty">×${qty}</span>`:'';
+        return `<div class="drop-row"><span class="drop-name">${itemName(id)}</span>${q}<span class="drop-rate ${cls}">${rate}%</span></div>`;
+      }).join('');
+      drops=`<div class="pop-drops-title">${t('popup.drops')}</div>${rows}`;
+    }
+    return `<div class="pop-enemy">
+      <div class="pop-ename">${name}</div>
+      <div class="pop-row"><span class="pk">ID</span><span class="pv" style="font-family:monospace;font-size:11px">${e.eid}</span></div>
+      <div class="pop-row"><span class="pk">${t('popup.level')}</span><span class="pv">${e.lv}</span></div>
+      ${drops}</div>`;
+  }).join('<div class="pop-divider"></div>');
+  return `<div class="pop">
+    <div class="pop-row" style="margin-bottom:6px"><span class="pk">${t('popup.spawn')}</span><span class="pv">${m.spawn||'—'}</span></div>
+    ${m.boss?`<div class="pop-boss" style="margin-bottom:8px">${t('popup.boss')}</div>`:''}
+    ${sections}</div>`;
 }
 
-function applyFilter(enemies){
-  if(filter==='boss')return enemies.filter(e=>e.boss);
-  if(filter==='day')return enemies.filter(e=>{const tm=e.spawn||'';return tm==='00:00,23:59'||tm.startsWith('06:')||tm.includes(',17:59')||tm.includes(',18:');});
-  if(filter==='night')return enemies.filter(e=>{const tm=e.spawn||'';return tm.startsWith('18:')||tm.startsWith('22:')||tm.includes('05:59');});
-  return enemies;
+function applyFilter(markers){
+  if(filter==='boss')return markers.filter(m=>m.boss);
+  if(filter==='day')return markers.filter(m=>{const tm=m.spawn||'';return tm==='00:00,23:59'||tm.startsWith('06:')||tm.includes(',17:59')||tm.includes(',18:');});
+  if(filter==='night')return markers.filter(m=>{const tm=m.spawn||'';return tm.startsWith('18:')||tm.startsWith('22:')||tm.includes('05:59');});
+  return markers;
 }
 
 function loadPdTiles(data,imgBounds){
@@ -346,8 +363,8 @@ function setFilter(f){
   filter=f;document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));
   document.getElementById('f-'+f).classList.add('on');
   if(!curStage)return;const d=MAP_DATA[curStage];
-  placeMarkers(d.enemies,d._sx||1,d._sy||1,d._realH||d.baseH||512);
-  _fitToMarkers(d.enemies,d._sx||1,d._sy||1,d._realH||d.baseH||512);
+  placeMarkers(d.markers,d._sx||1,d._sy||1,d._realH||d.baseH||512);
+  _fitToMarkers(d.markers,d._sx||1,d._sy||1,d._realH||d.baseH||512);
 }
 function filterList(){
   const q=document.getElementById('search').value.toLowerCase();
@@ -355,7 +372,7 @@ function filterList(){
 }
 function rebuildList(){
   if(!curStage)return;const d=MAP_DATA[curStage];
-  placeMarkers(d.enemies,d._sx||1,d._sy||1,d._realH||d.baseH||512);
+  placeMarkers(d.markers,d._sx||1,d._sy||1,d._realH||d.baseH||512);
 }
 boot();
 </script>
