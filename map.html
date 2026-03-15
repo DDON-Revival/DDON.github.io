@@ -8,15 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Pro:wght@300;400;600&family=Noto+Serif+JP:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#0d0b08;--surface:#161209;--surface2:#1e1710;--surface3:#252016;
-  --border:#352c1a;--border2:#4a3d28;--gold:#c9a84c;--gold2:#e8c96d;
-  --gold-dim:rgba(201,168,76,.12);--red:#c0392b;--red-dim:rgba(192,57,43,.15);
-  --boss:#e87c3e;--boss-dim:rgba(232,124,62,.12);--text:#d4c4a0;
-  --text-dim:#7a6a50;--text-mute:#4a3d28;--radius:3px;
-  --font-body:'Crimson Pro','Noto Serif JP',Georgia,serif;
-  --font-head:'Cinzel','Noto Serif JP',serif;
-}
+:root{--bg:#0d0b08;--surface:#161209;--surface2:#1e1710;--surface3:#252016;--border:#352c1a;--border2:#4a3d28;--gold:#c9a84c;--gold2:#e8c96d;--gold-dim:rgba(201,168,76,.12);--red:#c0392b;--red-dim:rgba(192,57,43,.15);--boss:#e87c3e;--boss-dim:rgba(232,124,62,.12);--text:#d4c4a0;--text-dim:#7a6a50;--text-mute:#4a3d28;--radius:3px;--font-body:'Crimson Pro','Noto Serif JP',Georgia,serif;--font-head:'Cinzel','Noto Serif JP',serif;}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;overflow:hidden;}
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);display:flex;flex-direction:column;}
@@ -28,13 +20,12 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);display
 #header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,var(--gold) 30%,var(--gold) 70%,transparent 100%);opacity:.35;}
 .logo{padding:0 20px;font-family:var(--font-head);font-weight:900;font-size:15px;letter-spacing:3px;color:var(--gold);white-space:nowrap;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
 .logo-cross{color:var(--red);font-size:14px;}
-.logo-sub{font-size:9px;letter-spacing:2px;color:var(--text-dim);font-weight:400;}
 .hdiv{width:1px;height:30px;background:var(--border);flex-shrink:0;margin:0 4px;}
 .zone-wrap{display:flex;align-items:center;gap:10px;padding:0 12px;}
 .zone-label{font-family:var(--font-head);font-size:10px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;white-space:nowrap;}
-.zone-select{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--font-body);font-size:14px;padding:5px 30px 5px 10px;border-radius:var(--radius);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c9a84c' opacity='.7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;background-size:8px;min-width:260px;transition:border-color .2s,background-color .2s;}
-.zone-select:hover,.zone-select:focus{border-color:var(--gold);outline:none;background-color:var(--surface3);}
-.zone-select optgroup{background:var(--surface2);color:var(--text-dim);font-size:11px;}
+.zone-select{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--font-body);font-size:14px;padding:5px 30px 5px 10px;border-radius:var(--radius);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c9a84c' opacity='.7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;background-size:8px;min-width:260px;transition:border-color .2s;}
+.zone-select:hover,.zone-select:focus{border-color:var(--gold);outline:none;}
+.zone-select optgroup{background:var(--surface2);color:var(--text-dim);}
 .zone-select option{background:var(--surface2);color:var(--text);}
 .filters{display:flex;align-items:center;gap:6px;padding:0 12px;}
 .fbtn{font-family:var(--font-head);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 11px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;border-radius:var(--radius);transition:all .18s;white-space:nowrap;}
@@ -46,7 +37,6 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);display
 .stat-badge strong{color:var(--gold2);}
 .lang-btn{font-family:var(--font-head);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;border-radius:var(--radius);transition:all .18s;}
 .lang-btn.active{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
-.lang-btn:hover{border-color:var(--border2);color:var(--text);}
 #app{flex:1;display:flex;overflow:hidden;}
 #sidebar{width:272px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
 .sb-top{padding:11px 14px 9px;border-bottom:1px solid var(--border);font-family:var(--font-head);font-size:10px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;}
@@ -75,10 +65,9 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);display
 #no-img.show{opacity:1;pointer-events:all;}
 #no-img .ni-title{font-family:var(--font-head);font-size:11px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase;}
 #no-img .ni-file{font-family:monospace;font-size:13px;color:var(--gold);}
-#no-img .ni-hint{font-size:12px;color:var(--text-mute);}
 .leaflet-container{font-family:var(--font-body);background:#08070504;}
 .leaflet-control-zoom{border:1px solid var(--border)!important;border-radius:var(--radius)!important;}
-.leaflet-control-zoom a{background:var(--surface)!important;color:var(--text-dim)!important;border-color:var(--border)!important;transition:all .15s!important;}
+.leaflet-control-zoom a{background:var(--surface)!important;color:var(--text-dim)!important;border-color:var(--border)!important;}
 .leaflet-control-zoom a:hover{color:var(--gold)!important;background:var(--surface2)!important;}
 .leaflet-popup-content-wrapper{background:var(--surface);border:1px solid var(--border2);border-radius:4px;box-shadow:0 12px 40px rgba(0,0,0,.7);padding:0;}
 .leaflet-popup-tip-container{display:none;}
@@ -93,17 +82,12 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);display
 .drop-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:2px 0;gap:8px;}
 .drop-name{color:var(--text);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .drop-qty{color:var(--text-dim);font-size:11px;flex-shrink:0;}
-.drop-rate{font-family:var(--font-head);font-size:10px;letter-spacing:.5px;flex-shrink:0;min-width:42px;text-align:right;}
-.drop-rate.high{color:#8fc97a;}
-.drop-rate.mid{color:var(--gold);}
-.drop-rate.low{color:var(--text-dim);}
-.pop-enemy{margin-bottom:4px;}
-.pop-ename{font-family:var(--font-head);font-size:12px;letter-spacing:.3px;color:var(--gold2);margin-bottom:4px;}
-.pop-divider{border-top:1px solid var(--border);margin:8px 0;}
-.gmarker{background:rgba(130,20,20,.88);border:1.5px solid rgba(192,57,43,.75);border-radius:3px;padding:2px 6px 2px 5px;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06);cursor:pointer;transition:transform .12s,box-shadow .12s;font-size:11px;line-height:1.3;}
-.gmarker:hover{transform:scale(1.08);box-shadow:0 2px 8px rgba(200,60,40,.7);}
+.drop-rate{font-family:var(--font-head);font-size:10px;flex-shrink:0;min-width:42px;text-align:right;}
+.drop-rate.high{color:#8fc97a;}.drop-rate.mid{color:var(--gold);}.drop-rate.low{color:var(--text-dim);}
+.gmarker{background:rgba(130,20,20,.88);border:1.5px solid rgba(192,57,43,.75);border-radius:3px;padding:2px 6px 2px 5px;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.6);cursor:pointer;transition:transform .12s;font-size:11px;line-height:1.3;}
+.gmarker:hover{transform:scale(1.08);}
 .gmarker.boss{background:rgba(160,60,10,.9);border-color:rgba(232,124,62,.85);}
-.gmarker.hi{background:rgba(160,130,20,.95)!important;border-color:var(--gold)!important;box-shadow:0 0 8px var(--gold),0 0 16px rgba(201,168,76,.4)!important;}
+.gmarker.hi{background:rgba(160,130,20,.95)!important;border-color:var(--gold)!important;box-shadow:0 0 8px var(--gold)!important;}
 .gm-name{color:#f2d0c8;max-width:120px;overflow:hidden;text-overflow:ellipsis;}
 .gm-lv{color:rgba(255,255,255,.5);font-size:10px;font-family:'Cinzel',serif;}
 .leaflet-marker-icon{overflow:visible!important;}
@@ -113,18 +97,18 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);display
 <body>
 <div id="loading"><div class="ld-icon">⚔</div><div class="ld-text" id="ld-msg">Loading map data…</div></div>
 <header id="header">
-  <div class="logo"><span>DDON</span><span class="logo-cross">✦</span><span class="logo-sub" data-i18n="header.subtitle">Enemy Map</span></div>
+  <div class="logo"><span>DDON</span><span class="logo-cross">✦</span><span style="font-size:9px;letter-spacing:2px;color:var(--text-dim);font-weight:400;">Enemy Map</span></div>
   <div class="hdiv"></div>
   <div class="zone-wrap">
-    <span class="zone-label" data-i18n="header.zone">Zone</span>
+    <span class="zone-label">Zone</span>
     <select class="zone-select" id="zone-sel"></select>
   </div>
   <div class="hdiv"></div>
   <div class="filters">
-    <button class="fbtn on" id="f-all" onclick="setFilter('all')" data-i18n="filter.all">All</button>
-    <button class="fbtn" id="f-day" onclick="setFilter('day')" data-i18n="filter.day">Day</button>
-    <button class="fbtn" id="f-night" onclick="setFilter('night')" data-i18n="filter.night">Night</button>
-    <button class="fbtn boss-f" id="f-boss" onclick="setFilter('boss')" data-i18n="filter.boss">Boss</button>
+    <button class="fbtn on" id="f-all" onclick="setFilter('all')">All</button>
+    <button class="fbtn" id="f-day" onclick="setFilter('day')">Day</button>
+    <button class="fbtn" id="f-night" onclick="setFilter('night')">Night</button>
+    <button class="fbtn boss-f" id="f-boss" onclick="setFilter('boss')">Boss</button>
   </div>
   <div class="hright">
     <span class="stat-badge" id="stat"></span>
@@ -135,95 +119,45 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);display
 </header>
 <div id="app">
   <aside id="sidebar">
-    <div class="sb-top"><span data-i18n="sidebar.title">Enemies</span><span class="sb-count" id="sb-cnt">0</span></div>
+    <div class="sb-top"><span>Enemies</span><span class="sb-count" id="sb-cnt">0</span></div>
     <div class="sb-search"><input id="search" placeholder="Search by name or level…" oninput="filterList()"></div>
     <div id="elist"></div>
   </aside>
   <div id="mapwrap">
     <div id="map"></div>
-    <div id="no-img">
-      <div class="ni-title">Map image not found</div>
-      <code class="ni-file" id="ni-path"></code>
-      <div class="ni-hint">Place the image in the maps/ folder</div>
-    </div>
+    <div id="no-img"><div class="ni-title">Map image not found</div><code class="ni-file" id="ni-path"></code></div>
   </div>
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const I18N={
-  en:{'header.subtitle':'Enemy Map','header.zone':'Zone','filter.all':'All','filter.day':'Day','filter.night':'Night','filter.boss':'Boss','sidebar.title':'Enemies','optgroup.main':'Field Maps','optgroup.dungeon':'Dungeon','popup.level':'Level','popup.spawn':'Spawn','popup.boss':'⚠ Area Boss','popup.drops':'Drops','stat':(n)=>`<strong>${n}</strong> enemies`},
-  jp:{'header.subtitle':'エネミーマップ','header.zone':'ゾーン','filter.all':'すべて','filter.day':'昼','filter.night':'夜','filter.boss':'ボス','sidebar.title':'エネミー','optgroup.main':'フィールドマップ','optgroup.dungeon':'ダンジョン','popup.level':'レベル','popup.spawn':'スポーン','popup.boss':'⚠ エリアボス','popup.drops':'ドロップ','stat':(n)=>`<strong>${n}</strong> 体`}
-};
-let lang='en';
-function t(k){return I18N[lang][k]||I18N.en[k]||k;}
+let ENEMY_NAMES={}, ITEM_NAMES={}, lang='en', MAP_DATA=null, leafMap=null, imgOvl=null, mkrs=[], filter='all', curStage=null, hlMkr=null;
+
+function enemyName(eid){const e=ENEMY_NAMES[eid];if(!e)return eid;return e[lang]||e.en||eid;}
+function itemName(id){const it=ITEM_NAMES[id];if(!it)return`Item #${id}`;return it[lang]||it.en||it.jp||`Item #${id}`;}
+
 function setLang(l){
   lang=l;
   document.getElementById('l-en').classList.toggle('active',l==='en');
   document.getElementById('l-jp').classList.toggle('active',l==='jp');
-  document.querySelectorAll('[data-i18n]').forEach(el=>{const v=I18N[l][el.dataset.i18n]||I18N.en[el.dataset.i18n];if(v&&typeof v==='string')el.textContent=v;});
-  
-  leafMap.on('click', function(e) {
-    const d = MAP_DATA[curStage];
-    if(!d||!d._sx) return;
-    const sx=d._sx, sy=d._sy, realH=d._realH||d.baseH;
-    const py = (realH - e.latlng.lat) / sy;
-    const px = e.latlng.lng / sx;
-    if(curStage&&curStage.startsWith('field000')){
-      const wx=(px-F1_OX)/F1_SX, wz=(py-F1_OY)/F1_SY;
-      const dbg=document.getElementById('dbg');
-      dbg.style.display='block';
-      dbg.textContent='coord('+px.toFixed(1)+', '+py.toFixed(1)+') world('+Math.round(wx)+', '+Math.round(wz)+')';
-    }
-  });
-  rebuildDropdown();rebuildList();
+  rebuildDropdown(); rebuildList();
 }
-
-let ENEMY_NAMES={},ITEM_NAMES={},STAGE_NAMES={};
-
-function enemyName(id){const e=ENEMY_NAMES[id];if(!e)return id;return e[lang]||e.en||id;}
-function itemName(id){const it=ITEM_NAMES[id];if(!it)return `Item #${id}`;return it[lang]||it.en||it.jp||`Item #${id}`;}
-function mapDisplayName(mk){
-  if(STAGE_NAMES[mk]){const s=STAGE_NAMES[mk];return s[lang]||s.en||s.jp||mk;}
-  const fm=mk.match(/^field(\d+)_m\d+$/);
-  if(fm){const k2=String(parseInt(fm[1])+1);if(STAGE_NAMES[k2]){const s=STAGE_NAMES[k2];return s[lang]||s.en||s.jp||mk;}}
-  return mk;
-}
-
-let MAP_DATA=null,leafMap=null,imgOvl=null,mkrs=[],filter='all',curStage=null,hlMkr=null;
 
 async function boot(){
-  const setMsg=m=>{document.getElementById('ld-msg').textContent=m;};
+  const msg=m=>{document.getElementById('ld-msg').textContent=m;};
   try{
-    setMsg('Loading map data…');
+    msg('Loading map data…');
     const r=await fetch('./datas/map_data.json');
-    if(!r.ok)throw new Error('datas/map_data.json not found (status '+r.status+')');
+    if(!r.ok)throw new Error('map_data.json not found: '+r.status);
     MAP_DATA=await r.json();
-  }catch(err){
-    document.getElementById('loading').innerHTML=`<div style="text-align:center"><div style="color:var(--gold);font-family:var(--font-head);letter-spacing:3px;font-size:13px;margin-bottom:12px">ERROR</div><div style="color:var(--text-dim);font-size:14px">${err.message}</div></div>`;
+  }catch(e){
+    document.getElementById('loading').innerHTML=`<div style="text-align:center"><div style="color:var(--gold);font-family:var(--font-head);font-size:13px;margin-bottom:12px">ERROR</div><div style="color:var(--text-dim);font-size:14px">${e.message}</div></div>`;
     return;
   }
-  setMsg('Loading enemy names…');
-  try{const r=await fetch('./datas/enemy-names.json');if(r.ok){const raw=await r.json();if(Array.isArray(raw)){raw.forEach(e=>{if(e.id)ENEMY_NAMES[e.id]={en:e.en||e.name,jp:e.jp};});}else{ENEMY_NAMES=raw;}}}catch(e){console.warn('enemy-names.json:',e.message);}
-  setMsg('Loading item names…');
-  try{const r=await fetch('./datas/item_names.json');if(r.ok){const raw=await r.json();if(Array.isArray(raw)){raw.forEach(it=>{ITEM_NAMES[it.id]={en:it['new']||it.en,jp:it['old']||it.jp};});}else{Object.entries(raw).forEach(([k,v])=>{ITEM_NAMES[parseInt(k)]=typeof v==='string'?{en:v,jp:v}:v;});}}}catch(e){console.warn('item_names.json:',e.message);}
-  setMsg('Loading stage names…');
-  try{const r=await fetch('./datas/stage-names.json');if(r.ok){const raw=await r.json();if(Array.isArray(raw)){raw.forEach(s=>{const key=s.id||s.key||s.mapKey;if(key)STAGE_NAMES[String(key)]={en:s.en||s.name,jp:s.jp};});}else{Object.entries(raw).forEach(([k,v])=>{STAGE_NAMES[k]=typeof v==='string'?{en:v,jp:v}:v;});}}}catch(e){console.warn('stage-names.json:',e.message);}
+  msg('Loading names…');
+  try{const r=await fetch('./datas/enemy-names.json');if(r.ok){const raw=await r.json();ENEMY_NAMES=Array.isArray(raw)?Object.fromEntries(raw.map(e=>[e.id,{en:e.en||e.name,jp:e.jp}])):raw;}}catch(e){}
+  try{const r=await fetch('./datas/item_names.json');if(r.ok){const raw=await r.json();if(Array.isArray(raw))raw.forEach(it=>{ITEM_NAMES[it.id]={en:it['new']||it.en,jp:it['old']||it.jp};});}}catch(e){}
 
-  leafMap=L.map('map',{crs:L.CRS.Simple,zoomSnap:.25,zoomDelta:.5,minZoom:-5,maxZoom:5,attributionControl:false});
-  
-  leafMap.on('click', function(e) {
-    const d = MAP_DATA[curStage];
-    if(!d||!d._sx) return;
-    const sx=d._sx, sy=d._sy, realH=d._realH||d.baseH;
-    const py = (realH - e.latlng.lat) / sy;
-    const px = e.latlng.lng / sx;
-    if(curStage&&curStage.startsWith('field000')){
-      const wx=(px-F1_OX)/F1_SX, wz=(py-F1_OY)/F1_SY;
-      const dbg=document.getElementById('dbg');
-      dbg.style.display='block';
-      dbg.textContent='coord('+px.toFixed(1)+', '+py.toFixed(1)+') world('+Math.round(wx)+', '+Math.round(wz)+')';
-    }
-  });
+  leafMap=L.map('map',{crs:L.CRS.Simple,zoomSnap:.25,zoomDelta:.5,minZoom:-5,maxZoom:6,attributionControl:false});
   rebuildDropdown();
   const first=document.getElementById('zone-sel').options[0]?.value;
   if(first){document.getElementById('zone-sel').value=first;loadStage(first);}
@@ -233,71 +167,57 @@ async function boot(){
 
 function rebuildDropdown(){
   const sel=document.getElementById('zone-sel');
-  const prev=sel.value;sel.innerHTML='';
-  const fields=[],rooms=[],pdGroups={};
-  Object.keys(MAP_DATA).filter(mk=>mk!=='_drops'&&MAP_DATA[mk].markers?.length>0).sort().forEach(mk=>{
+  const prev=sel.value; sel.innerHTML='';
+  const fields=[],dungeons=[],rooms=[];
+  Object.keys(MAP_DATA).filter(k=>k!=='_drops'&&MAP_DATA[k].markers?.length>0).sort().forEach(mk=>{
     const d=MAP_DATA[mk];
-    if(d.type==='field')fields.push(mk);
-    else if(d.type==='room')rooms.push(mk);
-    else if(d.type==='pd'){const pn=d.pdName||'pd';if(!pdGroups[pn])pdGroups[pn]=[];pdGroups[pn].push(mk);}
+    if(mk.startsWith('field')||mk.startsWith('sfield')) fields.push(mk);
+    else if(mk.startsWith('st')||mk.startsWith('pd')) dungeons.push(mk);
+    else rooms.push(mk);
   });
-  const addGroup=(label,keys,nameFn)=>{
+  const addGroup=(label,keys)=>{
     if(!keys.length)return;
     const og=document.createElement('optgroup');og.label=label;
     keys.forEach(mk=>{
+      const d=MAP_DATA[mk];
+      const name=(lang==='jp'&&d.name_jp)?d.name_jp:d.name_en||mk;
       const o=document.createElement('option');o.value=mk;
-      o.textContent=`${nameFn(mk)}  ·  ${MAP_DATA[mk].markers.length} enemies`;
+      o.textContent=`${name}  ·  ${d.markers.length}`;
       og.appendChild(o);
     });
     sel.appendChild(og);
   };
-  addGroup(t('optgroup.main'),fields,mk=>mapDisplayName(mk));
-  addGroup(t('optgroup.dungeon')+' (rooms)',rooms,mk=>{const n=mapDisplayName(mk);return n!==mk?n:mk;});
-  Object.keys(pdGroups).sort().forEach(pn=>{
-    const keys=pdGroups[pn].sort((a,b)=>parseInt(a.replace('pd_',''))-parseInt(b.replace('pd_','')));
-    addGroup(`${t('optgroup.dungeon')} [${pn}]`,keys,mk=>{const n=mapDisplayName(mk);return n!==mk?n:`${pn} #${mk.replace('pd_','')}`});
-  });
+  addGroup('Field Maps',fields);
+  addGroup('Dungeons',dungeons);
+  addGroup('Locations',rooms);
   if(prev&&MAP_DATA[prev])sel.value=prev;
 }
 
-function loadStage(mapKey){
-  if(!mapKey||!MAP_DATA[mapKey])return;
-  curStage=mapKey;filter='all';
+function loadStage(mk){
+  if(!mk||!MAP_DATA[mk])return;
+  curStage=mk; filter='all';
   document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));
   document.getElementById('f-all').classList.add('on');
   document.getElementById('search').value='';
-  const data=MAP_DATA[mapKey];
+  const data=MAP_DATA[mk];
   if(imgOvl){leafMap.removeLayer(imgOvl);imgOvl=null;}
   mkrs.forEach(m=>leafMap.removeLayer(m.lm));mkrs=[];
-  if(data.type==='pd'){
-    const W=data.imgW||512,H=data.imgH||512,imgBounds=[[0,0],[H,W]];
-    loadPdTiles(data,imgBounds);leafMap.fitBounds(imgBounds,{animate:false});
-    placeMarkers(data.markers);_fitToMarkers(data.markers);
-  }else{
-    const url='./maps/'+data.imgFile,img=new Image();
-    img.onload=()=>{
-      const imgW=data.imgW||img.naturalWidth,imgH=data.imgH||img.naturalHeight;
-      data._imgW=imgW;data._imgH=imgH;
-      const imgBounds=[[0,0],[imgH,imgW]];
-      imgOvl=L.imageOverlay(url,imgBounds).addTo(leafMap);
-      document.getElementById('no-img').classList.remove('show');
-      leafMap.fitBounds(imgBounds,{animate:false});
-      placeMarkers(data.markers);_fitToMarkers(data.markers);
-    };
-    img.onerror=()=>{
-      document.getElementById('no-img').classList.add('show');
-      document.getElementById('ni-path').textContent=url;
-      placeMarkers(data.markers);_fitToMarkers(data.markers);
-    };
-    img.src=url;
-  }
+  const url='./maps/'+data.imgFile;
+  const imgBounds=[[0,0],[data.imgH,data.imgW]];
+  imgOvl=L.imageOverlay(url,imgBounds).addTo(leafMap);
+  imgOvl.on('error',()=>{document.getElementById('no-img').classList.add('show');document.getElementById('ni-path').textContent=url;});
+  imgOvl.on('load',()=>{document.getElementById('no-img').classList.remove('show');});
+  document.getElementById('no-img').classList.remove('show');
+  leafMap.fitBounds(imgBounds,{animate:false});
+  placeMarkers(data.markers);
+  _fitToMarkers(data.markers);
 }
 
 function _fitToMarkers(markers){
   if(!markers?.length)return;
   const f=applyFilter(markers);if(!f.length)return;
   const lats=f.map(m=>m.lat),lngs=f.map(m=>m.lng);
-  const pad=(Math.max(...lats)-Math.min(...lats))*.02||10;
+  const pad=(Math.max(...lats)-Math.min(...lats))*.015||20;
   leafMap.fitBounds([[Math.min(...lats)-pad,Math.min(...lngs)-pad],[Math.max(...lats)+pad,Math.max(...lngs)+pad]],{animate:false,padding:[10,10]});
 }
 
@@ -306,31 +226,28 @@ function placeMarkers(allMarkers){
   document.getElementById('elist').innerHTML='';
   const list=applyFilter(allMarkers);
   list.forEach(m=>{
-    const lng=m.lng,lat=m.lat;
     const boss=!!m.boss;
     const name=enemyName(m.eid);
     const short=name.length>16?name.slice(0,15)+'…':name;
-    const lvLabel=`Lv${m.lv||'?'}`;
-    const icon=L.divIcon({className:'',html:`<div class="gmarker${boss?' boss':''}"><span class="gm-name">${short}</span><span class="gm-lv">${lvLabel}</span></div>`,iconAnchor:[0,10]});
-    const lm=L.marker([lat,lng],{icon,zIndexOffset:boss?100:0});
+    const icon=L.divIcon({className:'',html:`<div class="gmarker${boss?' boss':''}"><span class="gm-name">${short}</span><span class="gm-lv">Lv${m.lv||'?'}</span></div>`,iconAnchor:[0,10]});
+    const lm=L.marker([m.lat,m.lng],{icon,zIndexOffset:boss?100:0});
     lm.bindPopup(buildPopup(m),{maxWidth:320,minWidth:240});
     lm.addTo(leafMap);mkrs.push({lm,m});
     const item=document.createElement('div');
     item.className=`ei${boss?' boss-item':''}`;
-    item.dataset.name=name.toLowerCase();
-    item.dataset.level=String(m.lv||0);
-    item.innerHTML=`<div class="ei-lv${boss?' b':''}">${lvLabel}</div><div class="ei-info"><div class="ei-name">${name}</div><div class="ei-meta">${m.spawn||'—'}</div></div><div class="ei-dot${boss?' b':''}"></div>`;
+    item.dataset.name=name.toLowerCase();item.dataset.level=String(m.lv||0);
+    item.innerHTML=`<div class="ei-lv${boss?' b':''}">Lv${m.lv||'?'}</div><div class="ei-info"><div class="ei-name">${name}</div><div class="ei-meta">${m.spawn||'—'}</div></div><div class="ei-dot${boss?' b':''}"></div>`;
     item.addEventListener('click',()=>{
       if(hlMkr)hlMkr.getElement()?.querySelector('.gmarker')?.classList.remove('hi');
       lm.getElement()?.querySelector('.gmarker')?.classList.add('hi');
-      hlMkr=lm;leafMap.setView([lat,lng],1,{animate:true});lm.openPopup();
+      hlMkr=lm;leafMap.setView([m.lat,m.lng],1,{animate:true});lm.openPopup();
       document.querySelectorAll('.ei').forEach(x=>x.classList.remove('sel'));
       item.classList.add('sel');item.scrollIntoView({block:'nearest',behavior:'smooth'});
     });
     document.getElementById('elist').appendChild(item);
   });
   document.getElementById('sb-cnt').textContent=list.length;
-  document.getElementById('stat').innerHTML=t('stat')(list.length);
+  document.getElementById('stat').innerHTML=`<strong>${list.length}</strong> enemies`;
 }
 
 function buildPopup(m){
@@ -343,70 +260,38 @@ function buildPopup(m){
       const q=qty>1?`<span class="drop-qty">×${qty}</span>`:'';
       return `<div class="drop-row"><span class="drop-name">${itemName(id)}</span>${q}<span class="drop-rate ${cls}">${rate}%</span></div>`;
     }).join('');
-    drops=`<div class="pop-drops-title">${t('popup.drops')}</div>${rows}`;
+    drops=`<div class="pop-drops-title">Drops</div>${rows}`;
   }
-  return `<div class="pop">
-    <div class="pop-title">${name}</div>
+  return `<div class="pop"><div class="pop-title">${name}</div>
     <div class="pop-row"><span class="pk">ID</span><span class="pv" style="font-family:monospace;font-size:11px">${m.eid}</span></div>
-    <div class="pop-row"><span class="pk">${t('popup.level')}</span><span class="pv">${m.lv||'?'}</span></div>
-    <div class="pop-row"><span class="pk">${t('popup.spawn')}</span><span class="pv">${m.spawn||'—'}</span></div>
-    ${m.boss?`<div class="pop-boss">${t('popup.boss')}</div>`:''}
-    ${drops}</div>`;
+    <div class="pop-row"><span class="pk">Level</span><span class="pv">${m.lv||'?'}</span></div>
+    <div class="pop-row"><span class="pk">Spawn</span><span class="pv">${m.spawn||'—'}</span></div>
+    ${m.boss?`<div class="pop-boss">⚠ Area Boss</div>`:''}${drops}</div>`;
 }
 
 function applyFilter(markers){
   if(filter==='boss')return markers.filter(m=>m.boss);
-  if(filter==='day')return markers.filter(m=>{const tm=m.spawn||'';return tm==='00:00,23:59'||tm.startsWith('06:')||tm.includes(',17:59')||tm.includes(',18:');});
-  if(filter==='night')return markers.filter(m=>{const tm=m.spawn||'';return tm.startsWith('18:')||tm.startsWith('22:')||tm.includes('05:59');});
+  if(filter==='day')return markers.filter(m=>{const t=m.spawn||'';return t==='00:00,23:59'||t.startsWith('06:')||t.includes(',17:59');});
+  if(filter==='night')return markers.filter(m=>{const t=m.spawn||'';return t.startsWith('18:')||t.startsWith('22:')||t.includes('05:59');});
   return markers;
-}
-
-function loadPdTiles(data,imgBounds){
-  const W=data.baseW,H=data.baseH,canvas=document.createElement('canvas');
-  canvas.width=W;canvas.height=H;const ctx=canvas.getContext('2d');
-  let loaded=0,hasAny=false;const total=data.tiles.length;
-  data.tiles.forEach(tile=>{
-    const img=new Image();
-    img.onload=()=>{ctx.drawImage(img,Math.floor((W-tile.w)/2),tile.y_offset,tile.w,tile.h);hasAny=true;loaded++;if(loaded===total){imgOvl=L.imageOverlay(canvas.toDataURL('image/png'),imgBounds).addTo(leafMap);document.getElementById('no-img').classList.remove('show');}};
-    img.onerror=()=>{loaded++;if(loaded===total&&!hasAny){document.getElementById('no-img').classList.add('show');document.getElementById('ni-path').textContent=`maps/${data.tiles[0]?.file} (+${total-1} more)`;}else if(loaded===total&&hasAny){imgOvl=L.imageOverlay(canvas.toDataURL('image/png'),imgBounds).addTo(leafMap);}};
-    img.src='./maps/'+tile.file;
-  });
-  if(total>3){document.getElementById('ni-path').textContent=`Loading ${total} tiles…`;document.getElementById('no-img').classList.add('show');}
 }
 
 function setFilter(f){
   filter=f;document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));
   document.getElementById('f-'+f).classList.add('on');
-  if(!curStage)return;const d=MAP_DATA[curStage];
-  placeMarkers(d.markers);
-  _fitToMarkers(d.markers);
+  if(!curStage)return;
+  placeMarkers(MAP_DATA[curStage].markers);
+  _fitToMarkers(MAP_DATA[curStage].markers);
 }
+
 function filterList(){
   const q=document.getElementById('search').value.toLowerCase();
   document.querySelectorAll('.ei').forEach(i=>{i.style.display=(i.dataset.name.includes(q)||i.dataset.level.includes(q))?'':'none';});
 }
-function rebuildList(){
-  if(!curStage)return;const d=MAP_DATA[curStage];
-  placeMarkers(d.markers);
-}
 
-// DEBUG: click on map to see world coordinates
-// FIELD 1 inverse transform constants
-const F1_SX=215/238162, F1_OX=298+9906*215/238162;
-const F1_SY=215/238162, F1_OY=45+348034*215/238162;
-function getInverseTransform() {
-  if(!curStage||!MAP_DATA[curStage]) return null;
-  const d=MAP_DATA[curStage];
-  if(d.type!=='field') return null;
-  const mk=curStage;
-  // Only field000 (field_id=1) for now
-  if(!mk.startsWith('field000')) return null;
-  return {sx:F1_SX,ox:F1_OX,sy:F1_SY,oy:F1_OY};
-}
+function rebuildList(){if(!curStage)return;placeMarkers(MAP_DATA[curStage].markers);}
 
 boot();
-
-
 </script>
 </body>
 </html>
