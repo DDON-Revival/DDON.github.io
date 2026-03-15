@@ -4,410 +4,476 @@
     <base target="_top">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DDON Maps</title>
+    <title>DDON Interactive Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+        :root {
+            --gold:      #c8a84b;
+            --gold-dim:  #8a7030;
+            --gold-glow: rgba(200,168,75,0.25);
+            --bg-deep:   #0a0906;
+            --bg-panel:  #100e0b;
+            --bg-card:   #1a1710;
+            --bg-hover:  #221f15;
+            --border:    rgba(200,168,75,0.18);
+            --border-mid:rgba(200,168,75,0.35);
+            --text:      #d4c9a8;
+            --text-dim:  #7a7060;
+            --text-faint:#3a3428;
+            --red:       #c0392b;
+            --red-glow:  rgba(192,57,43,0.4);
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; background: var(--bg-deep); color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
 
-        html, body {
-            height: 100%;
-            font-family: system-ui, sans-serif;
-            background: #1a1a2e;
-            color: #e0e0e0;
-        }
+        /* ── Layout ── */
+        #app { display: flex; height: 100vh; overflow: hidden; }
 
-        #app {
-            display: flex;
-            height: 100vh;
-        }
-
-        /* ── Sidebar ── */
+        /* ══════════════════════════════════════════
+           SIDEBAR
+        ══════════════════════════════════════════ */
         #sidebar {
-            width: 260px;
+            width: 268px;
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
-            background: #16213e;
-            border-right: 1px solid #0f3460;
+            background: var(--bg-panel);
+            border-right: 1px solid var(--border);
+            position: relative;
             overflow: hidden;
         }
 
-        #sidebar h1 {
-            padding: 12px 16px;
-            font-size: 1rem;
+        /* Dragon-scale texture overlay */
+        #sidebar::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: 
+                repeating-linear-gradient(60deg, transparent, transparent 18px, rgba(200,168,75,0.018) 18px, rgba(200,168,75,0.018) 19px),
+                repeating-linear-gradient(-60deg, transparent, transparent 18px, rgba(200,168,75,0.018) 18px, rgba(200,168,75,0.018) 19px);
+            pointer-events: none;
+        }
+
+        /* ── Sidebar Header ── */
+        #sidebar-header {
+            padding: 16px 16px 12px;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+        #sidebar-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.15rem;
             font-weight: 700;
-            letter-spacing: 0.05em;
-            color: #e94560;
-            border-bottom: 1px solid #0f3460;
+            letter-spacing: 0.12em;
+            color: var(--gold);
+            text-shadow: 0 0 20px var(--gold-glow);
+            margin-bottom: 2px;
         }
-
-        #search-box {
-            padding: 8px;
-            border-bottom: 1px solid #0f3460;
-        }
-
-        #search-box input {
-            width: 100%;
-            padding: 6px 8px;
-            background: #0f3460;
-            border: none;
-            border-radius: 4px;
-            color: #e0e0e0;
-            font-size: 0.85rem;
-        }
-
-        #search-box input::placeholder { color: #888; }
-
-        #map-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 4px 0;
-        }
-
-        .map-group-header {
-            padding: 6px 16px 2px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
+        #sidebar-subtitle {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
-            color: #888;
+            color: var(--text-dim);
+        }
+        /* Gold underline ornament */
+        #sidebar-header::after {
+            content: '';
+            display: block;
+            position: absolute;
+            bottom: -1px; left: 16px; right: 16px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
         }
 
-        .map-entry {
-            padding: 5px 16px;
-            cursor: pointer;
+        /* Lang buttons */
+        .lang-row { display: flex; gap: 4px; margin-top: 10px; }
+        .lang-btn {
+            flex: 1; padding: 5px 0;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+            border-radius: 3px;
+            border: 1px solid var(--border);
+            background: transparent; color: var(--text-dim);
+            cursor: pointer; transition: all 0.15s;
+        }
+        .lang-btn.active  { background: var(--gold); color: #0a0906; border-color: var(--gold); }
+        .lang-btn:hover:not(.active) { border-color: var(--gold-dim); color: var(--text); }
+
+        /* ── Map search ── */
+        #search-box { padding: 8px 10px; border-bottom: 1px solid var(--border); }
+        .dd-input {
+            width: 100%;
+            padding: 7px 10px 7px 30px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            color: var(--text);
             font-size: 0.82rem;
-            border-left: 3px solid transparent;
-            transition: background 0.1s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.15s;
+        }
+        .dd-input::placeholder { color: var(--text-faint); }
+        .dd-input:focus { outline: none; border-color: var(--gold-dim); }
+        .input-wrap { position: relative; }
+        .input-wrap .search-icon {
+            position: absolute; left: 9px; top: 50%; transform: translateY(-50%);
+            font-size: 13px; color: var(--text-dim); pointer-events: none;
         }
 
-        .map-entry:hover { background: #0f3460; }
-
-        .map-entry.active {
-            background: #0f3460;
-            border-left-color: #e94560;
-            color: #fff;
+        /* ── Map list ── */
+        #map-list { flex: 1; overflow-y: auto; padding: 4px 0; }
+        .map-group-header {
+            padding: 8px 14px 3px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem; font-weight: 600; letter-spacing: 0.18em;
+            text-transform: uppercase; color: var(--gold-dim);
         }
-
-        .map-entry .img-dot,
-        .map-subentry .img-dot {
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            flex-shrink: 0;
+        .map-entry {
+            padding: 5px 14px; cursor: pointer; font-size: 0.81rem;
+            border-left: 2px solid transparent;
+            transition: all 0.1s; display: flex; align-items: center; gap: 6px;
+            color: var(--text-dim);
         }
-
-        .map-entry .img-dot.has-img,
-        .map-subentry .img-dot.has-img { background: #4caf50; }
-        .map-entry .img-dot.no-img,
-        .map-subentry .img-dot.no-img  { background: #555; }
-
-        .map-entry .expand-arrow {
-            font-size: 0.6rem;
-            color: #888;
-            flex-shrink: 0;
-            transition: transform 0.15s;
-            width: 10px;
-            text-align: center;
-        }
+        .map-entry:hover  { background: var(--bg-hover); color: var(--text); border-left-color: var(--gold-dim); }
+        .map-entry.active { background: var(--bg-hover); border-left-color: var(--gold); color: var(--gold); }
+        .map-entry .img-dot, .map-subentry .img-dot { width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0; }
+        .map-entry .img-dot.has-img, .map-subentry .img-dot.has-img { background: #5a9a5a; }
+        .map-entry .img-dot.no-img,  .map-subentry .img-dot.no-img  { background: var(--text-faint); }
+        .map-entry .expand-arrow { font-size: 0.55rem; color: var(--text-faint); flex-shrink:0; width:10px; text-align:center; transition: transform 0.15s; }
         .map-entry.expanded .expand-arrow { transform: rotate(90deg); }
-
         .map-sublist { display: none; }
         .map-sublist.open { display: block; }
-
         .map-subentry {
-            padding: 4px 16px 4px 30px;
-            cursor: pointer;
-            font-size: 0.78rem;
-            color: #aaa;
-            border-left: 3px solid transparent;
-            transition: background 0.1s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            padding: 4px 14px 4px 28px; cursor: pointer; font-size: 0.77rem;
+            color: var(--text-faint); border-left: 2px solid transparent;
+            transition: all 0.1s; display: flex; align-items: center; gap: 6px;
         }
-        .map-subentry:hover { background: #0f3460; color: #e0e0e0; }
-        .map-subentry.active {
-            background: #0f3460;
-            border-left-color: #e94560;
-            color: #fff;
-        }
+        .map-subentry:hover  { background: var(--bg-hover); color: var(--text); }
+        .map-subentry.active { background: var(--bg-hover); border-left-color: var(--gold); color: var(--gold); }
 
-        /* ── Layers panel ── */
+        /* ── Bottom panel ── */
         #layers-panel {
-            padding: 10px 16px;
-            border-top: 1px solid #0f3460;
-            font-size: 0.82rem;
-        }
-
-        #layers-panel h3 {
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: #888;
-            margin-bottom: 6px;
-        }
-
-        .layer-toggle {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 3px 0;
-            cursor: pointer;
-        }
-
-        .layer-toggle input { cursor: pointer; accent-color: #e94560; }
-
-        /* ── Map container ── */
-        #map-container {
-            flex: 1;
+            padding: 10px 12px 12px;
+            border-top: 1px solid var(--border);
             position: relative;
         }
 
-        #map {
-            height: 100%;
-            width: 100%;
-            background: #0d0d1a;
+        .panel-sep {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 8px 0;
         }
+
+        .section-label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.58rem; font-weight: 600; letter-spacing: 0.2em;
+            text-transform: uppercase; color: var(--gold-dim);
+            margin-bottom: 6px;
+        }
+
+        /* Enemy layer toggle */
+        .layer-toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 8px; }
+        .layer-toggle input { cursor: pointer; accent-color: var(--gold); }
+        .layer-toggle span  { font-size: 0.82rem; color: var(--text); }
+
+        /* Channel selector */
+        .channel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 8px; }
+        .channel-btn {
+            padding: 5px 4px;
+            font-size: 0.72rem; font-weight: 500;
+            border-radius: 3px;
+            border: 1px solid var(--border);
+            background: transparent; color: var(--text-dim);
+            cursor: pointer; transition: all 0.15s; text-align: center;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .channel-btn:hover  { border-color: var(--gold-dim); color: var(--text); }
+        .channel-btn.active { background: var(--gold); color: #0a0906; border-color: var(--gold); font-weight: 600; }
+
+        /* Pill filter buttons */
+        .pill-row { display: flex; gap: 4px; margin-bottom: 8px; }
+        .pill-btn {
+            flex: 1; padding: 5px 6px;
+            font-size: 0.72rem; border-radius: 3px;
+            border: 1px solid var(--border);
+            background: transparent; color: var(--text-dim);
+            cursor: pointer; transition: all 0.15s; text-align: center;
+        }
+        .pill-btn:hover          { border-color: var(--gold-dim); color: var(--text); }
+        .pill-btn.active         { background: var(--gold); color: #0a0906; border-color: var(--gold); font-weight: 600; }
+        .pill-btn.active-red     { background: var(--red); color: #fff; border-color: var(--red); font-weight: 600; }
+
+        /* Enemy search */
+        #enemy-search { margin-bottom: 8px; }
+
+        /* Expand/collapse */
+        #btn-expand-collapse {
+            width: 100%; padding: 6px 0;
+            font-family: 'Cinzel', serif; font-size: 0.72rem; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            border-radius: 3px;
+            border: 1px solid var(--border);
+            background: transparent; color: var(--text-dim);
+            cursor: pointer; transition: all 0.15s;
+        }
+        #btn-expand-collapse:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+        /* Help text */
+        .help-text { font-size: 0.68rem; color: var(--text-faint); line-height: 1.9; margin-top: 8px; }
+
+        /* ══════════════════════════════════════════
+           MAP AREA
+        ══════════════════════════════════════════ */
+        #map-container { flex: 1; position: relative; }
+        #map { height: 100%; width: 100%; background: #050403; }
 
         #map-title {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
+            position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
             z-index: 1000;
-            background: rgba(22, 33, 62, 0.9);
-            padding: 4px 14px;
-            border-radius: 16px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #fff;
+            background: rgba(10,9,6,0.92);
+            padding: 6px 20px;
+            border-radius: 2px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.88rem; font-weight: 600; letter-spacing: 0.1em;
+            color: var(--gold);
             pointer-events: none;
-            border: 1px solid #0f3460;
+            border: 1px solid var(--border-mid);
+            box-shadow: 0 0 24px rgba(0,0,0,0.8), 0 0 12px var(--gold-glow);
+            text-shadow: 0 0 12px var(--gold-glow);
         }
 
-        #floor-selector {
-            position: absolute;
-            top: 42px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            display: flex;
-            gap: 4px;
+        #floor-selector, #tile-layer-selector {
+            position: absolute; z-index: 1000;
+            left: 50%; transform: translateX(-50%); display: flex; gap: 4px;
         }
-        #floor-selector button {
-            background: rgba(22, 33, 62, 0.88);
-            color: #ccd;
-            border: 1px solid #0f3460;
-            border-radius: 12px;
-            padding: 2px 10px;
-            font-size: 0.75rem;
-            cursor: pointer;
-        }
-        #floor-selector button.active {
-            background: #0f3460;
-            color: #fff;
-            border-color: #4a90d9;
-        }
+        #floor-selector { top: 48px; }
+        #tile-layer-selector { top: 82px; }
 
-        #tile-layer-selector {
-            position: absolute;
-            top: 72px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            display: flex;
-            gap: 4px;
+        #floor-selector button, #tile-layer-selector button {
+            background: rgba(10,9,6,0.92); color: var(--text-dim);
+            border: 1px solid var(--border);
+            border-radius: 2px; padding: 3px 12px;
+            font-size: 0.72rem; cursor: pointer;
+            transition: all 0.12s;
+            font-family: 'Inter', sans-serif;
         }
-        #tile-layer-selector button {
-            background: rgba(22, 33, 62, 0.88);
-            color: #ccd;
-            border: 1px solid #0f3460;
-            border-radius: 12px;
-            padding: 2px 10px;
-            font-size: 0.75rem;
-            cursor: pointer;
-        }
-        #tile-layer-selector button.active {
-            background: #0f3460;
-            color: #fff;
-            border-color: #4a90d9;
+        #floor-selector button.active, #tile-layer-selector button.active {
+            background: var(--gold); color: #0a0906;
+            border-color: var(--gold); font-weight: 600;
         }
 
         #coord-display {
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            z-index: 1000;
-            background: rgba(22, 33, 62, 0.88);
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            font-family: monospace;
-            font-weight: 600;
-            color: #e0e0e0;
-            pointer-events: none;
-            min-width: 280px;
-            text-align: right;
-            border: 1px solid #0f3460;
+            position: absolute; bottom: 10px; right: 10px; z-index: 1000;
+            background: rgba(10,9,6,0.85);
+            padding: 4px 10px; border-radius: 2px;
+            font-size: 0.78rem; font-family: monospace;
+            color: var(--text-dim); pointer-events: none;
+            min-width: 240px; text-align: right;
+            border: 1px solid var(--border);
         }
 
-        /* ── Pd piece boundary labels ── */
-        .pd-label {
-            color: #ffcc44;
-            font-size: 10px;
-            font-family: monospace;
-            font-weight: 600;
-            white-space: nowrap;
-            pointer-events: none;
+        /* ══════════════════════════════════════════
+           LEAFLET OVERRIDES
+        ══════════════════════════════════════════ */
+        .leaflet-bar { border: 1px solid var(--border) !important; }
+        .leaflet-bar a {
+            background: rgba(10,9,6,0.92) !important;
+            color: var(--text-dim) !important;
+            border-bottom: 1px solid var(--border) !important;
         }
-        .pd-label-btn {
-            pointer-events: auto;
-            cursor: zoom-in;
-            text-decoration: underline dotted;
-        }
-        .pd-label-btn:hover { color: #ffe88a; }
+        .leaflet-bar a:hover { color: var(--gold) !important; background: var(--bg-hover) !important; }
 
-        /* ── Grid labels ── */
-        .grid-label {
-            color: rgba(255, 255, 255, 0.55);
-            font-size: 10px;
-            font-family: monospace;
-            font-weight: 600;
-            text-align: center;
-            pointer-events: none;
-            white-space: nowrap;
-            text-shadow: 0 0 3px rgba(0,0,0,0.9);
+        /* Popup */
+        .leaflet-popup-content-wrapper {
+            background: var(--bg-panel) !important;
+            border: 1px solid var(--border-mid) !important;
+            border-radius: 4px !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.8), 0 0 16px var(--gold-glow) !important;
+            padding: 0 !important;
+        }
+        .leaflet-popup-tip-container { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); }
+        .leaflet-popup-tip { background: var(--bg-panel) !important; }
+        .leaflet-popup-content { margin: 0 !important; min-width: 190px; }
+        .leaflet-popup-close-button {
+            color: var(--text-dim) !important; top: 7px !important; right: 9px !important;
+            font-size: 18px !important; font-weight: 300 !important;
+        }
+        .leaflet-popup-close-button:hover { color: var(--gold) !important; background: none !important; }
+
+        /* ══════════════════════════════════════════
+           POPUP STYLES
+        ══════════════════════════════════════════ */
+        .dd-popup { padding: 10px 13px 11px; font-size: 0.82rem; }
+
+        .dd-popup-top {
+            display: flex; align-items: center; gap: 6px;
+            margin-bottom: 6px; padding-bottom: 6px;
+            border-bottom: 1px solid var(--border);
+        }
+        .pp-sg-badge {
+            display: inline-block; padding: 1px 7px;
+            border-radius: 2px; font-size: 0.68rem; font-weight: 700;
+        }
+        .dd-popup-idx { font-size: 0.68rem; color: var(--text-faint); margin-left: auto; }
+
+        .dd-popup-name {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem; font-weight: 600;
+            color: var(--gold); letter-spacing: 0.04em;
+            margin-bottom: 3px;
+            text-shadow: 0 0 8px var(--gold-glow);
         }
 
-        /* ── Icons ── */
-        .ddon-icon {
-            height: 32px;
-            width: 32px;
-            background-image: url("./datas/MapIcons.webp");
-            background-size: 256px;
+        .dd-popup-lv { font-size: 0.80rem; color: var(--text); margin-bottom: 2px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+        .dd-spawn-time { font-size: 0.68rem; color: var(--text-dim); margin-left: 4px; }
+
+        .pp-badge { display: inline-block; padding: 1px 5px; border-radius: 2px; font-size: 0.64rem; font-weight: 700; }
+        .pp-boss  { background: rgba(160,60,0,0.5); color: #ff8040; border: 1px solid rgba(255,128,64,0.3); }
+        .pp-blood { background: rgba(140,0,0,0.5);  color: #ff5555; border: 1px solid rgba(255,85,85,0.3); }
+        .pp-high  { background: rgba(0,100,0,0.5);  color: #55ff55; border: 1px solid rgba(85,255,85,0.3); }
+
+        .dd-popup-stats { font-size: 0.70rem; color: var(--text-dim); margin-top: 2px; display: flex; gap: 10px; }
+
+        .dd-drops { margin-top: 7px; padding-top: 7px; border-top: 1px solid var(--border); }
+        .dd-drops-title {
+            font-family: 'Cinzel', serif; font-size: 0.6rem; font-weight: 600;
+            letter-spacing: 0.15em; text-transform: uppercase;
+            color: var(--gold-dim); margin-bottom: 5px;
         }
+        .pp-drop { display: flex; justify-content: space-between; align-items: center; padding: 1px 0; gap: 8px; }
+        .pp-drop-name { font-size: 0.76rem; color: var(--text); flex: 1; }
+        .pp-rate { font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
+        .pp-rate.hi  { color: #6dbb55; }
+        .pp-rate.mid { color: #c9a84c; }
+        .pp-rate.lo  { color: var(--text-dim); }
+
+        /* ══════════════════════════════════════════
+           ENEMY MARKERS
+        ══════════════════════════════════════════ */
+        .enemy-marker { filter: drop-shadow(0 0 3px rgba(0,0,0,0.9)); }
+
+        .group-chip {
+            display: inline-flex; align-items: center; gap: 3px;
+            padding: 2px 7px 2px 5px;
+            border: 1px solid currentColor; border-radius: 2px;
+            background: rgba(10,9,6,0.92);
+            font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600;
+            white-space: nowrap; cursor: pointer; user-select: none;
+            text-shadow: 0 0 6px rgba(0,0,0,1);
+            box-shadow: 0 0 8px rgba(0,0,0,0.9);
+            transition: background 0.1s;
+        }
+        .group-chip:hover { background: rgba(26,23,16,0.97); }
+        .chip-count  { font-size: 8px; opacity: 0.6; font-weight: 400; }
+        .chip-arrow  { font-size: 7px; transition: transform 0.15s; display: inline-block; opacity: 0.6; }
+        .chip-arrow.open { transform: rotate(90deg); }
+        .group-chip.chip-open { opacity: 0.7; }
+
+        /* Pd boundary */
+        .pd-label { color: #c8a84b; font-size: 10px; font-family: monospace; font-weight: 600; white-space: nowrap; pointer-events: none; }
+        .pd-label-btn { pointer-events: auto; cursor: zoom-in; text-decoration: underline dotted; }
+        .pd-label-btn:hover { color: #f0d080; }
+
+        /* Grid */
+        .grid-label { color: rgba(200,168,75,0.3); font-size: 10px; font-family: monospace; font-weight: 600; text-align: center; pointer-events: none; white-space: nowrap; }
+
+        /* Icons */
+        .ddon-icon { height: 32px; width: 32px; background-image: url("./datas/MapIcons.webp"); background-size: 256px; }
         .ddon-icon-door    { background-position: -191px 0; }
         .ddon-icon-dungeon { background-position: -111px -29px; }
 
-        /* ── Enemy marker drop-shadow for contrast against any map background ── */
-        .enemy-marker {
-            filter: drop-shadow(0 0 2px #000) drop-shadow(0 0 1px #000);
-        }
+        .leaflet-control-reset-view { font-size: 18px; line-height: 26px !important; }
 
-        /* ── Group chip labels ── */
-        .group-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 3px;
-            padding: 2px 7px 2px 5px;
-            border: 1.5px solid currentColor;
-            border-radius: 10px;
-            background: rgba(10, 15, 35, 0.88);
-            font-family: system-ui, sans-serif;
-            font-size: 11px;
-            font-weight: 700;
-            white-space: nowrap;
-            cursor: pointer;
-            user-select: none;
-            text-shadow: 0 0 4px rgba(0,0,0,0.9);
-            box-shadow: 0 0 4px rgba(0,0,0,0.7);
-            transition: background 0.1s;
-        }
-        .group-chip:hover { background: rgba(30, 40, 80, 0.95); }
-        .chip-count {
-            font-size: 9px;
-            opacity: 0.75;
-            font-weight: 500;
-        }
-        .chip-arrow {
-            font-size: 8px;
-            transition: transform 0.15s;
-            display: inline-block;
-            opacity: 0.8;
-        }
-        .chip-arrow.open { transform: rotate(90deg); }
-        .group-chip.chip-open { opacity: 0.75; }
-
-        /* ── Reset-view control ── */
-        .leaflet-control-reset-view {
-            font-size: 18px;
-            line-height: 26px !important;
-            font-weight: normal;
-        }
-
-        /* ── Scrollbar ── */
-        #map-list::-webkit-scrollbar { width: 6px; }
+        /* Scrollbar */
+        #map-list::-webkit-scrollbar { width: 4px; }
         #map-list::-webkit-scrollbar-track { background: transparent; }
-        #map-list::-webkit-scrollbar-thumb { background: #0f3460; border-radius: 3px; }
-
-        /* ── Leaflet popup override ── */
-        .leaflet-popup-content-wrapper {
-            background: #13132a !important;
-            border: 1px solid #2a2a4a !important;
-            border-radius: 10px !important;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.7) !important;
-            color: #ccd !important;
-        }
-        .leaflet-popup-tip { background: #13132a !important; }
-        .leaflet-popup-content { margin: 8px 12px !important; }
-        .leaflet-popup-close-button { color: #445 !important; top:6px !important; right:8px !important; font-size:16px !important; }
-        .leaflet-popup-close-button:hover { color: #fff !important; background: none !important; }
+        #map-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
     </style>
 </head>
 <body>
 <div id="app">
+    <!-- ══ SIDEBAR ══ -->
     <div id="sidebar">
-        <div id="sidebar-header" style="padding:12px 14px 10px;border-bottom:1px solid #1e1e3a;display:flex;align-items:center;gap:8px">
-            <h1 style="font-size:1.05rem;font-weight:800;letter-spacing:0.08em;color:#e94560;flex:1">DDON Maps</h1>
-            <button class="lang-btn" data-lang="en" style="padding:3px 9px;border-radius:12px;font-size:0.72rem;font-weight:700;cursor:pointer;border:1px solid #1a4a7a;background:#0f3460;color:#aaa;transition:all 0.1s">EN</button>
-            <button class="lang-btn" data-lang="jp" style="padding:3px 9px;border-radius:12px;font-size:0.72rem;font-weight:700;cursor:pointer;border:1px solid #1a4a7a;background:#0f3460;color:#aaa;transition:all 0.1s">JP</button>
+        <div id="sidebar-header">
+            <div id="sidebar-title">DDON Maps</div>
+            <div id="sidebar-subtitle">Dragon's Dogma Online — Interactive</div>
+            <div class="lang-row">
+                <button class="lang-btn" data-lang="en">English</button>
+                <button class="lang-btn" data-lang="jp">日本語</button>
+            </div>
         </div>
+
         <div id="search-box">
-            <input type="text" id="map-search" placeholder="🗺 Search maps...">
+            <div class="input-wrap">
+                <span class="search-icon">🗺</span>
+                <input type="text" id="map-search" class="dd-input" placeholder="Search maps...">
+            </div>
         </div>
+
         <div id="map-list"></div>
+
         <div id="layers-panel">
-            <label class="layer-toggle" style="margin-bottom:8px">
+            <!-- Channel selector -->
+            <div class="section-label">Channel</div>
+            <div class="channel-grid">
+                <button class="channel-btn" data-channel="normal">Normal</button>
+                <button class="channel-btn" data-channel="collab">Collab</button>
+                <button class="channel-btn" data-channel="custom">Custom</button>
+                <button class="channel-btn" data-channel="bossrush">Boss Rush</button>
+            </div>
+
+            <div class="panel-sep"></div>
+
+            <!-- Enemy layer toggle -->
+            <label class="layer-toggle">
                 <input type="checkbox" id="layer-enemies" checked>
-                <span style="font-size:0.82rem">Enemy Spawns</span>
+                <span>Enemy Spawns</span>
             </label>
-            <!-- Dev layers hidden from players -->
+
+            <!-- Dev layers — hidden from players, JS uses them -->
             <label class="layer-toggle" style="display:none"><input type="checkbox" id="layer-landmarks" checked>Landmarks</label>
             <label class="layer-toggle" style="display:none"><input type="checkbox" id="layer-connections" checked>Connections</label>
             <label class="layer-toggle" style="display:none"><input type="checkbox" id="layer-territory">Territory Bounds</label>
             <label class="layer-toggle" style="display:none"><input type="checkbox" id="layer-grid">Grid</label>
 
-            <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#556;margin-bottom:5px">Spawn Time</div>
-            <div style="display:flex;gap:3px;margin-bottom:10px">
-                <button class="filter-time-btn" data-time="all"   style="flex:1;padding:4px 0;border-radius:10px;font-size:0.75rem;cursor:pointer;border:1px solid #1a4a7a;background:#0f3460;color:#aaa;transition:all 0.12s">All</button>
-                <button class="filter-time-btn" data-time="day"   style="flex:1;padding:4px 0;border-radius:10px;font-size:0.75rem;cursor:pointer;border:1px solid #1a4a7a;background:#0f3460;color:#aaa;transition:all 0.12s">☀ Day</button>
-                <button class="filter-time-btn" data-time="night" style="flex:1;padding:4px 0;border-radius:10px;font-size:0.75rem;cursor:pointer;border:1px solid #1a4a7a;background:#0f3460;color:#aaa;transition:all 0.12s">🌙 Night</button>
+            <!-- Spawn time -->
+            <div class="section-label">Spawn Time</div>
+            <div class="pill-row">
+                <button class="pill-btn filter-time-btn" data-time="all">All</button>
+                <button class="pill-btn filter-time-btn" data-time="day">☀ Day</button>
+                <button class="pill-btn filter-time-btn" data-time="night">🌙 Night</button>
             </div>
 
-            <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#556;margin-bottom:5px">Type</div>
-            <div style="display:flex;gap:3px;margin-bottom:10px">
-                <button class="filter-toggle-btn" data-filter="boss"     style="flex:1;padding:4px 0;border-radius:10px;font-size:0.75rem;cursor:pointer;border:1px solid #1a4a7a;background:#0f3460;color:#aaa;transition:all 0.12s">Boss</button>
-                <button class="filter-toggle-btn" data-filter="bloodOrb" style="flex:1;padding:4px 0;border-radius:10px;font-size:0.75rem;cursor:pointer;border:1px solid #1a4a7a;background:#0f3460;color:#aaa;transition:all 0.12s">Blood Orb</button>
+            <!-- Type filter -->
+            <div class="section-label">Type</div>
+            <div class="pill-row" style="margin-bottom:8px">
+                <button class="pill-btn filter-toggle-btn" data-filter="boss">Boss</button>
+                <button class="pill-btn filter-toggle-btn" data-filter="bloodOrb">Blood Orb</button>
             </div>
 
-            <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#556;margin-bottom:5px">Enemy Filter</div>
-            <input type="text" id="enemy-search" placeholder="🔍 Search enemy name..." style="width:100%;padding:6px 8px;background:#0f3460;border:1px solid #1a4a7a;border-radius:6px;color:#dde;font-size:0.82rem;margin-bottom:8px">
+            <!-- Enemy search -->
+            <div class="section-label">Enemy Search</div>
+            <div class="input-wrap" style="margin-bottom:8px">
+                <span class="search-icon">⚔</span>
+                <input type="text" id="enemy-search" class="dd-input" placeholder="Search enemy name...">
+            </div>
 
-            <button id="btn-expand-collapse" style="width:100%;padding:5px 0;background:#0f3460;color:#99a;border:1px solid #1a4a7a;border-radius:6px;font-size:0.78rem;cursor:pointer">Expand All</button>
-            <div style="margin-top:8px;font-size:0.72rem;color:#445;line-height:1.8">
-                Click chip → expand · Middle-click hull → collapse<br>
-                Click spawn → show radii
+            <button id="btn-expand-collapse">Expand All</button>
+
+            <div class="help-text">
+                Click chip → expand group<br>
+                Middle-click hull → collapse<br>
+                Click spawn dot → show radii
             </div>
         </div>
     </div>
 
+    <!-- ══ MAP ══ -->
     <div id="map-container">
         <div id="map-title">—</div>
         <div id="floor-selector"></div>

@@ -3,92 +3,135 @@ import mapParams from './datas/map_params.json' with {type: "json"};
 import landmarkData from './datas/landmarks.json' with {type: "json"};
 import connectionData from './datas/connections.json' with {type: "json"};
 
-// ── Enemy data from EnemySpawn.json (names, levels, drops) ───────────────────
-let _enemyNames  = {};  // '0x010100' → {en, jp}
-let _itemNames   = {};  // itemId → {en, jp}
-let _dropsByDtid = {};  // dtid → [[itemId, qty, rate%], ...]
+// ── Enemy data ────────────────────────────────────────────────────────────────
+let _enemyNames  = {};
+let _itemNames   = {};
+let _stageNames  = {};  // stageNo → {en, jp}
+let _dropsByDtid = {};
 let _spawnByKey  = {};  // 'stageNo:groupId' → [{lv, dtid, boss, eid, spawn, exp, pp, bloodOrb, highOrb}, ...]
+let _enemyDataReady = false;
 
-// ── Language state ─────────────────────────────────────────────────────────────
+// ── Language ──────────────────────────────────────────────────────────────────
 let _lang = localStorage.getItem('ddon-lang') || 'en';
 
-// ── Spawn filter state ─────────────────────────────────────────────────────────
+// ── Spawn filter ──────────────────────────────────────────────────────────────
 let _spawnFilter = {
     time:     localStorage.getItem('ddon-filter-time')     || 'all',
     boss:     localStorage.getItem('ddon-filter-boss')     === '1',
     bloodOrb: localStorage.getItem('ddon-filter-bloodorb') === '1',
 };
+let _enemySearchText = '';
 
-(async function loadEnemyData() {
-    try {
-        const nr = await fetch('./datas/enemy-names.json');
-        if (nr.ok) {
-            const raw = await nr.json();
-            if (Array.isArray(raw)) {
-                raw.forEach(e => { if (e.id) _enemyNames[e.id] = {en: e.en||e.name||e.id, jp: e.jp||e.en||e.id}; });
-            } else {
-                // Format: {"0x010100": {"en":..., "jp":...}}
-                _enemyNames = raw;
-            }
-        }
-    } catch(e) {}
-    try {
-        // item_names.json format: { "item": [{id, old:"JP", new:"EN"}, ...] }  OR  flat array
-        const ir = await fetch('./datas/item_names.json');
-        if (ir.ok) {
-            const raw = await ir.json();
-            const arr = Array.isArray(raw) ? raw : (raw.item || []);
-            arr.forEach(it => { _itemNames[it.id] = {en: it['new']||it.en||'', jp: it['old']||it.jp||''}; });
-        }
-    } catch(e) {}
-    try {
-        const er = await fetch('./datas/EnemySpawn.json');
-        if (er.ok) {
-            const data = await er.json();
-            const schema = data.schemas.enemies;
-            const idx = Object.fromEntries(schema.map((k,i) => [k,i]));
-            data.dropsTables.forEach(dt => {
-                _dropsByDtid[dt.id] = dt.items.map(it => [it[0], it[1], Math.round(it[5]*100*10)/10]);
-            });
-            const sidToSno = {};
-            for (const info of Object.values(mapParams)) {
-                const ids = info.stage_ids;
-                if (!ids) continue;
-                for (const [stid, sid] of Object.entries(ids)) {
-                    sidToSno[sid] = parseInt(stid.slice(2), 10);
-                }
-            }
-            data.enemies.forEach(e => {
-                const sno = sidToSno[e[idx.StageId]];
-                if (sno === undefined || sno === null) return;
-                const key = `${sno}:${e[idx.GroupId]}`;
-                if (!_spawnByKey[key]) _spawnByKey[key] = [];
-                _spawnByKey[key].push({
-                    eid:      e[idx.EnemyId],
-                    lv:       e[idx.Lv],
-                    dtid:     e[idx.DropsTableId],
-                    boss:     e[idx.IsAreaBoss],
-                    spawn:    e[idx.SpawnTime],
-                    exp:      e[idx.Experience]      ?? 0,
-                    pp:       e[idx.PPDrop]          ?? 0,
-                    bloodOrb: e[idx.IsBloodOrbEnemy] ?? false,
-                    highOrb:  e[idx.IsHighOrbEnemy]  ?? false,
-                    bloodAmt: e[idx.BloodOrbs]       ?? 0,
-                    highAmt:  e[idx.HighOrbs]        ?? 0,
-                });
-            });
-        }
-    } catch(e) { console.warn('EnemySpawn.json load error:', e); }
+// ── Channels ──────────────────────────────────────────────────────────────────
+const CHANNELS = {
+    normal:   { label: 'Normal',    file: 'EnemySpawn.json' },
+    collab:   { label: 'Collab',    file: 'EnemySpawnCollab.json' },
+    custom:   { label: 'Custom',    file: 'EnemySpawnCustom.json' },
+    bossrush: { label: 'Boss Rush', file: 'EnemySpawnBR.json' },
+};
+let _activeChannel = localStorage.getItem('ddon-channel') || 'normal';
+
+// Build StageId → StageNo mapping once from map_params (used by all channel loads)
+const _sidToSno = (() => {
+    const m = {};
+    for (const info of Object.values(mapParams)) {
+        const ids = info.stage_ids;
+        if (!ids) continue;
+        for (const [stid, sid] of Object.entries(ids))
+            m[sid] = parseInt(stid.slice(2), 10);
+    }
+    return m;
 })();
 
-// ── Name lookup helpers ────────────────────────────────────────────────────────
-// Resolves a hex enemy ID (e.g. "0x010101" or "em010101") to a display name.
+async function _loadChannelFile(fileName) {
+    const r = await fetch('./datas/' + fileName);
+    if (!r.ok) throw new Error('Failed: ' + fileName);
+    const data = await r.json();
+    const schema = data.schemas.enemies;
+    const idx    = Object.fromEntries(schema.map((k,i) => [k,i]));
+    // Rebuild drops + spawn lookup
+    _dropsByDtid = {};
+    _spawnByKey  = {};
+    data.dropsTables.forEach(dt => {
+        _dropsByDtid[dt.id] = dt.items.map(it => [it[0], it[1], Math.round(it[5]*100*10)/10]);
+    });
+    data.enemies.forEach(e => {
+        const sno = _sidToSno[e[idx.StageId]];
+        if (sno === undefined || sno === null) return;
+        const key = `${sno}:${e[idx.GroupId]}`;
+        if (!_spawnByKey[key]) _spawnByKey[key] = [];
+        _spawnByKey[key].push({
+            eid:      e[idx.EnemyId],
+            lv:       e[idx.Lv],
+            dtid:     e[idx.DropsTableId],
+            boss:     e[idx.IsAreaBoss],
+            spawn:    e[idx.SpawnTime],
+            exp:      e[idx.Experience]      ?? 0,
+            pp:       e[idx.PPDrop]          ?? 0,
+            bloodOrb: e[idx.IsBloodOrbEnemy] ?? false,
+            highOrb:  e[idx.IsHighOrbEnemy]  ?? false,
+            bloodAmt: e[idx.BloodOrbs]       ?? 0,
+            highAmt:  e[idx.HighOrbs]        ?? 0,
+        });
+    });
+}
+
+async function switchChannel(channelId) {
+    if (!CHANNELS[channelId]) return;
+    _activeChannel = channelId;
+    localStorage.setItem('ddon-channel', channelId);
+    _updateChannelUI();
+    try {
+        await _loadChannelFile(CHANNELS[channelId].file);
+    } catch(e) { console.warn('Channel load error:', e); return; }
+    if (_loadedMapName && mapParams[_loadedMapName])
+        loadEnemySpawns(mapParams[_loadedMapName], _loadedStid);
+}
+
+function _updateChannelUI() {
+    document.querySelectorAll('.channel-btn').forEach(btn => {
+        const active = btn.dataset.channel === _activeChannel;
+        btn.classList.toggle('active', active);
+    });
+}
+
+(async function loadEnemyData() {
+    // Static lookups: names + item names + stage names
+    try {
+        const r = await fetch('./datas/enemy-names.json');
+        if (r.ok) {
+            const raw = await r.json();
+            _enemyNames = Array.isArray(raw)
+                ? Object.fromEntries(raw.filter(e=>e.id).map(e=>[e.id,{en:e.en||e.id,jp:e.jp||e.en||e.id}]))
+                : raw;
+        }
+    } catch(e) {}
+    try {
+        const r = await fetch('./datas/item_names.json');
+        if (r.ok) {
+            const raw = await r.json();
+            const arr = Array.isArray(raw) ? raw : (raw.item || []);
+            arr.forEach(it => { _itemNames[it.id] = {en:it['new']||it.en||'', jp:it['old']||it.jp||''}; });
+        }
+    } catch(e) {}
+    try {
+        const r = await fetch('./datas/stage-names.json');
+        if (r.ok) _stageNames = await r.json();
+    } catch(e) {}
+    // Channel data
+    try {
+        await _loadChannelFile(CHANNELS[_activeChannel].file);
+    } catch(e) { console.warn('EnemySpawn load error:', e); }
+    _enemyDataReady = true;
+    // Re-render current map now that data is ready
+    if (_loadedMapName && mapParams[_loadedMapName])
+        loadEnemySpawns(mapParams[_loadedMapName], _loadedStid);
+})();
+
 function getEnemyName(emId, lang) {
     const l = lang ?? _lang;
     if (!emId) return '?';
-    // Normalise to "0x......" lowercase
-    let key = emId;
-    if (emId.startsWith('em')) key = '0x' + emId.slice(2);
+    let key = emId.startsWith('em') ? '0x' + emId.slice(2) : emId;
     key = key.toLowerCase();
     const n = _enemyNames[key];
     if (n) return (l === 'jp' ? n.jp : n.en) || n.en || emId;
@@ -103,74 +146,78 @@ function getItemName(id, lang) {
 }
 
 function getSpawnInfo(stageNo, groupId) {
-    // Exact stage match first, fallback to any stage
     let entries = (stageNo !== null && stageNo !== undefined)
-        ? (_spawnByKey[`${stageNo}:${groupId}`] || [])
-        : [];
-    if (!entries.length) {
-        entries = Object.keys(_spawnByKey)
-            .filter(k => k.endsWith(':' + groupId))
-            .flatMap(k => _spawnByKey[k]);
-    }
+        ? (_spawnByKey[`${stageNo}:${groupId}`] || []) : [];
+    if (!entries.length)
+        entries = Object.keys(_spawnByKey).filter(k => k.endsWith(':'+groupId)).flatMap(k => _spawnByKey[k]);
     if (!entries.length) return null;
-    const lvs      = [...new Set(entries.map(e => e.lv))].sort((a,b) => a-b);
-    const dtid     = entries[0].dtid;
-    const boss     = entries.some(e => e.boss);
-    const spawn    = entries[0].spawn || '—';
-    const eids     = [...new Set(entries.map(e => e.eid))];
-    const exp      = entries[0].exp      || 0;
-    const pp       = entries[0].pp       || 0;
-    const bloodOrb = entries.some(e => e.bloodOrb);
-    const highOrb  = entries.some(e => e.highOrb);
-    const bloodAmt = entries[0].bloodAmt || 0;
-    const highAmt  = entries[0].highAmt  || 0;
-    return { lvs, dtid, boss, spawn, eids, exp, pp, bloodOrb, highOrb, bloodAmt, highAmt };
+    const lvs      = [...new Set(entries.map(e=>e.lv))].sort((a,b)=>a-b);
+    const eids     = [...new Set(entries.map(e=>e.eid))];
+    return {
+        lvs, eids,
+        dtid:     entries[0].dtid,
+        boss:     entries.some(e=>e.boss),
+        spawn:    entries[0].spawn || '—',
+        exp:      entries[0].exp      || 0,
+        pp:       entries[0].pp       || 0,
+        bloodOrb: entries.some(e=>e.bloodOrb),
+        highOrb:  entries.some(e=>e.highOrb),
+        bloodAmt: entries[0].bloodAmt || 0,
+        highAmt:  entries[0].highAmt  || 0,
+    };
 }
 
-// Best display name for a spawn:
-// Priority: EnemyId from EnemySpawn.json  >  EmName from enemyPositions  >  fallback
-// Reason: EmName in enemyPositions is often a base type (e.g. em010100 = generic Goblin)
-// while EnemySpawn EnemyId is the actual variant (e.g. 0x010101 = Goblin Fighter).
+// Use EnemyId from EnemySpawn (specific variant) over EmName (generic base type)
 function getBestEnemyName(emName, si, lang) {
     const l = lang ?? _lang;
     if (si?.eids?.length) {
-        // Use first EnemyId that resolves to a real name
         for (const eid of si.eids) {
-            const n = _enemyNames[eid.toLowerCase ? eid.toLowerCase() : eid];
+            const key = (eid+'').toLowerCase();
+            const n = _enemyNames[key];
             if (n) return (l === 'jp' ? n.jp : n.en) || n.en || null;
         }
     }
-    // Fallback to EmName from enemyPositions
-    const fromEmName = getEnemyName(emName, l);
-    if (fromEmName && fromEmName !== emName && fromEmName !== '?') return fromEmName;
-    return emName || '?';
+    return getEnemyName(emName, l);
 }
 
-// ── Spawn time helpers ─────────────────────────────────────────────────────────
-// DDON day cycle: Day = 06:00–20:00, Night = 20:00–06:00
-function classifySpawnTime(spawnStr) {
-    if (!spawnStr || spawnStr === '00:00,23:59') return 'all';
-    const [start, end] = spawnStr.split(',');
-    if (!start || !end) return 'all';
-    const [sh, sm] = start.split(':').map(Number);
-    const [eh, em] = end.split(':').map(Number);
-    const s = sh*60+sm, e2 = eh*60+em;
-    if (s === 0 && e2 >= 23*60+59) return 'all';
-    if (s > e2) return 'night';              // crosses midnight
-    if (s >= 360 && e2 <= 1200) return 'day';
+// DDON day cycle: 06:00–20:00 = Day, else Night
+function classifySpawnTime(s) {
+    if (!s || s === '00:00,23:59') return 'all';
+    const [a, b] = s.split(',');
+    if (!a || !b) return 'all';
+    const [sh,sm] = a.split(':').map(Number), [eh,em] = b.split(':').map(Number);
+    const sv = sh*60+sm, ev = eh*60+em;
+    if (sv === 0 && ev >= 23*60+59) return 'all';
+    if (sv > ev) return 'night';
+    if (sv >= 360 && ev <= 1200) return 'day';
     return 'night';
 }
 
 function groupMatchesFilter(groupId, stageNo) {
     if (_spawnFilter.time === 'all' && !_spawnFilter.boss && !_spawnFilter.bloodOrb) return true;
-    const sno = stageNo ?? (_loadedStid ? parseInt(_loadedStid.slice(2), 10) : null);
+    const sno = stageNo ?? (_loadedStid ? parseInt(_loadedStid.slice(2),10) : null);
     const si = getSpawnInfo(sno, groupId);
-    if (!si) return _spawnFilter.time === 'all';
+    if (!si) return false;
     if (_spawnFilter.boss     && !si.boss)     return false;
     if (_spawnFilter.bloodOrb && !si.bloodOrb) return false;
     if (_spawnFilter.time !== 'all') {
         const tc = classifySpawnTime(si.spawn);
         if (tc !== 'all' && tc !== _spawnFilter.time) return false;
+    }
+    return true;
+}
+
+function _groupPassesAllFilters(groupId) {
+    if (!groupMatchesFilter(groupId)) return false;
+    if (_enemySearchText) {
+        const g = _groupStore.get(groupId);
+        if (!g) return false;
+        const sno = _loadedStid ? parseInt(_loadedStid.slice(2),10) : null;
+        const si  = getSpawnInfo(sno, groupId);
+        return g.items.some(it => {
+            const name = getBestEnemyName(it.spawn.EmName, si, _lang).toLowerCase();
+            return name.includes(_enemySearchText) || (it.spawn.EmName||'').toLowerCase().includes(_enemySearchText);
+        });
     }
     return true;
 }
@@ -403,30 +450,17 @@ document.getElementById('btn-expand-collapse').addEventListener('click', () => {
     if (anyCollapsed) _expandAllGroups(); else _collapseAllGroups();
 });
 
-// ── Spawn filter ───────────────────────────────────────────────────────────────
-let _enemySearchText = '';
-
-function _groupPassesAllFilters(groupId) {
-    if (!groupMatchesFilter(groupId)) return false;
-    if (_enemySearchText) {
-        const g = _groupStore.get(groupId);
-        if (!g) return false;
-        const si = getSpawnInfo(_loadedStid ? parseInt(_loadedStid.slice(2),10) : null, groupId);
-        return g.items.some(it => {
-            const name = getBestEnemyName(it.spawn.EmName, si, _lang).toLowerCase();
-            return name.includes(_enemySearchText) || (it.spawn.EmName||'').toLowerCase().includes(_enemySearchText);
-        });
-    }
-    return true;
-}
-
+// ── Spawn filter apply ────────────────────────────────────────────────────────
 function _applySpawnFilter() {
     for (const g of _groupStore.values()) {
         const show = _groupPassesAllFilters(g.groupId);
         if (show) {
+            if (g.isExpanded && g.detailsLayer && !leafletMap.hasLayer(g.detailsLayer))
+                g.detailsLayer.addTo(leafletMap);
             if (!enemyLayer.hasLayer(g.labelMarker)) enemyLayer.addLayer(g.labelMarker);
         } else {
-            if (g.isExpanded) _collapseGroupCore(g);
+            if (g.detailsLayer && leafletMap.hasLayer(g.detailsLayer))
+                leafletMap.removeLayer(g.detailsLayer);
             if (enemyLayer.hasLayer(g.labelMarker)) enemyLayer.removeLayer(g.labelMarker);
         }
     }
@@ -435,42 +469,33 @@ function _applySpawnFilter() {
 
 function setSpawnFilter(key, value) {
     _spawnFilter[key] = value;
-    localStorage.setItem('ddon-filter-' + key, value === true ? '1' : value === false ? '0' : value);
+    localStorage.setItem('ddon-filter-'+key, value===true?'1':value===false?'0':value);
     _updateFilterUI();
     _applySpawnFilter();
 }
 
 function _updateFilterUI() {
     document.querySelectorAll('.filter-time-btn').forEach(btn => {
-        const active = btn.dataset.time === _spawnFilter.time;
-        btn.style.background  = active ? '#4a90d9' : '#0f3460';
-        btn.style.borderColor = active ? '#4a90d9' : '#1a4a7a';
-        btn.style.color       = active ? '#fff' : '#aaa';
-        btn.style.fontWeight  = active ? '700' : '400';
+        const a = btn.dataset.time === _spawnFilter.time;
+        btn.classList.toggle('active', a);
     });
     document.querySelectorAll('.filter-toggle-btn').forEach(btn => {
-        const active = _spawnFilter[btn.dataset.filter];
-        btn.style.background  = active ? '#e94560' : '#0f3460';
-        btn.style.borderColor = active ? '#e94560' : '#1a4a7a';
-        btn.style.color       = active ? '#fff' : '#aaa';
+        btn.classList.toggle('active-red', !!_spawnFilter[btn.dataset.filter]);
     });
 }
 
-// ── Viewport culling ───────────────────────────────────────────────────────────
+// ── Viewport culling ──────────────────────────────────────────────────────────
 let _cullTimer = null;
 function _cullChips() {
     clearTimeout(_cullTimer);
     _cullTimer = setTimeout(() => {
-        const bounds = leafletMap.getBounds().pad(0.5);
+        const bounds = leafletMap.getBounds().pad(0.6);
         for (const g of _groupStore.values()) {
+            if (!_groupPassesAllFilters(g.groupId)) continue;
             const ll = g.labelMarker.getLatLng();
-            if (bounds.contains(ll) || g.isExpanded) {
-                if (!enemyLayer.hasLayer(g.labelMarker) && _groupPassesAllFilters(g.groupId))
-                    enemyLayer.addLayer(g.labelMarker);
-            } else {
-                if (enemyLayer.hasLayer(g.labelMarker))
-                    enemyLayer.removeLayer(g.labelMarker);
-            }
+            const inView = bounds.contains(ll) || g.isExpanded;
+            if (inView && !enemyLayer.hasLayer(g.labelMarker)) enemyLayer.addLayer(g.labelMarker);
+            else if (!inView && enemyLayer.hasLayer(g.labelMarker)) enemyLayer.removeLayer(g.labelMarker);
         }
     }, 80);
 }
@@ -480,21 +505,13 @@ leafletMap.on('moveend zoomend', _cullChips);
 function setLang(lang) {
     _lang = lang;
     localStorage.setItem('ddon-lang', lang);
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        const active = btn.dataset.lang === lang;
-        btn.style.background  = active ? '#e94560' : '#0f3460';
-        btn.style.borderColor = active ? '#e94560' : '#1a4a7a';
-        btn.style.color       = active ? '#fff' : '#aaa';
-        btn.style.fontWeight  = active ? '700' : '400';
-    });
-    // Rebuild expanded groups so names + item names update
-    const wasExpanded = [..._groupStore.values()].filter(g => g.isExpanded);
-    for (const g of wasExpanded) {
-        leafletMap.removeLayer(g.detailsLayer);
-        g.detailsLayer = null; g.sgMarkers = {};
-    }
+    document.querySelectorAll('.lang-btn').forEach(btn =>
+        btn.classList.toggle('active', btn.dataset.lang === lang));
+    // Rebuild expanded groups
+    const exp = [..._groupStore.values()].filter(g=>g.isExpanded);
+    for (const g of exp) { leafletMap.removeLayer(g.detailsLayer); g.detailsLayer=null; g.sgMarkers={}; }
     _sgMarkers = {};
-    for (const g of wasExpanded) {
+    for (const g of exp) {
         buildGroupDetails(g);
         if (document.getElementById('layer-enemies').checked) g.detailsLayer.addTo(leafletMap);
     }
@@ -1014,42 +1031,38 @@ function buildGroupDetails(g) {
         const fillColor = spawnGroupColor(sg);
         const sgKey     = `${sg}:${g.groupId}`;
 
-        const badge = `<span style="display:inline-block;padding:1px 6px;border-radius:3px;background:${fillColor};color:#111;font-weight:bold;font-size:11px;">Spawn Set: ${sg}</span>`;
-        const subLine = spawn.SubGroupNo != null ? (() => {
-            const subColor = spawnGroupColor(spawn.SubGroupNo);
-            const subBadge = `<span style="display:inline-block;padding:1px 6px;border-radius:3px;background:${subColor};color:#111;font-weight:bold;font-size:11px;">${spawn.SubGroupNo}</span>`;
-            return `<br>SubGroup: ${subBadge}`;
-        })() : '';
-        const groupLabel = `<span style="color:${g.color};font-weight:bold;">Group: ${g.groupId}</span>`;
+        const badge = `<span class="pp-sg-badge" style="background:${fillColor};color:#111">Set ${sg}</span>`;
+        const groupLabel = `<span style="color:${g.color};font-weight:700">G${g.groupId}</span>`;
 
-        // Get spawn info first so we can use EnemyId for the name
-        const si = getSpawnInfo(stageNo, g.groupId);
-        // EnemyId from EnemySpawn is used as primary name source (more specific than EmName)
-        const eName  = getBestEnemyName(spawn.EmName, si, _lang);
-        const emLine = `<br><b>${eName}</b>`;
+        // Get spawn info first; use EnemyId (specific) over EmName (generic base)
+        const si    = getSpawnInfo(stageNo, g.groupId);
+        const eName = getBestEnemyName(spawn.EmName, si, _lang);
 
-        const lvLine = si?.lvs?.length
-            ? `<br>Lv ${si.lvs.length>1 ? si.lvs[0]+' – '+si.lvs[si.lvs.length-1] : si.lvs[0]}${si.boss
-                ? ' <span style="color:#e87c3e;font-weight:bold">BOSS</span>' : ''}${si.bloodOrb
-                ? ' <span style="color:#ff4444;font-size:10px;font-weight:bold"> ⬤ Blood Orb</span>' : ''}${si.highOrb
-                ? ' <span style="color:#44ff44;font-size:10px;font-weight:bold"> ⬤ High Orb</span>' : ''}`
-            : '';
-        const spawnLine = si?.spawn && si.spawn !== '00:00,23:59' && si.spawn !== '—'
-            ? `<br><span style="font-size:10px;color:#aaa">${classifySpawnTime(si.spawn) === 'day' ? '☀' : '🌙'} ${si.spawn}</span>` : '';
-        const statLine = si && (si.exp || si.pp)
-            ? `<br><span style="font-size:10px;color:#778">${si.exp ? `EXP: ${si.exp}` : ''}${si.exp && si.pp ? '  ' : ''}${si.pp ? `PP: ${si.pp}` : ''}</span>` : '';
-        const dropLines = (si?.dtid && _dropsByDtid[si.dtid]?.length)
-            ? '<br><span style="font-size:10px;color:#888;border-top:1px solid #333;display:block;margin-top:3px;padding-top:3px">Drops:</span>' +
-              _dropsByDtid[si.dtid].slice(0,8).map(([id,qty,rate]) =>
-                `<span style="font-size:10px;display:flex;justify-content:space-between;gap:8px"><span>${getItemName(id, _lang)}${qty>1?' ×'+qty:''}</span><b style="color:${rate>=80?'#8fc97a':rate>=30?'#c9a84c':'#888'};white-space:nowrap">${rate}%</b></span>`
-              ).join('') : '';
-        const radiiLine = (spawn.AggroRadius || spawn.LinkRadius) ? (() => {
-            const ag = spawn.AggroRadius ? `<span style="color:#ffd700">⬤</span> Aggro: ${spawn.AggroRadius}` : '';
-            const lk = spawn.LinkRadius  ? `<span style="color:#ff7700">○</span> Link: ${spawn.LinkRadius}` : '';
-            return `<br><span style="font-size:11px">${[ag,lk].filter(Boolean).join('  ')}</span>`;
-        })() : '';
-        const popupHtml  = `${badge}<br>${groupLabel}, Index: <b>${idx}</b>${subLine}${emLine}${lvLine}${spawnLine}${statLine}${dropLines}${radiiLine}`;
-        const tooltipText = `${eName !== '?' ? eName : spawn.EmName || '?'} Lv${si?.lvs?.[0]||'?'}`;
+        const lvStr = si?.lvs?.length
+            ? (si.lvs.length>1 ? `${si.lvs[0]}–${si.lvs[si.lvs.length-1]}` : `${si.lvs[0]}`) : '?';
+        const badges = [
+            si?.boss     ? `<span class="pp-badge pp-boss">BOSS</span>` : '',
+            si?.bloodOrb ? `<span class="pp-badge pp-blood">Blood Orb</span>` : '',
+            si?.highOrb  ? `<span class="pp-badge pp-high">High Orb</span>` : '',
+        ].filter(Boolean).join('');
+        const timeIcon = si?.spawn && si.spawn !== '—' && si.spawn !== '00:00,23:59'
+            ? (classifySpawnTime(si.spawn)==='day' ? '☀' : '🌙') + ' ' : '';
+
+        const dropRows = (si?.dtid && _dropsByDtid[si.dtid]?.length)
+            ? _dropsByDtid[si.dtid].slice(0,8).map(([id,qty,rate]) => {
+                const cls = rate>=80?'hi':rate>=30?'mid':'lo';
+                return `<div class="pp-drop"><span class="pp-drop-name">${getItemName(id,_lang)}${qty>1?' ×'+qty:''}</span><span class="pp-rate ${cls}">${rate}%</span></div>`;
+              }).join('') : '';
+
+        const popupHtml = `
+<div class="dd-popup">
+  <div class="dd-popup-top">${badge} ${groupLabel} <span class="dd-popup-idx">#${idx}</span></div>
+  <div class="dd-popup-name">${eName}</div>
+  <div class="dd-popup-lv">Lv ${lvStr}${badges ? ' '+badges : ''}${si?.spawn && si.spawn !== '—' && si.spawn !== '00:00,23:59' ? `<span class="dd-spawn-time">${timeIcon}${si.spawn}</span>` : ''}</div>
+  ${si?.exp||si?.pp ? `<div class="dd-popup-stats">${si.exp?`<span>EXP ${si.exp}</span>`:''}${si.pp?`<span>PP ${si.pp}</span>`:''}</div>` : ''}
+  ${dropRows ? `<div class="dd-drops"><div class="dd-drops-title">Drops</div>${dropRows}</div>` : ''}
+</div>`;
+        const tooltipText = `${eName} Lv${si?.lvs?.[0]||'?'}`;
 
         const marker = L.circleMarker(latlng, {
             renderer:    spawnRenderer,
@@ -1358,9 +1371,14 @@ function loadEnemySpawns(info, stid = null) {
         centroidBuckets.get(key).push(groupId);
     }
 
-    // Create one chip label marker per group (collapsed by default)
+    // Create one chip label marker per group
     for (const [groupId, { territory, items, pts }] of byGroupId) {
         if (!pts.length) continue;
+        // Skip groups with no EnemySpawn data (empty/placeholder spawns)
+        if (_enemyDataReady) {
+            const sno = stid ? parseInt(stid.slice(2), 10) : null;
+            if (!getSpawnInfo(sno, groupId)) continue;
+        }
         const color = groupBorderColor(parseInt(groupId, 10));
         const cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
         const cy = pts.reduce((s, p) => s + p[1], 0) / pts.length;
@@ -1369,7 +1387,7 @@ function loadEnemySpawns(info, stid = null) {
         const bucketKey = `${Math.round(cx)}:${Math.round(cy)}`;
         const bucket    = centroidBuckets.get(bucketKey);
         const slotIdx   = bucket.indexOf(groupId);
-        const yOffset   = 10 + slotIdx * 20;  // pixels below anchor
+        const yOffset   = 10 + slotIdx * 20;
 
         const chipIcon    = makeChipIcon(groupId, color, items.length, false, yOffset);
         const labelMarker = L.marker(xy(cx, cy), { icon: chipIcon, zIndexOffset: 100 });
@@ -1384,6 +1402,9 @@ function loadEnemySpawns(info, stid = null) {
     }
 
     _updateExpandCollapseBtn();
+
+    // Auto-expand all groups so enemies are visible without clicking
+    _expandAllGroups();
     _applySpawnFilter();
 }
 
@@ -1843,27 +1864,32 @@ loadMap = function (mapName) {
 buildSidebar();
 loadMap(currentMapName());
 
-// Attach filter/lang/search event listeners
+// Lang buttons
 document.querySelectorAll('.lang-btn').forEach(btn =>
     btn.addEventListener('click', () => setLang(btn.dataset.lang)));
+
+// Spawn time filter
 document.querySelectorAll('.filter-time-btn').forEach(btn =>
     btn.addEventListener('click', () => setSpawnFilter('time', btn.dataset.time)));
+
+// Type toggles
 document.querySelectorAll('.filter-toggle-btn').forEach(btn =>
     btn.addEventListener('click', () => setSpawnFilter(btn.dataset.filter, !_spawnFilter[btn.dataset.filter])));
-document.getElementById('enemy-search').addEventListener('input', e => {
+
+// Enemy name search
+document.getElementById('enemy-search')?.addEventListener('input', e => {
     _enemySearchText = e.target.value.toLowerCase().trim();
     _applySpawnFilter();
 });
 
-// Restore UI state
-(function initUIState() {
+// Channel selector
+document.querySelectorAll('.channel-btn').forEach(btn =>
+    btn.addEventListener('click', () => switchChannel(btn.dataset.channel)));
+
+// Init UI state
+(function () {
     const l = _lang;
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        const active = btn.dataset.lang === l;
-        btn.style.background  = active ? '#e94560' : '#0f3460';
-        btn.style.borderColor = active ? '#e94560' : '#1a4a7a';
-        btn.style.color       = active ? '#fff' : '#aaa';
-        btn.style.fontWeight  = active ? '700' : '400';
-    });
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang===l));
+    document.querySelectorAll('.channel-btn').forEach(b => b.classList.toggle('active', b.dataset.channel===_activeChannel));
     _updateFilterUI();
 })();
