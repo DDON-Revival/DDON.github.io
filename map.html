@@ -14,12 +14,15 @@
 
         html, body {
             height: 100%;
-            font-family: system-ui, -apple-system, sans-serif;
-            background: #0e0e1a;
-            color: #dde;
+            font-family: system-ui, sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
         }
 
-        #app { display: flex; height: 100vh; }
+        #app {
+            display: flex;
+            height: 100vh;
+        }
 
         /* ── Sidebar ── */
         #sidebar {
@@ -27,57 +30,36 @@
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
-            background: #13132a;
-            border-right: 1px solid #1e1e3a;
+            background: #16213e;
+            border-right: 1px solid #0f3460;
             overflow: hidden;
         }
 
-        #sidebar-header {
-            padding: 14px 16px 10px;
-            border-bottom: 1px solid #1e1e3a;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        #sidebar-header h1 {
-            font-size: 1.05rem;
-            font-weight: 800;
-            letter-spacing: 0.08em;
-            color: #e94560;
-            flex: 1;
-        }
-
-        /* ── Lang buttons in header ── */
-        .lang-btn {
-            padding: 3px 9px;
-            border-radius: 12px;
-            font-size: 0.72rem;
+        #sidebar h1 {
+            padding: 12px 16px;
+            font-size: 1rem;
             font-weight: 700;
-            cursor: pointer;
-            border: 1px solid #1a4a7a;
-            background: #0f3460;
-            color: #aaa;
-            transition: all 0.1s;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.05em;
+            color: #e94560;
+            border-bottom: 1px solid #0f3460;
         }
 
         #search-box {
-            padding: 8px 10px;
-            border-bottom: 1px solid #1e1e3a;
+            padding: 8px;
+            border-bottom: 1px solid #0f3460;
         }
 
         #search-box input {
             width: 100%;
-            padding: 7px 10px;
-            background: #1a1a35;
-            border: 1px solid #2a2a4a;
-            border-radius: 6px;
-            color: #dde;
-            font-size: 0.82rem;
+            padding: 6px 8px;
+            background: #0f3460;
+            border: none;
+            border-radius: 4px;
+            color: #e0e0e0;
+            font-size: 0.85rem;
         }
-        #search-box input::placeholder { color: #555; }
-        #search-box input:focus { outline: none; border-color: #4a90d9; }
+
+        #search-box input::placeholder { color: #888; }
 
         #map-list {
             flex: 1;
@@ -86,16 +68,16 @@
         }
 
         .map-group-header {
-            padding: 7px 14px 3px;
-            font-size: 0.67rem;
+            padding: 6px 16px 2px;
+            font-size: 0.7rem;
             font-weight: 700;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: #555;
+            color: #888;
         }
 
         .map-entry {
-            padding: 5px 14px;
+            padding: 5px 16px;
             cursor: pointer;
             font-size: 0.82rem;
             border-left: 3px solid transparent;
@@ -103,272 +85,324 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            color: #bbc;
         }
-        .map-entry:hover { background: #1a1a35; color: #dde; }
-        .map-entry.active { background: #1a1a35; border-left-color: #e94560; color: #fff; }
 
-        .map-entry .img-dot, .map-subentry .img-dot {
-            width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+        .map-entry:hover { background: #0f3460; }
+
+        .map-entry.active {
+            background: #0f3460;
+            border-left-color: #e94560;
+            color: #fff;
         }
-        .map-entry .img-dot.has-img, .map-subentry .img-dot.has-img { background: #4caf50; }
-        .map-entry .img-dot.no-img,  .map-subentry .img-dot.no-img  { background: #333; }
 
-        .map-entry .expand-arrow { font-size: 0.6rem; color: #555; flex-shrink:0; width:10px; text-align:center; transition: transform 0.15s; }
+        .map-entry .img-dot,
+        .map-subentry .img-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .map-entry .img-dot.has-img,
+        .map-subentry .img-dot.has-img { background: #4caf50; }
+        .map-entry .img-dot.no-img,
+        .map-subentry .img-dot.no-img  { background: #555; }
+
+        .map-entry .expand-arrow {
+            font-size: 0.6rem;
+            color: #888;
+            flex-shrink: 0;
+            transition: transform 0.15s;
+            width: 10px;
+            text-align: center;
+        }
         .map-entry.expanded .expand-arrow { transform: rotate(90deg); }
 
         .map-sublist { display: none; }
         .map-sublist.open { display: block; }
 
         .map-subentry {
-            padding: 4px 14px 4px 28px;
-            cursor: pointer; font-size: 0.78rem; color: #778;
-            border-left: 3px solid transparent; transition: background 0.1s;
-            display: flex; align-items: center; gap: 6px;
+            padding: 4px 16px 4px 30px;
+            cursor: pointer;
+            font-size: 0.78rem;
+            color: #aaa;
+            border-left: 3px solid transparent;
+            transition: background 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .map-subentry:hover { background: #1a1a35; color: #dde; }
-        .map-subentry.active { background: #1a1a35; border-left-color: #e94560; color: #fff; }
+        .map-subentry:hover { background: #0f3460; color: #e0e0e0; }
+        .map-subentry.active {
+            background: #0f3460;
+            border-left-color: #e94560;
+            color: #fff;
+        }
 
-        /* ── Bottom panel ── */
+        /* ── Layers panel ── */
         #layers-panel {
-            padding: 10px 12px 12px;
-            border-top: 1px solid #1e1e3a;
+            padding: 10px 16px;
+            border-top: 1px solid #0f3460;
             font-size: 0.82rem;
         }
 
-        .panel-section-title {
-            font-size: 0.65rem;
+        #layers-panel h3 {
+            font-size: 0.7rem;
             font-weight: 700;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: #555;
+            color: #888;
             margin-bottom: 6px;
         }
 
-        /* Layer toggle row */
         .layer-toggle {
-            display: flex; align-items: center; gap: 8px;
-            padding: 2px 0; cursor: pointer; color: #99a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 3px 0;
+            cursor: pointer;
         }
+
         .layer-toggle input { cursor: pointer; accent-color: #e94560; }
 
-        /* Pill button group */
-        .pill-group {
-            display: flex; gap: 3px; flex-wrap: wrap;
-            margin-bottom: 8px;
-        }
-        .pill-btn {
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            border: 1px solid #1a4a7a;
-            background: #0f3460;
-            color: #aaa;
-            transition: all 0.12s;
-            white-space: nowrap;
-        }
-        .pill-btn:hover { border-color: #4a90d9; color: #dde; }
-
-        /* Enemy filter search */
-        #enemy-search {
-            width: 100%;
-            padding: 6px 10px;
-            background: #1a1a35;
-            border: 1px solid #2a2a4a;
-            border-radius: 6px;
-            color: #dde;
-            font-size: 0.82rem;
-            margin-top: 4px;
-        }
-        #enemy-search::placeholder { color: #555; }
-        #enemy-search:focus { outline: none; border-color: #4a90d9; }
-
-        /* Expand/collapse btn */
-        #btn-expand-collapse {
-            width: 100%; padding: 5px 0; margin-top: 8px;
-            background: #1a1a35; color: #99a;
-            border: 1px solid #2a2a4a; border-radius: 6px;
-            font-size: 0.78rem; cursor: pointer; transition: all 0.1s;
-        }
-        #btn-expand-collapse:hover { background: #22223a; color: #dde; }
-
         /* ── Map container ── */
-        #map-container { flex: 1; position: relative; }
-        #map { height: 100%; width: 100%; background: #0a0a15; }
+        #map-container {
+            flex: 1;
+            position: relative;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+            background: #0d0d1a;
+        }
 
         #map-title {
-            position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
-            z-index: 1000; background: rgba(13,13,26,0.92);
-            padding: 5px 16px; border-radius: 20px;
-            font-size: 0.88rem; font-weight: 700; color: #fff;
-            pointer-events: none; border: 1px solid #2a2a4a;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: rgba(22, 33, 62, 0.9);
+            padding: 4px 14px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+            pointer-events: none;
+            border: 1px solid #0f3460;
         }
 
-        #floor-selector, #tile-layer-selector {
-            position: absolute; z-index: 1000;
-            left: 50%; transform: translateX(-50%);
-            display: flex; gap: 4px;
+        #floor-selector {
+            position: absolute;
+            top: 42px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 4px;
         }
-        #floor-selector { top: 44px; }
-        #tile-layer-selector { top: 76px; }
+        #floor-selector button {
+            background: rgba(22, 33, 62, 0.88);
+            color: #ccd;
+            border: 1px solid #0f3460;
+            border-radius: 12px;
+            padding: 2px 10px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+        #floor-selector button.active {
+            background: #0f3460;
+            color: #fff;
+            border-color: #4a90d9;
+        }
 
-        #floor-selector button, #tile-layer-selector button {
-            background: rgba(13,13,26,0.9); color: #99a;
-            border: 1px solid #2a2a4a; border-radius: 12px;
-            padding: 3px 11px; font-size: 0.75rem; cursor: pointer;
-            transition: all 0.1s;
+        #tile-layer-selector {
+            position: absolute;
+            top: 72px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 4px;
         }
-        #floor-selector button.active, #tile-layer-selector button.active {
-            background: #1a3a6a; color: #fff; border-color: #4a90d9;
+        #tile-layer-selector button {
+            background: rgba(22, 33, 62, 0.88);
+            color: #ccd;
+            border: 1px solid #0f3460;
+            border-radius: 12px;
+            padding: 2px 10px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+        #tile-layer-selector button.active {
+            background: #0f3460;
+            color: #fff;
+            border-color: #4a90d9;
         }
 
         #coord-display {
-            position: absolute; bottom: 8px; right: 8px; z-index: 1000;
-            background: rgba(13,13,26,0.88); padding: 4px 10px;
-            border-radius: 4px; font-size: 0.85rem; font-family: monospace;
-            font-weight: 600; color: #778; pointer-events: none;
-            min-width: 260px; text-align: right; border: 1px solid #1e1e3a;
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            z-index: 1000;
+            background: rgba(22, 33, 62, 0.88);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-family: monospace;
+            font-weight: 600;
+            color: #e0e0e0;
+            pointer-events: none;
+            min-width: 280px;
+            text-align: right;
+            border: 1px solid #0f3460;
         }
 
-        /* ── Popup styles ── */
+        /* ── Pd piece boundary labels ── */
+        .pd-label {
+            color: #ffcc44;
+            font-size: 10px;
+            font-family: monospace;
+            font-weight: 600;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        .pd-label-btn {
+            pointer-events: auto;
+            cursor: zoom-in;
+            text-decoration: underline dotted;
+        }
+        .pd-label-btn:hover { color: #ffe88a; }
+
+        /* ── Grid labels ── */
+        .grid-label {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 10px;
+            font-family: monospace;
+            font-weight: 600;
+            text-align: center;
+            pointer-events: none;
+            white-space: nowrap;
+            text-shadow: 0 0 3px rgba(0,0,0,0.9);
+        }
+
+        /* ── Icons ── */
+        .ddon-icon {
+            height: 32px;
+            width: 32px;
+            background-image: url("./datas/MapIcons.webp");
+            background-size: 256px;
+        }
+        .ddon-icon-door    { background-position: -191px 0; }
+        .ddon-icon-dungeon { background-position: -111px -29px; }
+
+        /* ── Enemy marker drop-shadow for contrast against any map background ── */
+        .enemy-marker {
+            filter: drop-shadow(0 0 2px #000) drop-shadow(0 0 1px #000);
+        }
+
+        /* ── Group chip labels ── */
+        .group-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 7px 2px 5px;
+            border: 1.5px solid currentColor;
+            border-radius: 10px;
+            background: rgba(10, 15, 35, 0.88);
+            font-family: system-ui, sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+            text-shadow: 0 0 4px rgba(0,0,0,0.9);
+            box-shadow: 0 0 4px rgba(0,0,0,0.7);
+            transition: background 0.1s;
+        }
+        .group-chip:hover { background: rgba(30, 40, 80, 0.95); }
+        .chip-count {
+            font-size: 9px;
+            opacity: 0.75;
+            font-weight: 500;
+        }
+        .chip-arrow {
+            font-size: 8px;
+            transition: transform 0.15s;
+            display: inline-block;
+            opacity: 0.8;
+        }
+        .chip-arrow.open { transform: rotate(90deg); }
+        .group-chip.chip-open { opacity: 0.75; }
+
+        /* ── Reset-view control ── */
+        .leaflet-control-reset-view {
+            font-size: 18px;
+            line-height: 26px !important;
+            font-weight: normal;
+        }
+
+        /* ── Scrollbar ── */
+        #map-list::-webkit-scrollbar { width: 6px; }
+        #map-list::-webkit-scrollbar-track { background: transparent; }
+        #map-list::-webkit-scrollbar-thumb { background: #0f3460; border-radius: 3px; }
+
+        /* ── Leaflet popup override ── */
         .leaflet-popup-content-wrapper {
             background: #13132a !important;
             border: 1px solid #2a2a4a !important;
             border-radius: 10px !important;
             box-shadow: 0 4px 24px rgba(0,0,0,0.7) !important;
-            padding: 0 !important;
+            color: #ccd !important;
         }
         .leaflet-popup-tip { background: #13132a !important; }
-        .leaflet-popup-content { margin: 0 !important; min-width: 180px; }
-        .leaflet-popup-close-button { color: #556 !important; top: 6px !important; right: 8px !important; font-size: 16px !important; }
-        .leaflet-popup-close-button:hover { color: #fff !important; }
-
-        .ddon-popup { padding: 10px 12px; font-size: 0.82rem; color: #ccd; }
-        .popup-header { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
-        .popup-sg-badge {
-            display: inline-block; padding: 1px 7px; border-radius: 4px;
-            font-size: 0.72rem; font-weight: 700;
-        }
-        .popup-group { font-weight: 700; font-size: 0.82rem; }
-        .popup-idx   { font-size: 0.72rem; color: #556; margin-left: auto; }
-        .popup-enemy-name { font-weight: 700; font-size: 0.95rem; color: #eef; display: block; margin-bottom: 2px; }
-        .popup-lv    { font-size: 0.82rem; color: #aab; display: block; margin: 2px 0; }
-        .popup-spawn { font-size: 0.72rem; color: #667; display: block; }
-        .popup-stats { font-size: 0.72rem; color: #778; display: block; margin-top: 2px; }
-        .popup-badge {
-            display: inline-block; padding: 1px 5px; border-radius: 3px;
-            font-size: 0.68rem; font-weight: 700; margin-left: 4px;
-        }
-        .popup-badge-boss  { background: #5a1e00; color: #ff7a35; }
-        .popup-badge-blood { background: #5a0000; color: #ff6060; }
-        .popup-badge-high  { background: #1a4a00; color: #80ff60; }
-        .popup-drops { margin-top: 6px; padding-top: 6px; border-top: 1px solid #222240; }
-        .popup-drops-header { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #445; margin-bottom: 4px; }
-        .popup-drop-row { display: flex; align-items: center; justify-content: space-between; padding: 1px 0; }
-        .popup-drop-name { font-size: 0.78rem; color: #bbc; flex: 1; padding-right: 8px; }
-        .popup-drop-rate { font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
-        .rate-high { color: #6dbb55; }
-        .rate-mid  { color: #c9a84c; }
-        .rate-low  { color: #556; }
-        .popup-radii { font-size: 0.75rem; margin-top: 5px; padding-top: 5px; border-top: 1px solid #222240; color: #778; }
-
-        /* ── Pd boundary labels ── */
-        .pd-label { color: #ffcc44; font-size: 10px; font-family: monospace; font-weight: 600; white-space: nowrap; pointer-events: none; }
-        .pd-label-btn { pointer-events: auto; cursor: zoom-in; text-decoration: underline dotted; }
-        .pd-label-btn:hover { color: #ffe88a; }
-
-        /* ── Grid labels ── */
-        .grid-label { color: rgba(255,255,255,0.4); font-size: 10px; font-family: monospace; font-weight: 600; text-align: center; pointer-events: none; white-space: nowrap; text-shadow: 0 0 3px rgba(0,0,0,0.9); }
-
-        /* ── Icons ── */
-        .ddon-icon { height: 32px; width: 32px; background-image: url("./datas/MapIcons.webp"); background-size: 256px; }
-        .ddon-icon-door    { background-position: -191px 0; }
-        .ddon-icon-dungeon { background-position: -111px -29px; }
-
-        /* ── Enemy marker ── */
-        .enemy-marker { filter: drop-shadow(0 0 2px #000) drop-shadow(0 0 1px #000); }
-
-        /* ── Group chip ── */
-        .group-chip {
-            display: inline-flex; align-items: center; gap: 3px;
-            padding: 2px 7px 2px 5px;
-            border: 1.5px solid currentColor; border-radius: 10px;
-            background: rgba(8,8,20,0.90);
-            font-family: system-ui, sans-serif; font-size: 11px; font-weight: 700;
-            white-space: nowrap; cursor: pointer; user-select: none;
-            text-shadow: 0 0 4px rgba(0,0,0,0.9);
-            box-shadow: 0 0 6px rgba(0,0,0,0.8);
-            transition: background 0.1s;
-        }
-        .group-chip:hover { background: rgba(20,20,50,0.97); }
-        .chip-count  { font-size: 9px; opacity: 0.65; font-weight: 500; }
-        .chip-arrow  { font-size: 8px; transition: transform 0.15s; display: inline-block; opacity: 0.7; }
-        .chip-arrow.open { transform: rotate(90deg); }
-        .group-chip.chip-open { opacity: 0.75; }
-
-        /* ── Reset view ── */
-        .leaflet-control-reset-view { font-size: 18px; line-height: 26px !important; }
-
-        /* ── Scrollbar ── */
-        #map-list::-webkit-scrollbar { width: 5px; }
-        #map-list::-webkit-scrollbar-track { background: transparent; }
-        #map-list::-webkit-scrollbar-thumb { background: #2a2a4a; border-radius: 3px; }
+        .leaflet-popup-content { margin: 8px 12px !important; }
+        .leaflet-popup-close-button { color: #445 !important; top:6px !important; right:8px !important; font-size:16px !important; }
+        .leaflet-popup-close-button:hover { color: #fff !important; background: none !important; }
     </style>
 </head>
 <body>
 <div id="app">
     <div id="sidebar">
-        <div id="sidebar-header">
-            <h1>DDON Maps</h1>
-            <button class="lang-btn" data-lang="en">EN</button>
-            <button class="lang-btn" data-lang="jp">JP</button>
+        <div id="sidebar-header" style="padding:12px 14px 10px;border-bottom:1px solid #1e1e3a;display:flex;align-items:center;gap:8px">
+            <h1 style="font-size:1.05rem;font-weight:800;letter-spacing:0.08em;color:#e94560;flex:1">DDON Maps</h1>
+            <button class="lang-btn" data-lang="en" style="padding:3px 9px;border-radius:12px;font-size:0.72rem;font-weight:700;cursor:pointer;border:1px solid #1a4a7a;background:#0f3460;color:#aaa;transition:all 0.1s">EN</button>
+            <button class="lang-btn" data-lang="jp" style="padding:3px 9px;border-radius:12px;font-size:0.72rem;font-weight:700;cursor:pointer;border:1px solid #1a4a7a;background:#0f3460;color:#aaa;transition:all 0.1s">JP</button>
         </div>
         <div id="search-box">
             <input type="text" id="map-search" placeholder="🗺 Search maps...">
         </div>
         <div id="map-list"></div>
         <div id="layers-panel">
-
-            <!-- Enemy layer toggle -->
             <label class="layer-toggle" style="margin-bottom:8px">
                 <input type="checkbox" id="layer-enemies" checked>
-                <span style="color:#dde;font-size:0.82rem">Enemy Spawns</span>
+                <span style="font-size:0.82rem">Enemy Spawns</span>
             </label>
-
-            <!-- Dev-only layers (hidden from players, JS still uses them) -->
+            <!-- Dev layers hidden from players -->
             <label class="layer-toggle" style="display:none"><input type="checkbox" id="layer-landmarks" checked>Landmarks</label>
             <label class="layer-toggle" style="display:none"><input type="checkbox" id="layer-connections" checked>Connections</label>
             <label class="layer-toggle" style="display:none"><input type="checkbox" id="layer-territory">Territory Bounds</label>
             <label class="layer-toggle" style="display:none"><input type="checkbox" id="layer-grid">Grid</label>
 
-            <!-- Spawn time filter -->
-            <div class="panel-section-title">Spawn Time</div>
-            <div class="pill-group">
-                <button class="pill-btn filter-time-btn" data-time="all">All</button>
-                <button class="pill-btn filter-time-btn" data-time="day">☀ Day</button>
-                <button class="pill-btn filter-time-btn" data-time="night">🌙 Night</button>
+            <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#556;margin-bottom:5px">Spawn Time</div>
+            <div style="display:flex;gap:3px;margin-bottom:10px">
+                <button class="filter-time-btn" data-time="all"   style="flex:1;padding:4px 0;border-radius:10px;font-size:0.75rem;cursor:pointer;border:1px solid #1a4a7a;background:#0f3460;color:#aaa;transition:all 0.12s">All</button>
+                <button class="filter-time-btn" data-time="day"   style="flex:1;padding:4px 0;border-radius:10px;font-size:0.75rem;cursor:pointer;border:1px solid #1a4a7a;background:#0f3460;color:#aaa;transition:all 0.12s">☀ Day</button>
+                <button class="filter-time-btn" data-time="night" style="flex:1;padding:4px 0;border-radius:10px;font-size:0.75rem;cursor:pointer;border:1px solid #1a4a7a;background:#0f3460;color:#aaa;transition:all 0.12s">🌙 Night</button>
             </div>
 
-            <!-- Type filter -->
-            <div class="panel-section-title">Type Filter</div>
-            <div class="pill-group" style="margin-bottom:10px">
-                <button class="pill-btn filter-toggle-btn" data-filter="boss">Boss</button>
-                <button class="pill-btn filter-toggle-btn" data-filter="bloodOrb">Blood Orb</button>
+            <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#556;margin-bottom:5px">Type</div>
+            <div style="display:flex;gap:3px;margin-bottom:10px">
+                <button class="filter-toggle-btn" data-filter="boss"     style="flex:1;padding:4px 0;border-radius:10px;font-size:0.75rem;cursor:pointer;border:1px solid #1a4a7a;background:#0f3460;color:#aaa;transition:all 0.12s">Boss</button>
+                <button class="filter-toggle-btn" data-filter="bloodOrb" style="flex:1;padding:4px 0;border-radius:10px;font-size:0.75rem;cursor:pointer;border:1px solid #1a4a7a;background:#0f3460;color:#aaa;transition:all 0.12s">Blood Orb</button>
             </div>
 
-            <!-- Enemy name search -->
-            <div class="panel-section-title">Enemy Search</div>
-            <input type="text" id="enemy-search" placeholder="🔍 Filter by enemy name...">
+            <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#556;margin-bottom:5px">Enemy Filter</div>
+            <input type="text" id="enemy-search" placeholder="🔍 Search enemy name..." style="width:100%;padding:6px 8px;background:#0f3460;border:1px solid #1a4a7a;border-radius:6px;color:#dde;font-size:0.82rem;margin-bottom:8px">
 
-            <!-- Expand/collapse -->
-            <button id="btn-expand-collapse">Expand All</button>
-
-            <!-- Help text -->
+            <button id="btn-expand-collapse" style="width:100%;padding:5px 0;background:#0f3460;color:#99a;border:1px solid #1a4a7a;border-radius:6px;font-size:0.78rem;cursor:pointer">Expand All</button>
             <div style="margin-top:8px;font-size:0.72rem;color:#445;line-height:1.8">
-                Click chip → expand group<br>
-                Middle-click hull → collapse<br>
+                Click chip → expand · Middle-click hull → collapse<br>
                 Click spawn → show radii
             </div>
         </div>
