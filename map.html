@@ -362,19 +362,20 @@
                 <input type="checkbox" id="layer-enemies" checked>
                 Enemy Spawns
             </label>
-            <label class="layer-toggle">
+            <!-- Dev layers: hidden from players, kept in JS -->
+            <label class="layer-toggle" style="display:none">
                 <input type="checkbox" id="layer-landmarks" checked>
                 Landmarks
             </label>
-            <label class="layer-toggle">
+            <label class="layer-toggle" style="display:none">
                 <input type="checkbox" id="layer-connections" checked>
                 Connections
             </label>
-            <label class="layer-toggle">
+            <label class="layer-toggle" style="display:none">
                 <input type="checkbox" id="layer-territory">
                 Territory Bounds
             </label>
-            <label class="layer-toggle">
+            <label class="layer-toggle" style="display:none">
                 <input type="checkbox" id="layer-grid">
                 Grid
             </label>
@@ -383,6 +384,29 @@
                 background:#0f3460;color:#e0e0e0;border:1px solid #1a4a7a;
                 border-radius:4px;font-size:0.78rem;cursor:pointer;
             ">Expand All</button>
+
+            <!-- Language toggle -->
+            <div style="margin-top:8px;display:flex;gap:4px;align-items:center">
+                <span style="font-size:0.72rem;color:#888;margin-right:2px">Lang:</span>
+                <button class="lang-btn" data-lang="en" style="
+                    flex:1;padding:3px 0;background:#e94560;color:#fff;
+                    border:1px solid #e94560;border-radius:4px;font-size:0.75rem;cursor:pointer;font-weight:600;
+                ">EN</button>
+                <button class="lang-btn" data-lang="jp" style="
+                    flex:1;padding:3px 0;background:#0f3460;color:#ccd;
+                    border:1px solid #1a4a7a;border-radius:4px;font-size:0.75rem;cursor:pointer;
+                ">JP</button>
+            </div>
+
+            <!-- Enemy search -->
+            <div style="margin-top:8px;border-top:1px solid #0f3460;padding-top:8px">
+                <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#888;margin-bottom:4px">Enemy Filter</div>
+                <input type="text" id="enemy-search" placeholder="Search enemy name..." style="
+                    width:100%;padding:5px 8px;background:#0f3460;border:none;
+                    border-radius:4px;color:#e0e0e0;font-size:0.82rem;
+                ">
+            </div>
+
             <div style="margin-top:6px;padding-top:6px;border-top:1px solid #0f3460;font-size:0.75rem;color:#888;line-height:1.7">
                 Click chip to expand group<br>
                 Middle-click hull to collapse<br>
