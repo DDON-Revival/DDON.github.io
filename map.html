@@ -227,16 +227,22 @@ function placeMarkers(allMarkers){
   const list=applyFilter(allMarkers);
   list.forEach(m=>{
     const boss=!!m.boss;
-    const name=enemyName(m.eid);
-    const short=name.length>16?name.slice(0,15)+'…':name;
-    const icon=L.divIcon({className:'',html:`<div class="gmarker${boss?' boss':''}"><span class="gm-name">${short}</span><span class="gm-lv">Lv${m.lv||'?'}</span></div>`,iconAnchor:[0,10]});
+    const eids=m.eids||[m.eid];
+    const primaryName=enemyName(eids[0]);
+    const short=primaryName.length>14?primaryName.slice(0,13)+'…':primaryName;
+    const extra=eids.length>1?` +${eids.length-1}`:'';
+    const lvs=m.lvs||[m.lv];
+    const lvLabel=lvs.length>1?`Lv${lvs[0]}-${lvs[lvs.length-1]}`:`Lv${lvs[0]||'?'}`;
+    const cnt=m.count>1?`<span style="font-size:9px;opacity:.6;margin-left:2px">×${m.count}</span>`:'';
+    const icon=L.divIcon({className:'',html:`<div class="gmarker${boss?' boss':''}"><span class="gm-name">${short}${extra}</span><span class="gm-lv">${lvLabel}</span>${cnt}</div>`,iconAnchor:[0,10]});
     const lm=L.marker([m.lat,m.lng],{icon,zIndexOffset:boss?100:0});
     lm.bindPopup(buildPopup(m),{maxWidth:320,minWidth:240});
     lm.addTo(leafMap);mkrs.push({lm,m});
     const item=document.createElement('div');
     item.className=`ei${boss?' boss-item':''}`;
-    item.dataset.name=name.toLowerCase();item.dataset.level=String(m.lv||0);
-    item.innerHTML=`<div class="ei-lv${boss?' b':''}">Lv${m.lv||'?'}</div><div class="ei-info"><div class="ei-name">${name}</div><div class="ei-meta">${m.spawn||'—'}</div></div><div class="ei-dot${boss?' b':''}"></div>`;
+    item.dataset.name=eids.map(id=>enemyName(id)).join(' ').toLowerCase();
+    item.dataset.level=String(lvs[0]||0);
+    item.innerHTML=`<div class="ei-lv${boss?' b':''}">${lvLabel}</div><div class="ei-info"><div class="ei-name">${primaryName}${extra}</div><div class="ei-meta">${m.spawn||'—'} · ${m.count} spawn${m.count>1?'s':''}</div></div><div class="ei-dot${boss?' b':''}"></div>`;
     item.addEventListener('click',()=>{
       if(hlMkr)hlMkr.getElement()?.querySelector('.gmarker')?.classList.remove('hi');
       lm.getElement()?.querySelector('.gmarker')?.classList.add('hi');
@@ -251,7 +257,10 @@ function placeMarkers(allMarkers){
 }
 
 function buildPopup(m){
-  const name=enemyName(m.eid);
+  const eids=m.eids||[m.eid];
+  const names=eids.map(id=>`${enemyName(id)} <span style="font-family:monospace;font-size:10px;opacity:.5">${id}</span>`).join('<br>');
+  const lvs=m.lvs||[m.lv];
+  const lvLabel=lvs.length>1?`${lvs[0]} – ${lvs[lvs.length-1]}`:(lvs[0]||'?');
   let drops='';
   const dt=MAP_DATA._drops?.[String(m.dtid)];
   if(dt&&dt.length){
@@ -262,16 +271,16 @@ function buildPopup(m){
     }).join('');
     drops=`<div class="pop-drops-title">Drops</div>${rows}`;
   }
-  return `<div class="pop"><div class="pop-title">${name}</div>
-    <div class="pop-row"><span class="pk">ID</span><span class="pv" style="font-family:monospace;font-size:11px">${m.eid}</span></div>
-    <div class="pop-row"><span class="pk">Level</span><span class="pv">${m.lv||'?'}</span></div>
-    <div class="pop-row"><span class="pk">Spawn</span><span class="pv">${m.spawn||'—'}</span></div>
+  return `<div class="pop"><div class="pop-title">${names}</div>
+    <div class="pop-row"><span class="pk">Level</span><span class="pv">${lvLabel}</span></div>
+    <div class="pop-row"><span class="pk">Spawns</span><span class="pv">${m.count||1}</span></div>
+    <div class="pop-row"><span class="pk">Spawn time</span><span class="pv">${m.spawn||'—'}</span></div>
     ${m.boss?`<div class="pop-boss">⚠ Area Boss</div>`:''}${drops}</div>`;
 }
 
 function applyFilter(markers){
   if(filter==='boss')return markers.filter(m=>m.boss);
-  if(filter==='day')return markers.filter(m=>{const t=m.spawn||'';return t==='00:00,23:59'||t.startsWith('06:')||t.includes(',17:59');});
+  if(filter==='day')return markers.filter(m=>{const t=m.spawn||'';return t==='00:00,23:59'||t.startsWith('06:')||t.includes(',17:59')||t.includes(',18:');});
   if(filter==='night')return markers.filter(m=>{const t=m.spawn||'';return t.startsWith('18:')||t.startsWith('22:')||t.includes('05:59');});
   return markers;
 }
