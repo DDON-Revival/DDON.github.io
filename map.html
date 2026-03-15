@@ -252,6 +252,8 @@ function loadStage(mapKey){
       const baseW=data.baseW||realW,baseH=data.baseH||realH;
       const sx=realW/baseW,sy=realH/baseH;
       data._sx=sx;data._sy=sy;data._realH=realH;
+      console.log('[DDON DEBUG] map='+mapKey+' image='+realW+'x'+realH+' base='+baseW+'x'+baseH+' sx='+sx.toFixed(3)+' sy='+sy.toFixed(3));
+      if(data.markers&&data.markers.length>0){const m=data.markers[0];console.log('[DDON DEBUG] first marker: px='+m.px+' py='+m.py+' → lng='+(m.px*sx).toFixed(0)+' lat='+(realH-m.py*sy).toFixed(0)+' ('+((m.px*sx/realW)*100).toFixed(1)+'% from left, '+((m.py*sy/realH)*100).toFixed(1)+'% from top)');}
       const imgBounds=[[0,0],[realH,realW]];
       imgOvl=L.imageOverlay(url,imgBounds).addTo(leafMap);
       document.getElementById('no-img').classList.remove('show');
