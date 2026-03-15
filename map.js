@@ -26,10 +26,10 @@ let _enemySearchText = '';
 
 // ── Channels ──────────────────────────────────────────────────────────────────
 const CHANNELS = {
-    normal:   { label: 'Normal',    file: 'EnemySpawn.json' },
-    collab:   { label: 'Collab',    file: 'EnemySpawnCollab.json' },
-    custom:   { label: 'Custom',    file: 'EnemySpawnCustom.json' },
-    bossrush: { label: 'Boss Rush', file: 'EnemySpawnBR.json' },
+    normal:   { label: 'Normal',    file: 'EnemySpawn.json',        gather: 'GatheringItem.json' },
+    collab:   { label: 'Collab',    file: 'EnemySpawnCollab.json',  gather: 'GatheringItemCollab.json' },
+    custom:   { label: 'Custom',    file: 'EnemySpawnCustom.json',  gather: 'GatheringItemCustom.json' },
+    bossrush: { label: 'Boss Rush', file: 'EnemySpawnBR.json',      gather: 'GatheringItemBR.json' },
 };
 let _activeChannel = localStorage.getItem('ddon-channel') || 'normal';
 
@@ -44,6 +44,16 @@ const _sidToSno = (() => {
     }
     return m;
 })();
+
+// Reverse: stageNo → stageId (for gathering lookup)
+const _snoToSid = (() => {
+    const m = {};
+    for (const [sid, sno] of Object.entries(_sidToSno)) m[sno] = parseInt(sid);
+    return m;
+})();
+
+// Gathering data: stageId → groupId → posId → {t, items}
+let _gatherData = {};
 
 async function _loadChannelFile(fileName) {
     const r = await fetch('./datas/' + fileName);
@@ -88,6 +98,14 @@ async function _loadChannelFile(fileName) {
     });
 }
 
+async function _loadGatherFile(fileName) {
+    try {
+        const r = await fetch('./datas/' + fileName);
+        if (r.ok) _gatherData = await r.json();
+        else _gatherData = {};
+    } catch(e) { _gatherData = {}; }
+}
+
 async function switchChannel(channelId) {
     if (!CHANNELS[channelId]) return;
     _activeChannel = channelId;
@@ -95,6 +113,7 @@ async function switchChannel(channelId) {
     _updateChannelUI();
     try {
         await _loadChannelFile(CHANNELS[channelId].file);
+        await _loadGatherFile(CHANNELS[channelId].gather);
     } catch(e) { console.warn('Channel load error:', e); return; }
     if (_loadedMapName && mapParams[_loadedMapName])
         loadEnemySpawns(mapParams[_loadedMapName], _loadedStid);
@@ -140,6 +159,7 @@ function _updateChannelUI() {
     } catch(e) {}
     try {
         await _loadChannelFile(CHANNELS[_activeChannel].file);
+        await _loadGatherFile(CHANNELS[_activeChannel].gather);
     } catch(e) { console.warn('EnemySpawn load error:', e); }
     _enemyDataReady = true;
     if (_loadedMapName && mapParams[_loadedMapName])
@@ -328,13 +348,14 @@ function worldToPixel(worldX, worldZ, info) {
 // ── Layer groups ───────────────────────────────────────────────────────────────
 let imageOverlay    = null;
 let enemyLayer      = L.layerGroup().addTo(leafletMap);  // group chip labels
+let gatheringLayer  = L.layerGroup().addTo(leafletMap);  // gathering nodes
 let landmarkLayer   = L.layerGroup().addTo(leafletMap);
 let connectionLayer = L.layerGroup().addTo(leafletMap);
-let gridLayer       = L.layerGroup();   // off by default
-let territoryLayer  = L.layerGroup();   // off by default; territory rects when groups expand
+let gridLayer       = L.layerGroup();
+let territoryLayer  = L.layerGroup();
 let pdBoundaryLayer = L.layerGroup().addTo(leafletMap);
-let spawnRadiiLayer   = L.layerGroup().addTo(leafletMap);  // aggro/link radius circles
-let _spreadOverlay    = L.layerGroup().addTo(leafletMap);  // cross-group spoke lines + anchor dots
+let spawnRadiiLayer   = L.layerGroup().addTo(leafletMap);
+let _spreadOverlay    = L.layerGroup().addTo(leafletMap);
 
 // Canvas renderer — all spawn circleMarkers share one <canvas> element (huge perf win).
 const spawnRenderer = L.canvas({ padding: 0.5 });
@@ -403,6 +424,7 @@ function updateLayersInHash() {
 function saveLayerPrefs() {
     const prefs = {
         enemies:     document.getElementById('layer-enemies').checked,
+        gathering:   document.getElementById('layer-gathering')?.checked ?? true,
         landmarks:   document.getElementById('layer-landmarks').checked,
         connections: document.getElementById('layer-connections').checked,
         grid:        document.getElementById('layer-grid').checked,
@@ -429,6 +451,8 @@ function loadLayerPrefs() {
     const isOn = (key, defaultOn) => key in prefs ? prefs[key] : defaultOn;
 
     document.getElementById('layer-enemies').checked     = isOn('enemies',     true);
+    const gatherEl = document.getElementById('layer-gathering');
+    if (gatherEl) gatherEl.checked = isOn('gathering', true);
     document.getElementById('layer-landmarks').checked   = isOn('landmarks',   true);
     document.getElementById('layer-connections').checked = isOn('connections', true);
     document.getElementById('layer-grid').checked        = isOn('grid',        false);
@@ -1787,6 +1811,84 @@ function loadPdBoundaries(info) {
     });
 }
 
+// ── Gathering nodes ────────────────────────────────────────────────────────────
+// Node type → SVG icon  (inline, no external downloads needed)
+const GATHER_ICONS = {
+    gather:  { svg: `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8" fill="#2d6a2d" stroke="#6dbf67" stroke-width="1.5"/><path d="M10 4 C7 7 7 10 10 14 C13 10 13 7 10 4Z" fill="#6dbf67" opacity="0.9"/><path d="M6 9 C8 8 10 10 12 9" fill="none" stroke="#6dbf67" stroke-width="1"/></svg>`, color: '#6dbf67', label: 'Gathering' },
+    rare:    { svg: `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8" fill="#1a4a6a" stroke="#67b5df" stroke-width="1.5"/><polygon points="10,3 12,8 17,8 13,12 14.5,17 10,14 5.5,17 7,12 3,8 8,8" fill="#67b5df" opacity="0.9"/></svg>`, color: '#67b5df', label: 'Rare Gather' },
+    chest:   { svg: `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8" fill="#5a3a00" stroke="#c8a84b" stroke-width="1.5"/><rect x="5" y="8" width="10" height="7" rx="1" fill="#c8a84b" opacity="0.9"/><rect x="5" y="6" width="10" height="4" rx="1" fill="#a07830"/><rect x="8.5" y="10" width="3" height="2" rx="0.5" fill="#5a3a00"/></svg>`, color: '#c8a84b', label: 'Chest' },
+    ore:     { svg: `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8" fill="#3a2a3a" stroke="#bf88df" stroke-width="1.5"/><polygon points="10,5 14,9 13,14 7,14 6,9" fill="#bf88df" opacity="0.8"/><polygon points="10,7 12.5,10 11,13 9,13 7.5,10" fill="#7a44af" opacity="0.9"/></svg>`, color: '#bf88df', label: 'Ore' },
+    special: { svg: `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8" fill="#4a1a00" stroke="#ff8040" stroke-width="1.5"/><text x="10" y="14" text-anchor="middle" font-size="10" fill="#ff8040">!</text></svg>`, color: '#ff8040', label: 'Special' },
+};
+
+function _makeGatherIcon(type) {
+    const def = GATHER_ICONS[type] || GATHER_ICONS.gather;
+    return L.divIcon({
+        className: '',
+        html: `<div class="gather-marker" title="${def.label}">${def.svg}</div>`,
+        iconSize:   [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor:[0, -12],
+    });
+}
+
+function loadGathering(info, stid = null) {
+    gatheringLayer.clearLayers();
+    if (!document.getElementById('layer-gathering')?.checked) return;
+    if (!info.stages?.length) return;
+
+    // Find matching stageId(s) from info
+    const stagesToLoad = (stid && info.stages.includes(stid)) ? [stid] : info.stages;
+
+    for (const stageId of stagesToLoad) {
+        const sno    = parseInt(stageId.slice(2), 10);
+        const sid    = _snoToSid[sno];
+        if (sid === undefined) continue;
+        const stageData = _gatherData[String(sid)];
+        if (!stageData) continue;
+
+        for (const [groupId, positions] of Object.entries(stageData)) {
+            // Each groupId can have many posIds, each is one gather node
+            for (const [posId, node] of Object.entries(positions)) {
+                // Find world position in enemyPositions
+                const stageNo  = String(sno);
+                const posData  = enemyPositions[stageNo]?.[groupId];
+                if (!posData) continue;
+                const spawns   = posData.spawns ?? posData;
+                const spawnPos = spawns[parseInt(posId)];
+                if (!spawnPos?.Position) continue;
+
+                const { x, z } = spawnPos.Position;
+                const latlng   = worldToPixel(x, z, info);
+                const icon     = _makeGatherIcon(node.t);
+
+                // Build popup
+                const itemRows = node.i.map(it => {
+                    const name = getItemName(it.id, _lang);
+                    const qty  = it.qty[0] === it.qty[1]
+                        ? (it.qty[0] > 0 ? ` ×${it.qty[1]}` : '')
+                        : ` ×${it.qty[0]}–${it.qty[1]}`;
+                    return `<div class="pp-drop"><span class="pp-drop-name">${name}${qty}</span></div>`;
+                }).join('');
+
+                const typeDef   = GATHER_ICONS[node.t] || GATHER_ICONS.gather;
+                const popupHtml = `
+<div class="dd-popup">
+  <div class="dd-popup-top"><span class="pp-sg-badge" style="background:${typeDef.color};color:#111">${typeDef.label}</span></div>
+  <div class="dd-drops"><div class="dd-drops-title">Items</div>${itemRows}</div>
+</div>`;
+
+                const tooltipText = node.i.map(it => getItemName(it.id, _lang)).join(', ');
+
+                L.marker(latlng, { icon })
+                    .bindPopup(popupHtml)
+                    .bindTooltip(tooltipText, { direction: 'top', offset: [0, -12] })
+                    .addTo(gatheringLayer);
+            }
+        }
+    }
+}
+
 // ── Map loader ────────────────────────────────────────────────────────────────
 function resetView() {
     const info = mapParams[_loadedMapName];
@@ -1844,6 +1946,7 @@ function loadMap(mapName) {
     const { openGroups } = parseHash();
 
     loadEnemySpawns(info, currentStageName());
+    loadGathering(info, currentStageName());
 
     if (openGroups?.length) {
         for (const id of openGroups) if (_groupStore.has(id)) _expandGroupCore(_groupStore.get(id));
@@ -1903,6 +2006,17 @@ loadMap = function (mapName) {
 // ── Init ──────────────────────────────────────────────────────────────────────
 buildSidebar();
 loadMap(currentMapName());
+
+// Gathering layer toggle
+document.getElementById('layer-gathering')?.addEventListener('change', e => {
+    if (e.target.checked) {
+        const info = mapParams[_loadedMapName];
+        if (info) loadGathering(info, _loadedStid);
+    } else {
+        gatheringLayer.clearLayers();
+    }
+    saveLayerPrefs();
+});
 
 // Lang buttons
 document.querySelectorAll('.lang-btn').forEach(btn =>

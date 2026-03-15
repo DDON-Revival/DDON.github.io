@@ -393,6 +393,14 @@
         #map-list::-webkit-scrollbar { width: 4px; }
         #map-list::-webkit-scrollbar-track { background: transparent; }
         #map-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+        /* ── Gathering markers ── */
+        .gather-marker {
+            width: 20px; height: 20px;
+            filter: drop-shadow(0 0 3px rgba(0,0,0,0.8));
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .gather-marker:hover { transform: scale(1.3); }
     </style>
 </head>
 <body>
@@ -433,6 +441,10 @@
             <label class="layer-toggle">
                 <input type="checkbox" id="layer-enemies" checked>
                 <span>Enemy Spawns</span>
+            </label>
+            <label class="layer-toggle" style="margin-bottom:8px">
+                <input type="checkbox" id="layer-gathering" checked>
+                <span>Gathering Nodes</span>
             </label>
 
             <!-- Dev layers — hidden from players, JS uses them -->
