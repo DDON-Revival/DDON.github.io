@@ -1,306 +1,406 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DDON — Enemy Map</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Pro:wght@300;400;600&family=Noto+Serif+JP:wght@300;400;600&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#0d0b08;--surface:#161209;--surface2:#1e1710;--surface3:#252016;--border:#352c1a;--border2:#4a3d28;--gold:#c9a84c;--gold2:#e8c96d;--gold-dim:rgba(201,168,76,.12);--red:#c0392b;--red-dim:rgba(192,57,43,.15);--boss:#e87c3e;--boss-dim:rgba(232,124,62,.12);--text:#d4c4a0;--text-dim:#7a6a50;--text-mute:#4a3d28;--radius:3px;--font-body:'Crimson Pro','Noto Serif JP',Georgia,serif;--font-head:'Cinzel','Noto Serif JP',serif;}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;overflow:hidden;}
-body{font-family:var(--font-body);background:var(--bg);color:var(--text);display:flex;flex-direction:column;}
-#loading{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;}
-.ld-icon{font-size:32px;color:var(--gold);animation:breathe 2s ease-in-out infinite;}
-.ld-text{font-family:var(--font-head);font-size:11px;letter-spacing:4px;color:var(--text-dim);text-transform:uppercase;animation:breathe 1.6s ease-in-out infinite;}
-@keyframes breathe{0%,100%{opacity:.25}50%{opacity:1}}
-#header{height:54px;flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0;position:relative;z-index:600;}
-#header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,var(--gold) 30%,var(--gold) 70%,transparent 100%);opacity:.35;}
-.logo{padding:0 20px;font-family:var(--font-head);font-weight:900;font-size:15px;letter-spacing:3px;color:var(--gold);white-space:nowrap;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
-.logo-cross{color:var(--red);font-size:14px;}
-.hdiv{width:1px;height:30px;background:var(--border);flex-shrink:0;margin:0 4px;}
-.zone-wrap{display:flex;align-items:center;gap:10px;padding:0 12px;}
-.zone-label{font-family:var(--font-head);font-size:10px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;white-space:nowrap;}
-.zone-select{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--font-body);font-size:14px;padding:5px 30px 5px 10px;border-radius:var(--radius);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c9a84c' opacity='.7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;background-size:8px;min-width:260px;transition:border-color .2s;}
-.zone-select:hover,.zone-select:focus{border-color:var(--gold);outline:none;}
-.zone-select optgroup{background:var(--surface2);color:var(--text-dim);}
-.zone-select option{background:var(--surface2);color:var(--text);}
-.filters{display:flex;align-items:center;gap:6px;padding:0 12px;}
-.fbtn{font-family:var(--font-head);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 11px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;border-radius:var(--radius);transition:all .18s;white-space:nowrap;}
-.fbtn:hover{border-color:var(--border2);color:var(--text);}
-.fbtn.on{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
-.fbtn.boss-f.on{border-color:var(--boss);color:var(--boss);background:var(--boss-dim);}
-.hright{margin-left:auto;display:flex;align-items:center;gap:8px;padding:0 16px;}
-.stat-badge{font-family:var(--font-head);font-size:10px;letter-spacing:1px;color:var(--text-dim);white-space:nowrap;}
-.stat-badge strong{color:var(--gold2);}
-.lang-btn{font-family:var(--font-head);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;border-radius:var(--radius);transition:all .18s;}
-.lang-btn.active{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
-#app{flex:1;display:flex;overflow:hidden;}
-#sidebar{width:272px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
-.sb-top{padding:11px 14px 9px;border-bottom:1px solid var(--border);font-family:var(--font-head);font-size:10px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;}
-.sb-count{color:var(--gold);font-weight:600;}
-.sb-search{padding:7px 12px;border-bottom:1px solid var(--border);}
-.sb-search input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:var(--font-body);font-size:14px;padding:5px 10px;border-radius:var(--radius);transition:border-color .2s;}
-.sb-search input::placeholder{color:var(--text-mute);}
-.sb-search input:focus{outline:none;border-color:var(--gold);}
-#elist{flex:1;overflow-y:auto;padding:3px 0;}
-#elist::-webkit-scrollbar{width:3px;}
-#elist::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
-.ei{padding:6px 14px;cursor:pointer;display:flex;align-items:center;gap:9px;border-left:2px solid transparent;transition:all .14s;}
-.ei:hover{background:rgba(201,168,76,.05);border-left-color:var(--gold);}
-.ei.sel{background:var(--gold-dim);border-left-color:var(--gold);}
-.ei.boss-item{border-left-color:var(--boss)!important;}
-.ei-lv{font-family:var(--font-head);font-size:10px;font-weight:600;min-width:36px;text-align:center;background:var(--gold-dim);color:var(--gold);padding:1px 4px;border-radius:2px;flex-shrink:0;}
-.ei-lv.b{background:var(--boss-dim);color:var(--boss);}
-.ei-info{flex:1;min-width:0;}
-.ei-name{font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;}
-.ei-meta{font-size:11px;color:var(--text-dim);margin-top:1px;}
-.ei-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:var(--red);box-shadow:0 0 4px rgba(192,57,43,.6);}
-.ei-dot.b{background:var(--boss);box-shadow:0 0 5px rgba(232,124,62,.7);}
-#mapwrap{flex:1;position:relative;display:flex;}
-#map{flex:1;background:#08070504;}
-#no-img{position:absolute;inset:0;z-index:400;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(13,11,8,.88);opacity:0;pointer-events:none;transition:opacity .25s;}
-#no-img.show{opacity:1;pointer-events:all;}
-#no-img .ni-title{font-family:var(--font-head);font-size:11px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase;}
-#no-img .ni-file{font-family:monospace;font-size:13px;color:var(--gold);}
-.leaflet-container{font-family:var(--font-body);background:#08070504;}
-.leaflet-control-zoom{border:1px solid var(--border)!important;border-radius:var(--radius)!important;}
-.leaflet-control-zoom a{background:var(--surface)!important;color:var(--text-dim)!important;border-color:var(--border)!important;}
-.leaflet-control-zoom a:hover{color:var(--gold)!important;background:var(--surface2)!important;}
-.leaflet-popup-content-wrapper{background:var(--surface);border:1px solid var(--border2);border-radius:4px;box-shadow:0 12px 40px rgba(0,0,0,.7);padding:0;}
-.leaflet-popup-tip-container{display:none;}
-.leaflet-popup-content{margin:0;min-width:240px;max-width:320px;}
-.pop{padding:13px 15px;}
-.pop-title{font-family:var(--font-head);font-size:13px;letter-spacing:.5px;color:var(--gold2);border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:8px;}
-.pop-row{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;padding:2px 0;}
-.pop-row .pk{color:var(--text-dim);}
-.pop-row .pv{color:var(--text);}
-.pop-boss{display:inline-block;margin-top:8px;background:var(--boss-dim);border:1px solid var(--boss);color:var(--boss);font-family:var(--font-head);font-size:9px;letter-spacing:2px;padding:3px 8px;border-radius:2px;}
-.pop-drops-title{font-family:var(--font-head);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);border-top:1px solid var(--border);padding-top:8px;margin-top:8px;margin-bottom:5px;}
-.drop-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:2px 0;gap:8px;}
-.drop-name{color:var(--text);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.drop-qty{color:var(--text-dim);font-size:11px;flex-shrink:0;}
-.drop-rate{font-family:var(--font-head);font-size:10px;flex-shrink:0;min-width:42px;text-align:right;}
-.drop-rate.high{color:#8fc97a;}.drop-rate.mid{color:var(--gold);}.drop-rate.low{color:var(--text-dim);}
-.gmarker{background:rgba(130,20,20,.88);border:1.5px solid rgba(192,57,43,.75);border-radius:3px;padding:2px 6px 2px 5px;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.6);cursor:pointer;transition:transform .12s;font-size:11px;line-height:1.3;}
-.gmarker:hover{transform:scale(1.08);}
-.gmarker.boss{background:rgba(160,60,10,.9);border-color:rgba(232,124,62,.85);}
-.gmarker.hi{background:rgba(160,130,20,.95)!important;border-color:var(--gold)!important;box-shadow:0 0 8px var(--gold)!important;}
-.gm-name{color:#f2d0c8;max-width:120px;overflow:hidden;text-overflow:ellipsis;}
-.gm-lv{color:rgba(255,255,255,.5);font-size:10px;font-family:'Cinzel',serif;}
-.leaflet-marker-icon{overflow:visible!important;}
-@media(max-width:720px){#sidebar,.filters,.zone-label{display:none;}.zone-select{min-width:160px;}}
-</style>
+    <base target="_top">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DDON Maps</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            height: 100%;
+            font-family: system-ui, sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+        }
+
+        #app {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* ── Sidebar ── */
+        #sidebar {
+            width: 260px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            background: #16213e;
+            border-right: 1px solid #0f3460;
+            overflow: hidden;
+        }
+
+        #sidebar h1 {
+            padding: 12px 16px;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: #e94560;
+            border-bottom: 1px solid #0f3460;
+        }
+
+        #search-box {
+            padding: 8px;
+            border-bottom: 1px solid #0f3460;
+        }
+
+        #search-box input {
+            width: 100%;
+            padding: 6px 8px;
+            background: #0f3460;
+            border: none;
+            border-radius: 4px;
+            color: #e0e0e0;
+            font-size: 0.85rem;
+        }
+
+        #search-box input::placeholder { color: #888; }
+
+        #map-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 4px 0;
+        }
+
+        .map-group-header {
+            padding: 6px 16px 2px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #888;
+        }
+
+        .map-entry {
+            padding: 5px 16px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            border-left: 3px solid transparent;
+            transition: background 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .map-entry:hover { background: #0f3460; }
+
+        .map-entry.active {
+            background: #0f3460;
+            border-left-color: #e94560;
+            color: #fff;
+        }
+
+        .map-entry .img-dot,
+        .map-subentry .img-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .map-entry .img-dot.has-img,
+        .map-subentry .img-dot.has-img { background: #4caf50; }
+        .map-entry .img-dot.no-img,
+        .map-subentry .img-dot.no-img  { background: #555; }
+
+        .map-entry .expand-arrow {
+            font-size: 0.6rem;
+            color: #888;
+            flex-shrink: 0;
+            transition: transform 0.15s;
+            width: 10px;
+            text-align: center;
+        }
+        .map-entry.expanded .expand-arrow { transform: rotate(90deg); }
+
+        .map-sublist { display: none; }
+        .map-sublist.open { display: block; }
+
+        .map-subentry {
+            padding: 4px 16px 4px 30px;
+            cursor: pointer;
+            font-size: 0.78rem;
+            color: #aaa;
+            border-left: 3px solid transparent;
+            transition: background 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .map-subentry:hover { background: #0f3460; color: #e0e0e0; }
+        .map-subentry.active {
+            background: #0f3460;
+            border-left-color: #e94560;
+            color: #fff;
+        }
+
+        /* ── Layers panel ── */
+        #layers-panel {
+            padding: 10px 16px;
+            border-top: 1px solid #0f3460;
+            font-size: 0.82rem;
+        }
+
+        #layers-panel h3 {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        .layer-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 3px 0;
+            cursor: pointer;
+        }
+
+        .layer-toggle input { cursor: pointer; accent-color: #e94560; }
+
+        /* ── Map container ── */
+        #map-container {
+            flex: 1;
+            position: relative;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+            background: #0d0d1a;
+        }
+
+        #map-title {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: rgba(22, 33, 62, 0.9);
+            padding: 4px 14px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+            pointer-events: none;
+            border: 1px solid #0f3460;
+        }
+
+        #floor-selector {
+            position: absolute;
+            top: 42px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 4px;
+        }
+        #floor-selector button {
+            background: rgba(22, 33, 62, 0.88);
+            color: #ccd;
+            border: 1px solid #0f3460;
+            border-radius: 12px;
+            padding: 2px 10px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+        #floor-selector button.active {
+            background: #0f3460;
+            color: #fff;
+            border-color: #4a90d9;
+        }
+
+        #tile-layer-selector {
+            position: absolute;
+            top: 72px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 4px;
+        }
+        #tile-layer-selector button {
+            background: rgba(22, 33, 62, 0.88);
+            color: #ccd;
+            border: 1px solid #0f3460;
+            border-radius: 12px;
+            padding: 2px 10px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+        #tile-layer-selector button.active {
+            background: #0f3460;
+            color: #fff;
+            border-color: #4a90d9;
+        }
+
+        #coord-display {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            z-index: 1000;
+            background: rgba(22, 33, 62, 0.88);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-family: monospace;
+            font-weight: 600;
+            color: #e0e0e0;
+            pointer-events: none;
+            min-width: 280px;
+            text-align: right;
+            border: 1px solid #0f3460;
+        }
+
+        /* ── Pd piece boundary labels ── */
+        .pd-label {
+            color: #ffcc44;
+            font-size: 10px;
+            font-family: monospace;
+            font-weight: 600;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        .pd-label-btn {
+            pointer-events: auto;
+            cursor: zoom-in;
+            text-decoration: underline dotted;
+        }
+        .pd-label-btn:hover { color: #ffe88a; }
+
+        /* ── Grid labels ── */
+        .grid-label {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 10px;
+            font-family: monospace;
+            font-weight: 600;
+            text-align: center;
+            pointer-events: none;
+            white-space: nowrap;
+            text-shadow: 0 0 3px rgba(0,0,0,0.9);
+        }
+
+        /* ── Icons ── */
+        .ddon-icon {
+            height: 32px;
+            width: 32px;
+            background-image: url("./datas/MapIcons.webp");
+            background-size: 256px;
+        }
+        .ddon-icon-door    { background-position: -191px 0; }
+        .ddon-icon-dungeon { background-position: -111px -29px; }
+
+        /* ── Enemy marker drop-shadow for contrast against any map background ── */
+        .enemy-marker {
+            filter: drop-shadow(0 0 2px #000) drop-shadow(0 0 1px #000);
+        }
+
+        /* ── Group chip labels ── */
+        .group-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 7px 2px 5px;
+            border: 1.5px solid currentColor;
+            border-radius: 10px;
+            background: rgba(10, 15, 35, 0.88);
+            font-family: system-ui, sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+            text-shadow: 0 0 4px rgba(0,0,0,0.9);
+            box-shadow: 0 0 4px rgba(0,0,0,0.7);
+            transition: background 0.1s;
+        }
+        .group-chip:hover { background: rgba(30, 40, 80, 0.95); }
+        .chip-count {
+            font-size: 9px;
+            opacity: 0.75;
+            font-weight: 500;
+        }
+        .chip-arrow {
+            font-size: 8px;
+            transition: transform 0.15s;
+            display: inline-block;
+            opacity: 0.8;
+        }
+        .chip-arrow.open { transform: rotate(90deg); }
+        .group-chip.chip-open { opacity: 0.75; }
+
+        /* ── Reset-view control ── */
+        .leaflet-control-reset-view {
+            font-size: 18px;
+            line-height: 26px !important;
+            font-weight: normal;
+        }
+
+        /* ── Scrollbar ── */
+        #map-list::-webkit-scrollbar { width: 6px; }
+        #map-list::-webkit-scrollbar-track { background: transparent; }
+        #map-list::-webkit-scrollbar-thumb { background: #0f3460; border-radius: 3px; }
+    </style>
 </head>
 <body>
-<div id="loading"><div class="ld-icon">⚔</div><div class="ld-text" id="ld-msg">Loading map data…</div></div>
-<header id="header">
-  <div class="logo"><span>DDON</span><span class="logo-cross">✦</span><span style="font-size:9px;letter-spacing:2px;color:var(--text-dim);font-weight:400;">Enemy Map</span></div>
-  <div class="hdiv"></div>
-  <div class="zone-wrap">
-    <span class="zone-label">Zone</span>
-    <select class="zone-select" id="zone-sel"></select>
-  </div>
-  <div class="hdiv"></div>
-  <div class="filters">
-    <button class="fbtn on" id="f-all" onclick="setFilter('all')">All</button>
-    <button class="fbtn" id="f-day" onclick="setFilter('day')">Day</button>
-    <button class="fbtn" id="f-night" onclick="setFilter('night')">Night</button>
-    <button class="fbtn boss-f" id="f-boss" onclick="setFilter('boss')">Boss</button>
-  </div>
-  <div class="hright">
-    <span class="stat-badge" id="stat"></span>
-    <div class="hdiv"></div>
-    <button class="lang-btn active" id="l-en" onclick="setLang('en')">EN</button>
-    <button class="lang-btn" id="l-jp" onclick="setLang('jp')">JP</button>
-  </div>
-</header>
 <div id="app">
-  <aside id="sidebar">
-    <div class="sb-top"><span>Enemies</span><span class="sb-count" id="sb-cnt">0</span></div>
-    <div class="sb-search"><input id="search" placeholder="Search by name or level…" oninput="filterList()"></div>
-    <div id="elist"></div>
-  </aside>
-  <div id="mapwrap">
-    <div id="map"></div>
-    <div id="no-img"><div class="ni-title">Map image not found</div><code class="ni-file" id="ni-path"></code></div>
-  </div>
+    <div id="sidebar">
+        <h1>DDON Maps</h1>
+        <div id="search-box">
+            <input type="text" id="map-search" placeholder="Search maps...">
+        </div>
+        <div id="map-list"></div>
+        <div id="layers-panel">
+            <h3>Layers</h3>
+            <label class="layer-toggle">
+                <input type="checkbox" id="layer-enemies" checked>
+                Enemy Spawns
+            </label>
+            <label class="layer-toggle">
+                <input type="checkbox" id="layer-landmarks" checked>
+                Landmarks
+            </label>
+            <label class="layer-toggle">
+                <input type="checkbox" id="layer-connections" checked>
+                Connections
+            </label>
+            <label class="layer-toggle">
+                <input type="checkbox" id="layer-territory">
+                Territory Bounds
+            </label>
+            <label class="layer-toggle">
+                <input type="checkbox" id="layer-grid">
+                Grid
+            </label>
+            <button id="btn-expand-collapse" style="
+                margin-top:8px;width:100%;padding:4px 0;
+                background:#0f3460;color:#e0e0e0;border:1px solid #1a4a7a;
+                border-radius:4px;font-size:0.78rem;cursor:pointer;
+            ">Expand All</button>
+            <div style="margin-top:6px;padding-top:6px;border-top:1px solid #0f3460;font-size:0.75rem;color:#888;line-height:1.7">
+                Click chip to expand group<br>
+                Middle-click hull to collapse<br>
+                Click spawn to show:<br>
+                <span style="color:#ffd700">&#9679;</span> Aggro radius<br>
+                <span style="color:#ff7700">&#9675;</span> Link radius
+            </div>
+        </div>
+    </div>
+
+    <div id="map-container">
+        <div id="map-title">—</div>
+        <div id="floor-selector"></div>
+        <div id="tile-layer-selector"></div>
+        <div id="map"></div>
+        <div id="coord-display"></div>
+    </div>
 </div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-let ENEMY_NAMES={}, ITEM_NAMES={}, lang='en', MAP_DATA=null, leafMap=null, imgOvl=null, mkrs=[], filter='all', curStage=null, hlMkr=null;
-
-function enemyName(eid){const e=ENEMY_NAMES[eid];if(!e)return eid;return e[lang]||e.en||eid;}
-function itemName(id){const it=ITEM_NAMES[id];if(!it)return`Item #${id}`;return it[lang]||it.en||it.jp||`Item #${id}`;}
-
-function setLang(l){
-  lang=l;
-  document.getElementById('l-en').classList.toggle('active',l==='en');
-  document.getElementById('l-jp').classList.toggle('active',l==='jp');
-  rebuildDropdown(); rebuildList();
-}
-
-async function boot(){
-  const msg=m=>{document.getElementById('ld-msg').textContent=m;};
-  try{
-    msg('Loading map data…');
-    const r=await fetch('./datas/map_data.json');
-    if(!r.ok)throw new Error('map_data.json not found: '+r.status);
-    MAP_DATA=await r.json();
-  }catch(e){
-    document.getElementById('loading').innerHTML=`<div style="text-align:center"><div style="color:var(--gold);font-family:var(--font-head);font-size:13px;margin-bottom:12px">ERROR</div><div style="color:var(--text-dim);font-size:14px">${e.message}</div></div>`;
-    return;
-  }
-  msg('Loading names…');
-  try{const r=await fetch('./datas/enemy-names.json');if(r.ok){const raw=await r.json();ENEMY_NAMES=Array.isArray(raw)?Object.fromEntries(raw.map(e=>[e.id,{en:e.en||e.name,jp:e.jp}])):raw;}}catch(e){}
-  try{const r=await fetch('./datas/item_names.json');if(r.ok){const raw=await r.json();if(Array.isArray(raw))raw.forEach(it=>{ITEM_NAMES[it.id]={en:it['new']||it.en,jp:it['old']||it.jp};});}}catch(e){}
-
-  leafMap=L.map('map',{crs:L.CRS.Simple,zoomSnap:.25,zoomDelta:.5,minZoom:-5,maxZoom:6,attributionControl:false});
-  rebuildDropdown();
-  const first=document.getElementById('zone-sel').options[0]?.value;
-  if(first){document.getElementById('zone-sel').value=first;loadStage(first);}
-  document.getElementById('zone-sel').addEventListener('change',e=>loadStage(e.target.value));
-  document.getElementById('loading').style.display='none';
-}
-
-function rebuildDropdown(){
-  const sel=document.getElementById('zone-sel');
-  const prev=sel.value; sel.innerHTML='';
-  const fields=[],dungeons=[],rooms=[];
-  Object.keys(MAP_DATA).filter(k=>k!=='_drops'&&MAP_DATA[k].markers?.length>0).sort().forEach(mk=>{
-    const d=MAP_DATA[mk];
-    if(mk.startsWith('field')||mk.startsWith('sfield')) fields.push(mk);
-    else if(mk.startsWith('st')||mk.startsWith('pd')) dungeons.push(mk);
-    else rooms.push(mk);
-  });
-  const addGroup=(label,keys)=>{
-    if(!keys.length)return;
-    const og=document.createElement('optgroup');og.label=label;
-    keys.forEach(mk=>{
-      const d=MAP_DATA[mk];
-      const name=(lang==='jp'&&d.name_jp)?d.name_jp:d.name_en||mk;
-      const o=document.createElement('option');o.value=mk;
-      o.textContent=`${name}  ·  ${d.markers.length}`;
-      og.appendChild(o);
-    });
-    sel.appendChild(og);
-  };
-  addGroup('Field Maps',fields);
-  addGroup('Dungeons',dungeons);
-  addGroup('Locations',rooms);
-  if(prev&&MAP_DATA[prev])sel.value=prev;
-}
-
-function loadStage(mk){
-  if(!mk||!MAP_DATA[mk])return;
-  curStage=mk; filter='all';
-  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));
-  document.getElementById('f-all').classList.add('on');
-  document.getElementById('search').value='';
-  const data=MAP_DATA[mk];
-  if(imgOvl){leafMap.removeLayer(imgOvl);imgOvl=null;}
-  mkrs.forEach(m=>leafMap.removeLayer(m.lm));mkrs=[];
-  const url='./maps/'+data.imgFile;
-  const imgBounds=[[0,0],[data.imgH,data.imgW]];
-  imgOvl=L.imageOverlay(url,imgBounds).addTo(leafMap);
-  imgOvl.on('error',()=>{document.getElementById('no-img').classList.add('show');document.getElementById('ni-path').textContent=url;});
-  imgOvl.on('load',()=>{document.getElementById('no-img').classList.remove('show');});
-  document.getElementById('no-img').classList.remove('show');
-  leafMap.fitBounds(imgBounds,{animate:false});
-  placeMarkers(data.markers);
-  _fitToMarkers(data.markers);
-}
-
-function _fitToMarkers(markers){
-  if(!markers?.length)return;
-  const f=applyFilter(markers);if(!f.length)return;
-  const lats=f.map(m=>m.lat),lngs=f.map(m=>m.lng);
-  const pad=(Math.max(...lats)-Math.min(...lats))*.015||20;
-  leafMap.fitBounds([[Math.min(...lats)-pad,Math.min(...lngs)-pad],[Math.max(...lats)+pad,Math.max(...lngs)+pad]],{animate:false,padding:[10,10]});
-}
-
-function placeMarkers(allMarkers){
-  mkrs.forEach(m=>leafMap.removeLayer(m.lm));mkrs=[];
-  document.getElementById('elist').innerHTML='';
-  const list=applyFilter(allMarkers);
-  list.forEach(m=>{
-    const boss=!!m.boss;
-    const eids=m.eids||[m.eid];
-    const primaryName=enemyName(eids[0]);
-    const short=primaryName.length>14?primaryName.slice(0,13)+'…':primaryName;
-    const extra=eids.length>1?` +${eids.length-1}`:'';
-    const lvs=m.lvs||[m.lv];
-    const lvLabel=lvs.length>1?`Lv${lvs[0]}-${lvs[lvs.length-1]}`:`Lv${lvs[0]||'?'}`;
-    const cnt=m.count>1?`<span style="font-size:9px;opacity:.6;margin-left:2px">×${m.count}</span>`:'';
-    const icon=L.divIcon({className:'',html:`<div class="gmarker${boss?' boss':''}"><span class="gm-name">${short}${extra}</span><span class="gm-lv">${lvLabel}</span>${cnt}</div>`,iconAnchor:[0,10]});
-    const lm=L.marker([m.lat,m.lng],{icon,zIndexOffset:boss?100:0});
-    lm.bindPopup(buildPopup(m),{maxWidth:320,minWidth:240});
-    lm.addTo(leafMap);mkrs.push({lm,m});
-    const item=document.createElement('div');
-    item.className=`ei${boss?' boss-item':''}`;
-    item.dataset.name=eids.map(id=>enemyName(id)).join(' ').toLowerCase();
-    item.dataset.level=String(lvs[0]||0);
-    item.innerHTML=`<div class="ei-lv${boss?' b':''}">${lvLabel}</div><div class="ei-info"><div class="ei-name">${primaryName}${extra}</div><div class="ei-meta">${m.spawn||'—'} · ${m.count} spawn${m.count>1?'s':''}</div></div><div class="ei-dot${boss?' b':''}"></div>`;
-    item.addEventListener('click',()=>{
-      if(hlMkr)hlMkr.getElement()?.querySelector('.gmarker')?.classList.remove('hi');
-      lm.getElement()?.querySelector('.gmarker')?.classList.add('hi');
-      hlMkr=lm;leafMap.setView([m.lat,m.lng],1,{animate:true});lm.openPopup();
-      document.querySelectorAll('.ei').forEach(x=>x.classList.remove('sel'));
-      item.classList.add('sel');item.scrollIntoView({block:'nearest',behavior:'smooth'});
-    });
-    document.getElementById('elist').appendChild(item);
-  });
-  document.getElementById('sb-cnt').textContent=list.length;
-  document.getElementById('stat').innerHTML=`<strong>${list.length}</strong> enemies`;
-}
-
-function buildPopup(m){
-  const eids=m.eids||[m.eid];
-  const names=eids.map(id=>`${enemyName(id)} <span style="font-family:monospace;font-size:10px;opacity:.5">${id}</span>`).join('<br>');
-  const lvs=m.lvs||[m.lv];
-  const lvLabel=lvs.length>1?`${lvs[0]} – ${lvs[lvs.length-1]}`:(lvs[0]||'?');
-  let drops='';
-  const dt=MAP_DATA._drops?.[String(m.dtid)];
-  if(dt&&dt.length){
-    const rows=dt.map(([id,qty,rate])=>{
-      const cls=rate>=80?'high':rate>=30?'mid':'low';
-      const q=qty>1?`<span class="drop-qty">×${qty}</span>`:'';
-      return `<div class="drop-row"><span class="drop-name">${itemName(id)}</span>${q}<span class="drop-rate ${cls}">${rate}%</span></div>`;
-    }).join('');
-    drops=`<div class="pop-drops-title">Drops</div>${rows}`;
-  }
-  return `<div class="pop"><div class="pop-title">${names}</div>
-    <div class="pop-row"><span class="pk">Level</span><span class="pv">${lvLabel}</span></div>
-    <div class="pop-row"><span class="pk">Spawns</span><span class="pv">${m.count||1}</span></div>
-    <div class="pop-row"><span class="pk">Spawn time</span><span class="pv">${m.spawn||'—'}</span></div>
-    ${m.boss?`<div class="pop-boss">⚠ Area Boss</div>`:''}${drops}</div>`;
-}
-
-function applyFilter(markers){
-  if(filter==='boss')return markers.filter(m=>m.boss);
-  if(filter==='day')return markers.filter(m=>{const t=m.spawn||'';return t==='00:00,23:59'||t.startsWith('06:')||t.includes(',17:59')||t.includes(',18:');});
-  if(filter==='night')return markers.filter(m=>{const t=m.spawn||'';return t.startsWith('18:')||t.startsWith('22:')||t.includes('05:59');});
-  return markers;
-}
-
-function setFilter(f){
-  filter=f;document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));
-  document.getElementById('f-'+f).classList.add('on');
-  if(!curStage)return;
-  placeMarkers(MAP_DATA[curStage].markers);
-  _fitToMarkers(MAP_DATA[curStage].markers);
-}
-
-function filterList(){
-  const q=document.getElementById('search').value.toLowerCase();
-  document.querySelectorAll('.ei').forEach(i=>{i.style.display=(i.dataset.name.includes(q)||i.dataset.level.includes(q))?'':'none';});
-}
-
-function rebuildList(){if(!curStage)return;placeMarkers(MAP_DATA[curStage].markers);}
-
-boot();
-</script>
+<script type="module" src="map.js"></script>
 </body>
 </html>
