@@ -141,6 +141,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);display
   </aside>
   <div id="mapwrap">
     <div id="map"></div>
+    <div id="dbg" style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);z-index:800;background:rgba(0,0,0,.82);color:#c9a84c;font-family:monospace;font-size:12px;padding:4px 12px;border-radius:3px;pointer-events:none;white-space:nowrap;display:none"></div>
     <div id="no-img">
       <div class="ni-title">Map image not found</div>
       <code class="ni-file" id="ni-path"></code>
@@ -374,7 +375,40 @@ function rebuildList(){
   if(!curStage)return;const d=MAP_DATA[curStage];
   placeMarkers(d.markers,d._sx||1,d._sy||1,d._realH||d.baseH||512);
 }
+
+// DEBUG: click on map to see world coordinates
+// FIELD 1 inverse transform constants
+const F1_SX=215/238162, F1_OX=298+9906*215/238162;
+const F1_SY=215/238162, F1_OY=45+348034*215/238162;
+function getInverseTransform() {
+  if(!curStage||!MAP_DATA[curStage]) return null;
+  const d=MAP_DATA[curStage];
+  if(d.type!=='field') return null;
+  const mk=curStage;
+  // Only field000 (field_id=1) for now
+  if(!mk.startsWith('field000')) return null;
+  return {sx:F1_SX,ox:F1_OX,sy:F1_SY,oy:F1_OY};
+}
+
 boot();
+
+// Debug click handler - add after leafMap is created
+leafMap.on('click', function(e) {
+  const d = MAP_DATA[curStage];
+  if(!d||!d._sx) return;
+  const sx=d._sx, sy=d._sy, realH=d._realH||d.baseH;
+  // Convert Leaflet lat/lng back to transform coords
+  const py = (realH - e.latlng.lat) / sy;
+  const px = e.latlng.lng / sx;
+  // Inverse field1 transform
+  if(curStage&&curStage.startsWith('field000')){
+    const wx=(px-F1_OX)/F1_SX, wz=(py-F1_OY)/F1_SY;
+    const dbg=document.getElementById('dbg');
+    dbg.style.display='block';
+    dbg.textContent=`Click → coord(${px.toFixed(1)}, ${py.toFixed(1)}) world(${Math.round(wx)}, ${Math.round(wz)})`;
+  }
+});
+
 </script>
 </body>
 </html>
