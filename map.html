@@ -308,22 +308,18 @@ function placeMarkers(allMarkers){
   list.forEach(m=>{
     const lng=m.lng,lat=m.lat;
     const boss=!!m.boss;
-    // Primary enemy for label display
-    const primary=m.enemies[0]||{eid:'?',lv:'?'};
-    const name=enemyName(primary.eid);
+    const name=enemyName(m.eid);
     const short=name.length>16?name.slice(0,15)+'…':name;
-    const extra=m.enemies.length>1?` +${m.enemies.length-1}`:'';
-    const lvs=[...new Set(m.enemies.map(e=>e.lv))].sort((a,b)=>a-b);
-    const lvLabel=lvs.length>1?`Lv${lvs[0]}-${lvs[lvs.length-1]}`:`Lv${lvs[0]||'?'}`;
-    const icon=L.divIcon({className:'',html:`<div class="gmarker${boss?' boss':''}"><span class="gm-name">${short}${extra}</span><span class="gm-lv">${lvLabel}</span></div>`,iconAnchor:[0,10]});
+    const lvLabel=`Lv${m.lv||'?'}`;
+    const icon=L.divIcon({className:'',html:`<div class="gmarker${boss?' boss':''}"><span class="gm-name">${short}</span><span class="gm-lv">${lvLabel}</span></div>`,iconAnchor:[0,10]});
     const lm=L.marker([lat,lng],{icon,zIndexOffset:boss?100:0});
     lm.bindPopup(buildPopup(m),{maxWidth:320,minWidth:240});
     lm.addTo(leafMap);mkrs.push({lm,m});
     const item=document.createElement('div');
     item.className=`ei${boss?' boss-item':''}`;
-    item.dataset.name=m.enemies.map(e=>enemyName(e.eid)).join(' ').toLowerCase();
-    item.dataset.level=String(lvs[0]||0);
-    item.innerHTML=`<div class="ei-lv${boss?' b':''}">${lvLabel}</div><div class="ei-info"><div class="ei-name">${name}${extra}</div><div class="ei-meta">${m.spawn||'—'}</div></div><div class="ei-dot${boss?' b':''}"></div>`;
+    item.dataset.name=name.toLowerCase();
+    item.dataset.level=String(m.lv||0);
+    item.innerHTML=`<div class="ei-lv${boss?' b':''}">${lvLabel}</div><div class="ei-info"><div class="ei-name">${name}</div><div class="ei-meta">${m.spawn||'—'}</div></div><div class="ei-dot${boss?' b':''}"></div>`;
     item.addEventListener('click',()=>{
       if(hlMkr)hlMkr.getElement()?.querySelector('.gmarker')?.classList.remove('hi');
       lm.getElement()?.querySelector('.gmarker')?.classList.add('hi');
@@ -338,29 +334,24 @@ function placeMarkers(allMarkers){
 }
 
 function buildPopup(m){
-  // Build one section per unique enemy type at this position
-  const sections=m.enemies.map(e=>{
-    const name=enemyName(e.eid);
-    let drops='';
-    const dt=MAP_DATA._drops?.[String(e.dtid)];
-    if(dt&&dt.length){
-      const rows=dt.map(([id,qty,rate])=>{
-        const cls=rate>=80?'high':rate>=30?'mid':'low';
-        const q=qty>1?`<span class="drop-qty">×${qty}</span>`:'';
-        return `<div class="drop-row"><span class="drop-name">${itemName(id)}</span>${q}<span class="drop-rate ${cls}">${rate}%</span></div>`;
-      }).join('');
-      drops=`<div class="pop-drops-title">${t('popup.drops')}</div>${rows}`;
-    }
-    return `<div class="pop-enemy">
-      <div class="pop-ename">${name}</div>
-      <div class="pop-row"><span class="pk">ID</span><span class="pv" style="font-family:monospace;font-size:11px">${e.eid}</span></div>
-      <div class="pop-row"><span class="pk">${t('popup.level')}</span><span class="pv">${e.lv}</span></div>
-      ${drops}</div>`;
-  }).join('<div class="pop-divider"></div>');
+  const name=enemyName(m.eid);
+  let drops='';
+  const dt=MAP_DATA._drops?.[String(m.dtid)];
+  if(dt&&dt.length){
+    const rows=dt.map(([id,qty,rate])=>{
+      const cls=rate>=80?'high':rate>=30?'mid':'low';
+      const q=qty>1?`<span class="drop-qty">×${qty}</span>`:'';
+      return `<div class="drop-row"><span class="drop-name">${itemName(id)}</span>${q}<span class="drop-rate ${cls}">${rate}%</span></div>`;
+    }).join('');
+    drops=`<div class="pop-drops-title">${t('popup.drops')}</div>${rows}`;
+  }
   return `<div class="pop">
-    <div class="pop-row" style="margin-bottom:6px"><span class="pk">${t('popup.spawn')}</span><span class="pv">${m.spawn||'—'}</span></div>
-    ${m.boss?`<div class="pop-boss" style="margin-bottom:8px">${t('popup.boss')}</div>`:''}
-    ${sections}</div>`;
+    <div class="pop-title">${name}</div>
+    <div class="pop-row"><span class="pk">ID</span><span class="pv" style="font-family:monospace;font-size:11px">${m.eid}</span></div>
+    <div class="pop-row"><span class="pk">${t('popup.level')}</span><span class="pv">${m.lv||'?'}</span></div>
+    <div class="pop-row"><span class="pk">${t('popup.spawn')}</span><span class="pv">${m.spawn||'—'}</span></div>
+    ${m.boss?`<div class="pop-boss">${t('popup.boss')}</div>`:''}
+    ${drops}</div>`;
 }
 
 function applyFilter(markers){
