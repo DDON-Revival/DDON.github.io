@@ -52,8 +52,9 @@ const _snoToSid = (() => {
     return m;
 })();
 
-// Gathering data: stageId → groupId → posId → {t, items}
-let _gatherData = {};
+// gatheringSpots.json — world positions for all gathering nodes
+// Format: stageNo → [{GroupNo, PosId, GatheringType, Position:{x,y,z}}, ...]
+let _gatherSpots = {};
 
 async function _loadChannelFile(fileName) {
     const r = await fetch('./datas/' + fileName);
@@ -147,6 +148,10 @@ function _updateChannelUI() {
     try {
         const r = await fetch('./datas/stage-names.json');
         if (r.ok) _stageNames = await r.json();
+    } catch(e) {}
+    try {
+        const r = await fetch('./datas/gatheringSpots.json');
+        if (r.ok) _gatherSpots = await r.json();
     } catch(e) {}
     try {
         // named_param_ndp.json — enemy name modifiers
@@ -1817,20 +1822,31 @@ function loadPdBoundaries(info) {
 }
 
 // ── Gathering nodes ────────────────────────────────────────────────────────────
-// Node type → SVG icon  (inline, no external downloads needed)
+// GatheringType → icon config
+// Type 30 = shop/warp marker (UnitId 520170) — skip, no item drops
+const GATHER_TYPE_MAP = {
+    0:  'gather', 1:  'gather', 2:  'gather', 5:  'gather', 6:  'gather',
+    8:  'ore',    9:  'gather', 12: 'ore',    13: 'ore',    15: 'ore',
+    16: 'gather', 17: 'gather', 18: 'ore',    19: 'gather', 20: 'gather',
+    21: 'gather', 23: 'gather', 24: 'gather', 25: 'rare',   26: 'gather',
+    27: 'ore',    28: 'ore',    29: 'gather', 31: 'chest',  32: 'chest',
+    33: 'gather', 34: 'gather', 36: 'special',
+};
+const SKIP_GATHER_TYPES = new Set([30]); // shop/warp, no items
+
 const GATHER_ICONS = {
-    gather:  { svg: `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8" fill="#2d6a2d" stroke="#6dbf67" stroke-width="1.5"/><path d="M10 4 C7 7 7 10 10 14 C13 10 13 7 10 4Z" fill="#6dbf67" opacity="0.9"/><path d="M6 9 C8 8 10 10 12 9" fill="none" stroke="#6dbf67" stroke-width="1"/></svg>`, color: '#6dbf67', label: 'Gathering' },
-    rare:    { svg: `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8" fill="#1a4a6a" stroke="#67b5df" stroke-width="1.5"/><polygon points="10,3 12,8 17,8 13,12 14.5,17 10,14 5.5,17 7,12 3,8 8,8" fill="#67b5df" opacity="0.9"/></svg>`, color: '#67b5df', label: 'Rare Gather' },
-    chest:   { svg: `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8" fill="#5a3a00" stroke="#c8a84b" stroke-width="1.5"/><rect x="5" y="8" width="10" height="7" rx="1" fill="#c8a84b" opacity="0.9"/><rect x="5" y="6" width="10" height="4" rx="1" fill="#a07830"/><rect x="8.5" y="10" width="3" height="2" rx="0.5" fill="#5a3a00"/></svg>`, color: '#c8a84b', label: 'Chest' },
-    ore:     { svg: `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8" fill="#3a2a3a" stroke="#bf88df" stroke-width="1.5"/><polygon points="10,5 14,9 13,14 7,14 6,9" fill="#bf88df" opacity="0.8"/><polygon points="10,7 12.5,10 11,13 9,13 7.5,10" fill="#7a44af" opacity="0.9"/></svg>`, color: '#bf88df', label: 'Ore' },
-    special: { svg: `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="8" fill="#4a1a00" stroke="#ff8040" stroke-width="1.5"/><text x="10" y="14" text-anchor="middle" font-size="10" fill="#ff8040">!</text></svg>`, color: '#ff8040', label: 'Special' },
+    gather:  { svg: `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" fill="#1a3d1a" stroke="#6dbf67" stroke-width="1.5"/><path d="M10 4C7 7 7 10 10 14C13 10 13 7 10 4Z" fill="#6dbf67"/><path d="M6 9C8 8 10 10 12 9" fill="none" stroke="#5aaa55" stroke-width="1"/></svg>`, color: '#6dbf67', label: 'Gathering' },
+    rare:    { svg: `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" fill="#0d2a3d" stroke="#67b5df" stroke-width="1.5"/><polygon points="10,3 12,8 17,8 13,12 14.5,17 10,14 5.5,17 7,12 3,8 8,8" fill="#67b5df"/></svg>`, color: '#67b5df', label: 'Rare Gather' },
+    chest:   { svg: `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" fill="#3a2800" stroke="#c8a84b" stroke-width="1.5"/><rect x="5" y="8" width="10" height="6" rx="1" fill="#c8a84b"/><rect x="5" y="6" width="10" height="4" rx="1" fill="#9a7a30"/><rect x="8.5" y="10" width="3" height="2" rx="0.5" fill="#3a2800"/></svg>`, color: '#c8a84b', label: 'Chest' },
+    ore:     { svg: `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" fill="#1e1230" stroke="#bf88df" stroke-width="1.5"/><polygon points="10,5 14,9 13,14 7,14 6,9" fill="#bf88df" opacity="0.9"/><polygon points="10,7 12.5,10 11,13 9,13 7.5,10" fill="#7a44af"/></svg>`, color: '#bf88df', label: 'Ore' },
+    special: { svg: `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" fill="#3a1400" stroke="#ff8040" stroke-width="1.5"/><text x="10" y="15" text-anchor="middle" font-size="12" fill="#ff8040" font-weight="bold">!</text></svg>`, color: '#ff8040', label: 'Special' },
 };
 
 function _makeGatherIcon(type) {
     const def = GATHER_ICONS[type] || GATHER_ICONS.gather;
     return L.divIcon({
         className: '',
-        html: `<div class="gather-marker" title="${def.label}">${def.svg}</div>`,
+        html: `<div class="gather-marker">${def.svg}</div>`,
         iconSize:   [20, 20],
         iconAnchor: [10, 10],
         popupAnchor:[0, -12],
@@ -1842,54 +1858,56 @@ function loadGathering(info, stid = null) {
     if (!document.getElementById('layer-gathering')?.checked) return;
     if (!info.stages?.length) return;
 
-    // Find matching stageId(s) from info
     const stagesToLoad = (stid && info.stages.includes(stid)) ? [stid] : info.stages;
 
     for (const stageId of stagesToLoad) {
-        const sno    = parseInt(stageId.slice(2), 10);
-        const sid    = _snoToSid[sno];
-        if (sid === undefined) continue;
-        const stageData = _gatherData[String(sid)];
-        if (!stageData) continue;
+        const sno   = parseInt(stageId.slice(2), 10);
+        const sid   = _snoToSid[sno];
+        const spots = _gatherSpots[String(sno)];
+        if (!spots) continue;
 
-        for (const [groupId, positions] of Object.entries(stageData)) {
-            // Each groupId can have many posIds, each is one gather node
-            for (const [posId, node] of Object.entries(positions)) {
-                // Find world position in enemyPositions
-                const stageNo  = String(sno);
-                const posData  = enemyPositions[stageNo]?.[groupId];
-                if (!posData) continue;
-                const spawns   = posData.spawns ?? posData;
-                const spawnPos = spawns[parseInt(posId)];
-                if (!spawnPos?.Position) continue;
+        // Build item lookup for this stage: groupNo:posId → node data
+        const stageItems = _gatherData[String(sid)] || {};
 
-                const { x, z } = spawnPos.Position;
-                const latlng   = worldToPixel(x, z, info);
-                const icon     = _makeGatherIcon(node.t);
+        for (const spot of spots) {
+            // Skip shop/warp markers (no items)
+            if (SKIP_GATHER_TYPES.has(spot.GatheringType)) continue;
+            // Skip zero-position placeholders
+            if (spot.Position.x === 0 && spot.Position.z === 0) continue;
 
-                // Build popup
-                const itemRows = node.i.map(it => {
-                    const name = getItemName(it.id, _lang);
-                    const qty  = it.qty[0] === it.qty[1]
-                        ? (it.qty[0] > 0 ? ` ×${it.qty[1]}` : '')
-                        : ` ×${it.qty[0]}–${it.qty[1]}`;
-                    return `<div class="pp-drop"><span class="pp-drop-name">${name}${qty}</span></div>`;
-                }).join('');
+            const { x, z }  = spot.Position;
+            const latlng     = worldToPixel(x, z, info);
+            const nodeType   = GATHER_TYPE_MAP[spot.GatheringType] || 'gather';
+            const icon       = _makeGatherIcon(nodeType);
+            const typeDef    = GATHER_ICONS[nodeType];
 
-                const typeDef   = GATHER_ICONS[node.t] || GATHER_ICONS.gather;
-                const popupHtml = `
+            // Look up items from channel gathering data
+            const groupItems = stageItems[String(spot.GroupNo)];
+            const posItems   = groupItems?.[String(spot.PosId)];
+            const items      = posItems?.i || [];
+
+            const itemRows = items.map(it => {
+                const name = getItemName(it.id, _lang);
+                const qty  = it.qty[0] === it.qty[1]
+                    ? (it.qty[1] > 0 ? ` ×${it.qty[1]}` : '')
+                    : ` ×${it.qty[0]}–${it.qty[1]}`;
+                return `<div class="pp-drop"><span class="pp-drop-name">${name}${qty}</span></div>`;
+            }).join('');
+
+            const tooltipText = items.length
+                ? items.map(it => getItemName(it.id, _lang)).join(', ')
+                : typeDef.label;
+
+            const popupHtml = `
 <div class="dd-popup">
   <div class="dd-popup-top"><span class="pp-sg-badge" style="background:${typeDef.color};color:#111">${typeDef.label}</span></div>
-  <div class="dd-drops"><div class="dd-drops-title">Items</div>${itemRows}</div>
+  ${items.length ? `<div class="dd-drops"><div class="dd-drops-title">Items</div>${itemRows}</div>` : `<div style="font-size:0.78rem;color:var(--text-dim,#888);margin-top:4px">No item data</div>`}
 </div>`;
 
-                const tooltipText = node.i.map(it => getItemName(it.id, _lang)).join(', ');
-
-                L.marker(latlng, { icon })
-                    .bindPopup(popupHtml)
-                    .bindTooltip(tooltipText, { direction: 'top', offset: [0, -12] })
-                    .addTo(gatheringLayer);
-            }
+            L.marker(latlng, { icon })
+                .bindPopup(popupHtml)
+                .bindTooltip(tooltipText, { direction: 'top', offset: [0, -12] })
+                .addTo(gatheringLayer);
         }
     }
 }
