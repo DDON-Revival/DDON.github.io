@@ -252,8 +252,6 @@ function loadStage(mapKey){
       const baseW=data.baseW||realW,baseH=data.baseH||realH;
       const sx=realW/baseW,sy=realH/baseH;
       data._sx=sx;data._sy=sy;data._realH=realH;
-      
-      if(data.markers&&data.markers.length>0){const m=data.markers[0];
       const imgBounds=[[0,0],[realH,realW]];
       imgOvl=L.imageOverlay(url,imgBounds).addTo(leafMap);
       document.getElementById('no-img').classList.remove('show');
