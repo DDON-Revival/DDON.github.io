@@ -630,18 +630,23 @@ function _buildGlobalEnemyIndex() {
         const name  = resolveDisplayName(entry.eid, entry.ndpId, 'en').toLowerCase();
         if (!name || name === '?') continue;
 
-        // Get position from enemyPositions
+        // Get position from enemyPositions (Annuate) or tool supplement
         const posData = enemyPositions[snoStr]?.[groupId];
-        if (!posData) continue;
-        const spawns = posData.spawns ?? posData;
-        if (!spawns.length) continue;
+        let firstPos = null;
+        if (posData) {
+            const spawns = posData.spawns ?? posData;
+            if (spawns.length) firstPos = spawns[0].Position;
+        } else {
+            // Try tool supplement
+            const toolPos = enemyPositionsTool[snoStr]?.[groupId];
+            if (toolPos?.length) firstPos = { x: toolPos[0].x, z: toolPos[0].z };
+        }
+        if (!firstPos) continue;
 
         for (const { mapName, stid } of maps) {
             const info = mapParams[mapName];
             if (!info?.img_exists) continue;
-            // Centroid of first spawn (good enough for navigation)
-            const pos    = spawns[0].Position;
-            const latlng = worldToPixel(pos.x, pos.z, info);
+            const latlng = worldToPixel(firstPos.x, firstPos.z, info);
             results.push({
                 name,
                 displayName: resolveDisplayName(entry.eid, entry.ndpId, 'en'),
@@ -924,10 +929,15 @@ function _buildGlobalDropIndex() {
                 const info = mapParams[mapName];
                 if (!info?.img_exists) continue;
                 const posData = enemyPositions[snoStr]?.[groupId];
-                if (!posData) continue;
-                const spawns = posData.spawns ?? posData;
-                if (!spawns.length) continue;
-                const pos    = spawns[0].Position;
+                let pos = null;
+                if (posData) {
+                    const spawns = posData.spawns ?? posData;
+                    if (spawns.length) pos = spawns[0].Position;
+                } else {
+                    const toolPos = enemyPositionsTool[snoStr]?.[groupId];
+                    if (toolPos?.length) pos = { x: toolPos[0].x, z: toolPos[0].z };
+                }
+                if (!pos) continue;
                 const latlng = worldToPixel(pos.x, pos.z, info);
                 results.push({
                     itemName,
@@ -938,7 +948,7 @@ function _buildGlobalDropIndex() {
                     rate,
                     cx: latlng.lng, cy: latlng.lat,
                 });
-                break; // one map entry per drop per group is enough
+                break;
             }
         }
     }
@@ -1832,13 +1842,18 @@ function loadEnemySpawns(info, stid = null) {
     for (const [groupId, { territory, items, pts, sourceStageNo }] of byGroupId) {
         if (!pts.length) continue;
         // Skip truly empty groups (no EmName AND no EnemySpawn data)
-        const hasRealEnemies = items.some(it => {
-            const em = it.spawn.EmName;
-            return em && em !== 'em000000' && em !== '';
-        });
-        // Tool-sourced groups have empty EmName but valid EnemySpawn data
         const hasSpawnData = !!getSpawnInfo(sourceStageNo, groupId);
-        if (!hasRealEnemies && !hasSpawnData) continue;
+        // When enemy data is loaded: require EnemySpawn match to show group
+        // This hides placeholder/orphan groups like "Goblin Lv?"
+        if (_enemyDataReady && !hasSpawnData) continue;
+        // Before data loads: also require real EmName (not empty/em000000)
+        if (!_enemyDataReady) {
+            const hasRealEnemies = items.some(it => {
+                const em = it.spawn.EmName;
+                return em && em !== 'em000000' && em !== '';
+            });
+            if (!hasRealEnemies) continue;
+        }
         const color = groupBorderColor(parseInt(groupId, 10));
         const cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
         const cy = pts.reduce((s, p) => s + p[1], 0) / pts.length;
