@@ -2,6 +2,7 @@ import enemyPositions from './datas/enemyPositions.json' with {type: "json"};
 import mapParams from './datas/map_params.json' with {type: "json"};
 import landmarkData from './datas/landmarks.json' with {type: "json"};
 import connectionData from './datas/connections.json' with {type: "json"};
+import stageIdToNo from './datas/stageIdToNo.json' with {type: "json"};
 
 // ── Enemy data ────────────────────────────────────────────────────────────────
 let _enemyNames  = {};
@@ -35,20 +36,24 @@ const CHANNELS = {
 };
 let _activeChannel = localStorage.getItem('ddon-channel') || 'normal';
 
-// StageId → StageNo mapping — will be loaded from stageIdToNo.json in loadEnemyData
-// Initial build from map_params as fallback
-let _sidToSno = (() => {
+// StageId → StageNo mapping from stageIdToNo.json (561 entries, authoritative)
+// Merged with map_params.stage_ids as additional fallback
+const _sidToSno = (() => {
     const m = {};
+    // Primary: complete StageList mapping
+    for (const [sid, sno] of Object.entries(stageIdToNo))
+        m[parseInt(sid)] = sno;
+    // Secondary: map_params.stage_ids (may have additional entries)
     for (const info of Object.values(mapParams)) {
         const ids = info.stage_ids;
         if (!ids) continue;
         for (const [stid, sid] of Object.entries(ids))
-            m[sid] = parseInt(stid.slice(2), 10);
+            if (!(sid in m)) m[sid] = parseInt(stid.slice(2), 10);
     }
     return m;
 })();
 
-// Reverse: stageNo → stageId (for gathering lookup) — rebuilt after stageIdToNo loads
+// Reverse: stageNo → stageId (for gathering lookup)
 const _snoToSid = (() => {
     const m = {};
     for (const [sid, sno] of Object.entries(_sidToSno)) m[sno] = parseInt(sid);
@@ -175,18 +180,6 @@ function _updateChannelUI() {
             list.forEach(p => {
                 _ndpById[p.ID] = { name: p.Name || '', type: p.TypeName || 'NAMED_TYPE_NONE' };
             });
-        }
-    } catch(e) {}
-    try {
-        // Load complete StageId→StageNo mapping FIRST so channel file indexing is correct
-        const r = await fetch('./datas/stageIdToNo.json');
-        if (r.ok) {
-            const data = await r.json();
-            for (const [sid, sno] of Object.entries(data))
-                _sidToSno[parseInt(sid)] = sno;
-            // Rebuild reverse mapping
-            for (const [sid, sno] of Object.entries(_sidToSno))
-                _snoToSid[sno] = parseInt(sid);
         }
     } catch(e) {}
     try {
