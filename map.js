@@ -591,9 +591,9 @@ function setLang(lang) {
 }
 
 // ── Global cross-map search index ─────────────────────────────────────────────
-// Built once after enemy data loads. Covers all maps × all stages.
-let _enemyIndex   = null;  // [{name, mapName, stid, groupId, stageNo, cx, cy}]
-let _gatherIndex  = null;  // [{names, mapName, stid, stageNo, x, z}]
+let _enemyIndex   = null;
+let _gatherIndex  = null;
+let _dropIndex    = null;  // [{itemName, enemyName, mapName, stid, groupId, lv, cx, cy}]
 
 // Build reverse: stageNo → [{mapName, stid}]
 function _buildSnoToMap() {
@@ -700,8 +700,9 @@ function setSearchMode(mode) {
     _searchQuery = '';
     const inp = document.getElementById('map-search');
     if (inp) {
-        inp.placeholder = mode === 'enemy' ? '⚔ Search enemy name...'
-            : mode === 'gathering'         ? '🌿 Search item name...'
+        inp.placeholder = mode === 'enemy'     ? '⚔ Search enemy name...'
+            : mode === 'gathering'             ? '🌿 Search item name...'
+            : mode === 'drops'                 ? '💧 Search drop item...'
             : '🗺 Search maps...';
         inp.value = '';
     }
@@ -816,6 +817,49 @@ function _renderSearchResults(q) {
                 listEl.appendChild(more);
             }
         }
+    } else if (_searchMode === 'drops') {
+        if (!_dropIndex) _dropIndex = _buildGlobalDropIndex();
+        if (!_searchQuery || _searchQuery.length < 2) {
+            listEl.innerHTML = '<div style="padding:12px 14px;font-size:0.78rem;color:var(--text-dim)">Type at least 2 characters...</div>';
+            return;
+        }
+        const matches = _dropIndex.filter(r => r.itemNameLower.includes(_searchQuery)).slice(0, 100);
+        if (!matches.length) {
+            listEl.innerHTML = '<div style="padding:12px 14px;font-size:0.78rem;color:var(--text-dim)">No results</div>';
+            return;
+        }
+        const byItem = new Map();
+        for (const r of matches) {
+            if (!byItem.has(r.itemName)) byItem.set(r.itemName, []);
+            byItem.get(r.itemName).push(r);
+        }
+        for (const [itemName, entries] of byItem) {
+            const header = document.createElement('div');
+            header.className = 'map-group-header';
+            header.textContent = itemName;
+            listEl.appendChild(header);
+            const byEnemy = new Map();
+            for (const r of entries) {
+                if (!byEnemy.has(r.enemyName)) byEnemy.set(r.enemyName, []);
+                byEnemy.get(r.enemyName).push(r);
+            }
+            for (const [eName, ers] of [...byEnemy].slice(0, 6)) {
+                const info  = mapParams[ers[0].mapName];
+                const mapLabel = info?.name_en ? splitPascalCase(info.name_en) : ers[0].mapName;
+                const el = document.createElement('div');
+                el.className = 'map-entry';
+                el.innerHTML = `<span class="img-dot ${info?.img_exists?'has-img':'no-img'}"></span><span>${eName}</span><span style="margin-left:auto;font-size:0.7rem;color:${ers[0].rate>=80?'#6dbb55':ers[0].rate>=30?'#c9a84c':'var(--text-dim)'}">${ers[0].rate}%</span>`;
+                el.title = mapLabel;
+                el.addEventListener('click', () => _navigateToResult(ers[0]));
+                listEl.appendChild(el);
+            }
+            if (byEnemy.size > 6) {
+                const more = document.createElement('div');
+                more.style.cssText = 'padding:3px 14px;font-size:0.72rem;color:var(--text-dim)';
+                more.textContent = `+${byEnemy.size - 6} more enemies`;
+                listEl.appendChild(more);
+            }
+        }
     }
 }
 
@@ -851,10 +895,54 @@ function _flashPosition(cx, cy) {
     }, 300);
 }
 
+function _buildGlobalDropIndex() {
+    const snoToMap = _buildSnoToMap();
+    const results  = [];
+    for (const [key, entries] of Object.entries(_spawnByKey)) {
+        const [snoStr, groupId] = key.split(':');
+        const sno   = parseInt(snoStr, 10);
+        const maps  = snoToMap[sno];
+        if (!maps) continue;
+        const entry = entries[0];
+        if (!entry.dtid || !_dropsByDtid[entry.dtid]?.length) continue;
+
+        const enemyName = resolveDisplayName(entry.eid, entry.ndpId, 'en');
+        const drops     = _dropsByDtid[entry.dtid];
+
+        for (const [itemId, qty, rate] of drops) {
+            const itemName = getItemName(itemId, 'en');
+            if (itemName.startsWith('Item #')) continue; // unknown items
+
+            for (const { mapName, stid } of maps) {
+                const info = mapParams[mapName];
+                if (!info?.img_exists) continue;
+                const posData = enemyPositions[snoStr]?.[groupId];
+                if (!posData) continue;
+                const spawns = posData.spawns ?? posData;
+                if (!spawns.length) continue;
+                const pos    = spawns[0].Position;
+                const latlng = worldToPixel(pos.x, pos.z, info);
+                results.push({
+                    itemName,
+                    itemNameLower: itemName.toLowerCase(),
+                    enemyName,
+                    mapName, stid, groupId,
+                    lv: entry.lv,
+                    rate,
+                    cx: latlng.lng, cy: latlng.lat,
+                });
+                break; // one map entry per drop per group is enough
+            }
+        }
+    }
+    return results;
+}
+
 // Invalidate indices when channel changes (items may differ)
 function _invalidateSearchIndex() {
     _enemyIndex  = null;
     _gatherIndex = null;
+    _dropIndex   = null;
 }
 
 // ── Sidebar map list ───────────────────────────────────────────────────────────
@@ -1312,13 +1400,12 @@ leafletMap.on('mousedown', (e) => {
 // ── Group chip / expand-collapse helpers ──────────────────────────────────────
 
 function makeChipIcon(groupId, color, count, expanded, yOffset = 10) {
+    // Chips are hidden from players but kept for collapse/expand click target
     return L.divIcon({
         className: '',
-        html: `<div class="group-chip${expanded ? ' chip-open' : ''}" style="color:${color}"><span class="chip-arrow${expanded ? ' open' : ''}">&#9654;</span>G${groupId} <span class="chip-count">${count}</span></div>`,
-        iconSize:   null,
-        // When expanded: anchor at bottom of chip so the chip floats above the marker position.
-        // When collapsed: anchor near top (yOffset) so chip hangs below the centroid.
-        iconAnchor: expanded ? [0, 22] : [0, yOffset],
+        html: `<div class="group-chip" style="opacity:0;pointer-events:auto;width:10px;height:10px"></div>`,
+        iconSize:   [10, 10],
+        iconAnchor: [5, 5],
     });
 }
 
@@ -1327,20 +1414,16 @@ function makeChipIcon(groupId, color, count, expanded, yOffset = 10) {
 function buildGroupDetails(g) {
     const info    = _currentMapInfo;
     const layer   = L.layerGroup();
-    const stageNo = _loadedStid ? parseInt(_loadedStid.slice(2), 10)
-        // No stid → try to resolve stageNo from the first stage that has EnemySpawn data
-        : (() => {
-            const info2 = mapParams[_loadedMapName];
-            if (!info2?.stages?.length) return null;
-            for (const sid of info2.stages) {
-                const sno = parseInt(sid.slice(2), 10);
-                // Check if any group in this stage has data
-                const stageStr = String(sno);
-                const hasData = Object.keys(_spawnByKey).some(k => k.startsWith(stageStr + ':'));
-                if (hasData) return sno;
-            }
-            return null;
-        })();
+    // Find the stageNo that actually has EnemySpawn data for THIS specific group
+    const stageNo = (() => {
+        const info2  = mapParams[_loadedMapName];
+        const stages = _loadedStid ? [_loadedStid] : (info2?.stages || []);
+        for (const sid of stages) {
+            const n = parseInt(sid.slice(2), 10);
+            if (getSpawnInfo(n, g.groupId)) return n;
+        }
+        return null;
+    })();
 
     // Hull
     if (g.pts.length >= 3) {
@@ -1592,48 +1675,8 @@ function clearSpawnRadii() {
 }
 
 function showSpawnRadii(marker) {
-    // Toggle off if clicking the same marker again
-    if (_activeRadiiMarker === marker) {
-        clearSpawnRadii();
-        return;
-    }
-    spawnRadiiLayer.clearLayers();
-    _activeRadiiMarker = marker;
-
-    const spawn = marker._spawn;
-    const info  = marker._info;
-    if (!spawn || !info) return;
-
-    // Convert world-unit radius → map CRS units (image pixels).
-    // info.scale is pixels-per-world-unit (used for the X axis on all map types).
-    const scale = info.scale;
-    const latlng = marker.getLatLng();
-
-    if (spawn.AggroRadius) {
-        L.circle(latlng, {
-            radius:      spawn.AggroRadius * scale,
-            color:       '#ffd700',
-            weight:      1.5,
-            opacity:     0.9,
-            fillColor:   '#ffd700',
-            fillOpacity: 0.07,
-            dashArray:   null,
-            interactive: false,
-        }).addTo(spawnRadiiLayer);
-    }
-
-    if (spawn.LinkRadius) {
-        L.circle(latlng, {
-            radius:      spawn.LinkRadius * scale,
-            color:       '#ff7700',
-            weight:      2,
-            opacity:     0.9,
-            fillColor:   '#ff7700',
-            fillOpacity: 0.05,
-            dashArray:   '6 4',
-            interactive: false,
-        }).addTo(spawnRadiiLayer);
-    }
+    // Aggro/link circles disabled — kept in code for potential future use
+    return;
 }
 
 // Dismiss circles when clicking the map background (not a marker).
@@ -1741,16 +1784,13 @@ function loadEnemySpawns(info, stid = null) {
     for (const [groupId, { territory, items, pts }] of byGroupId) {
         if (!pts.length) continue;
         // Skip groups with no EnemySpawn data (empty/placeholder spawns)
+        // Check every stage in stagesToLoad — only show if at least one has this groupId
         if (_enemyDataReady) {
-            const sno = stid ? parseInt(stid.slice(2), 10)
-                : (() => {
-                    for (const sid of stagesToLoad) {
-                        const n = parseInt(sid.slice(2), 10);
-                        if (Object.keys(_spawnByKey).some(k => k.startsWith(n + ':'))) return n;
-                    }
-                    return null;
-                })();
-            if (!getSpawnInfo(sno, groupId)) continue;
+            const hasData = stagesToLoad.some(sid => {
+                const n = parseInt(sid.slice(2), 10);
+                return !!getSpawnInfo(n, groupId);
+            });
+            if (!hasData) continue;
         }
         const color = groupBorderColor(parseInt(groupId, 10));
         const cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
