@@ -9,8 +9,9 @@ let _itemNames   = {};
 let _stageNames  = {};       // stageNo → {en, jp}
 let _ndpById     = {};       // ndpId → {name, type}   (named_param_ndp.json)
 let _dropsByDtid = {};
-let _spawnByKey  = {};       // 'sno:groupId'          → [{eid,ndpId,lv,dtid,boss,spawn,...}]
-let _spawnByPos  = {};       // 'sno:groupId:posIdx'   → {eid,ndpId,lv,dtid,boss,spawn,...}
+let _spawnByKey     = {};       // 'sno:groupId'          → entries (sno via _sidToSno mapping)
+let _spawnByPos     = {};       // 'sno:groupId:posIdx'   → entries
+let _spawnByStageId = {};       // 'StageId:groupId'      → entries (raw StageId, no mapping)
 let _enemyDataReady = false;
 
 // ── Language ──────────────────────────────────────────────────────────────────
@@ -64,9 +65,10 @@ async function _loadChannelFile(fileName) {
     const data = await r.json();
     const schema = data.schemas.enemies;
     const idx    = Object.fromEntries(schema.map((k,i) => [k,i]));
-    _dropsByDtid = {};
-    _spawnByKey  = {};
-    _spawnByPos  = {};
+    _dropsByDtid    = {};
+    _spawnByKey     = {};
+    _spawnByPos     = {};
+    _spawnByStageId = {};
     data.dropsTables.forEach(dt => {
         _dropsByDtid[dt.id] = dt.items.map(it => [it[0], it[1], Math.round(it[5]*100*10)/10]);
     });
@@ -89,15 +91,22 @@ async function _loadChannelFile(fileName) {
             bloodAmt: e[idx.BloodOrbs]       ?? 0,
             highAmt:  e[idx.HighOrbs]        ?? 0,
         };
-        // Group-level lookup (for level range, drop table, filter)
+        // Group-level lookup via mapped stageNo
         const gkey = `${sno}:${groupId}`;
         if (!_spawnByKey[gkey]) _spawnByKey[gkey] = [];
         _spawnByKey[gkey].push(entry);
-        // Per-position lookup (for exact name per spawn dot)
-        // Multiple entries can share same posIdx (SubGroupId variants) — keep all
+        // Per-position lookup via mapped stageNo
         const pkey = `${sno}:${groupId}:${posIdx}`;
         if (!_spawnByPos[pkey]) _spawnByPos[pkey] = [];
         _spawnByPos[pkey].push(entry);
+        // Secondary index by raw StageId (for maps where stageNo === StageId directly)
+        const rawStageId = e[idx.StageId];
+        const sgkey = `${rawStageId}:${groupId}`;
+        if (!_spawnByStageId[sgkey]) _spawnByStageId[sgkey] = [];
+        _spawnByStageId[sgkey].push(entry);
+        const spkey = `${rawStageId}:${groupId}:${posIdx}`;
+        if (!_spawnByPos[spkey]) _spawnByPos[spkey] = [];
+        if (_spawnByPos[spkey].length === 0) _spawnByPos[spkey].push(entry);
     });
 }
 
@@ -218,31 +227,41 @@ function getItemName(id, lang) {
     return (l === 'jp' ? it.jp : it.en) || it.en || `Item #${id}`;
 }
 
-// Per-position exact lookup — used to get the correct name for each spawn dot
+// Per-position exact lookup for correct name per spawn dot
 function getSpawnEntry(stageNo, groupId, posIdx) {
     if (stageNo !== null && stageNo !== undefined) {
+        // 1. Mapped stageNo
         const exact = _spawnByPos[`${stageNo}:${groupId}:${posIdx}`];
         if (exact?.length) return exact[0];
+        // 2. stageNo as raw StageId
+        const byStageId = _spawnByPos[`${stageNo}:${groupId}:${posIdx}`];
+        if (byStageId?.length) return byStageId[0];
     }
-    // Cross-stage fallback — at least get enemy type right
-    const fallback = _spawnByPos[Object.keys(_spawnByPos)
-        .find(k => k.endsWith(`:${groupId}:${posIdx}`)) || ''];
-    return fallback?.[0] ?? null;
+    // 3. Cross-stage fallback
+    const fallbackKey = Object.keys(_spawnByPos)
+        .find(k => k.endsWith(`:${groupId}:${posIdx}`));
+    return fallbackKey ? (_spawnByPos[fallbackKey]?.[0] ?? null) : null;
 }
 
-// Group-level info — exact stageNo match first, then cross-stage fallback for display
+// Group-level info — three-level lookup:
+// 1. Exact stageNo via _sidToSno mapping
+// 2. stageNo used directly as StageId (for maps where stageNo === StageId)
+// 3. Cross-stage fallback (any groupId match) — no drops shown
 function getSpawnInfo(stageNo, groupId) {
-    // Try exact match first
+    // 1. Mapped stageNo
     if (stageNo !== null && stageNo !== undefined) {
         const exact = _spawnByKey[`${stageNo}:${groupId}`];
         if (exact?.length) return _buildSpawnInfo(exact);
+        // 2. stageNo as raw StageId
+        const byStageId = _spawnByStageId[`${stageNo}:${groupId}`];
+        if (byStageId?.length) return _buildSpawnInfo(byStageId);
     }
-    // Cross-stage fallback: find entries with this groupId in any stage
-    // Used for maps whose StageId isn't in map_params.stage_ids
-    const fallbackEntries = Object.keys(_spawnByKey)
-        .filter(k => k.endsWith(':' + groupId))
-        .flatMap(k => _spawnByKey[k]);
-    if (fallbackEntries.length) return _buildSpawnInfo(fallbackEntries, true);
+    // 3. Cross-stage fallback — find any matching groupId
+    const fallbackKey = Object.keys(_spawnByKey).find(k => k.endsWith(':' + groupId));
+    if (fallbackKey) {
+        const fallbackEntries = _spawnByKey[fallbackKey];
+        if (fallbackEntries?.length) return _buildSpawnInfo(fallbackEntries, true);
+    }
     return null;
 }
 
