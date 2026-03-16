@@ -55,6 +55,7 @@ const _snoToSid = (() => {
 // gatheringSpots.json — world positions for all gathering nodes
 // Format: stageNo → [{GroupNo, PosId, GatheringType, Position:{x,y,z}}, ...]
 let _gatherSpots = {};
+let _gatherChannelData = {};
 
 async function _loadChannelFile(fileName) {
     const r = await fetch('./datas/' + fileName);
@@ -102,9 +103,9 @@ async function _loadChannelFile(fileName) {
 async function _loadGatherFile(fileName) {
     try {
         const r = await fetch('./datas/' + fileName);
-        if (r.ok) _gatherData = await r.json();
-        else _gatherData = {};
-    } catch(e) { _gatherData = {}; }
+        if (r.ok) _gatherChannelData = await r.json();
+        else _gatherChannelData = {};
+    } catch(e) { _gatherChannelData = {}; }
 }
 
 async function switchChannel(channelId) {
@@ -1867,7 +1868,7 @@ function loadGathering(info, stid = null) {
         if (!spots) continue;
 
         // Build item lookup for this stage: groupNo:posId → node data
-        const stageItems = _gatherData[String(sid)] || {};
+        const stageItems = _gatherChannelData[String(sid)] || {};
 
         for (const spot of spots) {
             // Skip shop/warp markers (no items)
