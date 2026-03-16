@@ -220,29 +220,47 @@ function getItemName(id, lang) {
 
 // Per-position exact lookup — used to get the correct name for each spawn dot
 function getSpawnEntry(stageNo, groupId, posIdx) {
-    if (stageNo === null || stageNo === undefined) return null;
-    const entries = _spawnByPos[`${stageNo}:${groupId}:${posIdx}`];
-    return entries?.[0] ?? null;
+    if (stageNo !== null && stageNo !== undefined) {
+        const exact = _spawnByPos[`${stageNo}:${groupId}:${posIdx}`];
+        if (exact?.length) return exact[0];
+    }
+    // Cross-stage fallback — at least get enemy type right
+    const fallback = _spawnByPos[Object.keys(_spawnByPos)
+        .find(k => k.endsWith(`:${groupId}:${posIdx}`)) || ''];
+    return fallback?.[0] ?? null;
 }
 
-// Group-level info (level range, drops, filter flags) — strict stageNo, no fallback
+// Group-level info — exact stageNo match first, then cross-stage fallback for display
 function getSpawnInfo(stageNo, groupId) {
-    const entries = (stageNo !== null && stageNo !== undefined)
-        ? (_spawnByKey[`${stageNo}:${groupId}`] || []) : [];
-    if (!entries.length) return null;
+    // Try exact match first
+    if (stageNo !== null && stageNo !== undefined) {
+        const exact = _spawnByKey[`${stageNo}:${groupId}`];
+        if (exact?.length) return _buildSpawnInfo(exact);
+    }
+    // Cross-stage fallback: find entries with this groupId in any stage
+    // Used for maps whose StageId isn't in map_params.stage_ids
+    const fallbackEntries = Object.keys(_spawnByKey)
+        .filter(k => k.endsWith(':' + groupId))
+        .flatMap(k => _spawnByKey[k]);
+    if (fallbackEntries.length) return _buildSpawnInfo(fallbackEntries, true);
+    return null;
+}
+
+function _buildSpawnInfo(entries, isFallback = false) {
     const lvs = [...new Set(entries.map(e=>e.lv))].sort((a,b)=>a-b);
     return {
         lvs,
-        dtid:     entries[0].dtid,
-        boss:     entries.some(e=>e.boss),
-        spawn:    entries[0].spawn || '—',
-        exp:      entries[0].exp      || 0,
-        pp:       entries[0].pp       || 0,
-        bloodOrb: entries.some(e=>e.bloodOrb),
-        highOrb:  entries.some(e=>e.highOrb),
-        bloodAmt: entries[0].bloodAmt || 0,
-        highAmt:  entries[0].highAmt  || 0,
-        eids:     [...new Set(entries.map(e=>e.eid))],
+        dtid:      isFallback ? null : entries[0].dtid,  // don't show drops from wrong stage
+        boss:      entries.some(e=>e.boss),
+        spawn:     entries[0].spawn || '—',
+        exp:       entries[0].exp      || 0,
+        pp:        entries[0].pp       || 0,
+        bloodOrb:  entries.some(e=>e.bloodOrb),
+        highOrb:   entries.some(e=>e.highOrb),
+        bloodAmt:  entries[0].bloodAmt || 0,
+        highAmt:   entries[0].highAmt  || 0,
+        eids:      [...new Set(entries.map(e=>e.eid))],
+        isFallback,
     };
 }
 
