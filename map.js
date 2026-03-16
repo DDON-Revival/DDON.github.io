@@ -1,4 +1,4 @@
-// v4 cache-bust 1773701468
+// v5 cache-bust 1773701984
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -658,6 +658,41 @@ function _buildGlobalEnemyIndex() {
             });
         }
     }
+    // Also index groups from tool supplement that use cross-stage EnemySpawn data
+    // e.g. Mysterious Mausoleum Group 10: positions in stageNo=872 but EnemySpawn in stageNo=113
+    for (const [snoStr, toolGroups] of Object.entries(enemyPositionsTool)) {
+        const sno  = parseInt(snoStr, 10);
+        const maps = snoToMap[sno];
+        if (!maps) continue;
+        for (const [groupId, positions] of Object.entries(toolGroups)) {
+            // Skip if already indexed via normal path
+            if (_spawnByKey[`${sno}:${groupId}`]) continue;
+            // Find EnemySpawn data in any stage
+            const anyKey = Object.keys(_spawnByKey).find(k => k.endsWith(':' + groupId));
+            if (!anyKey) continue;
+            const entries = _spawnByKey[anyKey];
+            const entry   = entries[0];
+            const name    = resolveDisplayName(entry.eid, entry.ndpId, 'en').toLowerCase();
+            if (!name || name === '?') continue;
+            const firstPos = positions[0];
+            if (!firstPos) continue;
+            for (const { mapName, stid } of maps) {
+                const info = mapParams[mapName];
+                if (!info?.img_exists) continue;
+                const latlng = worldToPixel(firstPos.x, firstPos.z, info);
+                results.push({
+                    name,
+                    displayName: resolveDisplayName(entry.eid, entry.ndpId, 'en'),
+                    mapName, stid, groupId,
+                    lv:   entry.lv,
+                    boss: entries.some(e => e.boss),
+                    cx: latlng.lng,
+                    cy: latlng.lat,
+                });
+            }
+        }
+    }
+
     // Deduplicate same (mapName+groupId) — keep first
     const seen = new Set();
     return results.filter(r => {
@@ -949,6 +984,39 @@ function _buildGlobalDropIndex() {
                     cx: latlng.lng, cy: latlng.lat,
                 });
                 break;
+            }
+        }
+    }
+    // Tool-supplement groups (cross-stage EnemySpawn drops)
+    for (const [snoStr, toolGroups] of Object.entries(enemyPositionsTool)) {
+        const sno  = parseInt(snoStr, 10);
+        const maps = snoToMap[sno];
+        if (!maps) continue;
+        for (const [groupId, positions] of Object.entries(toolGroups)) {
+            if (_spawnByKey[`${sno}:${groupId}`]) continue;
+            const anyKey = Object.keys(_spawnByKey).find(k => k.endsWith(':' + groupId));
+            if (!anyKey) continue;
+            const entries   = _spawnByKey[anyKey];
+            const entry     = entries[0];
+            if (!entry.dtid || !_dropsByDtid[entry.dtid]?.length) continue;
+            const enemyName = resolveDisplayName(entry.eid, entry.ndpId, 'en');
+            const firstPos  = positions[0];
+            if (!firstPos) continue;
+            for (const [itemId, qty, rate] of _dropsByDtid[entry.dtid]) {
+                const itemName = getItemName(itemId, 'en');
+                if (itemName.startsWith('Item #')) continue;
+                for (const { mapName, stid } of maps) {
+                    const info = mapParams[mapName];
+                    if (!info?.img_exists) continue;
+                    const latlng = worldToPixel(firstPos.x, firstPos.z, info);
+                    results.push({
+                        itemName, itemNameLower: itemName.toLowerCase(),
+                        enemyName, mapName, stid, groupId,
+                        lv: entry.lv, rate,
+                        cx: latlng.lng, cy: latlng.lat,
+                    });
+                    break;
+                }
             }
         }
     }
@@ -1798,9 +1866,19 @@ function loadEnemySpawns(info, stid = null) {
             const toolData   = enemyPositionsTool[stageNoStr];
             if (!toolData) continue;
             for (const [groupId, positions] of Object.entries(toolData)) {
-                // Only add if: not already in byGroupId AND has EnemySpawn data
+                // Only add if: not already in byGroupId
                 if (byGroupId.has(groupId)) continue;
-                if (!getSpawnInfo(stageNoInt, groupId)) continue;
+                // Find a stageNo that has EnemySpawn data for this groupId
+                // First try the exact stage, then search all stages
+                let resolvedSno = null;
+                if (getSpawnInfo(stageNoInt, groupId)) {
+                    resolvedSno = stageNoInt;
+                } else {
+                    // Search other stages for this groupId
+                    const anyKey = Object.keys(_spawnByKey).find(k => k.endsWith(':' + groupId));
+                    if (anyKey) resolvedSno = parseInt(anyKey.split(':')[0], 10);
+                }
+                if (!resolvedSno) continue;
                 // Create minimal spawn entries compatible with our format
                 const toolItems = [];
                 const toolPts   = [];
@@ -1820,7 +1898,7 @@ function loadEnemySpawns(info, stid = null) {
                 if (toolPts.length) {
                     byGroupId.set(groupId, {
                         territory: null, items: toolItems, pts: toolPts,
-                        sourceStageNo: stageNoInt,
+                        sourceStageNo: resolvedSno,
                     });
                 }
             }
