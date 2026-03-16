@@ -1785,11 +1785,13 @@ function loadEnemySpawns(info, stid = null) {
     // Create one chip label marker per group
     for (const [groupId, { territory, items, pts, sourceStageNo }] of byGroupId) {
         if (!pts.length) continue;
-        // Skip groups with no EnemySpawn data (empty/placeholder spawns)
-        // Use the exact stageNo that was recorded when collecting positions
-        if (_enemyDataReady) {
-            if (!getSpawnInfo(sourceStageNo, groupId)) continue;
-        }
+        // Skip groups where ALL spawns have no EmName or EmName="em000000" (truly empty placeholders)
+        // This is more reliable than checking EnemySpawn which may have mapping gaps
+        const hasRealEnemies = items.some(it => {
+            const em = it.spawn.EmName;
+            return em && em !== 'em000000' && em !== '';
+        });
+        if (!hasRealEnemies) continue;
         const color = groupBorderColor(parseInt(groupId, 10));
         const cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
         const cy = pts.reduce((s, p) => s + p[1], 0) / pts.length;
