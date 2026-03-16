@@ -1733,7 +1733,9 @@ function loadEnemySpawns(info, stid = null) {
     if (!info.stages?.length) return;
 
     const floorObbs     = _currentFloorObbs;
-    const filterByFloor = floorObbs !== null;
+    // Only filter by floor if user has explicitly clicked a floor button
+    // (indicated by _floorExplicitlySelected). Default view shows all floors.
+    const filterByFloor = floorObbs !== null && _floorExplicitlySelected;
 
     const stagesToLoad = (stid && info.stages.includes(stid)) ? [stid] : info.stages;
 
@@ -1956,6 +1958,7 @@ function loadGrid(info) {
 
 // ── Floor selector ────────────────────────────────────────────────────────────
 let currentLayer = 0;
+let _floorExplicitlySelected = false;  // true only after user clicks a floor button
 
 function buildFloorSelector(info) {
     const el = document.getElementById('floor-selector');
@@ -1969,6 +1972,7 @@ function buildFloorSelector(info) {
         if (layer === currentLayer) btn.classList.add('active');
         btn.addEventListener('click', () => {
             currentLayer = layer;
+            _floorExplicitlySelected = true;
             swapMapImage(info, img_file);
             el.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.textContent === `Floor ${layer}`));
             // Re-filter enemy markers for the new floor (only matters on multi-floor maps)
@@ -2270,6 +2274,7 @@ function loadMap(mapName) {
     _loadedMapName = mapName;
     _loadedStid = currentStageName();
     currentLayer = 0;
+    _floorExplicitlySelected = false;
 
     // Update title
     const stid = currentStageName();
