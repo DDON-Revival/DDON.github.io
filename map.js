@@ -1,8 +1,9 @@
-import enemyPositions from './datas/enemyPositions.json' with {type: "json"};
-import mapParams from './datas/map_params.json' with {type: "json"};
-import landmarkData from './datas/landmarks.json' with {type: "json"};
-import connectionData from './datas/connections.json' with {type: "json"};
-import stageIdToNo from './datas/stageIdToNo.json' with {type: "json"};
+import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
+import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
+import mapParams          from './datas/map_params.json'          with {type: "json"};
+import landmarkData       from './datas/landmarks.json'           with {type: "json"};
+import connectionData     from './datas/connections.json'         with {type: "json"};
+import stageIdToNo        from './datas/stageIdToNo.json'         with {type: "json"};
 
 // ── Enemy data ────────────────────────────────────────────────────────────────
 let _enemyNames  = {};
@@ -1748,9 +1749,7 @@ function loadEnemySpawns(info, stid = null) {
     const stagesToLoad = (stid && info.stages.includes(stid)) ? [stid] : info.stages;
 
     // Collect all groups, merging across stages if multiple are loaded
-    // sourceStageNo: the first stage that has EnemySpawn data for this groupId — stored
-    // on the group so buildGroupDetails uses the exact correct stage, never guesses.
-    const byGroupId = new Map(); // groupId → { territory, items, pts, sourceStageNo }
+    const byGroupId = new Map();
     for (const stageId of stagesToLoad) {
         const stageNoInt = parseInt(stageId.slice(2), 10);
         const stageNoStr = String(stageNoInt);
@@ -1760,13 +1759,62 @@ function loadEnemySpawns(info, stid = null) {
             const spawns    = groupData.spawns    ?? groupData;
             const territory = groupData.territory ?? null;
             if (!byGroupId.has(groupId)) {
-                // Resolve the exact stageNo from EnemySpawn for this specific groupId
-                // Prefer the stageNo that actually has data for THIS groupId
                 const resolvedSno = _enemyDataReady && getSpawnInfo(stageNoInt, groupId)
                     ? stageNoInt : null;
                 byGroupId.set(groupId, { territory, items: [], pts: [], sourceStageNo: resolvedSno ?? stageNoInt });
             }
             const entry = byGroupId.get(groupId);
+            for (let i = 0; i < spawns.length; i++) {
+                const spawn = spawns[i];
+                const pos   = spawn.Position;
+                if (filterByFloor) {
+                    const floor = getEnemyFloor(pos.x, pos.y, pos.z, floorObbs);
+                    if (floor !== null && floor !== currentLayer) continue;
+                }
+                const latlng = worldToPixel(pos.x, pos.z, info);
+                entry.pts.push([latlng.lng, latlng.lat]);
+                entry.items.push({ spawn, idx: i, sg: spawn.SpawnGroup ?? 0, latlng });
+            }
+        }
+    }
+
+    // Supplement with DDON tool positions for groups that exist in EnemySpawn
+    // but are MISSING from Annuate's enemyPositions (e.g. Group 10 in stage 872)
+    if (_enemyDataReady) {
+        for (const stageId of stagesToLoad) {
+            const stageNoInt = parseInt(stageId.slice(2), 10);
+            const stageNoStr = String(stageNoInt);
+            const toolData   = enemyPositionsTool[stageNoStr];
+            if (!toolData) continue;
+            for (const [groupId, positions] of Object.entries(toolData)) {
+                // Only add if: not already in byGroupId AND has EnemySpawn data
+                if (byGroupId.has(groupId)) continue;
+                if (!getSpawnInfo(stageNoInt, groupId)) continue;
+                // Create minimal spawn entries compatible with our format
+                const toolItems = [];
+                const toolPts   = [];
+                positions.forEach((p, i) => {
+                    if (filterByFloor) {
+                        const floor = getEnemyFloor(p.x, p.y, p.z, floorObbs ?? []);
+                        if (floor !== null && floor !== currentLayer) return;
+                    }
+                    const latlng = worldToPixel(p.x, p.z, info);
+                    toolPts.push([latlng.lng, latlng.lat]);
+                    // Minimal spawn object — no EmName, resolved via EnemySpawn
+                    toolItems.push({
+                        spawn: { EmName: '', SpawnGroup: p.sg, Position: {x:p.x,y:p.y,z:p.z}, AggroRadius: 0, LinkRadius: 0 },
+                        idx: i, sg: p.sg, latlng,
+                    });
+                });
+                if (toolPts.length) {
+                    byGroupId.set(groupId, {
+                        territory: null, items: toolItems, pts: toolPts,
+                        sourceStageNo: stageNoInt,
+                    });
+                }
+            }
+        }
+    }
             for (let i = 0; i < spawns.length; i++) {
                 const spawn = spawns[i];
                 const pos   = spawn.Position;
@@ -1795,13 +1843,14 @@ function loadEnemySpawns(info, stid = null) {
     // Create one chip label marker per group
     for (const [groupId, { territory, items, pts, sourceStageNo }] of byGroupId) {
         if (!pts.length) continue;
-        // Skip groups where ALL spawns have no EmName or EmName="em000000" (truly empty placeholders)
-        // This is more reliable than checking EnemySpawn which may have mapping gaps
+        // Skip truly empty groups (no EmName AND no EnemySpawn data)
         const hasRealEnemies = items.some(it => {
             const em = it.spawn.EmName;
             return em && em !== 'em000000' && em !== '';
         });
-        if (!hasRealEnemies) continue;
+        // Tool-sourced groups have empty EmName but valid EnemySpawn data
+        const hasSpawnData = !!getSpawnInfo(sourceStageNo, groupId);
+        if (!hasRealEnemies && !hasSpawnData) continue;
         const color = groupBorderColor(parseInt(groupId, 10));
         const cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
         const cy = pts.reduce((s, p) => s + p[1], 0) / pts.length;
