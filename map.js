@@ -35,8 +35,10 @@ const CHANNELS = {
 };
 let _activeChannel = localStorage.getItem('ddon-channel') || 'normal';
 
-// Build StageId → StageNo mapping once from map_params
-const _sidToSno = (() => {
+// StageId → StageNo mapping — loaded from stageIdToNo.json (complete, 561 entries)
+// Falls back to map_params.stage_ids for any missing entries
+let _sidToSno = (() => {
+    // Initial build from map_params as fallback
     const m = {};
     for (const info of Object.values(mapParams)) {
         const ids = info.stage_ids;
@@ -47,7 +49,21 @@ const _sidToSno = (() => {
     return m;
 })();
 
-// Reverse: stageNo → stageId (for gathering lookup)
+// Load complete mapping from stageIdToNo.json and merge
+fetch('./datas/stageIdToNo.json')
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+        if (!data) return;
+        // Merge: stageIdToNo.json takes priority (it's the authoritative source)
+        for (const [sid, sno] of Object.entries(data))
+            _sidToSno[parseInt(sid)] = sno;
+        // Rebuild _snoToSid after merge
+        for (const [sid, sno] of Object.entries(_sidToSno))
+            _snoToSid[sno] = parseInt(sid);
+    })
+    .catch(() => {});
+
+// Reverse: stageNo → stageId (for gathering lookup) — mutable, rebuilt after merge
 const _snoToSid = (() => {
     const m = {};
     for (const [sid, sno] of Object.entries(_sidToSno)) m[sno] = parseInt(sid);
@@ -230,38 +246,24 @@ function getItemName(id, lang) {
 // Per-position exact lookup for correct name per spawn dot
 function getSpawnEntry(stageNo, groupId, posIdx) {
     if (stageNo !== null && stageNo !== undefined) {
-        // 1. Mapped stageNo
         const exact = _spawnByPos[`${stageNo}:${groupId}:${posIdx}`];
         if (exact?.length) return exact[0];
-        // 2. stageNo as raw StageId
-        const byStageId = _spawnByPos[`${stageNo}:${groupId}:${posIdx}`];
-        if (byStageId?.length) return byStageId[0];
     }
-    // 3. Cross-stage fallback
+    // Cross-stage fallback
     const fallbackKey = Object.keys(_spawnByPos)
         .find(k => k.endsWith(`:${groupId}:${posIdx}`));
     return fallbackKey ? (_spawnByPos[fallbackKey]?.[0] ?? null) : null;
 }
 
-// Group-level info — three-level lookup:
-// 1. Exact stageNo via _sidToSno mapping
-// 2. stageNo used directly as StageId (for maps where stageNo === StageId)
-// 3. Cross-stage fallback (any groupId match) — no drops shown
+// Group-level info — exact stageNo match first, cross-stage fallback for display only
 function getSpawnInfo(stageNo, groupId) {
-    // 1. Mapped stageNo
     if (stageNo !== null && stageNo !== undefined) {
         const exact = _spawnByKey[`${stageNo}:${groupId}`];
         if (exact?.length) return _buildSpawnInfo(exact);
-        // 2. stageNo as raw StageId
-        const byStageId = _spawnByStageId[`${stageNo}:${groupId}`];
-        if (byStageId?.length) return _buildSpawnInfo(byStageId);
     }
-    // 3. Cross-stage fallback — find any matching groupId
+    // Cross-stage fallback — name/level only, no drops (wrong stage data)
     const fallbackKey = Object.keys(_spawnByKey).find(k => k.endsWith(':' + groupId));
-    if (fallbackKey) {
-        const fallbackEntries = _spawnByKey[fallbackKey];
-        if (fallbackEntries?.length) return _buildSpawnInfo(fallbackEntries, true);
-    }
+    if (fallbackKey) return _buildSpawnInfo(_spawnByKey[fallbackKey], true);
     return null;
 }
 
