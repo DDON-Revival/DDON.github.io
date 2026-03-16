@@ -10,9 +10,8 @@ let _itemNames   = {};
 let _stageNames  = {};       // stageNo → {en, jp}
 let _ndpById     = {};       // ndpId → {name, type}   (named_param_ndp.json)
 let _dropsByDtid = {};
-let _spawnByKey     = {};       // 'sno:groupId'          → entries (sno via _sidToSno mapping)
-let _spawnByPos     = {};       // 'sno:groupId:posIdx'   → entries
-let _spawnByStageId = {};       // 'StageId:groupId'      → entries (raw StageId, no mapping)
+let _spawnByKey     = {};       // 'sno:groupId'        → entries
+let _spawnByPos     = {};       // 'sno:groupId:posIdx' → entries
 let _enemyDataReady = false;
 
 // ── Language ──────────────────────────────────────────────────────────────────
@@ -71,10 +70,9 @@ async function _loadChannelFile(fileName) {
     const data = await r.json();
     const schema = data.schemas.enemies;
     const idx    = Object.fromEntries(schema.map((k,i) => [k,i]));
-    _dropsByDtid    = {};
-    _spawnByKey     = {};
-    _spawnByPos     = {};
-    _spawnByStageId = {};
+    _dropsByDtid = {};
+    _spawnByKey  = {};
+    _spawnByPos  = {};
     data.dropsTables.forEach(dt => {
         _dropsByDtid[dt.id] = dt.items.map(it => [it[0], it[1], Math.round(it[5]*100*10)/10]);
     });
@@ -105,14 +103,6 @@ async function _loadChannelFile(fileName) {
         const pkey = `${sno}:${groupId}:${posIdx}`;
         if (!_spawnByPos[pkey]) _spawnByPos[pkey] = [];
         _spawnByPos[pkey].push(entry);
-        // Secondary index by raw StageId (for maps where stageNo === StageId directly)
-        const rawStageId = e[idx.StageId];
-        const sgkey = `${rawStageId}:${groupId}`;
-        if (!_spawnByStageId[sgkey]) _spawnByStageId[sgkey] = [];
-        _spawnByStageId[sgkey].push(entry);
-        const spkey = `${rawStageId}:${groupId}:${posIdx}`;
-        if (!_spawnByPos[spkey]) _spawnByPos[spkey] = [];
-        if (_spawnByPos[spkey].length === 0) _spawnByPos[spkey].push(entry);
     });
 }
 
@@ -235,43 +225,29 @@ function getItemName(id, lang) {
 
 // Per-position exact lookup for correct name per spawn dot
 function getSpawnEntry(stageNo, groupId, posIdx) {
-    if (stageNo !== null && stageNo !== undefined) {
-        const exact = _spawnByPos[`${stageNo}:${groupId}:${posIdx}`];
-        if (exact?.length) return exact[0];
-    }
-    // Cross-stage fallback
-    const fallbackKey = Object.keys(_spawnByPos)
-        .find(k => k.endsWith(`:${groupId}:${posIdx}`));
-    return fallbackKey ? (_spawnByPos[fallbackKey]?.[0] ?? null) : null;
+    if (stageNo === null || stageNo === undefined) return null;
+    const exact = _spawnByPos[`${stageNo}:${groupId}:${posIdx}`];
+    return exact?.[0] ?? null;
 }
 
-// Group-level info — exact stageNo match first, cross-stage fallback for display only
+// Group-level info — exact stageNo match only, null if no data
 function getSpawnInfo(stageNo, groupId) {
-    if (stageNo !== null && stageNo !== undefined) {
-        const exact = _spawnByKey[`${stageNo}:${groupId}`];
-        if (exact?.length) return _buildSpawnInfo(exact);
-    }
-    // Cross-stage fallback — name/level only, no drops (wrong stage data)
-    const fallbackKey = Object.keys(_spawnByKey).find(k => k.endsWith(':' + groupId));
-    if (fallbackKey) return _buildSpawnInfo(_spawnByKey[fallbackKey], true);
-    return null;
-}
-
-function _buildSpawnInfo(entries, isFallback = false) {
+    if (stageNo === null || stageNo === undefined) return null;
+    const entries = _spawnByKey[`${stageNo}:${groupId}`];
+    if (!entries?.length) return null;
     const lvs = [...new Set(entries.map(e=>e.lv))].sort((a,b)=>a-b);
     return {
         lvs,
-        dtid:      isFallback ? null : entries[0].dtid,  // don't show drops from wrong stage
-        boss:      entries.some(e=>e.boss),
-        spawn:     entries[0].spawn || '—',
-        exp:       entries[0].exp      || 0,
-        pp:        entries[0].pp       || 0,
-        bloodOrb:  entries.some(e=>e.bloodOrb),
-        highOrb:   entries.some(e=>e.highOrb),
-        bloodAmt:  entries[0].bloodAmt || 0,
-        highAmt:   entries[0].highAmt  || 0,
-        eids:      [...new Set(entries.map(e=>e.eid))],
-        isFallback,
+        dtid:     entries[0].dtid,
+        boss:     entries.some(e=>e.boss),
+        spawn:    entries[0].spawn || '—',
+        exp:      entries[0].exp      || 0,
+        pp:       entries[0].pp       || 0,
+        bloodOrb: entries.some(e=>e.bloodOrb),
+        highOrb:  entries.some(e=>e.highOrb),
+        bloodAmt: entries[0].bloodAmt || 0,
+        highAmt:  entries[0].highAmt  || 0,
+        eids:     [...new Set(entries.map(e=>e.eid))],
     };
 }
 
