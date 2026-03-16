@@ -1,4 +1,4 @@
-// v3 cache-bust
+// v4 cache-bust 1773701468
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
