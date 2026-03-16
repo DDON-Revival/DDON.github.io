@@ -1,3 +1,4 @@
+// v2 - gathering fix
 import enemyPositions from './datas/enemyPositions.json' with {type: "json"};
 import mapParams from './datas/map_params.json' with {type: "json"};
 import landmarkData from './datas/landmarks.json' with {type: "json"};
