@@ -1,4 +1,3 @@
-// v2 - gathering fix
 import enemyPositions from './datas/enemyPositions.json' with {type: "json"};
 import mapParams from './datas/map_params.json' with {type: "json"};
 import landmarkData from './datas/landmarks.json' with {type: "json"};
@@ -22,6 +21,7 @@ let _spawnFilter = {
     time:     localStorage.getItem('ddon-filter-time')     || 'all',
     boss:     localStorage.getItem('ddon-filter-boss')     === '1',
     bloodOrb: localStorage.getItem('ddon-filter-bloodorb') === '1',
+    highOrb:  localStorage.getItem('ddon-filter-highorb')  === '1',
 };
 let _enemySearchText = '';
 
@@ -118,6 +118,7 @@ async function switchChannel(channelId) {
         await _loadChannelFile(CHANNELS[channelId].file);
         await _loadGatherFile(CHANNELS[channelId].gather);
     } catch(e) { console.warn('Channel load error:', e); return; }
+    _invalidateSearchIndex();
     if (_loadedMapName && mapParams[_loadedMapName]) {
         loadEnemySpawns(mapParams[_loadedMapName], _loadedStid);
         loadGathering(mapParams[_loadedMapName], _loadedStid);
@@ -171,11 +172,14 @@ function _updateChannelUI() {
         await _loadGatherFile(CHANNELS[_activeChannel].gather);
     } catch(e) { console.warn('EnemySpawn load error:', e); }
     _enemyDataReady = true;
-    // Re-render current map now that data is ready
+    _invalidateSearchIndex();
     if (_loadedMapName && mapParams[_loadedMapName]) {
         loadEnemySpawns(mapParams[_loadedMapName], _loadedStid);
         loadGathering(mapParams[_loadedMapName], _loadedStid);
     }
+    // Re-render search if in enemy/gathering mode
+    if (_searchMode !== 'map' && _searchQuery.length >= 2)
+        _renderSearchResults(_searchQuery);
 })();
 
 function getEnemyName(emId, lang) {
@@ -255,11 +259,12 @@ function classifySpawnTime(s) {
 }
 
 function groupMatchesFilter(groupId, stageNo) {
-    if (_spawnFilter.time === 'all' && !_spawnFilter.boss && !_spawnFilter.bloodOrb) return true;
+    if (_spawnFilter.time === 'all' && !_spawnFilter.boss && !_spawnFilter.bloodOrb && !_spawnFilter.highOrb) return true;
     const si = getSpawnInfo(stageNo, groupId);
     if (!si) return false;
     if (_spawnFilter.boss     && !si.boss)     return false;
     if (_spawnFilter.bloodOrb && !si.bloodOrb) return false;
+    if (_spawnFilter.highOrb  && !si.highOrb)  return false;
     if (_spawnFilter.time !== 'all') {
         const tc = classifySpawnTime(si.spawn);
         if (tc !== 'all' && tc !== _spawnFilter.time) return false;
@@ -546,7 +551,8 @@ function _updateFilterUI() {
         btn.classList.toggle('active', a);
     });
     document.querySelectorAll('.filter-toggle-btn').forEach(btn => {
-        btn.classList.toggle('active-red', !!_spawnFilter[btn.dataset.filter]);
+        const key = btn.dataset.filter;
+        btn.classList.toggle('active-red', !!_spawnFilter[key]);
     });
 }
 
@@ -582,6 +588,273 @@ function setLang(lang) {
         if (document.getElementById('layer-enemies').checked) g.detailsLayer.addTo(leafletMap);
     }
     reapplySpread();
+}
+
+// ── Global cross-map search index ─────────────────────────────────────────────
+// Built once after enemy data loads. Covers all maps × all stages.
+let _enemyIndex   = null;  // [{name, mapName, stid, groupId, stageNo, cx, cy}]
+let _gatherIndex  = null;  // [{names, mapName, stid, stageNo, x, z}]
+
+// Build reverse: stageNo → [{mapName, stid}]
+function _buildSnoToMap() {
+    const m = {};
+    for (const [mapName, info] of Object.entries(mapParams)) {
+        if (!info.stages?.length) continue;
+        for (const stid of info.stages) {
+            const sno = parseInt(stid.slice(2), 10);
+            if (!m[sno]) m[sno] = [];
+            m[sno].push({ mapName, stid });
+        }
+    }
+    return m;
+}
+
+function _buildGlobalEnemyIndex() {
+    const snoToMap = _buildSnoToMap();
+    const results  = [];
+    for (const [key, entries] of Object.entries(_spawnByKey)) {
+        const [snoStr, groupId] = key.split(':');
+        const sno  = parseInt(snoStr, 10);
+        const maps = snoToMap[sno];
+        if (!maps) continue;
+
+        // Get representative name (first entry, NDP-resolved)
+        const entry = entries[0];
+        const name  = resolveDisplayName(entry.eid, entry.ndpId, 'en').toLowerCase();
+        if (!name || name === '?') continue;
+
+        // Get position from enemyPositions
+        const posData = enemyPositions[snoStr]?.[groupId];
+        if (!posData) continue;
+        const spawns = posData.spawns ?? posData;
+        if (!spawns.length) continue;
+
+        for (const { mapName, stid } of maps) {
+            const info = mapParams[mapName];
+            if (!info?.img_exists) continue;
+            // Centroid of first spawn (good enough for navigation)
+            const pos    = spawns[0].Position;
+            const latlng = worldToPixel(pos.x, pos.z, info);
+            results.push({
+                name,
+                displayName: resolveDisplayName(entry.eid, entry.ndpId, 'en'),
+                mapName, stid, groupId,
+                lv:  entries[0].lv,
+                boss: entries.some(e => e.boss),
+                cx: latlng.lng,
+                cy: latlng.lat,
+            });
+        }
+    }
+    // Deduplicate same (mapName+groupId) — keep first
+    const seen = new Set();
+    return results.filter(r => {
+        const k = `${r.mapName}:${r.stid}:${r.groupId}`;
+        if (seen.has(k)) return false;
+        seen.add(k); return true;
+    });
+}
+
+function _buildGlobalGatherIndex() {
+    const snoToMap = _buildSnoToMap();
+    const results  = [];
+    for (const [snoStr, spots] of Object.entries(_gatherSpots)) {
+        const sno  = parseInt(snoStr, 10);
+        const maps = snoToMap[sno];
+        if (!maps) continue;
+        const sid  = _snoToSid[sno];
+        const stageItems = sid !== undefined ? (_gatherChannelData[String(sid)] || {}) : {};
+
+        for (const spot of spots) {
+            if (SKIP_GATHER_TYPES.has(spot.GatheringType)) continue;
+            if (spot.Position.x === 0 && spot.Position.z === 0) continue;
+
+            const posItems = stageItems[String(spot.GroupNo)]?.[String(spot.PosId)];
+            if (!posItems?.i?.length) continue;
+
+            const names = posItems.i.map(it => getItemName(it.id, 'en').toLowerCase());
+
+            for (const { mapName, stid } of maps) {
+                const info = mapParams[mapName];
+                if (!info?.img_exists) continue;
+                const latlng = worldToPixel(spot.Position.x, spot.Position.z, info);
+                results.push({
+                    names,
+                    displayNames: posItems.i.map(it => getItemName(it.id, 'en')),
+                    nodeType: GATHER_TYPE_MAP[spot.GatheringType] || 'gather',
+                    mapName, stid,
+                    cx: latlng.lng, cy: latlng.lat,
+                });
+            }
+        }
+    }
+    return results;
+}
+
+// ── Search UI state ───────────────────────────────────────────────────────────
+let _searchMode  = 'map';   // 'map' | 'enemy' | 'gathering'
+let _searchQuery = '';
+
+function setSearchMode(mode) {
+    _searchMode  = mode;
+    _searchQuery = '';
+    const inp = document.getElementById('map-search');
+    if (inp) {
+        inp.placeholder = mode === 'enemy' ? '⚔ Search enemy name...'
+            : mode === 'gathering'         ? '🌿 Search item name...'
+            : '🗺 Search maps...';
+        inp.value = '';
+    }
+    document.querySelectorAll('.search-tab').forEach(t =>
+        t.classList.toggle('active', t.dataset.mode === mode));
+    if (mode === 'map') {
+        buildSidebar('');
+    } else {
+        _renderSearchResults('');
+    }
+}
+
+function _renderSearchResults(q) {
+    _searchQuery = q.toLowerCase().trim();
+    const listEl = document.getElementById('map-list');
+    listEl.innerHTML = '';
+
+    if (_searchMode === 'enemy') {
+        if (!_enemyIndex) _enemyIndex = _buildGlobalEnemyIndex();
+        const matches = _searchQuery.length < 2 ? []
+            : _enemyIndex.filter(r => r.name.includes(_searchQuery)).slice(0, 60);
+
+        if (!_searchQuery || _searchQuery.length < 2) {
+            listEl.innerHTML = '<div style="padding:12px 14px;font-size:0.78rem;color:var(--text-dim)">Type at least 2 characters...</div>';
+            return;
+        }
+        if (!matches.length) {
+            listEl.innerHTML = '<div style="padding:12px 14px;font-size:0.78rem;color:var(--text-dim)">No results</div>';
+            return;
+        }
+
+        // Group by enemy name
+        const byName = new Map();
+        for (const r of matches) {
+            if (!byName.has(r.displayName)) byName.set(r.displayName, []);
+            byName.get(r.displayName).push(r);
+        }
+
+        for (const [eName, entries] of byName) {
+            const header = document.createElement('div');
+            header.className = 'map-group-header';
+            header.textContent = eName + (entries[0].boss ? ' ★' : '');
+            listEl.appendChild(header);
+
+            for (const r of entries.slice(0, 8)) {
+                const info = mapParams[r.mapName];
+                const label = info?.name_en ? splitPascalCase(info.name_en) : r.mapName;
+                const el = document.createElement('div');
+                el.className = 'map-entry';
+                el.innerHTML = `<span class="img-dot ${info?.img_exists ? 'has-img' : 'no-img'}"></span><span>${label}</span><span style="margin-left:auto;font-size:0.7rem;color:var(--text-dim)">Lv${r.lv}</span>`;
+                el.addEventListener('click', () => _navigateToResult(r));
+                listEl.appendChild(el);
+            }
+            if (entries.length > 8) {
+                const more = document.createElement('div');
+                more.style.cssText = 'padding:3px 14px;font-size:0.72rem;color:var(--text-dim)';
+                more.textContent = `+${entries.length - 8} more locations`;
+                listEl.appendChild(more);
+            }
+        }
+    } else if (_searchMode === 'gathering') {
+        if (!_gatherIndex) _gatherIndex = _buildGlobalGatherIndex();
+        if (!_searchQuery || _searchQuery.length < 2) {
+            listEl.innerHTML = '<div style="padding:12px 14px;font-size:0.78rem;color:var(--text-dim)">Type at least 2 characters...</div>';
+            return;
+        }
+
+        const matches = _gatherIndex.filter(r =>
+            r.names.some(n => n.includes(_searchQuery))
+        ).slice(0, 80);
+
+        if (!matches.length) {
+            listEl.innerHTML = '<div style="padding:12px 14px;font-size:0.78rem;color:var(--text-dim)">No results</div>';
+            return;
+        }
+
+        // Group by matching item name
+        const byItem = new Map();
+        for (const r of matches) {
+            const matchedNames = r.displayNames.filter((_, i) => r.names[i].includes(_searchQuery));
+            const key = matchedNames.join(', ');
+            if (!byItem.has(key)) byItem.set(key, []);
+            byItem.get(key).push(r);
+        }
+
+        for (const [itemName, entries] of byItem) {
+            const header = document.createElement('div');
+            header.className = 'map-group-header';
+            header.textContent = itemName;
+            listEl.appendChild(header);
+
+            const unique = new Map();
+            for (const r of entries) {
+                const mk = `${r.mapName}:${r.stid}`;
+                if (!unique.has(mk)) unique.set(mk, r);
+            }
+
+            for (const r of [...unique.values()].slice(0, 8)) {
+                const info = mapParams[r.mapName];
+                const label = info?.name_en ? splitPascalCase(info.name_en) : r.mapName;
+                const typeIcon = r.nodeType === 'chest' ? '📦' : r.nodeType === 'ore' ? '💎' : r.nodeType === 'rare' ? '⭐' : '🌿';
+                const el = document.createElement('div');
+                el.className = 'map-entry';
+                el.innerHTML = `<span>${typeIcon}</span><span>${label}</span>`;
+                el.addEventListener('click', () => _navigateToResult(r));
+                listEl.appendChild(el);
+            }
+            if (unique.size > 8) {
+                const more = document.createElement('div');
+                more.style.cssText = 'padding:3px 14px;font-size:0.72rem;color:var(--text-dim)';
+                more.textContent = `+${unique.size - 8} more locations`;
+                listEl.appendChild(more);
+            }
+        }
+    }
+}
+
+function _navigateToResult(r) {
+    // Navigate to map
+    const currentMap  = currentMapName();
+    const currentStid = currentStageName();
+    if (r.mapName !== currentMap || (r.stid && r.stid !== currentStid)) {
+        navigateTo(r.mapName, r.stid || null);
+        // Pan after short delay to let map load
+        setTimeout(() => {
+            leafletMap.setView(L.latLng(r.cy, r.cx), 2);
+            _flashPosition(r.cx, r.cy);
+        }, 600);
+    } else {
+        leafletMap.setView(L.latLng(r.cy, r.cx), 2);
+        _flashPosition(r.cx, r.cy);
+    }
+}
+
+function _flashPosition(cx, cy) {
+    // Briefly show a pulsing circle at the target position
+    const circle = L.circleMarker(L.latLng(cy, cx), {
+        radius: 18, color: '#c8a84b', fillColor: '#c8a84b',
+        fillOpacity: 0.3, weight: 3, opacity: 0.9,
+        interactive: false,
+    }).addTo(leafletMap);
+    let n = 0;
+    const timer = setInterval(() => {
+        n++;
+        circle.setStyle({ opacity: n % 2 === 0 ? 0.9 : 0.2, fillOpacity: n % 2 === 0 ? 0.3 : 0.05 });
+        if (n >= 6) { clearInterval(timer); circle.remove(); }
+    }, 300);
+}
+
+// Invalidate indices when channel changes (items may differ)
+function _invalidateSearchIndex() {
+    _enemyIndex  = null;
+    _gatherIndex = null;
 }
 
 // ── Sidebar map list ───────────────────────────────────────────────────────────
@@ -809,7 +1082,11 @@ function buildSidebar(filter = '') {
 }
 
 document.getElementById('map-search').addEventListener('input', e => {
-    buildSidebar(e.target.value);
+    if (_searchMode === 'map') {
+        buildSidebar(e.target.value);
+    } else {
+        _renderSearchResults(e.target.value);
+    }
 });
 
 // ── URL hash navigation ────────────────────────────────────────────────────────
@@ -1050,7 +1327,20 @@ function makeChipIcon(groupId, color, count, expanded, yOffset = 10) {
 function buildGroupDetails(g) {
     const info    = _currentMapInfo;
     const layer   = L.layerGroup();
-    const stageNo = _loadedStid ? parseInt(_loadedStid.slice(2), 10) : null;
+    const stageNo = _loadedStid ? parseInt(_loadedStid.slice(2), 10)
+        // No stid → try to resolve stageNo from the first stage that has EnemySpawn data
+        : (() => {
+            const info2 = mapParams[_loadedMapName];
+            if (!info2?.stages?.length) return null;
+            for (const sid of info2.stages) {
+                const sno = parseInt(sid.slice(2), 10);
+                // Check if any group in this stage has data
+                const stageStr = String(sno);
+                const hasData = Object.keys(_spawnByKey).some(k => k.startsWith(stageStr + ':'));
+                if (hasData) return sno;
+            }
+            return null;
+        })();
 
     // Hull
     if (g.pts.length >= 3) {
@@ -1113,8 +1403,8 @@ function buildGroupDetails(g) {
             ? (si.lvs.length>1 ? `${si.lvs[0]}–${si.lvs[si.lvs.length-1]}` : `${si.lvs[0]}`) : '?';
         const badges = [
             si?.boss     ? `<span class="pp-badge pp-boss">BOSS</span>` : '',
-            si?.bloodOrb ? `<span class="pp-badge pp-blood">Blood Orb</span>` : '',
-            si?.highOrb  ? `<span class="pp-badge pp-high">High Orb</span>` : '',
+            si?.bloodOrb ? `<span class="pp-badge pp-blood">Blood Orb${si.bloodAmt > 0 ? ' ×'+si.bloodAmt : ''}</span>` : '',
+            si?.highOrb  ? `<span class="pp-badge pp-high">High Orb${si.highAmt > 0 ? ' ×'+si.highAmt : ''}</span>` : '',
         ].filter(Boolean).join('');
         const timeIcon = si?.spawn && si.spawn !== '—' && si.spawn !== '00:00,23:59'
             ? (classifySpawnTime(si.spawn)==='day' ? '☀' : '🌙') + ' ' : '';
@@ -1452,7 +1742,14 @@ function loadEnemySpawns(info, stid = null) {
         if (!pts.length) continue;
         // Skip groups with no EnemySpawn data (empty/placeholder spawns)
         if (_enemyDataReady) {
-            const sno = stid ? parseInt(stid.slice(2), 10) : null;
+            const sno = stid ? parseInt(stid.slice(2), 10)
+                : (() => {
+                    for (const sid of stagesToLoad) {
+                        const n = parseInt(sid.slice(2), 10);
+                        if (Object.keys(_spawnByKey).some(k => k.startsWith(n + ':'))) return n;
+                    }
+                    return null;
+                })();
             if (!getSpawnInfo(sno, groupId)) continue;
         }
         const color = groupBorderColor(parseInt(groupId, 10));
@@ -2042,6 +2339,10 @@ document.getElementById('layer-gathering')?.addEventListener('change', e => {
     }
     saveLayerPrefs();
 });
+
+// Search mode tabs
+document.querySelectorAll('.search-tab').forEach(btn =>
+    btn.addEventListener('click', () => setSearchMode(btn.dataset.mode)));
 
 // Lang buttons
 document.querySelectorAll('.lang-btn').forEach(btn =>

@@ -393,6 +393,11 @@
         #map-list::-webkit-scrollbar { width: 4px; }
         #map-list::-webkit-scrollbar-track { background: transparent; }
         #map-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+        /* ── Search tabs ── */
+        .search-tab { transition: all 0.15s; }
+        .search-tab.active { background: var(--gold) !important; color: #0a0906 !important; border-color: var(--gold) !important; }
+        .search-tab:hover:not(.active) { border-color: var(--gold-dim) !important; color: var(--text) !important; }
+
         /* ── Gathering markers ── */
         .gather-marker {
             width: 20px; height: 20px;
@@ -417,6 +422,12 @@
         </div>
 
         <div id="search-box">
+            <!-- Search mode tabs -->
+            <div style="display:flex;gap:2px;margin-bottom:6px">
+                <button class="search-tab active" data-mode="map" style="flex:1;padding:4px 0;font-size:0.7rem;font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.06em;border-radius:3px;border:1px solid var(--border);background:var(--gold);color:#0a0906;cursor:pointer;transition:all 0.15s">Maps</button>
+                <button class="search-tab" data-mode="enemy" style="flex:1;padding:4px 0;font-size:0.7rem;font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.06em;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.15s">Enemies</button>
+                <button class="search-tab" data-mode="gathering" style="flex:1;padding:4px 0;font-size:0.7rem;font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.06em;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.15s">Items</button>
+            </div>
             <div class="input-wrap">
                 <span class="search-icon">🗺</span>
                 <input type="text" id="map-search" class="dd-input" placeholder="Search maps...">
@@ -466,6 +477,7 @@
             <div class="pill-row" style="margin-bottom:8px">
                 <button class="pill-btn filter-toggle-btn" data-filter="boss">Boss</button>
                 <button class="pill-btn filter-toggle-btn" data-filter="bloodOrb">Blood Orb</button>
+                <button class="pill-btn filter-toggle-btn" data-filter="highOrb">High Orb</button>
             </div>
 
             <!-- Enemy search -->
