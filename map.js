@@ -35,10 +35,9 @@ const CHANNELS = {
 };
 let _activeChannel = localStorage.getItem('ddon-channel') || 'normal';
 
-// StageId → StageNo mapping — loaded from stageIdToNo.json (complete, 561 entries)
-// Falls back to map_params.stage_ids for any missing entries
+// StageId → StageNo mapping — will be loaded from stageIdToNo.json in loadEnemyData
+// Initial build from map_params as fallback
 let _sidToSno = (() => {
-    // Initial build from map_params as fallback
     const m = {};
     for (const info of Object.values(mapParams)) {
         const ids = info.stage_ids;
@@ -49,21 +48,7 @@ let _sidToSno = (() => {
     return m;
 })();
 
-// Load complete mapping from stageIdToNo.json and merge
-fetch('./datas/stageIdToNo.json')
-    .then(r => r.ok ? r.json() : null)
-    .then(data => {
-        if (!data) return;
-        // Merge: stageIdToNo.json takes priority (it's the authoritative source)
-        for (const [sid, sno] of Object.entries(data))
-            _sidToSno[parseInt(sid)] = sno;
-        // Rebuild _snoToSid after merge
-        for (const [sid, sno] of Object.entries(_sidToSno))
-            _snoToSid[sno] = parseInt(sid);
-    })
-    .catch(() => {});
-
-// Reverse: stageNo → stageId (for gathering lookup) — mutable, rebuilt after merge
+// Reverse: stageNo → stageId (for gathering lookup) — rebuilt after stageIdToNo loads
 const _snoToSid = (() => {
     const m = {};
     for (const [sid, sno] of Object.entries(_sidToSno)) m[sno] = parseInt(sid);
@@ -190,6 +175,18 @@ function _updateChannelUI() {
             list.forEach(p => {
                 _ndpById[p.ID] = { name: p.Name || '', type: p.TypeName || 'NAMED_TYPE_NONE' };
             });
+        }
+    } catch(e) {}
+    try {
+        // Load complete StageId→StageNo mapping FIRST so channel file indexing is correct
+        const r = await fetch('./datas/stageIdToNo.json');
+        if (r.ok) {
+            const data = await r.json();
+            for (const [sid, sno] of Object.entries(data))
+                _sidToSno[parseInt(sid)] = sno;
+            // Rebuild reverse mapping
+            for (const [sid, sno] of Object.entries(_sidToSno))
+                _snoToSid[sno] = parseInt(sid);
         }
     } catch(e) {}
     try {
