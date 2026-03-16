@@ -273,10 +273,10 @@ function groupMatchesFilter(groupId, stageNo) {
 }
 
 function _groupPassesAllFilters(groupId) {
-    const sno = _loadedStid ? parseInt(_loadedStid.slice(2),10) : null;
+    const g   = _groupStore.get(groupId);
+    const sno = g?.stageNo ?? (_loadedStid ? parseInt(_loadedStid.slice(2),10) : null);
     if (!groupMatchesFilter(groupId, sno)) return false;
     if (_enemySearchText) {
-        const g = _groupStore.get(groupId);
         if (!g) return false;
         return g.items.some(it => {
             const entry = getSpawnEntry(sno, groupId, it.idx);
@@ -1414,16 +1414,9 @@ function makeChipIcon(groupId, color, count, expanded, yOffset = 10) {
 function buildGroupDetails(g) {
     const info    = _currentMapInfo;
     const layer   = L.layerGroup();
-    // Find the stageNo that actually has EnemySpawn data for THIS specific group
-    const stageNo = (() => {
-        const info2  = mapParams[_loadedMapName];
-        const stages = _loadedStid ? [_loadedStid] : (info2?.stages || []);
-        for (const sid of stages) {
-            const n = parseInt(sid.slice(2), 10);
-            if (getSpawnInfo(n, g.groupId)) return n;
-        }
-        return null;
-    })();
+    // stageNo is stored directly on the group — resolved at collection time,
+    // guaranteed to match the EnemySpawn stage that actually has this groupId.
+    const stageNo = g.stageNo;
 
     // Hull
     if (g.pts.length >= 3) {
@@ -1745,15 +1738,24 @@ function loadEnemySpawns(info, stid = null) {
     const stagesToLoad = (stid && info.stages.includes(stid)) ? [stid] : info.stages;
 
     // Collect all groups, merging across stages if multiple are loaded
-    const byGroupId = new Map(); // groupId string → { territory, items:[{spawn,idx,sg,latlng}], pts:[] }
+    // sourceStageNo: the first stage that has EnemySpawn data for this groupId — stored
+    // on the group so buildGroupDetails uses the exact correct stage, never guesses.
+    const byGroupId = new Map(); // groupId → { territory, items, pts, sourceStageNo }
     for (const stageId of stagesToLoad) {
-        const stageNo   = String(parseInt(stageId.slice(2), 10));
-        const stageData = enemyPositions[stageNo];
+        const stageNoInt = parseInt(stageId.slice(2), 10);
+        const stageNoStr = String(stageNoInt);
+        const stageData  = enemyPositions[stageNoStr];
         if (!stageData) continue;
         for (const [groupId, groupData] of Object.entries(stageData)) {
-            const spawns    = groupData.spawns    ?? groupData;  // back-compat
+            const spawns    = groupData.spawns    ?? groupData;
             const territory = groupData.territory ?? null;
-            if (!byGroupId.has(groupId)) byGroupId.set(groupId, { territory, items: [], pts: [] });
+            if (!byGroupId.has(groupId)) {
+                // Resolve the exact stageNo from EnemySpawn for this specific groupId
+                // Prefer the stageNo that actually has data for THIS groupId
+                const resolvedSno = _enemyDataReady && getSpawnInfo(stageNoInt, groupId)
+                    ? stageNoInt : null;
+                byGroupId.set(groupId, { territory, items: [], pts: [], sourceStageNo: resolvedSno ?? stageNoInt });
+            }
             const entry = byGroupId.get(groupId);
             for (let i = 0; i < spawns.length; i++) {
                 const spawn = spawns[i];
@@ -1781,16 +1783,12 @@ function loadEnemySpawns(info, stid = null) {
     }
 
     // Create one chip label marker per group
-    for (const [groupId, { territory, items, pts }] of byGroupId) {
+    for (const [groupId, { territory, items, pts, sourceStageNo }] of byGroupId) {
         if (!pts.length) continue;
         // Skip groups with no EnemySpawn data (empty/placeholder spawns)
-        // Check every stage in stagesToLoad — only show if at least one has this groupId
+        // Use the exact stageNo that was recorded when collecting positions
         if (_enemyDataReady) {
-            const hasData = stagesToLoad.some(sid => {
-                const n = parseInt(sid.slice(2), 10);
-                return !!getSpawnInfo(n, groupId);
-            });
-            if (!hasData) continue;
+            if (!getSpawnInfo(sourceStageNo, groupId)) continue;
         }
         const color = groupBorderColor(parseInt(groupId, 10));
         const cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
@@ -1806,6 +1804,7 @@ function loadEnemySpawns(info, stid = null) {
         const labelMarker = L.marker(xy(cx, cy), { icon: chipIcon, zIndexOffset: 100 });
 
         const g = { groupId, color, territory, items, pts,
+                    stageNo: sourceStageNo,
                     centroid: { px: cx, py: cy }, yOffset,
                     labelMarker, detailsLayer: null, isExpanded: false, sgMarkers: {} };
         _groupStore.set(groupId, g);
