@@ -1489,8 +1489,11 @@ function buildGroupDetails(g) {
         ].filter(Boolean).join('');
         const timeIcon = si?.spawn && si.spawn !== '—' && si.spawn !== '00:00,23:59'
             ? (classifySpawnTime(si.spawn)==='day' ? '☀' : '🌙') + ' ' : '';
-        const dropRows = (si?.dtid && _dropsByDtid[si.dtid]?.length)
-            ? _dropsByDtid[si.dtid].slice(0,8).map(([id,qty,rate]) => {
+        // Use per-position drop table when available (correct for mixed-enemy groups)
+        // Fall back to group-level dtid only if no position entry exists
+        const dtid = posEntry?.dtid ?? si?.dtid;
+        const dropRows = (dtid && _dropsByDtid[dtid]?.length)
+            ? _dropsByDtid[dtid].slice(0,8).map(([id,qty,rate]) => {
                 const cls = rate>=80?'hi':rate>=30?'mid':'lo';
                 return `<div class="pp-drop"><span class="pp-drop-name">${getItemName(id,_lang)}${qty>1?' ×'+qty:''}</span><span class="pp-rate ${cls}">${rate}%</span></div>`;
               }).join('') : '';
