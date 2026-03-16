@@ -1815,19 +1815,6 @@ function loadEnemySpawns(info, stid = null) {
             }
         }
     }
-            for (let i = 0; i < spawns.length; i++) {
-                const spawn = spawns[i];
-                const pos   = spawn.Position;
-                if (filterByFloor) {
-                    const floor = getEnemyFloor(pos.x, pos.y, pos.z, floorObbs);
-                    if (floor !== null && floor !== currentLayer) continue;
-                }
-                const latlng = worldToPixel(pos.x, pos.z, info);
-                entry.pts.push([latlng.lng, latlng.lat]);
-                entry.items.push({ spawn, idx: i, sg: spawn.SpawnGroup ?? 0, latlng });
-            }
-        }
-    }
 
     // Detect centroid collisions so stacked chips can be offset
     const centroidBuckets = new Map();
