@@ -1,4 +1,4 @@
-// v10 cache-bust 1773780899
+// v11 cache-bust 1773781409
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -648,22 +648,30 @@ function _buildGlobalEnemyIndex() {
         for (const entry of entries) {
             if (seenEids.has(entry.eid)) continue;
             seenEids.add(entry.eid);
-            const name = resolveDisplayName(entry.eid, entry.ndpId, 'en').toLowerCase();
+            // Index under both the NDP-transformed name AND the base enemy name
+            // so "deathknight" is findable even when NDP renames it
+            const displayName = resolveDisplayName(entry.eid, entry.ndpId, 'en');
+            const baseName    = resolveDisplayName(entry.eid, 0, 'en');
+            const name        = displayName.toLowerCase();
+            const baseLower   = baseName.toLowerCase();
             if (!name || name === '?') continue;
 
             for (const { mapName, stid } of maps) {
                 const info = mapParams[mapName];
                 if (!_mapHasImage(info)) continue;
                 const latlng = worldToPixel(firstPos.x, firstPos.z, info);
-                results.push({
-                    name,
-                    displayName: resolveDisplayName(entry.eid, entry.ndpId, 'en'),
+                const baseEntry = {
                     mapName, stid, groupId,
                     lv:   entry.lv,
                     boss: entries.some(e => e.boss),
                     cx: latlng.lng,
                     cy: latlng.lat,
-                });
+                };
+                results.push({ ...baseEntry, name, displayName });
+                // Also add base name if different (so both are searchable)
+                if (baseLower !== name && baseLower && baseLower !== '?') {
+                    results.push({ ...baseEntry, name: baseLower, displayName: baseName });
+                }
             }
         }
     }
