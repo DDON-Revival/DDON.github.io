@@ -1,4 +1,4 @@
-// v9-debug cache-bust 1773780330
+// v10 cache-bust 1773780899
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -632,51 +632,50 @@ function _buildGlobalEnemyIndex() {
         const maps = snoToMap[sno];
         if (!maps) continue;
 
-        const entry = entries[0];
-        const name  = resolveDisplayName(entry.eid, entry.ndpId, 'en').toLowerCase();
-        if (sno === 872) console.log(`[DEBUG-NORMAL] 872:${groupId} eid=${entry.eid} ndpId=${entry.ndpId} name="${name}"`);
-        if (!name || name === '?') continue;
-
-        // Get position from enemyPositions (Annuate) or tool supplement
+        // Index ALL unique enemies in this group (not just first entry)
         const posData = enemyPositions[snoStr]?.[groupId];
         let firstPos = null;
         if (posData) {
             const spawns = posData.spawns ?? posData;
             if (spawns.length) firstPos = spawns[0].Position;
         } else {
-            // Try tool supplement
             const toolPos = enemyPositionsTool[snoStr]?.[groupId];
             if (toolPos?.length) firstPos = { x: toolPos[0].x, z: toolPos[0].z };
         }
         if (!firstPos) continue;
 
-        for (const { mapName, stid } of maps) {
-            const info = mapParams[mapName];
-            if (!_mapHasImage(info)) continue;
-            const latlng = worldToPixel(firstPos.x, firstPos.z, info);
-            results.push({
-                name,
-                displayName: resolveDisplayName(entry.eid, entry.ndpId, 'en'),
-                mapName, stid, groupId,
-                lv:  entries[0].lv,
-                boss: entries.some(e => e.boss),
-                cx: latlng.lng,
-                cy: latlng.lat,
-            });
+        const seenEids = new Set();
+        for (const entry of entries) {
+            if (seenEids.has(entry.eid)) continue;
+            seenEids.add(entry.eid);
+            const name = resolveDisplayName(entry.eid, entry.ndpId, 'en').toLowerCase();
+            if (!name || name === '?') continue;
+
+            for (const { mapName, stid } of maps) {
+                const info = mapParams[mapName];
+                if (!_mapHasImage(info)) continue;
+                const latlng = worldToPixel(firstPos.x, firstPos.z, info);
+                results.push({
+                    name,
+                    displayName: resolveDisplayName(entry.eid, entry.ndpId, 'en'),
+                    mapName, stid, groupId,
+                    lv:   entry.lv,
+                    boss: entries.some(e => e.boss),
+                    cx: latlng.lng,
+                    cy: latlng.lat,
+                });
+            }
         }
     }
     // Also index groups from tool supplement that use cross-stage EnemySpawn data
-    console.log('[DEBUG] snoToMap[872]:', JSON.stringify(snoToMap[872]));
     for (const [snoStr, toolGroups] of Object.entries(enemyPositionsTool)) {
         const sno  = parseInt(snoStr, 10);
         const maps = snoToMap[sno];
         if (!maps) continue;
-        if (sno === 872) console.log('[DEBUG] 872 maps:', JSON.stringify(maps));
         for (const [groupId, positions] of Object.entries(toolGroups)) {
             if (_spawnByKey[`${sno}:${groupId}`]) continue;
             const allKeys = Object.keys(_spawnByKey).filter(k => k.endsWith(':' + groupId));
             if (!allKeys.length) continue;
-            if (sno === 872) console.log('[DEBUG] 872 groupId:', groupId, 'allKeys:', allKeys.slice(0,3));
             const firstPos = positions[0];
             if (!firstPos) continue;
             const seenEids = new Set();
@@ -685,16 +684,16 @@ function _buildGlobalEnemyIndex() {
                 for (const entry of entries) {
                     if (seenEids.has(entry.eid)) continue;
                     seenEids.add(entry.eid);
-                    const name = resolveDisplayName(entry.eid, entry.ndpId, 'en').toLowerCase();
+                    // Use ndpId=0 for cross-stage entries since ndpId context may be wrong
+                    const name = resolveDisplayName(entry.eid, 0, 'en').toLowerCase();
                     if (!name || name === '?') continue;
                     for (const { mapName, stid } of maps) {
                         const info = mapParams[mapName];
-                        if (sno === 872) console.log('[DEBUG] 872 mapName:', mapName, '_mapHasImage:', _mapHasImage(info), 'name:', name);
                         if (!_mapHasImage(info)) continue;
                         const latlng = worldToPixel(firstPos.x, firstPos.z, info);
                         results.push({
                             name,
-                            displayName: resolveDisplayName(entry.eid, entry.ndpId, 'en'),
+                            displayName: resolveDisplayName(entry.eid, 0, 'en'),
                             mapName, stid, groupId,
                             lv:   entry.lv,
                             boss: entries.some(e => e.boss),
