@@ -1,4 +1,4 @@
-// v6 cache-bust 1773767008
+// v7 cache-bust 1773779195
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -616,6 +616,13 @@ function _buildSnoToMap() {
     return m;
 }
 
+
+function _mapHasImage(info) {
+    if (!info) return false;
+    if (info.img_exists) return true;
+    return (info.layers || []).some(l => l.img_exists);
+}
+
 function _buildGlobalEnemyIndex() {
     const snoToMap = _buildSnoToMap();
     const results  = [];
@@ -645,7 +652,7 @@ function _buildGlobalEnemyIndex() {
 
         for (const { mapName, stid } of maps) {
             const info = mapParams[mapName];
-            if (!info?.img_exists) continue;
+            if (!_mapHasImage(info)) continue;
             const latlng = worldToPixel(firstPos.x, firstPos.z, info);
             results.push({
                 name,
@@ -681,7 +688,7 @@ function _buildGlobalEnemyIndex() {
                     if (!name || name === '?') continue;
                     for (const { mapName, stid } of maps) {
                         const info = mapParams[mapName];
-                        if (!info?.img_exists) continue;
+                        if (!_mapHasImage(info)) continue;
                         const latlng = worldToPixel(firstPos.x, firstPos.z, info);
                         results.push({
                             name,
@@ -728,7 +735,7 @@ function _buildGlobalGatherIndex() {
 
             for (const { mapName, stid } of maps) {
                 const info = mapParams[mapName];
-                if (!info?.img_exists) continue;
+                if (!_mapHasImage(info)) continue;
                 const latlng = worldToPixel(spot.Position.x, spot.Position.z, info);
                 results.push({
                     names,
@@ -967,7 +974,7 @@ function _buildGlobalDropIndex() {
 
             for (const { mapName, stid } of maps) {
                 const info = mapParams[mapName];
-                if (!info?.img_exists) continue;
+                if (!_mapHasImage(info)) continue;
                 const posData = enemyPositions[snoStr]?.[groupId];
                 let pos = null;
                 if (posData) {
@@ -1016,7 +1023,7 @@ function _buildGlobalDropIndex() {
                     if (itemName.startsWith('Item #')) continue;
                     for (const { mapName, stid } of maps) {
                         const info = mapParams[mapName];
-                        if (!info?.img_exists) continue;
+                        if (!_mapHasImage(info)) continue;
                         const latlng = worldToPixel(firstPos.x, firstPos.z, info);
                         results.push({
                             itemName, itemNameLower: itemName.toLowerCase(),
