@@ -1,4 +1,4 @@
-// v20 cache-bust 1773785808
+// v21 cache-bust 1773786330
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -945,14 +945,26 @@ function _buildGlobalDropIndex() {
         for (const stid of info.stages) {
             const sno    = parseInt(stid.slice(2), 10);
             const snoStr = String(sno);
+            const ownSid = _snoToSid[sno] ?? 0;
 
             const annuateGroups = enemyPositions[snoStr] ? Object.keys(enemyPositions[snoStr]) : [];
             const toolGroups    = enemyPositionsTool[snoStr] ? Object.keys(enemyPositionsTool[snoStr]) : [];
             const allGroupIds   = [...new Set([...annuateGroups, ...toolGroups])];
 
             for (const groupId of allGroupIds) {
-                const si = getSpawnInfo(sno, groupId);
-                if (!si) continue;
+                // Try exact match first, then closest-StageId fallback for tool groups
+                let entries = _spawnByKey[`${sno}:${groupId}`];
+                if (!entries?.length) {
+                    const allKeys = Object.keys(_spawnByKey).filter(k => k.endsWith(':' + groupId));
+                    if (!allKeys.length) continue;
+                    const bestKey = allKeys.reduce((best, k) => {
+                        const kSid = _snoToSid[parseInt(k.split(':')[0], 10)] ?? 0;
+                        const bSid = _snoToSid[parseInt(best.split(':')[0], 10)] ?? 0;
+                        return Math.abs(kSid - ownSid) < Math.abs(bSid - ownSid) ? k : best;
+                    });
+                    entries = _spawnByKey[bestKey];
+                }
+                if (!entries?.length) continue;
 
                 const pd = enemyPositions[snoStr]?.[groupId];
                 let pos = null;
@@ -965,8 +977,7 @@ function _buildGlobalDropIndex() {
                 }
                 if (!pos) continue;
 
-                const latlng   = worldToPixel(pos.x, pos.z, info);
-                const entries  = _spawnByKey[`${sno}:${groupId}`] || [];
+                const latlng    = worldToPixel(pos.x, pos.z, info);
                 const seenDtids = new Set();
 
                 for (const entry of entries) {
@@ -992,7 +1003,6 @@ function _buildGlobalDropIndex() {
         }
     }
 
-    // Deduplicate by item+enemy+map
     const seen = new Set();
     return results.filter(r => {
         const k = `${r.itemName}:${r.enemyName}:${r.mapName}:${r.stid}`;
