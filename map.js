@@ -1,4 +1,4 @@
-// v14 cache-bust 1773782994
+// v15 cache-bust 1773783814
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -632,24 +632,13 @@ function _buildGlobalEnemyIndex() {
         const maps = snoToMap[sno];
         if (!maps) continue;
 
-        // Index ALL unique enemies in this group (not just first entry)
-        const posData = enemyPositions[snoStr]?.[groupId];
-        let firstPos = null;
-        if (posData) {
-            const spawns = posData.spawns ?? posData;
-            if (spawns.length) firstPos = spawns[0].Position;
-        } else {
-            const toolPos = enemyPositionsTool[snoStr]?.[groupId];
-            if (toolPos?.length) firstPos = { x: toolPos[0].x, z: toolPos[0].z };
-        }
-        if (!firstPos) continue;
+        // Index ALL unique enemies in this group
+        // Position is validated per-map below
 
         const seenEids = new Set();
         for (const entry of entries) {
             if (seenEids.has(entry.eid)) continue;
             seenEids.add(entry.eid);
-            // Index under both the NDP-transformed name AND the base enemy name
-            // so "deathknight" is findable even when NDP renames it
             const displayName = resolveDisplayName(entry.eid, entry.ndpId, 'en');
             const baseName    = resolveDisplayName(entry.eid, 0, 'en');
             const name        = displayName.toLowerCase();
@@ -659,16 +648,26 @@ function _buildGlobalEnemyIndex() {
             for (const { mapName, stid } of maps) {
                 const info = mapParams[mapName];
                 if (!_mapHasImage(info)) continue;
-                const latlng = worldToPixel(firstPos.x, firstPos.z, info);
-                const baseEntry = {
-                    mapName, stid, groupId,
-                    lv:   entry.lv,
-                    boss: entries.some(e => e.boss),
-                    cx: latlng.lng,
-                    cy: latlng.lat,
-                };
+                // Verify this group actually has a position on THIS specific map's stage
+                const mapSno    = parseInt(stid.slice(2), 10);
+                const mapSnoStr = String(mapSno);
+                const hasPosHere = enemyPositions[mapSnoStr]?.[groupId]
+                    || enemyPositionsTool[mapSnoStr]?.[groupId];
+                if (!hasPosHere) continue;
+                // Use firstPos for the correct stage
+                let pos = null;
+                const pd = enemyPositions[mapSnoStr]?.[groupId];
+                if (pd) {
+                    const sp = pd.spawns ?? pd;
+                    if (sp.length) pos = sp[0].Position;
+                } else {
+                    const tp = enemyPositionsTool[mapSnoStr]?.[groupId];
+                    if (tp?.length) pos = { x: tp[0].x, z: tp[0].z };
+                }
+                if (!pos) continue;
+                const latlng = worldToPixel(pos.x, pos.z, info);
+                const baseEntry = { mapName, stid, groupId, lv: entry.lv, boss: entries.some(e => e.boss), cx: latlng.lng, cy: latlng.lat };
                 results.push({ ...baseEntry, name, displayName });
-                // Also add base name if different (so both are searchable)
                 if (baseLower !== name && baseLower && baseLower !== '?') {
                     results.push({ ...baseEntry, name: baseLower, displayName: baseName });
                 }
