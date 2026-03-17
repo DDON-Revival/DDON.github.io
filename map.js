@@ -1,4 +1,4 @@
-// v24 new-annuate-data 1773787922
+// v25 posIdx-fix 1773788735
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -1858,7 +1858,7 @@ function loadEnemySpawns(info, stid = null) {
                 }
                 const latlng = worldToPixel(pos.x, pos.z, info);
                 entry.pts.push([latlng.lng, latlng.lat]);
-                entry.items.push({ spawn, idx: i, sg: spawn.SpawnGroup ?? 0, latlng });
+                entry.items.push({ spawn, idx: spawn.posIdx ?? i, sg: spawn.SpawnGroup ?? 0, latlng });
             }
         }
     }
