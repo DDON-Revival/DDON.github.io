@@ -1,4 +1,4 @@
-// v5 cache-bust 1773701984
+// v6 cache-bust 1773767008
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -659,36 +659,41 @@ function _buildGlobalEnemyIndex() {
         }
     }
     // Also index groups from tool supplement that use cross-stage EnemySpawn data
-    // e.g. Mysterious Mausoleum Group 10: positions in stageNo=872 but EnemySpawn in stageNo=113
     for (const [snoStr, toolGroups] of Object.entries(enemyPositionsTool)) {
         const sno  = parseInt(snoStr, 10);
         const maps = snoToMap[sno];
         if (!maps) continue;
         for (const [groupId, positions] of Object.entries(toolGroups)) {
-            // Skip if already indexed via normal path
             if (_spawnByKey[`${sno}:${groupId}`]) continue;
-            // Find EnemySpawn data in any stage
-            const anyKey = Object.keys(_spawnByKey).find(k => k.endsWith(':' + groupId));
-            if (!anyKey) continue;
-            const entries = _spawnByKey[anyKey];
-            const entry   = entries[0];
-            const name    = resolveDisplayName(entry.eid, entry.ndpId, 'en').toLowerCase();
-            if (!name || name === '?') continue;
+            // Collect ALL EnemySpawn entries for this groupId across ALL stages
+            const allKeys = Object.keys(_spawnByKey).filter(k => k.endsWith(':' + groupId));
+            if (!allKeys.length) continue;
             const firstPos = positions[0];
             if (!firstPos) continue;
-            for (const { mapName, stid } of maps) {
-                const info = mapParams[mapName];
-                if (!info?.img_exists) continue;
-                const latlng = worldToPixel(firstPos.x, firstPos.z, info);
-                results.push({
-                    name,
-                    displayName: resolveDisplayName(entry.eid, entry.ndpId, 'en'),
-                    mapName, stid, groupId,
-                    lv:   entry.lv,
-                    boss: entries.some(e => e.boss),
-                    cx: latlng.lng,
-                    cy: latlng.lat,
-                });
+            // Deduplicate by EnemyId — each unique enemy gets one entry
+            const seenEids = new Set();
+            for (const anyKey of allKeys) {
+                const entries = _spawnByKey[anyKey];
+                for (const entry of entries) {
+                    if (seenEids.has(entry.eid)) continue;
+                    seenEids.add(entry.eid);
+                    const name = resolveDisplayName(entry.eid, entry.ndpId, 'en').toLowerCase();
+                    if (!name || name === '?') continue;
+                    for (const { mapName, stid } of maps) {
+                        const info = mapParams[mapName];
+                        if (!info?.img_exists) continue;
+                        const latlng = worldToPixel(firstPos.x, firstPos.z, info);
+                        results.push({
+                            name,
+                            displayName: resolveDisplayName(entry.eid, entry.ndpId, 'en'),
+                            mapName, stid, groupId,
+                            lv:   entry.lv,
+                            boss: entries.some(e => e.boss),
+                            cx: latlng.lng,
+                            cy: latlng.lat,
+                        });
+                    }
+                }
             }
         }
     }
@@ -994,28 +999,33 @@ function _buildGlobalDropIndex() {
         if (!maps) continue;
         for (const [groupId, positions] of Object.entries(toolGroups)) {
             if (_spawnByKey[`${sno}:${groupId}`]) continue;
-            const anyKey = Object.keys(_spawnByKey).find(k => k.endsWith(':' + groupId));
-            if (!anyKey) continue;
-            const entries   = _spawnByKey[anyKey];
-            const entry     = entries[0];
-            if (!entry.dtid || !_dropsByDtid[entry.dtid]?.length) continue;
-            const enemyName = resolveDisplayName(entry.eid, entry.ndpId, 'en');
-            const firstPos  = positions[0];
+            const allKeys = Object.keys(_spawnByKey).filter(k => k.endsWith(':' + groupId));
+            if (!allKeys.length) continue;
+            const firstPos = positions[0];
             if (!firstPos) continue;
-            for (const [itemId, qty, rate] of _dropsByDtid[entry.dtid]) {
-                const itemName = getItemName(itemId, 'en');
-                if (itemName.startsWith('Item #')) continue;
-                for (const { mapName, stid } of maps) {
-                    const info = mapParams[mapName];
-                    if (!info?.img_exists) continue;
-                    const latlng = worldToPixel(firstPos.x, firstPos.z, info);
-                    results.push({
-                        itemName, itemNameLower: itemName.toLowerCase(),
-                        enemyName, mapName, stid, groupId,
-                        lv: entry.lv, rate,
-                        cx: latlng.lng, cy: latlng.lat,
-                    });
-                    break;
+            const seenDtids = new Set();
+            for (const anyKey of allKeys) {
+                const entries = _spawnByKey[anyKey];
+                const entry   = entries[0];
+                if (!entry.dtid || seenDtids.has(entry.dtid)) continue;
+                seenDtids.add(entry.dtid);
+                if (!_dropsByDtid[entry.dtid]?.length) continue;
+                const enemyName = resolveDisplayName(entry.eid, entry.ndpId, 'en');
+                for (const [itemId, qty, rate] of _dropsByDtid[entry.dtid]) {
+                    const itemName = getItemName(itemId, 'en');
+                    if (itemName.startsWith('Item #')) continue;
+                    for (const { mapName, stid } of maps) {
+                        const info = mapParams[mapName];
+                        if (!info?.img_exists) continue;
+                        const latlng = worldToPixel(firstPos.x, firstPos.z, info);
+                        results.push({
+                            itemName, itemNameLower: itemName.toLowerCase(),
+                            enemyName, mapName, stid, groupId,
+                            lv: entry.lv, rate,
+                            cx: latlng.lng, cy: latlng.lat,
+                        });
+                        break;
+                    }
                 }
             }
         }
