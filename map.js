@@ -1,4 +1,4 @@
-// v8-debug cache-bust 1773779873
+// v9-debug cache-bust 1773780330
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -632,9 +632,9 @@ function _buildGlobalEnemyIndex() {
         const maps = snoToMap[sno];
         if (!maps) continue;
 
-        // Get representative name (first entry, NDP-resolved)
         const entry = entries[0];
         const name  = resolveDisplayName(entry.eid, entry.ndpId, 'en').toLowerCase();
+        if (sno === 872) console.log(`[DEBUG-NORMAL] 872:${groupId} eid=${entry.eid} ndpId=${entry.ndpId} name="${name}"`);
         if (!name || name === '?') continue;
 
         // Get position from enemyPositions (Annuate) or tool supplement
