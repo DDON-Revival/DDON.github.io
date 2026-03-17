@@ -1,4 +1,4 @@
-// v19 cache-bust 1773785513
+// v20 cache-bust 1773785808
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -1912,21 +1912,6 @@ function loadEnemySpawns(info, stid = null) {
                 return em && em !== 'em000000' && em !== '';
             });
             if (!hasRealEnemies) continue;
-        }
-        // Verify EmName matches EnemySpawn eid — prevents Goblin positions on maps
-        // where EnemySpawn actually has Ghost/Grimwarg/DeathKnight
-        if (_enemyDataReady && hasSpawnData) {
-            const entries   = _spawnByKey[`${sourceStageNo}:${groupId}`] || [];
-            const spawnEids = new Set(entries.map(e => e.eid.toLowerCase()));
-            const annuateItems = items.filter(it => it.spawn.EmName && it.spawn.EmName !== '' && it.spawn.EmName !== 'em000000');
-            if (annuateItems.length > 0) {
-                // Convert EmName (em010100) to eid format (0x010100) for comparison
-                const hasMatch = annuateItems.some(it => {
-                    const eid = '0x' + it.spawn.EmName.slice(2).toLowerCase();
-                    return spawnEids.has(eid);
-                });
-                if (!hasMatch) continue;
-            }
         }
         const color = groupBorderColor(parseInt(groupId, 10));
         const cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
