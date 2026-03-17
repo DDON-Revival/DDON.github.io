@@ -1,4 +1,4 @@
-// v17 cache-bust 1773784925
+// v18 cache-bust 1773785273
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -937,92 +937,70 @@ function _flashPosition(cx, cy) {
 }
 
 function _buildGlobalDropIndex() {
-    const snoToMap = _buildSnoToMap();
-    const results  = [];
-    for (const [key, entries] of Object.entries(_spawnByKey)) {
-        const [snoStr, groupId] = key.split(':');
-        const sno   = parseInt(snoStr, 10);
-        const maps  = snoToMap[sno];
-        if (!maps) continue;
-        const entry = entries[0];
-        if (!entry.dtid || !_dropsByDtid[entry.dtid]?.length) continue;
+    const results = [];
 
-        const enemyName = resolveDisplayName(entry.eid, entry.ndpId, 'en');
-        const drops     = _dropsByDtid[entry.dtid];
+    for (const [mapName, info] of Object.entries(mapParams)) {
+        if (!_mapHasImage(info) || !info.stages?.length) continue;
 
-        for (const [itemId, qty, rate] of drops) {
-            const itemName = getItemName(itemId, 'en');
-            if (itemName.startsWith('Item #')) continue; // unknown items
+        for (const stid of info.stages) {
+            const sno    = parseInt(stid.slice(2), 10);
+            const snoStr = String(sno);
 
-            for (const { mapName, stid } of maps) {
-                const info = mapParams[mapName];
-                if (!_mapHasImage(info)) continue;
-                const posData = enemyPositions[snoStr]?.[groupId];
+            const annuateGroups = enemyPositions[snoStr] ? Object.keys(enemyPositions[snoStr]) : [];
+            const toolGroups    = enemyPositionsTool[snoStr] ? Object.keys(enemyPositionsTool[snoStr]) : [];
+            const allGroupIds   = [...new Set([...annuateGroups, ...toolGroups])];
+
+            for (const groupId of allGroupIds) {
+                const si = getSpawnInfo(sno, groupId);
+                if (!si) continue;
+
+                const pd = enemyPositions[snoStr]?.[groupId];
                 let pos = null;
-                if (posData) {
-                    const spawns = posData.spawns ?? posData;
-                    if (spawns.length) pos = spawns[0].Position;
+                if (pd) {
+                    const sp = pd.spawns ?? pd;
+                    if (sp.length) pos = sp[0].Position;
                 } else {
-                    const toolPos = enemyPositionsTool[snoStr]?.[groupId];
-                    if (toolPos?.length) pos = { x: toolPos[0].x, z: toolPos[0].z };
+                    const tp = enemyPositionsTool[snoStr]?.[groupId];
+                    if (tp?.length) pos = { x: tp[0].x, z: tp[0].z };
                 }
                 if (!pos) continue;
-                const latlng = worldToPixel(pos.x, pos.z, info);
-                results.push({
-                    itemName,
-                    itemNameLower: itemName.toLowerCase(),
-                    enemyName,
-                    mapName, stid, groupId,
-                    lv: entry.lv,
-                    rate,
-                    cx: latlng.lng, cy: latlng.lat,
-                });
-                break;
-            }
-        }
-    }
-    // Tool-supplement groups (cross-stage EnemySpawn drops)
-    for (const [snoStr, toolGroups] of Object.entries(enemyPositionsTool)) {
-        const sno  = parseInt(snoStr, 10);
-        const maps = snoToMap[sno];
-        if (!maps) continue;
-        for (const [groupId, positions] of Object.entries(toolGroups)) {
-            if (_spawnByKey[`${sno}:${groupId}`]) continue;
-            const allKeys = Object.keys(_spawnByKey).filter(k => k.endsWith(':' + groupId));
-            if (!allKeys.length) continue;
-            const firstPos = positions[0];
-            if (!firstPos) continue;
-            const seenDtids = new Set();
-            for (const anyKey of allKeys) {
-                const entries = _spawnByKey[anyKey];
-                const entry   = entries[0];
-                if (!entry.dtid || seenDtids.has(entry.dtid)) continue;
-                seenDtids.add(entry.dtid);
-                if (!_dropsByDtid[entry.dtid]?.length) continue;
-                const enemyName = resolveDisplayName(entry.eid, entry.ndpId, 'en');
-                for (const [itemId, qty, rate] of _dropsByDtid[entry.dtid]) {
-                    const itemName = getItemName(itemId, 'en');
-                    if (itemName.startsWith('Item #')) continue;
-                    for (const { mapName, stid } of maps) {
-                        const info = mapParams[mapName];
-                        if (!_mapHasImage(info)) continue;
-                        const latlng = worldToPixel(firstPos.x, firstPos.z, info);
+
+                const latlng   = worldToPixel(pos.x, pos.z, info);
+                const entries  = _spawnByKey[`${sno}:${groupId}`] || [];
+                const seenDtids = new Set();
+
+                for (const entry of entries) {
+                    if (!entry.dtid || seenDtids.has(entry.dtid)) continue;
+                    seenDtids.add(entry.dtid);
+                    if (!_dropsByDtid[entry.dtid]?.length) continue;
+                    const enemyName = resolveDisplayName(entry.eid, entry.ndpId, 'en');
+                    for (const [itemId, qty, rate] of _dropsByDtid[entry.dtid]) {
+                        const itemName = getItemName(itemId, 'en');
+                        if (itemName.startsWith('Item #')) continue;
                         results.push({
-                            itemName, itemNameLower: itemName.toLowerCase(),
-                            enemyName, mapName, stid, groupId,
-                            lv: entry.lv, rate,
+                            itemName,
+                            itemNameLower: itemName.toLowerCase(),
+                            enemyName,
+                            mapName, stid, groupId,
+                            lv: entry.lv,
+                            rate,
                             cx: latlng.lng, cy: latlng.lat,
                         });
-                        break;
                     }
                 }
             }
         }
     }
-    return results;
+
+    // Deduplicate by item+enemy+map
+    const seen = new Set();
+    return results.filter(r => {
+        const k = `${r.itemName}:${r.enemyName}:${r.mapName}:${r.stid}`;
+        if (seen.has(k)) return false;
+        seen.add(k); return true;
+    });
 }
 
-// Invalidate indices when channel changes (items may differ)
 function _invalidateSearchIndex() {
     _enemyIndex  = null;
     _gatherIndex = null;
@@ -1926,18 +1904,26 @@ function loadEnemySpawns(info, stid = null) {
     // Create one chip label marker per group
     for (const [groupId, { territory, items, pts, sourceStageNo }] of byGroupId) {
         if (!pts.length) continue;
-        // Skip truly empty groups (no EmName AND no EnemySpawn data)
         const hasSpawnData = !!getSpawnInfo(sourceStageNo, groupId);
-        // When enemy data is loaded: require EnemySpawn match to show group
-        // This hides placeholder/orphan groups like "Goblin Lv?"
         if (_enemyDataReady && !hasSpawnData) continue;
-        // Before data loads: also require real EmName (not empty/em000000)
         if (!_enemyDataReady) {
             const hasRealEnemies = items.some(it => {
                 const em = it.spawn.EmName;
                 return em && em !== 'em000000' && em !== '';
             });
             if (!hasRealEnemies) continue;
+        }
+        // Extra check: if EmName exists but doesn't match any EnemySpawn eid, skip
+        // This prevents e.g. "Goblin" positions showing on maps where EnemySpawn has different enemies
+        if (_enemyDataReady && hasSpawnData) {
+            const entries = _spawnByKey[`${sourceStageNo}:${groupId}`] || [];
+            const spawnEids = new Set(entries.map(e => e.eid));
+            const hasMatchingEnemy = items.some(it => {
+                if (!it.spawn.EmName || it.spawn.EmName === 'em000000') return true; // tool-sourced, trust EnemySpawn
+                const emKey = '0x' + it.spawn.EmName.slice(2);
+                return spawnEids.has(emKey.toLowerCase()) || spawnEids.size === 0;
+            });
+            if (!hasMatchingEnemy) continue;
         }
         const color = groupBorderColor(parseInt(groupId, 10));
         const cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
