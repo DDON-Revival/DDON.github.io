@@ -1,4 +1,4 @@
-// v13 cache-bust 1773781952
+// v14 cache-bust 1773782994
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -677,38 +677,49 @@ function _buildGlobalEnemyIndex() {
     }
     // Also index groups from tool supplement that use cross-stage EnemySpawn data
     for (const [snoStr, toolGroups] of Object.entries(enemyPositionsTool)) {
-        const sno  = parseInt(snoStr, 10);
-        const maps = snoToMap[sno];
+        const sno     = parseInt(snoStr, 10);
+        const maps    = snoToMap[sno];
         if (!maps) continue;
+        // The map's own StageId — we want EnemySpawn from the closest StageId
+        const ownStageId = _snoToSid[sno] ?? 0;
+
         for (const [groupId, positions] of Object.entries(toolGroups)) {
             if (_spawnByKey[`${sno}:${groupId}`]) continue;
             const allKeys = Object.keys(_spawnByKey).filter(k => k.endsWith(':' + groupId));
             if (!allKeys.length) continue;
             const firstPos = positions[0];
             if (!firstPos) continue;
+
+            // Pick the key whose stageNo maps back to the StageId closest to ownStageId
+            // This avoids pulling Goblin Lv1 (StageId=1) when we want Death Knight (StageId=433)
+            const bestKey = allKeys.reduce((best, k) => {
+                const kSno     = parseInt(k.split(':')[0], 10);
+                const kStageId = _snoToSid[kSno] ?? 0;
+                const bestSno  = parseInt(best.split(':')[0], 10);
+                const bestSid  = _snoToSid[bestSno] ?? 0;
+                return Math.abs(kStageId - ownStageId) < Math.abs(bestSid - ownStageId) ? k : best;
+            });
+
+            const entries = _spawnByKey[bestKey];
             const seenEids = new Set();
-            for (const anyKey of allKeys) {
-                const entries = _spawnByKey[anyKey];
-                for (const entry of entries) {
-                    if (seenEids.has(entry.eid)) continue;
-                    seenEids.add(entry.eid);
-                    // Use ndpId=0 for cross-stage entries since ndpId context may be wrong
-                    const name = resolveDisplayName(entry.eid, 0, 'en').toLowerCase();
-                    if (!name || name === '?') continue;
-                    for (const { mapName, stid } of maps) {
-                        const info = mapParams[mapName];
-                        if (!_mapHasImage(info)) continue;
-                        const latlng = worldToPixel(firstPos.x, firstPos.z, info);
-                        results.push({
-                            name,
-                            displayName: resolveDisplayName(entry.eid, 0, 'en'),
-                            mapName, stid, groupId,
-                            lv:   entry.lv,
-                            boss: entries.some(e => e.boss),
-                            cx: latlng.lng,
-                            cy: latlng.lat,
-                        });
-                    }
+            for (const entry of entries) {
+                if (seenEids.has(entry.eid)) continue;
+                seenEids.add(entry.eid);
+                const name = resolveDisplayName(entry.eid, 0, 'en').toLowerCase();
+                if (!name || name === '?') continue;
+                for (const { mapName, stid } of maps) {
+                    const info = mapParams[mapName];
+                    if (!_mapHasImage(info)) continue;
+                    const latlng = worldToPixel(firstPos.x, firstPos.z, info);
+                    results.push({
+                        name,
+                        displayName: resolveDisplayName(entry.eid, 0, 'en'),
+                        mapName, stid, groupId,
+                        lv:   entry.lv,
+                        boss: entries.some(e => e.boss),
+                        cx: latlng.lng,
+                        cy: latlng.lat,
+                    });
                 }
             }
         }
@@ -1910,15 +1921,23 @@ function loadEnemySpawns(info, stid = null) {
             for (const [groupId, positions] of Object.entries(toolData)) {
                 // Only add if: not already in byGroupId
                 if (byGroupId.has(groupId)) continue;
-                // Find a stageNo that has EnemySpawn data for this groupId
-                // First try the exact stage, then search all stages
+                // Find the stageNo whose StageId is closest to this map's own StageId
+                const ownSid = _snoToSid[stageNoInt] ?? 0;
                 let resolvedSno = null;
                 if (getSpawnInfo(stageNoInt, groupId)) {
                     resolvedSno = stageNoInt;
                 } else {
-                    // Search other stages for this groupId
-                    const anyKey = Object.keys(_spawnByKey).find(k => k.endsWith(':' + groupId));
-                    if (anyKey) resolvedSno = parseInt(anyKey.split(':')[0], 10);
+                    const allKeys = Object.keys(_spawnByKey).filter(k => k.endsWith(':' + groupId));
+                    if (allKeys.length) {
+                        const bestKey = allKeys.reduce((best, k) => {
+                            const kSno = parseInt(k.split(':')[0], 10);
+                            const kSid = _snoToSid[kSno] ?? 0;
+                            const bSno = parseInt(best.split(':')[0], 10);
+                            const bSid = _snoToSid[bSno] ?? 0;
+                            return Math.abs(kSid - ownSid) < Math.abs(bSid - ownSid) ? k : best;
+                        });
+                        resolvedSno = parseInt(bestKey.split(':')[0], 10);
+                    }
                 }
                 if (!resolvedSno) continue;
                 // Create minimal spawn entries compatible with our format
