@@ -1,4 +1,4 @@
-// v7 cache-bust 1773779195
+// v8-debug cache-bust 1773779873
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -666,18 +666,19 @@ function _buildGlobalEnemyIndex() {
         }
     }
     // Also index groups from tool supplement that use cross-stage EnemySpawn data
+    console.log('[DEBUG] snoToMap[872]:', JSON.stringify(snoToMap[872]));
     for (const [snoStr, toolGroups] of Object.entries(enemyPositionsTool)) {
         const sno  = parseInt(snoStr, 10);
         const maps = snoToMap[sno];
         if (!maps) continue;
+        if (sno === 872) console.log('[DEBUG] 872 maps:', JSON.stringify(maps));
         for (const [groupId, positions] of Object.entries(toolGroups)) {
             if (_spawnByKey[`${sno}:${groupId}`]) continue;
-            // Collect ALL EnemySpawn entries for this groupId across ALL stages
             const allKeys = Object.keys(_spawnByKey).filter(k => k.endsWith(':' + groupId));
             if (!allKeys.length) continue;
+            if (sno === 872) console.log('[DEBUG] 872 groupId:', groupId, 'allKeys:', allKeys.slice(0,3));
             const firstPos = positions[0];
             if (!firstPos) continue;
-            // Deduplicate by EnemyId — each unique enemy gets one entry
             const seenEids = new Set();
             for (const anyKey of allKeys) {
                 const entries = _spawnByKey[anyKey];
@@ -688,6 +689,7 @@ function _buildGlobalEnemyIndex() {
                     if (!name || name === '?') continue;
                     for (const { mapName, stid } of maps) {
                         const info = mapParams[mapName];
+                        if (sno === 872) console.log('[DEBUG] 872 mapName:', mapName, '_mapHasImage:', _mapHasImage(info), 'name:', name);
                         if (!_mapHasImage(info)) continue;
                         const latlng = worldToPixel(firstPos.x, firstPos.z, info);
                         results.push({
