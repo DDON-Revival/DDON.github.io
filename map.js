@@ -1,4 +1,4 @@
-// v16 cache-bust 1773784396
+// v17 cache-bust 1773784925
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -624,110 +624,54 @@ function _mapHasImage(info) {
 }
 
 function _buildGlobalEnemyIndex() {
-    const snoToMap = _buildSnoToMap();
-    const results  = [];
-    for (const [key, entries] of Object.entries(_spawnByKey)) {
-        const [snoStr, groupId] = key.split(':');
-        const sno  = parseInt(snoStr, 10);
-        const maps = snoToMap[sno];
-        if (!maps) continue;
+    const results = [];
 
-        // Index ALL unique enemies in this group
-        // Position is validated per-map below
+    for (const [mapName, info] of Object.entries(mapParams)) {
+        if (!_mapHasImage(info) || !info.stages?.length) continue;
 
-        const seenEids = new Set();
-        for (const entry of entries) {
-            if (seenEids.has(entry.eid)) continue;
-            seenEids.add(entry.eid);
-            const displayName = resolveDisplayName(entry.eid, entry.ndpId, 'en');
-            const baseName    = resolveDisplayName(entry.eid, 0, 'en');
-            const name        = displayName.toLowerCase();
-            const baseLower   = baseName.toLowerCase();
-            if (!name || name === '?') continue;
+        for (const stid of info.stages) {
+            const sno    = parseInt(stid.slice(2), 10);
+            const snoStr = String(sno);
 
-            for (const { mapName, stid } of maps) {
-                const info = mapParams[mapName];
-                if (!_mapHasImage(info)) continue;
-                // Verify this group actually has a position on THIS specific map's stage
-                const mapSno    = parseInt(stid.slice(2), 10);
-                const mapSnoStr = String(mapSno);
-                // Only match when this stid's stageNo is exactly the one in the key
-                // Prevents st0100 (Lestania/Goblin) from polluting dungeons that also list st0100
-                if (mapSno !== sno) continue;
-                const hasPosHere = enemyPositions[mapSnoStr]?.[groupId]
-                    || enemyPositionsTool[mapSnoStr]?.[groupId];
-                if (!hasPosHere) continue;
-                // Use firstPos for the correct stage
+            const annuateGroups = enemyPositions[snoStr] ? Object.keys(enemyPositions[snoStr]) : [];
+            const toolGroups    = enemyPositionsTool[snoStr] ? Object.keys(enemyPositionsTool[snoStr]) : [];
+            const allGroupIds   = [...new Set([...annuateGroups, ...toolGroups])];
+
+            for (const groupId of allGroupIds) {
+                const si = getSpawnInfo(sno, groupId);
+                if (!si) continue;
+
+                const pd = enemyPositions[snoStr]?.[groupId];
                 let pos = null;
-                const pd = enemyPositions[mapSnoStr]?.[groupId];
                 if (pd) {
                     const sp = pd.spawns ?? pd;
                     if (sp.length) pos = sp[0].Position;
                 } else {
-                    const tp = enemyPositionsTool[mapSnoStr]?.[groupId];
+                    const tp = enemyPositionsTool[snoStr]?.[groupId];
                     if (tp?.length) pos = { x: tp[0].x, z: tp[0].z };
                 }
                 if (!pos) continue;
-                const latlng = worldToPixel(pos.x, pos.z, info);
-                const baseEntry = { mapName, stid, groupId, lv: entry.lv, boss: entries.some(e => e.boss), cx: latlng.lng, cy: latlng.lat };
-                results.push({ ...baseEntry, name, displayName });
-                if (baseLower !== name && baseLower && baseLower !== '?') {
-                    results.push({ ...baseEntry, name: baseLower, displayName: baseName });
-                }
-            }
-        }
-    }
-    // Also index groups from tool supplement that use cross-stage EnemySpawn data
-    for (const [snoStr, toolGroups] of Object.entries(enemyPositionsTool)) {
-        const sno     = parseInt(snoStr, 10);
-        const maps    = snoToMap[sno];
-        if (!maps) continue;
-        // The map's own StageId — we want EnemySpawn from the closest StageId
-        const ownStageId = _snoToSid[sno] ?? 0;
 
-        for (const [groupId, positions] of Object.entries(toolGroups)) {
-            if (_spawnByKey[`${sno}:${groupId}`]) continue;
-            const allKeys = Object.keys(_spawnByKey).filter(k => k.endsWith(':' + groupId));
-            if (!allKeys.length) continue;
-            const firstPos = positions[0];
-            if (!firstPos) continue;
-
-            // Pick the key whose stageNo maps back to the StageId closest to ownStageId
-            // This avoids pulling Goblin Lv1 (StageId=1) when we want Death Knight (StageId=433)
-            const bestKey = allKeys.reduce((best, k) => {
-                const kSno     = parseInt(k.split(':')[0], 10);
-                const kStageId = _snoToSid[kSno] ?? 0;
-                const bestSno  = parseInt(best.split(':')[0], 10);
-                const bestSid  = _snoToSid[bestSno] ?? 0;
-                return Math.abs(kStageId - ownStageId) < Math.abs(bestSid - ownStageId) ? k : best;
-            });
-
-            const entries = _spawnByKey[bestKey];
-            const seenEids = new Set();
-            for (const entry of entries) {
-                if (seenEids.has(entry.eid)) continue;
-                seenEids.add(entry.eid);
-                const name = resolveDisplayName(entry.eid, 0, 'en').toLowerCase();
-                if (!name || name === '?') continue;
-                for (const { mapName, stid } of maps) {
-                    const info = mapParams[mapName];
-                    if (!_mapHasImage(info)) continue;
-                    const latlng = worldToPixel(firstPos.x, firstPos.z, info);
-                    results.push({
-                        name,
-                        displayName: resolveDisplayName(entry.eid, 0, 'en'),
-                        mapName, stid, groupId,
-                        lv:   entry.lv,
-                        boss: entries.some(e => e.boss),
-                        cx: latlng.lng,
-                        cy: latlng.lat,
-                    });
+                const latlng  = worldToPixel(pos.x, pos.z, info);
+                const entries = _spawnByKey[`${sno}:${groupId}`] || [];
+                const seenEids = new Set();
+                for (const entry of entries) {
+                    if (seenEids.has(entry.eid)) continue;
+                    seenEids.add(entry.eid);
+                    const displayName = resolveDisplayName(entry.eid, entry.ndpId, 'en');
+                    const baseName    = resolveDisplayName(entry.eid, 0, 'en');
+                    const name        = displayName.toLowerCase();
+                    const baseLower   = baseName.toLowerCase();
+                    if (!name || name === '?') continue;
+                    const base = { mapName, stid, groupId, lv: entry.lv, boss: si.boss, cx: latlng.lng, cy: latlng.lat };
+                    results.push({ ...base, name, displayName });
+                    if (baseLower !== name && baseLower && baseLower !== '?')
+                        results.push({ ...base, name: baseLower, displayName: baseName });
                 }
             }
         }
     }
 
-    // Deduplicate: same map+group+name — keep first
     const seen = new Set();
     return results.filter(r => {
         const k = `${r.mapName}:${r.stid}:${r.groupId}:${r.name}`;
