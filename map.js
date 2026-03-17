@@ -1,4 +1,4 @@
-// v15 cache-bust 1773783814
+// v16 cache-bust 1773784396
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -651,6 +651,9 @@ function _buildGlobalEnemyIndex() {
                 // Verify this group actually has a position on THIS specific map's stage
                 const mapSno    = parseInt(stid.slice(2), 10);
                 const mapSnoStr = String(mapSno);
+                // Only match when this stid's stageNo is exactly the one in the key
+                // Prevents st0100 (Lestania/Goblin) from polluting dungeons that also list st0100
+                if (mapSno !== sno) continue;
                 const hasPosHere = enemyPositions[mapSnoStr]?.[groupId]
                     || enemyPositionsTool[mapSnoStr]?.[groupId];
                 if (!hasPosHere) continue;
