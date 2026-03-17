@@ -1,4 +1,4 @@
-// v12 cache-bust 1773781706
+// v13 cache-bust 1773781952
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -815,19 +815,35 @@ function _renderSearchResults(q) {
             header.textContent = eName + (entries[0].boss ? ' ★' : '');
             listEl.appendChild(header);
 
-            for (const r of entries.slice(0, 8)) {
+            // Deduplicate by mapName+stid — show each location once
+            const seen = new Map();
+            for (const r of entries) {
+                const k = `${r.mapName}:${r.stid}`;
+                if (!seen.has(k)) seen.set(k, r);
+            }
+            const unique = [...seen.values()];
+            const SHOW = 12;
+
+            const renderEntry = (r) => {
                 const info = mapParams[r.mapName];
                 const label = info?.name_en ? splitPascalCase(info.name_en) : r.mapName;
                 const el = document.createElement('div');
                 el.className = 'map-entry';
-                el.innerHTML = `<span class="img-dot ${info?.img_exists ? 'has-img' : 'no-img'}"></span><span>${label}</span><span style="margin-left:auto;font-size:0.7rem;color:var(--text-dim)">Lv${r.lv}</span>`;
+                el.innerHTML = `<span class="img-dot ${_mapHasImage(info) ? 'has-img' : 'no-img'}"></span><span>${label}</span><span style="margin-left:auto;font-size:0.7rem;color:var(--text-dim)">Lv${r.lv}</span>`;
                 el.addEventListener('click', () => _navigateToResult(r));
                 listEl.appendChild(el);
-            }
-            if (entries.length > 8) {
+            };
+
+            unique.slice(0, SHOW).forEach(renderEntry);
+
+            if (unique.length > SHOW) {
                 const more = document.createElement('div');
-                more.style.cssText = 'padding:3px 14px;font-size:0.72rem;color:var(--text-dim)';
-                more.textContent = `+${entries.length - 8} more locations`;
+                more.style.cssText = 'padding:4px 14px;font-size:0.72rem;color:var(--gold-dim);cursor:pointer;text-decoration:underline';
+                more.textContent = `+${unique.length - SHOW} more locations`;
+                more.addEventListener('click', () => {
+                    more.remove();
+                    unique.slice(SHOW).forEach(renderEntry);
+                });
                 listEl.appendChild(more);
             }
         }
