@@ -1,4 +1,4 @@
-// v11 cache-bust 1773781409
+// v12 cache-bust 1773781706
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -714,10 +714,10 @@ function _buildGlobalEnemyIndex() {
         }
     }
 
-    // Deduplicate same (mapName+groupId) — keep first
+    // Deduplicate: same map+group+name — keep first
     const seen = new Set();
     return results.filter(r => {
-        const k = `${r.mapName}:${r.stid}:${r.groupId}`;
+        const k = `${r.mapName}:${r.stid}:${r.groupId}:${r.name}`;
         if (seen.has(k)) return false;
         seen.add(k); return true;
     });
