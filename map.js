@@ -1,4 +1,4 @@
-// v21 cache-bust 1773786330
+// v23 cache-bust 1773787351
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -879,25 +879,37 @@ function _renderSearchResults(q) {
             header.className = 'map-group-header';
             header.textContent = itemName;
             listEl.appendChild(header);
+            // Group by enemy, show each map as separate clickable row
             const byEnemy = new Map();
             for (const r of entries) {
                 if (!byEnemy.has(r.enemyName)) byEnemy.set(r.enemyName, []);
                 byEnemy.get(r.enemyName).push(r);
             }
-            for (const [eName, ers] of [...byEnemy].slice(0, 6)) {
-                const info  = mapParams[ers[0].mapName];
-                const mapLabel = info?.name_en ? splitPascalCase(info.name_en) : ers[0].mapName;
-                const el = document.createElement('div');
-                el.className = 'map-entry';
-                el.innerHTML = `<span class="img-dot ${info?.img_exists?'has-img':'no-img'}"></span><span>${eName}</span><span style="margin-left:auto;font-size:0.7rem;color:${ers[0].rate>=80?'#6dbb55':ers[0].rate>=30?'#c9a84c':'var(--text-dim)'}">${ers[0].rate}%</span>`;
-                el.title = mapLabel;
-                el.addEventListener('click', () => _navigateToResult(ers[0]));
-                listEl.appendChild(el);
+            let rowCount = 0;
+            for (const [eName, ers] of byEnemy) {
+                const seenMaps = new Map();
+                for (const r of ers) {
+                    const k = `${r.mapName}:${r.stid}`;
+                    if (!seenMaps.has(k)) seenMaps.set(k, r);
+                }
+                for (const r of seenMaps.values()) {
+                    if (rowCount >= 12) break;
+                    const info = mapParams[r.mapName];
+                    const mapLabel = info?.name_en ? splitPascalCase(info.name_en) : r.mapName;
+                    const el = document.createElement('div');
+                    el.className = 'map-entry';
+                    el.innerHTML = `<span class="img-dot ${_mapHasImage(info)?'has-img':'no-img'}"></span><span>${eName} <span style="font-size:0.7rem;color:var(--text-dim)">@ ${mapLabel}</span></span><span style="margin-left:auto;font-size:0.7rem;color:${r.rate>=80?'#6dbb55':r.rate>=30?'#c9a84c':'var(--text-dim)'}">${r.rate}%</span>`;
+                    el.addEventListener('click', () => _navigateToResult(r));
+                    listEl.appendChild(el);
+                    rowCount++;
+                }
+                if (rowCount >= 12) break;
             }
-            if (byEnemy.size > 6) {
+            const total = [...byEnemy.values()].reduce((s,ers) => s + new Set(ers.map(r=>`${r.mapName}:${r.stid}`)).size, 0);
+            if (total > 12) {
                 const more = document.createElement('div');
-                more.style.cssText = 'padding:3px 14px;font-size:0.72rem;color:var(--text-dim)';
-                more.textContent = `+${byEnemy.size - 6} more enemies`;
+                more.style.cssText = 'padding:3px 14px;font-size:0.72rem;color:var(--gold-dim)';
+                more.textContent = `+${total - 12} more locations`;
                 listEl.appendChild(more);
             }
         }
@@ -1824,10 +1836,17 @@ function loadEnemySpawns(info, stid = null) {
         for (const [groupId, groupData] of Object.entries(stageData)) {
             const spawns    = groupData.spawns    ?? groupData;
             const territory = groupData.territory ?? null;
+            const resolvedSno = _enemyDataReady && getSpawnInfo(stageNoInt, groupId)
+                ? stageNoInt : null;
             if (!byGroupId.has(groupId)) {
-                const resolvedSno = _enemyDataReady && getSpawnInfo(stageNoInt, groupId)
-                    ? stageNoInt : null;
                 byGroupId.set(groupId, { territory, items: [], pts: [], sourceStageNo: resolvedSno ?? stageNoInt });
+            } else if (resolvedSno !== null) {
+                // Override sourceStageNo if we found a better (confirmed) match
+                // This prevents st0100 (Lestania) from claiming groups that belong to st0872
+                const existing = byGroupId.get(groupId);
+                if (!getSpawnInfo(existing.sourceStageNo, groupId)) {
+                    existing.sourceStageNo = resolvedSno;
+                }
             }
             const entry = byGroupId.get(groupId);
             for (let i = 0; i < spawns.length; i++) {
