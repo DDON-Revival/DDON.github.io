@@ -1,4 +1,4 @@
-// v23 cache-bust 1773787351
+// v24 new-annuate-data 1773787922
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
