@@ -1,4 +1,4 @@
-// v26 name-fallback-fix 1773789557
+// v27 skip-no-spawn 1773863656
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -1555,15 +1555,10 @@ function buildGroupDetails(g) {
         const posEntry  = getSpawnEntry(stageNo, g.groupId, idx);
         const eName     = posEntry
             ? resolveDisplayName(posEntry.eid, posEntry.ndpId, _lang)
-            : (() => {
-                // No exact posIdx match — use first EnemySpawn entry for this group
-                const fallback = _spawnByKey[`${stageNo}:${g.groupId}`]?.[0];
-                return fallback
-                    ? resolveDisplayName(fallback.eid, fallback.ndpId, _lang)
-                    : getEnemyName(spawn.EmName, _lang);
-            })();
+            : null; // No EnemySpawn match for this position — don't render dot
 
-        const badge      = `<span class="pp-sg-badge" style="background:${fillColor};color:#111">Set ${sg}</span>`;
+        // Skip positions with no EnemySpawn match — these are empty/unassigned slots
+        if (eName === null) continue;
         const groupLabel = `<span style="color:${g.color};font-weight:700">G${g.groupId}</span>`;
 
         const lvStr = si?.lvs?.length
