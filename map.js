@@ -1,4 +1,4 @@
-// v25 posIdx-fix 1773788735
+// v26 name-fallback-fix 1773789557
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -287,8 +287,9 @@ function _groupPassesAllFilters(groupId) {
         if (!g) return false;
         return g.items.some(it => {
             const entry = getSpawnEntry(sno, groupId, it.idx);
-            const name = entry
-                ? resolveDisplayName(entry.eid, entry.ndpId, _lang).toLowerCase()
+            const fallback = entry ?? _spawnByKey[`${sno}:${groupId}`]?.[0];
+            const name = fallback
+                ? resolveDisplayName(fallback.eid, fallback.ndpId, _lang).toLowerCase()
                 : getEnemyName(it.spawn.EmName, _lang).toLowerCase();
             return name.includes(_enemySearchText) || (it.spawn.EmName||'').toLowerCase().includes(_enemySearchText);
         });
@@ -1554,7 +1555,13 @@ function buildGroupDetails(g) {
         const posEntry  = getSpawnEntry(stageNo, g.groupId, idx);
         const eName     = posEntry
             ? resolveDisplayName(posEntry.eid, posEntry.ndpId, _lang)
-            : getEnemyName(spawn.EmName, _lang);
+            : (() => {
+                // No exact posIdx match — use first EnemySpawn entry for this group
+                const fallback = _spawnByKey[`${stageNo}:${g.groupId}`]?.[0];
+                return fallback
+                    ? resolveDisplayName(fallback.eid, fallback.ndpId, _lang)
+                    : getEnemyName(spawn.EmName, _lang);
+            })();
 
         const badge      = `<span class="pp-sg-badge" style="background:${fillColor};color:#111">Set ${sg}</span>`;
         const groupLabel = `<span style="color:${g.color};font-weight:700">G${g.groupId}</span>`;
