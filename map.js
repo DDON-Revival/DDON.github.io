@@ -1,4 +1,4 @@
-// v28 npc-shops + area-labels
+// v29 npc-shops-items 1773866304
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -31,10 +31,10 @@ let _enemySearchText = '';
 
 // ── Channels ──────────────────────────────────────────────────────────────────
 const CHANNELS = {
-    normal:   { label: 'Normal',    file: 'EnemySpawn.json',        gather: 'GatheringItem.json' },
-    collab:   { label: 'Collab',    file: 'EnemySpawnCollab.json',  gather: 'GatheringItemCollab.json' },
-    custom:   { label: 'Custom',    file: 'EnemySpawnCustom.json',  gather: 'GatheringItemCustom.json' },
-    bossrush: { label: 'Boss Rush', file: 'EnemySpawnBR.json',      gather: 'GatheringItemBR.json' },
+    normal:   { label: 'Normal',    file: 'EnemySpawn.json',        gather: 'GatheringItem.json',        shop: 'ShopItems_normal.json' },
+    collab:   { label: 'Collab',    file: 'EnemySpawnCollab.json',  gather: 'GatheringItemCollab.json',  shop: 'ShopItems_collab.json' },
+    custom:   { label: 'Custom',    file: 'EnemySpawnCustom.json',  gather: 'GatheringItemCustom.json',  shop: 'ShopItems_custom.json' },
+    bossrush: { label: 'Boss Rush', file: 'EnemySpawnBR.json',      gather: 'GatheringItemBR.json',      shop: 'ShopItems_bossrush.json' },
 };
 let _activeChannel = localStorage.getItem('ddon-channel') || 'normal';
 
@@ -66,6 +66,15 @@ const _snoToSid = (() => {
 // Format: stageNo → [{GroupNo, PosId, GatheringType, Position:{x,y,z}}, ...]
 let _gatherSpots = {};
 let _gatherChannelData = {};
+let _shopItems         = {};   // ShopId → [ItemId, ...]
+
+async function _loadShopFile(fileName) {
+    try {
+        const r = await fetch('./datas/' + fileName);
+        if (r.ok) _shopItems = await r.json();
+        else _shopItems = {};
+    } catch(e) { _shopItems = {}; }
+}
 
 async function _loadChannelFile(fileName) {
     const r = await fetch('./datas/' + fileName);
@@ -125,6 +134,7 @@ async function switchChannel(channelId) {
     try {
         await _loadChannelFile(CHANNELS[channelId].file);
         await _loadGatherFile(CHANNELS[channelId].gather);
+        await _loadShopFile(CHANNELS[channelId].shop);
     } catch(e) { console.warn('Channel load error:', e); return; }
     _invalidateSearchIndex();
     if (_loadedMapName && mapParams[_loadedMapName]) {
@@ -178,6 +188,7 @@ function _updateChannelUI() {
     try {
         await _loadChannelFile(CHANNELS[_activeChannel].file);
         await _loadGatherFile(CHANNELS[_activeChannel].gather);
+        await _loadShopFile(CHANNELS[_activeChannel].shop);
     } catch(e) { console.warn('EnemySpawn load error:', e); }
     _enemyDataReady = true;
     _invalidateSearchIndex();
@@ -2440,8 +2451,8 @@ function loadNpcShops(info, stid = null) {
     const stagesToLoad = (stid && info.stages.includes(stid)) ? [stid] : info.stages;
 
     for (const stageId of stagesToLoad) {
-        const sno   = parseInt(stageId.slice(2), 10);
-        const npcs  = npcShopsData[String(sno)];
+        const sno  = parseInt(stageId.slice(2), 10);
+        const npcs = npcShopsData[String(sno)];
         if (!npcs) continue;
 
         for (const npc of npcs) {
@@ -2452,11 +2463,28 @@ function loadNpcShops(info, stid = null) {
                 html: `<div style="font-size:14px;line-height:1;filter:drop-shadow(0 1px 2px #000a)">${emoji}</div>`,
                 iconSize:   [18, 18],
                 iconAnchor: [9, 9],
-                popupAnchor:[0, -12],
+                popupAnchor:[0, -14],
             });
+
+            // Build shop items list for popup
+            const itemIds = npc.sid ? (_shopItems[String(npc.sid)] || []) : [];
+            const itemRows = itemIds.slice(0, 12).map(id => {
+                const name = getItemName(id, _lang);
+                return `<div class="pp-drop"><span class="pp-drop-name">${name}</span></div>`;
+            }).join('');
+            const moreItems = itemIds.length > 12
+                ? `<div style="font-size:0.7rem;color:var(--text-dim);padding:2px 0">+${itemIds.length - 12} more items</div>` : '';
+
+            const popupHtml = `
+<div class="dd-popup">
+  <div class="dd-popup-top"><span class="pp-sg-badge" style="background:${color};color:#111">${emoji} ${npc.t}</span></div>
+  <div class="dd-popup-name">${npc.n}</div>
+  ${itemRows ? `<div class="dd-drops"><div class="dd-drops-title">Items</div>${itemRows}${moreItems}</div>` : ''}
+</div>`;
+
             L.marker(latlng, { icon })
                 .bindTooltip(`${npc.n} (${npc.t})`, { direction: 'top', offset: [0, -10] })
-                .bindPopup(`<div class="dd-popup"><div class="dd-popup-name" style="color:${color}">${emoji} ${npc.n}</div><div style="font-size:0.8rem;color:var(--text-dim)">${npc.t}</div></div>`)
+                .bindPopup(popupHtml)
                 .addTo(npcLayer);
         }
     }
