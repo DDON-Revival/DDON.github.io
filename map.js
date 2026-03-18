@@ -1,10 +1,11 @@
-// v27 skip-no-spawn 1773863656
+// v28 npc-shops + area-labels
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
 import landmarkData       from './datas/landmarks.json'           with {type: "json"};
 import connectionData     from './datas/connections.json'         with {type: "json"};
 import stageIdToNo        from './datas/stageIdToNo.json'         with {type: "json"};
+import npcShopsData       from './datas/npcShops.json'            with {type: "json"};
 
 // ── Enemy data ────────────────────────────────────────────────────────────────
 let _enemyNames  = {};
@@ -381,6 +382,8 @@ let territoryLayer  = L.layerGroup();
 let pdBoundaryLayer = L.layerGroup().addTo(leafletMap);
 let spawnRadiiLayer   = L.layerGroup().addTo(leafletMap);
 let _spreadOverlay    = L.layerGroup().addTo(leafletMap);
+let npcLayer          = L.layerGroup();   // hidden by default
+let areaLabelLayer    = L.layerGroup();   // hidden by default
 
 // Canvas renderer — all spawn circleMarkers share one <canvas> element (huge perf win).
 const spawnRenderer = L.canvas({ padding: 0.5 });
@@ -2417,6 +2420,68 @@ function resetView() {
     }
 }
 
+// ── NPC / Shop markers ────────────────────────────────────────────────────────
+const NPC_TYPE_ICONS = {
+    'Shop':       { emoji: '🛒', color: '#c8a84b' },
+    'Equipment':  { emoji: '⚔',  color: '#b87333' },
+    'Inn':        { emoji: '🏠', color: '#6dbb55' },
+    'Storage':    { emoji: '📦', color: '#8888cc' },
+    'Craft':      { emoji: '🔨', color: '#cc8844' },
+    'Dye':        { emoji: '🎨', color: '#cc55cc' },
+    'Rift Shop':  { emoji: '💠', color: '#55aaee' },
+    'Pawn Guild': { emoji: '🤝', color: '#ddbb44' },
+    'Special':    { emoji: '⭐', color: '#ffffff' },
+    'NPC':        { emoji: '👤', color: '#aaaaaa' },
+};
+
+function loadNpcShops(info, stid = null) {
+    npcLayer.clearLayers();
+    if (!info.stages?.length) return;
+    const stagesToLoad = (stid && info.stages.includes(stid)) ? [stid] : info.stages;
+
+    for (const stageId of stagesToLoad) {
+        const sno   = parseInt(stageId.slice(2), 10);
+        const npcs  = npcShopsData[String(sno)];
+        if (!npcs) continue;
+
+        for (const npc of npcs) {
+            const latlng = worldToPixel(npc.x, npc.z, info);
+            const { emoji, color } = NPC_TYPE_ICONS[npc.t] || NPC_TYPE_ICONS['NPC'];
+            const icon = L.divIcon({
+                className: '',
+                html: `<div style="font-size:14px;line-height:1;filter:drop-shadow(0 1px 2px #000a)">${emoji}</div>`,
+                iconSize:   [18, 18],
+                iconAnchor: [9, 9],
+                popupAnchor:[0, -12],
+            });
+            L.marker(latlng, { icon })
+                .bindTooltip(`${npc.n} (${npc.t})`, { direction: 'top', offset: [0, -10] })
+                .bindPopup(`<div class="dd-popup"><div class="dd-popup-name" style="color:${color}">${emoji} ${npc.n}</div><div style="font-size:0.8rem;color:var(--text-dim)">${npc.t}</div></div>`)
+                .addTo(npcLayer);
+        }
+    }
+}
+
+// ── Area / Spot name labels ───────────────────────────────────────────────────
+function loadAreaLabels(info) {
+    areaLabelLayer.clearLayers();
+    const labels = info.stage_labels;
+    if (!labels?.length) return;
+
+    for (const label of labels) {
+        const latlng = worldToPixel(label.x, label.z, info);
+        const fontSize = label.radius > 30000 ? '0.85rem'
+                       : label.radius > 8000  ? '0.72rem' : '0.6rem';
+        const icon = L.divIcon({
+            className: '',
+            html: `<div class="area-label" style="font-size:${fontSize}">${label.name}</div>`,
+            iconSize:   [0, 0],
+            iconAnchor: [0, 0],
+        });
+        L.marker(latlng, { icon, interactive: false }).addTo(areaLabelLayer);
+    }
+}
+
 function loadMap(mapName) {
     const info = mapParams[mapName];
     if (!info) return;
@@ -2465,6 +2530,14 @@ function loadMap(mapName) {
 
     loadEnemySpawns(info, currentStageName());
     loadGathering(info, currentStageName());
+    if (document.getElementById('layer-npcs')?.checked) {
+        loadNpcShops(info, currentStageName());
+        if (!leafletMap.hasLayer(npcLayer)) leafletMap.addLayer(npcLayer);
+    }
+    if (document.getElementById('layer-arealabels')?.checked) {
+        loadAreaLabels(info);
+        if (!leafletMap.hasLayer(areaLabelLayer)) leafletMap.addLayer(areaLabelLayer);
+    }
 
     if (openGroups?.length) {
         for (const id of openGroups) if (_groupStore.has(id)) _expandGroupCore(_groupStore.get(id));
@@ -2534,6 +2607,34 @@ document.getElementById('layer-gathering')?.addEventListener('change', e => {
         gatheringLayer.clearLayers();
     }
     saveLayerPrefs();
+});
+
+// NPC layer toggle
+document.getElementById('layer-npcs')?.addEventListener('change', e => {
+    if (e.target.checked) {
+        const info = mapParams[_loadedMapName];
+        if (info) {
+            loadNpcShops(info, _loadedStid);
+            leafletMap.addLayer(npcLayer);
+        }
+    } else {
+        npcLayer.clearLayers();
+        leafletMap.removeLayer(npcLayer);
+    }
+});
+
+// Area labels toggle
+document.getElementById('layer-arealabels')?.addEventListener('change', e => {
+    if (e.target.checked) {
+        const info = mapParams[_loadedMapName];
+        if (info) {
+            loadAreaLabels(info);
+            leafletMap.addLayer(areaLabelLayer);
+        }
+    } else {
+        areaLabelLayer.clearLayers();
+        leafletMap.removeLayer(areaLabelLayer);
+    }
 });
 
 // Search mode tabs
