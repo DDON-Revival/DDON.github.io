@@ -1,4 +1,4 @@
-// v32 jp-full 1774032211
+// v33 jp-connections 1774032835
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -2047,7 +2047,10 @@ function loadConnections(mapName, info) {
                 : null);
         const hasMap = !!navMap;
         const stageId = `st${String(conn.to_stage).padStart(4, '0')}`;
-        const destName = (conn.name_en || `Stage ${conn.to_stage}`) + ` (${stageId})`;
+        const destNameText = _lang === 'jp'
+            ? (conn.name_jp || conn.name_en || `Stage ${conn.to_stage}`)
+            : (conn.name_en || `Stage ${conn.to_stage}`);
+        const destName = destNameText + ` (${stageId})`;
         const color = hasMap ? '#ff6b35' : '#666666';
 
         const icon = L.divIcon({
