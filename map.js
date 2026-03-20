@@ -1,4 +1,4 @@
-// v29 npc-shops-items 1773866304
+// v30 shop-prices 1773867180
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -2466,20 +2466,19 @@ function loadNpcShops(info, stid = null) {
                 popupAnchor:[0, -14],
             });
 
-            // Build shop items list for popup
-            const itemIds = npc.sid ? (_shopItems[String(npc.sid)] || []) : [];
-            const itemRows = itemIds.slice(0, 12).map(id => {
+            // Build shop items list for popup - all items with price + currency
+            const itemEntries = npc.sid ? (_shopItems[String(npc.sid)] || []) : [];
+            const itemRows = itemEntries.map(([id, price, currency]) => {
                 const name = getItemName(id, _lang);
-                return `<div class="pp-drop"><span class="pp-drop-name">${name}</span></div>`;
+                const priceStr = price > 0 ? `<span class="pp-rate" style="color:var(--gold,#c8a84b);min-width:unset;margin-left:auto;white-space:nowrap">${price.toLocaleString()} ${currency}</span>` : '';
+                return `<div class="pp-drop"><span class="pp-drop-name">${name}</span>${priceStr}</div>`;
             }).join('');
-            const moreItems = itemIds.length > 12
-                ? `<div style="font-size:0.7rem;color:var(--text-dim);padding:2px 0">+${itemIds.length - 12} more items</div>` : '';
 
             const popupHtml = `
 <div class="dd-popup">
   <div class="dd-popup-top"><span class="pp-sg-badge" style="background:${color};color:#111">${emoji} ${npc.t}</span></div>
   <div class="dd-popup-name">${npc.n}</div>
-  ${itemRows ? `<div class="dd-drops"><div class="dd-drops-title">Items</div>${itemRows}${moreItems}</div>` : ''}
+  ${itemRows ? `<div class="dd-drops" style="max-height:260px;overflow-y:auto"><div class="dd-drops-title">Items (${itemEntries.length})</div>${itemRows}</div>` : '<div style="font-size:0.78rem;color:var(--text-dim,#888);margin-top:4px">No items</div>'}
 </div>`;
 
             L.marker(latlng, { icon })
