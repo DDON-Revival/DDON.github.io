@@ -437,9 +437,9 @@
         <div id="search-box">
             <div style="display:flex;gap:2px;margin-bottom:6px">
                 <button class="search-tab active" data-mode="map" style="flex:1;padding:4px 0;font-size:0.65rem;font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.04em;border-radius:3px;border:1px solid var(--border);background:var(--gold);color:#0a0906;cursor:pointer;transition:all 0.15s">Maps</button>
-                <button class="search-tab" data-mode="enemy" style="flex:1;padding:4px 0;font-size:0.65rem;font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.04em;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.15s">Enemy</button>
-                <button class="search-tab" data-mode="gathering" style="flex:1;padding:4px 0;font-size:0.65rem;font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.04em;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.15s">Gather</button>
-                <button class="search-tab" data-mode="drops" style="flex:1;padding:4px 0;font-size:0.65rem;font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.04em;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.15s">Drops</button>
+                <button class="search-tab" data-mode="enemy" id="tab-enemy" style="flex:1;padding:4px 0;font-size:0.65rem;font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.04em;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.15s">Enemy</button>
+                <button class="search-tab" data-mode="gathering" id="tab-gathering" style="flex:1;padding:4px 0;font-size:0.65rem;font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.04em;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.15s">Gather</button>
+                <button class="search-tab" data-mode="drops" id="tab-drops" style="flex:1;padding:4px 0;font-size:0.65rem;font-family:'Cinzel',serif;font-weight:600;letter-spacing:0.04em;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.15s">Drops</button>
             </div>
             <div class="input-wrap">
                 <span class="search-icon">🗺</span>
@@ -451,12 +451,12 @@
 
         <div id="layers-panel">
             <!-- Channel selector -->
-            <div class="section-label">Channel</div>
+            <div class="section-label" id="lbl-channel">Channel</div>
             <div class="channel-grid">
                 <button class="channel-btn" data-channel="normal">Normal</button>
                 <button class="channel-btn" data-channel="collab">Collab</button>
                 <button class="channel-btn" data-channel="custom">Custom</button>
-                <button class="channel-btn" data-channel="bossrush">Boss Rush</button>
+                <button class="channel-btn" data-channel="bossrush" id="ch-bossrush">Boss Rush</button>
             </div>
 
             <div class="panel-sep"></div>
@@ -464,19 +464,19 @@
             <!-- Enemy layer toggle -->
             <label class="layer-toggle">
                 <input type="checkbox" id="layer-enemies" checked>
-                <span>Enemy Spawns</span>
+                <span id="lbl-enemy-spawns">Enemy Spawns</span>
             </label>
             <label class="layer-toggle" style="margin-bottom:8px">
                 <input type="checkbox" id="layer-gathering" checked>
-                <span>Gathering Nodes</span>
+                <span id="lbl-gathering">Gathering Nodes</span>
             </label>
             <label class="layer-toggle" style="margin-bottom:8px">
                 <input type="checkbox" id="layer-npcs">
-                <span>NPCs &amp; Shops</span>
+                <span id="lbl-npcs">NPCs &amp; Shops</span>
             </label>
             <label class="layer-toggle" style="margin-bottom:8px">
                 <input type="checkbox" id="layer-arealabels">
-                <span>Area Names</span>
+                <span id="lbl-arealabels">Area Names</span>
             </label>
 
             <!-- Dev layers — hidden from players, JS uses them -->
@@ -486,29 +486,29 @@
             <label class="layer-toggle" style="display:none"><input type="checkbox" id="layer-grid">Grid</label>
 
             <!-- Spawn time -->
-            <div class="section-label">Spawn Time</div>
+            <div class="section-label" id="lbl-spawntime">Spawn Time</div>
             <div class="pill-row">
-                <button class="pill-btn filter-time-btn" data-time="all">All</button>
-                <button class="pill-btn filter-time-btn" data-time="day">☀ Day</button>
-                <button class="pill-btn filter-time-btn" data-time="night">🌙 Night</button>
+                <button class="pill-btn filter-time-btn" data-time="all" id="btn-time-all">All</button>
+                <button class="pill-btn filter-time-btn" data-time="day" id="btn-time-day">☀ Day</button>
+                <button class="pill-btn filter-time-btn" data-time="night" id="btn-time-night">🌙 Night</button>
             </div>
 
             <!-- Type filter -->
-            <div class="section-label">Type</div>
+            <div class="section-label" id="lbl-type">Type</div>
             <div class="pill-row" style="margin-bottom:8px">
-                <button class="pill-btn filter-toggle-btn" data-filter="boss">Boss</button>
-                <button class="pill-btn filter-toggle-btn" data-filter="bloodOrb">Blood Orb</button>
-                <button class="pill-btn filter-toggle-btn" data-filter="highOrb">High Orb</button>
+                <button class="pill-btn filter-toggle-btn" data-filter="boss" id="btn-boss">Boss</button>
+                <button class="pill-btn filter-toggle-btn" data-filter="bloodOrb" id="btn-bloodorb">Blood Orb</button>
+                <button class="pill-btn filter-toggle-btn" data-filter="highOrb" id="btn-highorb">High Orb</button>
             </div>
 
             <!-- Enemy search -->
-            <div class="section-label">Enemy Search</div>
+            <div class="section-label" id="lbl-enemysearch">Enemy Search</div>
             <div class="input-wrap" style="margin-bottom:8px">
                 <span class="search-icon">⚔</span>
-                <input type="text" id="enemy-search" class="dd-input" placeholder="Search enemy name...">
+                <input type="text" id="enemy-search" class="dd-input" placeholder="Search enemy name..." id="search-placeholder">
             </div>
 
-            <button id="btn-expand-collapse">Expand All</button>
+            <button id="btn-expand-collapse" data-txt-expand="Expand All" data-txt-collapse="Collapse All">Expand All</button>
 
             <div class="help-text">
                 Click chip → expand group<br>

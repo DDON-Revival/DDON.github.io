@@ -1,4 +1,4 @@
-// v35 badge-fix 1774033732
+// v36 jp-ui-translations 1774036738
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -602,6 +602,42 @@ function setLang(lang) {
     localStorage.setItem('ddon-lang', lang);
     document.querySelectorAll('.lang-btn').forEach(btn =>
         btn.classList.toggle('active', btn.dataset.lang === lang));
+
+    // Translate UI strings
+    const UI = {
+        en: {
+            'tab-maps': 'Maps', 'tab-enemy': 'Enemy', 'tab-gathering': 'Gather', 'tab-drops': 'Drops',
+            'lbl-enemy-spawns': 'Enemy Spawns', 'lbl-gathering': 'Gathering Nodes',
+            'lbl-npcs': 'NPCs & Shops', 'lbl-arealabels': 'Area Names',
+            'lbl-channel': 'Channel', 'lbl-spawntime': 'Spawn Time', 'lbl-type': 'Type',
+            'lbl-enemysearch': 'Enemy Search',
+            'btn-time-all': 'All', 'btn-time-day': '☀ Day', 'btn-time-night': '🌙 Night',
+            'btn-boss': 'Boss', 'btn-bloodorb': 'Blood Orb', 'btn-highorb': 'High Orb',
+            'btn-expand': 'Expand All', 'btn-collapse': 'Collapse All',
+            'ch-normal': 'Normal', 'ch-collab': 'Collab', 'ch-custom': 'Custom', 'ch-bossrush': 'Boss Rush',
+            'search-placeholder': 'Search enemy name...',
+        },
+        jp: {
+            'tab-maps': 'マップ', 'tab-enemy': '敵', 'tab-gathering': '採集', 'tab-drops': 'ドロップ',
+            'lbl-enemy-spawns': '敵スポーン', 'lbl-gathering': '採集ポイント',
+            'lbl-npcs': 'NPC・ショップ', 'lbl-arealabels': 'エリア名',
+            'lbl-channel': 'チャンネル', 'lbl-spawntime': 'スポーン時間', 'lbl-type': 'タイプ',
+            'lbl-enemysearch': '敵検索',
+            'btn-time-all': '全て', 'btn-time-day': '☀ 昼', 'btn-time-night': '🌙 夜',
+            'btn-boss': 'ボス', 'btn-bloodorb': 'ブラッドオーブ', 'btn-highorb': 'ハイオーブ',
+            'btn-expand': '全展開', 'btn-collapse': '全折りたたみ',
+            'ch-normal': 'ノーマル', 'ch-collab': 'コラボ', 'ch-custom': 'カスタム', 'ch-bossrush': 'ボスラッシュ',
+            'search-placeholder': '敵の名前を検索...',
+        }
+    };
+    const t = UI[lang] || UI.en;
+    Object.entries(t).forEach(([id, text]) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.tagName === 'INPUT') el.placeholder = text;
+        else el.textContent = text;
+    });
+
     // Rebuild expanded groups
     const exp = [..._groupStore.values()].filter(g=>g.isExpanded);
     for (const g of exp) { leafletMap.removeLayer(g.detailsLayer); g.detailsLayer=null; g.sgMarkers={}; }
@@ -611,7 +647,6 @@ function setLang(lang) {
         if (document.getElementById('layer-enemies').checked) g.detailsLayer.addTo(leafletMap);
     }
     reapplySpread();
-    // Reload map to update title, connections, area labels, sidebar
     if (_loadedMapName) loadMap(_loadedMapName);
     buildSidebar(document.getElementById('map-search')?.value || '');
     _invalidateSearchIndex();
@@ -1586,8 +1621,8 @@ function buildGroupDetails(g) {
             ? (si.lvs.length>1 ? `${si.lvs[0]}–${si.lvs[si.lvs.length-1]}` : `${si.lvs[0]}`) : '?';
         const badges = [
             si?.boss     ? `<span class="pp-badge pp-boss">BOSS</span>` : '',
-            si?.bloodOrb ? `<span class="pp-badge pp-blood">Blood Orb${si.bloodAmt > 0 ? ' ×'+si.bloodAmt : ''}</span>` : '',
-            si?.highOrb  ? `<span class="pp-badge pp-high">High Orb${si.highAmt > 0 ? ' ×'+si.highAmt : ''}</span>` : '',
+            si?.bloodOrb ? `<span class="pp-badge pp-blood">Blood Orb${si.bloodAmt ? ' ×'+si.bloodAmt : ''}</span>` : '',
+            si?.highOrb  ? `<span class="pp-badge pp-high">High Orb${si.highAmt ? ' ×'+si.highAmt : ''}</span>` : '',
         ].filter(Boolean).join('');
         const timeIcon = si?.spawn && si.spawn !== '—' && si.spawn !== '00:00,23:59'
             ? (classifySpawnTime(si.spawn)==='day' ? '☀' : '🌙') + ' ' : '';
