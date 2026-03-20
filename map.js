@@ -1,4 +1,4 @@
-// v31 jp-names 1774031795
+// v32 jp-full 1774032211
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -1147,7 +1147,7 @@ function appendGroupHeader(listEl, text) {
 }
 
 function stageLabel(info, stid) {
-    // Display name for a specific stage variant of a map.
+    if (_lang === 'jp' && info.name_jp) return info.name_jp;
     const raw = info.stage_names?.[stid] || info.name_en || '';
     return raw ? splitPascalCase(raw) : stid;
 }
@@ -2503,7 +2503,7 @@ function loadAreaLabels(info) {
                        : label.radius > 8000  ? '0.72rem' : '0.6rem';
         const icon = L.divIcon({
             className: '',
-            html: `<div class="area-label" style="font-size:${fontSize}">${label.name}</div>`,
+            html: `<div class="area-label" style="font-size:${fontSize}">${_lang === 'jp' ? (label.name_jp || label.name) : label.name}</div>`,
             iconSize:   [0, 0],
             iconAnchor: [0, 0],
         });
