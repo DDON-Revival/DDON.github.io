@@ -186,7 +186,7 @@ async function loadAll() {
     await loadJSON("EnemySpawnCollab", "/datas/EnemySpawnCollab.json");
     await loadJSON("EnemySpawnCustom", "/datas/EnemySpawnCustom.json");
     await loadJSON("EnemyNames", "/datas/enemy-names.json");
-    await loadJSON("StageNames", "/datas/stage-names.json");
+    await loadJSON("StageNames", "/datas/stage-names-by-id.json");
     await loadJSON("Items", "/datas/item_names.json");
     await loadJSON("ShopsNormal", "/datas/Shop.json");
 	await loadJSON("ShopsBR", "/datas/ShopBR.json");
@@ -842,21 +842,24 @@ function renderStages(filter="") {
 
     let html="";
 
-    Object.keys(DATA.StageNames || {}).forEach(id=>{
+    const entries = Object.entries(DATA.StageNames || {});
+    entries.sort((a,b) => getStageName(a[0]).localeCompare(getStageName(b[0])));
+
+    entries.forEach(([id, stage])=>{
+        const en = (stage?.en || "").trim();
+        const jp = (stage?.jp || "").trim();
+        if (!en || en === "Invalid" || en.startsWith("st0") || jp.startsWith("st0")) return;
         const name = getStageName(id);
-        if (!String(name).toLowerCase().includes(filter)) return;
+        if (filter && !name.toLowerCase().includes(filter) && !en.toLowerCase().includes(filter)) return;
 
         html += `
             <div class="card">
-                <h3 onclick="navigate('?stage=${id}')"
-                    style="cursor:pointer">
-                    ${name}
-                </h3>
+                <h3 onclick="navigate('?stage=${id}')" style="cursor:pointer">${name}</h3>
             </div>
         `;
     });
 
-    document.getElementById("content").innerHTML = html;
+    document.getElementById("content").innerHTML = html || "<div class='card'>No stages found.</div>";
 }
 
 function openStage(id) {
