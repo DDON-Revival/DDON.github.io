@@ -1,3 +1,4 @@
+// v2.js cache-bust 1774035377
 /* =========================================================
    DDON WIKI V2 – FULL CLEAN STABLE BUILD
 ========================================================= */
@@ -842,11 +843,14 @@ function renderStages(filter="") {
     let html = "";
     const entries = Object.entries(DATA.StageNames || {});
     entries.sort((a, b) => getStageName(a[0]).localeCompare(getStageName(b[0])));
+    const seenNames = new Set();
     entries.forEach(([id, stage]) => {
         const en = (typeof stage === "string" ? stage : stage?.en) || "";
         const jp = (typeof stage === "object" ? stage?.jp : "") || "";
         if (!en || en === "Invalid" || en.toLowerCase().startsWith("st0") || jp.startsWith("st0")) return;
         const name = getStageName(id);
+        if (seenNames.has(name)) return;
+        seenNames.add(name);
         if (filter && !name.toLowerCase().includes(filter.toLowerCase()) && !en.toLowerCase().includes(filter.toLowerCase())) return;
         html += `<div class="card"><h3 onclick="navigate('?stage=${id}')" style="cursor:pointer">${name}</h3></div>`;
     });
