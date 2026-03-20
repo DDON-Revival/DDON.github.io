@@ -453,6 +453,10 @@ function router() {
 
 document.querySelectorAll(".tabs button").forEach(btn => {
     btn.onclick = () => {
+        if (btn.dataset.tab === "map") {
+            window.open("map.html", "_blank");
+            return;
+        }
         document.querySelectorAll(".tabs button")
             .forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
