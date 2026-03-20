@@ -1,4 +1,4 @@
-// v30 shop-prices 1773867180
+// v31 jp-names 1774031795
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -181,7 +181,7 @@ function _updateChannelUI() {
             const raw = await r.json();
             const list = raw.namedParamList || [];
             list.forEach(p => {
-                _ndpById[p.ID] = { name: p.Name || '', type: p.TypeName || 'NAMED_TYPE_NONE' };
+                _ndpById[p.ID] = { name: p.Name || '', nameJP: p.NameJP || p.Name || '', type: p.TypeName || 'NAMED_TYPE_NONE' };
             });
         }
     } catch(e) {}
@@ -222,10 +222,11 @@ function resolveDisplayName(eid, ndpId, lang) {
     if (!ndpId) return base;
     const ndp  = _ndpById[ndpId];
     if (!ndp || !ndp.name) return base;
+    const ndpName = (l === 'jp' && ndp.nameJP) ? ndp.nameJP : ndp.name;
     switch (ndp.type) {
-        case 'NAMED_TYPE_REPLACE': return ndp.name;
-        case 'NAMED_TYPE_PREFIX':  return `${ndp.name} ${base}`;
-        case 'NAMED_TYPE_SUFFIX':  return `${base} ${ndp.name}`;
+        case 'NAMED_TYPE_REPLACE': return ndpName;
+        case 'NAMED_TYPE_PREFIX':  return `${ndpName} ${base}`;
+        case 'NAMED_TYPE_SUFFIX':  return `${base} ${ndpName}`;
         default: return base;
     }
 }
@@ -798,7 +799,7 @@ function _renderSearchResults(q) {
 
             const renderEntry = (r) => {
                 const info = mapParams[r.mapName];
-                const label = info?.name_en ? splitPascalCase(info.name_en) : r.mapName;
+                const label = _lang === 'jp' ? (info?.name_jp || (info?.name_en ? splitPascalCase(info.name_en) : r.mapName)) : (info?.name_en ? splitPascalCase(info.name_en) : r.mapName);
                 const el = document.createElement('div');
                 el.className = 'map-entry';
                 el.innerHTML = `<span class="img-dot ${_mapHasImage(info) ? 'has-img' : 'no-img'}"></span><span>${label}</span><span style="margin-left:auto;font-size:0.7rem;color:var(--text-dim)">Lv${r.lv}</span>`;
@@ -858,7 +859,7 @@ function _renderSearchResults(q) {
 
             for (const r of [...unique.values()].slice(0, 8)) {
                 const info = mapParams[r.mapName];
-                const label = info?.name_en ? splitPascalCase(info.name_en) : r.mapName;
+                const label = _lang === 'jp' ? (info?.name_jp || (info?.name_en ? splitPascalCase(info.name_en) : r.mapName)) : (info?.name_en ? splitPascalCase(info.name_en) : r.mapName);
                 const typeIcon = r.nodeType === 'chest' ? '📦' : r.nodeType === 'ore' ? '💎' : r.nodeType === 'rare' ? '⭐' : '🌿';
                 const el = document.createElement('div');
                 el.className = 'map-entry';
@@ -910,7 +911,7 @@ function _renderSearchResults(q) {
                 for (const r of seenMaps.values()) {
                     if (rowCount >= 12) break;
                     const info = mapParams[r.mapName];
-                    const mapLabel = info?.name_en ? splitPascalCase(info.name_en) : r.mapName;
+                    const mapLabel = _lang === 'jp' ? (info?.name_jp || (info?.name_en ? splitPascalCase(info.name_en) : r.mapName)) : (info?.name_en ? splitPascalCase(info.name_en) : r.mapName);
                     const el = document.createElement('div');
                     el.className = 'map-entry';
                     el.innerHTML = `<span class="img-dot ${_mapHasImage(info)?'has-img':'no-img'}"></span><span>${eName} <span style="font-size:0.7rem;color:var(--text-dim)">@ ${mapLabel}</span></span><span style="margin-left:auto;font-size:0.7rem;color:${r.rate>=80?'#6dbb55':r.rate>=30?'#c9a84c':'var(--text-dim)'}">${r.rate}%</span>`;
@@ -1068,6 +1069,7 @@ function splitPascalCase(s) {
 }
 
 function displayName(mapName, info) {
+    if (_lang === 'jp' && info.name_jp) return info.name_jp;
     if (info.name_en) return splitPascalCase(info.name_en);
     return mapName;
 }
@@ -2477,12 +2479,12 @@ function loadNpcShops(info, stid = null) {
             const popupHtml = `
 <div class="dd-popup">
   <div class="dd-popup-top"><span class="pp-sg-badge" style="background:${color};color:#111">${emoji} ${npc.t}</span></div>
-  <div class="dd-popup-name">${npc.n}</div>
+  <div class="dd-popup-name">${_lang === 'jp' ? (npc.nj || npc.n) : npc.n}</div>
   ${itemRows ? `<div class="dd-drops" style="max-height:260px;overflow-y:auto"><div class="dd-drops-title">Items (${itemEntries.length})</div>${itemRows}</div>` : '<div style="font-size:0.78rem;color:var(--text-dim,#888);margin-top:4px">No items</div>'}
 </div>`;
 
             L.marker(latlng, { icon })
-                .bindTooltip(`${npc.n} (${npc.t})`, { direction: 'top', offset: [0, -10] })
+                .bindTooltip(`${_lang === 'jp' ? (npc.nj || npc.n) : npc.n} (${npc.t})`, { direction: 'top', offset: [0, -10] })
                 .bindPopup(popupHtml)
                 .addTo(npcLayer);
         }
@@ -2520,7 +2522,9 @@ function loadMap(mapName) {
 
     // Update title
     const stid = currentStageName();
-    const baseName = info.name_en ? splitPascalCase(info.name_en) : mapName;
+    const baseName = _lang === 'jp'
+        ? (info.name_jp || splitPascalCase(info.name_en || mapName))
+        : (info.name_en ? splitPascalCase(info.name_en) : mapName);
     const stageSuffix = stid ? ` (${stid})` : '';
     const title = baseName + stageSuffix;
     document.getElementById('map-title').textContent = title;
