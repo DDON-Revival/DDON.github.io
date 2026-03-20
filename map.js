@@ -1,4 +1,4 @@
-// v33 jp-connections 1774032835
+// v34 jp-connections-fix 1774033354
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -611,6 +611,10 @@ function setLang(lang) {
         if (document.getElementById('layer-enemies').checked) g.detailsLayer.addTo(leafletMap);
     }
     reapplySpread();
+    // Reload map to update title, connections, area labels, sidebar
+    if (_loadedMapName) loadMap(_loadedMapName);
+    buildSidebar(document.getElementById('map-search')?.value || '');
+    _invalidateSearchIndex();
 }
 
 // ── Global cross-map search index ─────────────────────────────────────────────
@@ -2050,7 +2054,7 @@ function loadConnections(mapName, info) {
         const destNameText = _lang === 'jp'
             ? (conn.name_jp || conn.name_en || `Stage ${conn.to_stage}`)
             : (conn.name_en || `Stage ${conn.to_stage}`);
-        const destName = destNameText + ` (${stageId})`;
+        const destName = destNameText;
         const color = hasMap ? '#ff6b35' : '#666666';
 
         const icon = L.divIcon({
@@ -2528,8 +2532,7 @@ function loadMap(mapName) {
     const baseName = _lang === 'jp'
         ? (info.name_jp || splitPascalCase(info.name_en || mapName))
         : (info.name_en ? splitPascalCase(info.name_en) : mapName);
-    const stageSuffix = stid ? ` (${stid})` : '';
-    const title = baseName + stageSuffix;
+    const title = baseName;
     document.getElementById('map-title').textContent = title;
     document.title = `${title} — DDON Maps`;
 
