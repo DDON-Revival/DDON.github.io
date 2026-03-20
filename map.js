@@ -1,4 +1,4 @@
-// v36 jp-ui-translations 1774036738
+// v37 jp-init-fix 1774037134
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -394,8 +394,8 @@ let territoryLayer  = L.layerGroup();
 let pdBoundaryLayer = L.layerGroup().addTo(leafletMap);
 let spawnRadiiLayer   = L.layerGroup().addTo(leafletMap);
 let _spreadOverlay    = L.layerGroup().addTo(leafletMap);
-let npcLayer          = L.layerGroup();   // hidden by default
-let areaLabelLayer    = L.layerGroup();   // hidden by default
+let npcLayer          = L.layerGroup().addTo(leafletMap);   // on by default
+let areaLabelLayer    = L.layerGroup().addTo(leafletMap);   // on by default
 
 // Canvas renderer — all spawn circleMarkers share one <canvas> element (huge perf win).
 const spawnRenderer = L.canvas({ padding: 0.5 });
@@ -465,6 +465,8 @@ function saveLayerPrefs() {
     const prefs = {
         enemies:     document.getElementById('layer-enemies').checked,
         gathering:   document.getElementById('layer-gathering')?.checked ?? true,
+        npcs:        document.getElementById('layer-npcs')?.checked ?? true,
+        arealabels:  document.getElementById('layer-arealabels')?.checked ?? true,
         landmarks:   document.getElementById('layer-landmarks').checked,
         connections: document.getElementById('layer-connections').checked,
         grid:        document.getElementById('layer-grid').checked,
@@ -493,6 +495,10 @@ function loadLayerPrefs() {
     document.getElementById('layer-enemies').checked     = isOn('enemies',     true);
     const gatherEl = document.getElementById('layer-gathering');
     if (gatherEl) gatherEl.checked = isOn('gathering', true);
+    const npcsEl = document.getElementById('layer-npcs');
+    if (npcsEl) npcsEl.checked = isOn('npcs', true);
+    const areaEl = document.getElementById('layer-arealabels');
+    if (areaEl) areaEl.checked = isOn('arealabels', true);
     document.getElementById('layer-landmarks').checked   = isOn('landmarks',   true);
     document.getElementById('layer-connections').checked = isOn('connections', true);
     document.getElementById('layer-grid').checked        = isOn('grid',        false);
@@ -2603,14 +2609,10 @@ function loadMap(mapName) {
 
     loadEnemySpawns(info, currentStageName());
     loadGathering(info, currentStageName());
-    if (document.getElementById('layer-npcs')?.checked) {
-        loadNpcShops(info, currentStageName());
-        if (!leafletMap.hasLayer(npcLayer)) leafletMap.addLayer(npcLayer);
-    }
-    if (document.getElementById('layer-arealabels')?.checked) {
-        loadAreaLabels(info);
-        if (!leafletMap.hasLayer(areaLabelLayer)) leafletMap.addLayer(areaLabelLayer);
-    }
+    loadNpcShops(info, currentStageName());
+    if (!leafletMap.hasLayer(npcLayer)) leafletMap.addLayer(npcLayer);
+    loadAreaLabels(info);
+    if (!leafletMap.hasLayer(areaLabelLayer)) leafletMap.addLayer(areaLabelLayer);
 
     if (openGroups?.length) {
         for (const id of openGroups) if (_groupStore.has(id)) _expandGroupCore(_groupStore.get(id));
@@ -2739,7 +2741,8 @@ document.querySelectorAll('.channel-btn').forEach(btn =>
 // Init UI state
 (function () {
     const l = _lang;
-    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang===l));
     document.querySelectorAll('.channel-btn').forEach(b => b.classList.toggle('active', b.dataset.channel===_activeChannel));
     _updateFilterUI();
+    // Apply language translations on load (incl. JP if stored)
+    setLang(l);
 })();
