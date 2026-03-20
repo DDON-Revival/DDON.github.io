@@ -229,13 +229,27 @@ cursor:pointer;
 <button data-tab="quest">Quests</button>
 <button data-tab="crafting">Crafting</button>
 <button data-tab="craftingPlus">Crafting+</button>
-<button data-tab="map">Interactive Map</button>
+<button data-tab="map" onclick="window.open('map.html','_blank')" id="btn-map">Interactive Map</button>
 </div>
 
 <div id="content"></div>
 
 <!-- ⚠️ NUR DIESE EINE DATEI -->
 <script src="js/v2.js"></script>
+
+
+<script>
+(function() {
+    const MAP_LABELS = { en: "Interactive Map", jp: "インタラクティブマップ" };
+    function updateMapBtn() {
+        const lang = document.getElementById("languageSelect")?.value || "en";
+        const btn = document.getElementById("btn-map");
+        if (btn) btn.textContent = MAP_LABELS[lang] || MAP_LABELS.en;
+    }
+    document.getElementById("languageSelect")?.addEventListener("change", updateMapBtn);
+    window.addEventListener("load", updateMapBtn);
+})();
+</script>
 
 </body>
 </html>
