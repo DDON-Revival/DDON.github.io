@@ -1,4 +1,4 @@
-// v34 jp-connections-fix 1774033354
+// v35 badge-fix 1774033732
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -1579,6 +1579,7 @@ function buildGroupDetails(g) {
 
         // Skip positions with no EnemySpawn match — these are empty/unassigned slots
         if (eName === null) continue;
+        const badge      = `<span class="pp-sg-badge" style="background:${fillColor};color:#111">Set ${sg}</span>`;
         const groupLabel = `<span style="color:${g.color};font-weight:700">G${g.groupId}</span>`;
 
         const lvStr = si?.lvs?.length
