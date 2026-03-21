@@ -1,4 +1,4 @@
-// v38 gather-filter 1774086878
+// v39 jp-search 1774087740
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -719,10 +719,14 @@ function _buildGlobalEnemyIndex() {
                 for (const entry of entries) {
                     if (seenEids.has(entry.eid)) continue;
                     seenEids.add(entry.eid);
-                    const displayName = resolveDisplayName(entry.eid, entry.ndpId, 'en');
-                    const baseName    = resolveDisplayName(entry.eid, 0, 'en');
-                    const name        = displayName.toLowerCase();
-                    const baseLower   = baseName.toLowerCase();
+                    const displayName   = resolveDisplayName(entry.eid, entry.ndpId, 'en');
+                    const displayNameJP = resolveDisplayName(entry.eid, entry.ndpId, 'jp');
+                    const baseName      = resolveDisplayName(entry.eid, 0, 'en');
+                    const baseNameJP    = resolveDisplayName(entry.eid, 0, 'jp');
+                    const name          = displayName.toLowerCase();
+                    const nameJP        = displayNameJP.toLowerCase();
+                    const baseLower     = baseName.toLowerCase();
+                    const baseLowerJP   = baseNameJP.toLowerCase();
                     if (!name || name === '?') continue;
                     const base = { mapName, stid, groupId, lv: entry.lv, boss: si.boss, cx: latlng.lng, cy: latlng.lat };
                     results.push({ ...base, name, displayName });
@@ -766,13 +770,16 @@ function _buildGlobalGatherIndex() {
                 const latlng = worldToPixel(spot.Position.x, spot.Position.z, info);
                 // One result per item so filter button knows which itemId
                 for (const it of posItems.i) {
-                    const name = getItemName(it.id, 'en');
+                    const name   = getItemName(it.id, 'en');
+                    const nameJP = getItemName(it.id, 'jp');
                     results.push({
                         names,
                         displayNames: posItems.i.map(i => getItemName(i.id, 'en')),
                         itemId: it.id,
                         itemName: name,
                         itemNameLower: name.toLowerCase(),
+                        itemNameJP: nameJP,
+                        itemNameJPLower: nameJP.toLowerCase(),
                         nodeType: GATHER_TYPE_MAP[spot.GatheringType] || 'gather',
                         mapName, stid,
                         cx: latlng.lng, cy: latlng.lat,
@@ -887,7 +894,7 @@ function _renderSearchResults(q) {
         }
 
         const matches = _gatherIndex.filter(r =>
-            r.itemNameLower.includes(_searchQuery)
+            r.itemNameLower.includes(_searchQuery) || r.itemNameJPLower?.includes(_searchQuery)
         );
 
         if (!matches.length) {
@@ -907,7 +914,7 @@ function _renderSearchResults(q) {
             header.className = 'map-group-header';
             header.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:6px';
             const nameSpan = document.createElement('span');
-            nameSpan.textContent = entries[0].itemName;
+            nameSpan.textContent = _lang === 'jp' ? (entries[0].itemNameJP || entries[0].itemName) : entries[0].itemName;
             header.appendChild(nameSpan);
             const sampleEntry = entries[0];
             const isActive = _gatherItemFilter === sampleEntry.itemId;
@@ -954,26 +961,28 @@ function _renderSearchResults(q) {
             listEl.innerHTML = '<div style="padding:12px 14px;font-size:0.78rem;color:var(--text-dim)">Type at least 2 characters...</div>';
             return;
         }
-        const matches = _dropIndex.filter(r => r.itemNameLower.includes(_searchQuery)).slice(0, 100);
+        const matches = _dropIndex.filter(r => r.itemNameLower.includes(_searchQuery) || r.itemNameJPLower?.includes(_searchQuery)).slice(0, 100);
         if (!matches.length) {
             listEl.innerHTML = '<div style="padding:12px 14px;font-size:0.78rem;color:var(--text-dim)">No results</div>';
             return;
         }
         const byItem = new Map();
         for (const r of matches) {
-            if (!byItem.has(r.itemName)) byItem.set(r.itemName, []);
-            byItem.get(r.itemName).push(r);
+            const key = r.itemName; // group by EN name for dedup
+            if (!byItem.has(key)) byItem.set(key, []);
+            byItem.get(key).push(r);
         }
         for (const [itemName, entries] of byItem) {
             const header = document.createElement('div');
             header.className = 'map-group-header';
-            header.textContent = itemName;
+            header.textContent = _lang === 'jp' ? (entries[0].itemNameJP || itemName) : itemName;
             listEl.appendChild(header);
             // Group by enemy, show each map as separate clickable row
             const byEnemy = new Map();
             for (const r of entries) {
-                if (!byEnemy.has(r.enemyName)) byEnemy.set(r.enemyName, []);
-                byEnemy.get(r.enemyName).push(r);
+                const eKey = r.enemyName;
+                if (!byEnemy.has(eKey)) byEnemy.set(eKey, []);
+                byEnemy.get(eKey).push(r);
             }
             let rowCount = 0;
             for (const [eName, ers] of byEnemy) {
@@ -986,9 +995,10 @@ function _renderSearchResults(q) {
                     if (rowCount >= 12) break;
                     const info = mapParams[r.mapName];
                     const mapLabel = _lang === 'jp' ? (info?.name_jp || (info?.name_en ? splitPascalCase(info.name_en) : r.mapName)) : (info?.name_en ? splitPascalCase(info.name_en) : r.mapName);
+                    const displayEnemy = _lang === 'jp' ? (r.enemyNameJP || eName) : eName;
                     const el = document.createElement('div');
                     el.className = 'map-entry';
-                    el.innerHTML = `<span class="img-dot ${_mapHasImage(info)?'has-img':'no-img'}"></span><span>${eName} <span style="font-size:0.7rem;color:var(--text-dim)">@ ${mapLabel}</span></span><span style="margin-left:auto;font-size:0.7rem;color:${r.rate>=80?'#6dbb55':r.rate>=30?'#c9a84c':'var(--text-dim)'}">${r.rate}%</span>`;
+                    el.innerHTML = `<span class="img-dot ${_mapHasImage(info)?'has-img':'no-img'}"></span><span>${displayEnemy} <span style="font-size:0.7rem;color:var(--text-dim)">@ ${mapLabel}</span></span><span style="margin-left:auto;font-size:0.7rem;color:${r.rate>=80?'#6dbb55':r.rate>=30?'#c9a84c':'var(--text-dim)'}">${r.rate}%</span>`;
                     el.addEventListener('click', () => _navigateToResult(r));
                     listEl.appendChild(el);
                     rowCount++;
@@ -1086,14 +1096,19 @@ function _buildGlobalDropIndex() {
                     if (!entry.dtid || seenDtids.has(entry.dtid)) continue;
                     seenDtids.add(entry.dtid);
                     if (!_dropsByDtid[entry.dtid]?.length) continue;
-                    const enemyName = resolveDisplayName(entry.eid, entry.ndpId, 'en');
+                    const enemyName   = resolveDisplayName(entry.eid, entry.ndpId, 'en');
+                    const enemyNameJP = resolveDisplayName(entry.eid, entry.ndpId, 'jp');
                     for (const [itemId, qty, rate] of _dropsByDtid[entry.dtid]) {
-                        const itemName = getItemName(itemId, 'en');
+                        const itemName   = getItemName(itemId, 'en');
+                        const itemNameJP = getItemName(itemId, 'jp');
                         if (itemName.startsWith('Item #')) continue;
                         results.push({
                             itemName,
-                            itemNameLower: itemName.toLowerCase(),
+                            itemNameLower:   itemName.toLowerCase(),
+                            itemNameJP,
+                            itemNameJPLower: itemNameJP.toLowerCase(),
                             enemyName,
+                            enemyNameJP,
                             mapName, stid, groupId,
                             lv: entry.lv,
                             rate,
