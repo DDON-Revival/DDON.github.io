@@ -1,4 +1,4 @@
-// v37 jp-init-fix 1774037134
+// v38 gather-filter 1774086878
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -764,13 +764,20 @@ function _buildGlobalGatherIndex() {
                 const info = mapParams[mapName];
                 if (!_mapHasImage(info)) continue;
                 const latlng = worldToPixel(spot.Position.x, spot.Position.z, info);
-                results.push({
-                    names,
-                    displayNames: posItems.i.map(it => getItemName(it.id, 'en')),
-                    nodeType: GATHER_TYPE_MAP[spot.GatheringType] || 'gather',
-                    mapName, stid,
-                    cx: latlng.lng, cy: latlng.lat,
-                });
+                // One result per item so filter button knows which itemId
+                for (const it of posItems.i) {
+                    const name = getItemName(it.id, 'en');
+                    results.push({
+                        names,
+                        displayNames: posItems.i.map(i => getItemName(i.id, 'en')),
+                        itemId: it.id,
+                        itemName: name,
+                        itemNameLower: name.toLowerCase(),
+                        nodeType: GATHER_TYPE_MAP[spot.GatheringType] || 'gather',
+                        mapName, stid,
+                        cx: latlng.lng, cy: latlng.lat,
+                    });
+                }
             }
         }
     }
@@ -779,11 +786,18 @@ function _buildGlobalGatherIndex() {
 
 // ── Search UI state ───────────────────────────────────────────────────────────
 let _searchMode  = 'map';   // 'map' | 'enemy' | 'gathering'
+let _gatherItemFilter = null;  // itemId to filter gather nodes, null = show all
 let _searchQuery = '';
 
 function setSearchMode(mode) {
     _searchMode  = mode;
     _searchQuery = '';
+    // Clear gather filter when leaving gathering mode
+    if (mode !== 'gathering' && _gatherItemFilter !== null) {
+        _gatherItemFilter = null;
+        const info = mapParams[_loadedMapName];
+        if (info) loadGathering(info, _loadedStid);
+    }
     const inp = document.getElementById('map-search');
     if (inp) {
         inp.placeholder = mode === 'enemy'     ? '⚔ Search enemy name...'
@@ -873,27 +887,42 @@ function _renderSearchResults(q) {
         }
 
         const matches = _gatherIndex.filter(r =>
-            r.names.some(n => n.includes(_searchQuery))
-        ).slice(0, 80);
+            r.itemNameLower.includes(_searchQuery)
+        );
 
         if (!matches.length) {
             listEl.innerHTML = '<div style="padding:12px 14px;font-size:0.78rem;color:var(--text-dim)">No results</div>';
             return;
         }
 
-        // Group by matching item name
+        // Group by itemId
         const byItem = new Map();
         for (const r of matches) {
-            const matchedNames = r.displayNames.filter((_, i) => r.names[i].includes(_searchQuery));
-            const key = matchedNames.join(', ');
-            if (!byItem.has(key)) byItem.set(key, []);
-            byItem.get(key).push(r);
+            if (!byItem.has(r.itemId)) byItem.set(r.itemId, []);
+            byItem.get(r.itemId).push(r);
         }
 
         for (const [itemName, entries] of byItem) {
             const header = document.createElement('div');
             header.className = 'map-group-header';
-            header.textContent = itemName;
+            header.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:6px';
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = entries[0].itemName;
+            header.appendChild(nameSpan);
+            const sampleEntry = entries[0];
+            const isActive = _gatherItemFilter === sampleEntry.itemId;
+            const filterBtn = document.createElement('button');
+            filterBtn.textContent = isActive ? '✕' : '🔍';
+            filterBtn.title = isActive ? 'Clear filter' : 'Show only on map';
+            filterBtn.style.cssText = `font-size:0.7rem;padding:1px 5px;border-radius:4px;border:1px solid ${isActive?'#e88':'var(--border)'};background:${isActive?'#5a2020':'transparent'};color:${isActive?'#faa':'var(--text-dim)'};cursor:pointer;flex-shrink:0`;
+            filterBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                _gatherItemFilter = isActive ? null : sampleEntry.itemId;
+                const info = mapParams[_loadedMapName];
+                if (info) loadGathering(info, _loadedStid);
+                _renderSearchResults(_searchQuery);
+            });
+            header.appendChild(filterBtn);
             listEl.appendChild(header);
 
             const unique = new Map();
@@ -2444,6 +2473,9 @@ function loadGathering(info, stid = null) {
             const groupItems = stageItems[String(spot.GroupNo)];
             const posItems   = groupItems?.[String(spot.PosId)];
             const items      = posItems?.i || [];
+
+            // If item filter active, skip nodes that don't contain the item
+            if (_gatherItemFilter !== null && !items.some(it => it.id === _gatherItemFilter)) continue;
 
             const itemRows = items.map(it => {
                 const name = getItemName(it.id, _lang);
