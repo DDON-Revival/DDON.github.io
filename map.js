@@ -1,4 +1,10 @@
-// v39 jp-search 1774087740
+// v40 token-search 1774092273
+function tokenMatch(text, query) {
+    if (!query) return true;
+    const tokens = query.toLowerCase().split(/\s+/).filter(Boolean);
+    const t = (text || '').toLowerCase();
+    return tokens.every(tok => t.includes(tok));
+}
 import enemyPositions     from './datas/enemyPositions.json'     with {type: "json"};
 import enemyPositionsTool from './datas/enemyPositionsTool.json' with {type: "json"};
 import mapParams          from './datas/map_params.json'          with {type: "json"};
@@ -304,7 +310,7 @@ function _groupPassesAllFilters(groupId) {
             const name = fallback
                 ? resolveDisplayName(fallback.eid, fallback.ndpId, _lang).toLowerCase()
                 : getEnemyName(it.spawn.EmName, _lang).toLowerCase();
-            return name.includes(_enemySearchText) || (it.spawn.EmName||'').toLowerCase().includes(_enemySearchText);
+            return tokenMatch(name, _enemySearchText) || tokenMatch((it.spawn.EmName||''), _enemySearchText);
         });
     }
     return true;
@@ -830,7 +836,7 @@ function _renderSearchResults(q) {
     if (_searchMode === 'enemy') {
         if (!_enemyIndex) _enemyIndex = _buildGlobalEnemyIndex();
         const matches = _searchQuery.length < 2 ? []
-            : _enemyIndex.filter(r => r.name.includes(_searchQuery)).slice(0, 60);
+            : _enemyIndex.filter(r => tokenMatch(r.name, _searchQuery) || tokenMatch(r.nameJP, _searchQuery)).slice(0, 60);
 
         if (!_searchQuery || _searchQuery.length < 2) {
             listEl.innerHTML = '<div style="padding:12px 14px;font-size:0.78rem;color:var(--text-dim)">Type at least 2 characters...</div>';
@@ -894,7 +900,7 @@ function _renderSearchResults(q) {
         }
 
         const matches = _gatherIndex.filter(r =>
-            r.itemNameLower.includes(_searchQuery) || r.itemNameJPLower?.includes(_searchQuery)
+            tokenMatch(r.itemNameLower, _searchQuery) || tokenMatch(r.itemNameJPLower, _searchQuery)
         );
 
         if (!matches.length) {
@@ -961,7 +967,7 @@ function _renderSearchResults(q) {
             listEl.innerHTML = '<div style="padding:12px 14px;font-size:0.78rem;color:var(--text-dim)">Type at least 2 characters...</div>';
             return;
         }
-        const matches = _dropIndex.filter(r => r.itemNameLower.includes(_searchQuery) || r.itemNameJPLower?.includes(_searchQuery)).slice(0, 100);
+        const matches = _dropIndex.filter(r => tokenMatch(r.itemNameLower, _searchQuery) || tokenMatch(r.itemNameJPLower, _searchQuery)).slice(0, 100);
         if (!matches.length) {
             listEl.innerHTML = '<div style="padding:12px 14px;font-size:0.78rem;color:var(--text-dim)">No results</div>';
             return;

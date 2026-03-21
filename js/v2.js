@@ -469,7 +469,14 @@ document.querySelectorAll(".tabs button").forEach(btn => {
    SEARCH LISTENER
 ========================================================= */
 
-let searchTimeout;
+function tokenMatch(text, query) {
+    if (!query) return true;
+    const tokens = query.toLowerCase().split(/\s+/).filter(Boolean);
+    const t = (text || '').toLowerCase();
+    return tokens.every(tok => t.includes(tok));
+}
+
+
 
 document.getElementById("searchBox")
 ?.addEventListener("input", () => {
@@ -537,7 +544,7 @@ function renderMonsters(filter="") {
 
     ids.forEach(id => {
         const name = getEnemyName(id);
-        if (!name || !name.toLowerCase().includes(filter)) return;
+        if (!name || !tokenMatch(name, filter)) return;
 
         html += `
             <div class="card">
@@ -645,7 +652,7 @@ function renderItems(filter="") {
 
         const name = String(rawName);   // 🔥 FIX
 
-        if (!name.toLowerCase().includes(filter)) return;
+        if (!tokenMatch(name, filter)) return;
 
         html += `
             <div class="card">
@@ -849,7 +856,7 @@ function renderStages(filter="") {
 
     Object.keys(DATA.StageNames || {}).forEach(id=>{
         const name = getStageName(id);
-        if (!String(name).toLowerCase().includes(filter)) return;
+        if (!tokenMatch(String(name), filter)) return;
 
         html += `
             <div class="card">
@@ -942,7 +949,7 @@ function renderShops(filter="") {
 
                 const npcName = getNpcName(npcId);
 
-                if (!npcName.toLowerCase().includes(filter)) return;
+                if (!tokenMatch(npcName, filter)) return;
 
                 // 🔥 Verhindert Duplikate
                 const uniqueKey = npcId + "_" + shopId;
@@ -1024,7 +1031,7 @@ function renderSpecial(filter=""){
     DATA.Special?.shops?.forEach(shop=>{
         shop.categories?.forEach(cat=>{
 
-            if (!cat.label.toLowerCase().includes(filter)) return;
+            if (!tokenMatch(cat.label, filter)) return;
 
             let body="";
             cat.appraisals?.forEach(app=>{
@@ -1075,8 +1082,8 @@ function renderGathering(filter="") {
 
             if (
                 filter &&
-                !itemName.includes(filter) &&
-                !stageName.includes(filter)
+                !tokenMatch(itemName, filter) &&
+                !tokenMatch(stageName, filter)
             ) return;
 
             if (!map.has(stage)) map.set(stage, new Set());
@@ -1121,7 +1128,7 @@ function renderQuests(filter=""){
         // 🔎 Search Filter
         const questName = getQuestName(q);
 
-if (!questName.toLowerCase().includes(filter)) return;
+if (!tokenMatch(questName, filter)) return;
 
         // 🏷 Category Filter
         if (
@@ -1208,7 +1215,7 @@ function renderCrafting(filter=""){
         cat.RecipeList?.forEach(r=>{
 
 const name = String(getItemName(r.ItemID) || "");
-if (!name.toLowerCase().includes(filter)) return;
+if (!tokenMatch(name, filter)) return;
 
 
             let mats="";
@@ -1235,7 +1242,7 @@ function renderCraftingPlus(filter=""){
         cat.RecipeList?.forEach(r=>{
 
 const name = String(getItemName(r.ItemID) || "");
-if (!name.toLowerCase().includes(filter)) return;
+if (!tokenMatch(name, filter)) return;
 
             let mats="";
             r.CraftMaterialList?.forEach(m=>{
