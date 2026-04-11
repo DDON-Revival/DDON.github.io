@@ -268,7 +268,11 @@ button:hover{
             <input id="password" type="password" data-placeholder="password">
 			<input id="email" type="email" placeholder="Email">
 
-            <p id="loginMsg" style="color:#ff6b6b;"></p>
+            <p id="loginMsg" style="
+    font-weight:bold;
+    font-size:14px;
+    margin-top:10px;
+"></p>
 
             <button type="submit" data-key="login"></button>
 			<button type="button" onclick="register()" data-key="register"></button>
@@ -431,49 +435,58 @@ async function register(){
 
     const lang = localStorage.getItem("lang") || "en";
     const t = translations[lang];
-	const loginMsg = document.getElementById("loginMsg");
-	const username = document.getElementById("username").value.trim();
-	const password = document.getElementById("password").value;
-	const email = document.getElementById("email").value.trim();
-	
-	if(!email || !email.includes("@")){
-    loginMsg.textContent = "Invalid email";
-    return;
-}
+    const loginMsg = document.getElementById("loginMsg");
 
-    if(!username || !password){
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+    const email = document.getElementById("email").value.trim();
 
-loginMsg.textContent = t.enterCredentials;
-        loginMsg.style.color = "#ff6b6b";
+    loginMsg.style.color = "#ff6b6b";
+
+    if(!username || !password || !email){
+        loginMsg.textContent = "Please fill all fields";
+        return;
+    }
+
+    if(!email.includes("@")){
+        loginMsg.textContent = "Invalid email";
         return;
     }
 
     try{
+
         const res = await fetch("https://api.ddon.org/api/register",{
             method:"POST",
             headers:{"Content-Type":"application/json"},
-		body: JSON.stringify({
-			username,
-			password,
-			email
-		})
+            body: JSON.stringify({
+                username,
+                password,
+                email
+            })
         });
 
         const data = await res.json();
 
-if(res.status !== 200){
-    loginMsg.textContent =
-    t[data.error] ||
-    t.registerFailed;
+        if(res.status !== 200){
+            loginMsg.textContent =
+                t[data.error] ||
+                data.error ||
+                "Register failed";
             return;
         }
 
+        // ✅ SUCCESS FEEDBACK
         loginMsg.style.color = "#4caf50";
-        loginMsg.textContent = t.registerSuccess;
-		document.getElementById("password").value = "";
+        loginMsg.textContent = "✅ Account created successfully!";
+
+        // 🔥 NICE UX
+        document.getElementById("password").value = "";
+
+        // optional: auto login
+        // await login();
 
     }catch(e){
-        loginMsg.textContent = t.connectionError;
+        loginMsg.textContent = "Connection error";
     }
 }
 
