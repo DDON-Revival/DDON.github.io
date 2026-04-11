@@ -266,7 +266,7 @@ button:hover{
 
             <input id="username" type="text" data-placeholder="username">
             <input id="password" type="password" data-placeholder="password">
-			<input id="email" type="email" placeholder="Email">
+			<input id="email" type="email" placeholder="Email" style="display:none;">
 
             <p id="loginMsg" style="
     font-weight:bold;
@@ -274,8 +274,8 @@ button:hover{
     margin-top:10px;
 "></p>
 
-            <button type="submit" data-key="login"></button>
-			<button type="button" onclick="register()" data-key="register"></button>
+            <button type="submit" onclick="showLogin()" data-key="login"></button>
+			<button type="button" onclick="showRegister(); register();" data-key="register"></button>
 			<button type="button" data-key="forgotPassword" onclick="openResetModal()"></button>
 
         </div>
@@ -679,6 +679,14 @@ function initLanguageSelector(){
 
         container.appendChild(btn);
     });
+}
+
+function showRegister(){
+    document.getElementById("email").style.display = "block";
+}
+
+function showLogin(){
+    document.getElementById("email").style.display = "none";
 }
 
 async function openAutoLoot(){
