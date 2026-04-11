@@ -266,6 +266,7 @@ button:hover{
 
             <input id="username" type="text" data-placeholder="username">
             <input id="password" type="password" data-placeholder="password">
+			<input id="email" type="email" placeholder="Email">
 
             <p id="loginMsg" style="color:#ff6b6b;"></p>
 
@@ -431,8 +432,14 @@ async function register(){
     const lang = localStorage.getItem("lang") || "en";
     const t = translations[lang];
 	const loginMsg = document.getElementById("loginMsg");
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value;
+	const username = document.getElementById("username").value.trim();
+	const password = document.getElementById("password").value;
+	const email = document.getElementById("email").value.trim();
+	
+	if(!email || !email.includes("@")){
+    loginMsg.textContent = "Invalid email";
+    return;
+}
 
     if(!username || !password){
 
@@ -445,10 +452,11 @@ loginMsg.textContent = t.enterCredentials;
         const res = await fetch("https://api.ddon.org/api/register",{
             method:"POST",
             headers:{"Content-Type":"application/json"},
-            body: JSON.stringify({
-                username,
-                password
-            })
+		body: JSON.stringify({
+			username,
+			password,
+			email
+		})
         });
 
         const data = await res.json();
