@@ -692,12 +692,26 @@ function initLanguageSelector(){
     });
 }
 
+let registerMode = false;
+
 function showRegister(){
-    document.getElementById("email").style.display = "block";
+
+    const email = document.getElementById("email");
+
+    if(!registerMode){
+        email.style.display = "block";
+        registerMode = true;
+
+        // optional UX
+        document.getElementById("loginMsg").textContent = "Enter email to register";
+    } else {
+        register();
+    }
 }
 
 function showLogin(){
     document.getElementById("email").style.display = "none";
+    registerMode = false;
 }
 
 async function openAutoLoot(){
