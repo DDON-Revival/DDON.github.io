@@ -470,7 +470,7 @@ step7Text:"チュートリアルクエストを完了して機能を解放して
 },
 
 downloadLinks:{
-    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQA4WanxetY2SrY2msrcqtu4AVT84h0qRbCC-UoVEu3qAz0?e=D7wGLY",
+    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQDYxpEhLan-R4Qan_J-HT44AedwEWh5uBXp-vEfoYVRkG0?e=FTf8GU",
 },
 
 jobs:{
