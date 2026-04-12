@@ -476,19 +476,21 @@ async function register(){
             })
         });
 
-        const data = await res.json();
+const data = await res.json();
 
-        if(res.status !== 200){
-            loginMsg.textContent =
-                t[data.error] ||
-                data.error ||
-                "Register failed";
-            return;
-        }
+// ❗ WICHTIG: Error im BODY prüfen
+if(data.Error){
+    loginMsg.style.color = "#ff6b6b";
+    loginMsg.textContent =
+        t[data.Error] ||
+        data.Error ||
+        "Register failed";
+    return;
+}
 
-        // ✅ SUCCESS FEEDBACK
-        loginMsg.style.color = "#4caf50";
-        loginMsg.textContent = "✅ Account created successfully!";
+// ✅ SUCCESS
+loginMsg.style.color = "#4caf50";
+loginMsg.textContent = data.Message || "Account created!";
 
         // 🔥 NICE UX
         document.getElementById("password").value = "";
