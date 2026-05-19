@@ -1132,10 +1132,10 @@ ctx.fill();
 
 ctx.drawImage(
     riftImg,
-    riftPos.x-80,
-    riftPos.y-140,
-    160,
-    160
+riftPos.x-110,
+riftPos.y-190,
+220,
+220
 );
 
         // enemies
@@ -1150,16 +1150,20 @@ const dy = 0-enemy.y;
             enemy.y += (dy/dist)*enemy.speed;
 
             // draw goblin
+const enemyPos = isoToScreen(
+    enemy.x,
+    enemy.y
+);			
 const currentEnemySprite = enemy.boss
     ? bossImg
     : goblinImg;
 
 ctx.drawImage(
     currentEnemySprite,
-    enemyPos.x-(enemy.size/2),
-    enemyPos.y-enemy.size,
-    enemy.size,
-    enemy.size
+    enemyPos.x-(enemy.boss ? 90 : 36),
+    enemyPos.y-(enemy.boss ? 180 : 72),
+    enemy.boss ? 180 : 72,
+    enemy.boss ? 180 : 72
 );
 
 if(enemy.boss){
