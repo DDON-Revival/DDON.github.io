@@ -839,16 +839,12 @@ function startRiftPrototype(){
     const keys = {};
 
     let player = {
-let selectedClass = "fighter";
-
-let player = {
-    x: 640,
-    y: 360,
-    size: 32,
-    speed: 5,
-    hp: 100,
-    class: selectedClass
-};
+        x: 640,
+        y: 360,
+        size: 32,
+        speed: 5,
+        hp: 100
+    };
 
     let enemies = [];
 	let damageTexts = [];
@@ -868,18 +864,6 @@ window.onkeydown = (e)=>{
     e.preventDefault();
 
     keys[e.key.toLowerCase()] = true;
-	
-	if(e.key === "1"){
-    player.class = "fighter";
-}
-
-if(e.key === "2"){
-    player.class = "hunter";
-}
-
-if(e.key === "3"){
-    player.class = "priest";
-}
 
     if(e.code === "Space" && !attackCooldown){
 
@@ -963,20 +947,6 @@ enemies.push({
 
     function attack(){
 	attackFlash = 8;
-	
-	let attackRange = 80;
-
-if(player.class === "hunter"){
-    attackRange = 180;
-}
-
-if(player.class === "priest"){
-
-    player.hp += 5;
-
-    if(player.hp > 100)
-        player.hp = 100;
-}
 
         enemies = enemies.filter(enemy=>{
 
@@ -985,7 +955,7 @@ if(player.class === "priest"){
 
             const dist = Math.sqrt(dx*dx+dy*dy);
 
-            if(dist < attackRange){
+            if(dist < 80){
 
                 enemy.hp--;
 				
@@ -1128,17 +1098,7 @@ damageTexts = damageTexts.filter(
 
     ctx.stroke();
 }
-        if(player.class === "fighter"){
-    ctx.fillStyle = "#c8a75d";
-}
-
-if(player.class === "hunter"){
-    ctx.fillStyle = "#4fc3f7";
-}
-
-if(player.class === "priest"){
-    ctx.fillStyle = "#81c784";
-}
+        ctx.fillStyle = "#c8a75d";
 
         ctx.fillRect(
             player.x-player.size/2,
@@ -1171,24 +1131,6 @@ if(player.class === "priest"){
             30,
             120
         );
-		
-ctx.fillText(
-    "1 = Fighter",
-    30,
-    150
-);
-
-ctx.fillText(
-    "2 = Hunter",
-    30,
-    180
-);
-
-ctx.fillText(
-    "3 = Priest",
-    30,
-    210
-);		
 		
 		if(wave % 5 === 0){
 
