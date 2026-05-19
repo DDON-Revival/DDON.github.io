@@ -299,6 +299,12 @@ button:hover{
     <button data-key="changePassword" onclick="openChangePassword()"></button>
 
     <button data-key="autolootTitle" onclick="openAutoLoot()"></button>
+	
+	<button id="festivalBtn"
+        onclick="openFestival()"
+        style="display:none;">
+    Dogma Festival III
+</button>
 
     <button data-key="logout" onclick="logout()"></button>
 </div>
@@ -913,11 +919,26 @@ window.onload = function(){
         credentials: "include"
     }).then(res => {
         if(res.ok){
-document.getElementById("dashboardContainer").style.display = "flex";
 
-loadCharacters();
-loadEmail();
+            document.getElementById("dashboardContainer").style.display = "flex";
+
+            loadCharacters();
+            loadEmail();
+
+            fetch("https://api.ddon.org/api/me",{
+                credentials:"include"
+            })
+            .then(res=>res.json())
+            .then(data=>{
+
+                if(data.flags?.dogmaFestival){
+
+                    document.getElementById("festivalBtn").style.display = "block";
+                }
+            });
+
         } else {
+
             document.getElementById("loginSection").style.display = "block";
         }
     });
