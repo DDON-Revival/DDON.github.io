@@ -1182,7 +1182,7 @@ if(enemy.boss){
         });
 
         // player
-		damageTexts.forEach(text=>{
+damageTexts.forEach(text=>{
 
     text.y -= 1;
     text.life--;
@@ -1191,16 +1191,18 @@ if(enemy.boss){
 
     ctx.font = "22px Cinzel";
 
-const dmgPos = isoToScreen(
-    text.x,
-    text.y
-);
+    const dmgPos = isoToScreen(
+        text.x,
+        text.y
+    );
 
-ctx.fillText(
-    text.text,
-    dmgPos.x,
-    dmgPos.y-30
-);
+    ctx.fillText(
+        text.text,
+        dmgPos.x,
+        dmgPos.y-30
+    );
+
+});
 
 damageTexts = damageTexts.filter(
     t => t.life > 0
