@@ -849,6 +849,9 @@ function startRiftPrototype(){
     let enemies = [];
 
     let kills = 0;
+	let wave = 1;
+	let enemiesToSpawn = 5;
+	let spawnedEnemies = 0;
 
     let attackCooldown = false;
 
@@ -877,45 +880,61 @@ window.onkeydown = (e)=>{
     };
 
     // spawn goblins
-    setInterval(()=>{
+setInterval(()=>{
 
-        if(document.getElementById("riftGameOverlay").style.display === "none")
-            return;
+    if(document.getElementById("riftGameOverlay").style.display === "none")
+        return;
 
-        const side = Math.floor(Math.random()*4);
+    // wave complete
+    if(spawnedEnemies >= enemiesToSpawn && enemies.length === 0){
 
-        let x = 0;
-        let y = 0;
+        wave++;
 
-        if(side === 0){
-            x = 0;
-            y = Math.random()*720;
-        }
+        spawnedEnemies = 0;
 
-        if(side === 1){
-            x = 1280;
-            y = Math.random()*720;
-        }
+        enemiesToSpawn += 3;
+    }
 
-        if(side === 2){
-            x = Math.random()*1280;
-            y = 0;
-        }
+    // stop spawning if wave limit reached
+    if(spawnedEnemies >= enemiesToSpawn)
+        return;
 
-        if(side === 3){
-            x = Math.random()*1280;
-            y = 720;
-        }
+    spawnedEnemies++;
 
-        enemies.push({
-            x,
-            y,
-            size: 28,
-            speed: 1.2,
-            hp: 3
-        });
+    const side = Math.floor(Math.random()*4);
 
-    },1500);
+    let x = 0;
+    let y = 0;
+
+    if(side === 0){
+        x = 0;
+        y = Math.random()*720;
+    }
+
+    if(side === 1){
+        x = 1280;
+        y = Math.random()*720;
+    }
+
+    if(side === 2){
+        x = Math.random()*1280;
+        y = 0;
+    }
+
+    if(side === 3){
+        x = Math.random()*1280;
+        y = 720;
+    }
+
+    enemies.push({
+        x,
+        y,
+        size: 28,
+        speed: 1.2 + (wave*0.08),
+        hp: 2 + Math.floor(wave/2)
+    });
+
+},1000);
 
     function attack(){
 
@@ -1035,17 +1054,23 @@ window.onkeydown = (e)=>{
             30,
             120
         );
+		
+		ctx.fillText(
+    "Wave: "+wave,
+    30,
+    170
+);
 
         ctx.fillText(
             "Kills: "+kills,
             30,
-            170
+            210
         );
 
         ctx.fillText(
             "Rift HP: "+Math.floor(player.hp),
             30,
-            210
+            250
         );
 
         // game over
