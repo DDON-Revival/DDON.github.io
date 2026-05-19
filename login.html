@@ -854,6 +854,7 @@ function startRiftPrototype(){
 	let spawnedEnemies = 0;
 
     let attackCooldown = false;
+	let attackFlash = 0;
 
     // controls
 window.onkeydown = (e)=>{
@@ -926,17 +927,25 @@ setInterval(()=>{
         y = 720;
     }
 
-    enemies.push({
-        x,
-        y,
-        size: 28,
-        speed: 1.2 + (wave*0.08),
-        hp: 2 + Math.floor(wave/2)
-    });
+const isBoss = wave % 5 === 0;
+
+enemies.push({
+    x,
+    y,
+    size: isBoss ? 80 : 28,
+    speed: isBoss
+        ? 0.6
+        : 1.2 + (wave*0.08),
+    hp: isBoss
+        ? 25 + (wave*2)
+        : 2 + Math.floor(wave/2),
+    boss: isBoss
+});
 
 },1000);
 
     function attack(){
+	attackFlash = 8;
 
         enemies = enemies.filter(enemy=>{
 
@@ -1004,7 +1013,9 @@ setInterval(()=>{
             enemy.y += (dy/dist)*enemy.speed;
 
             // draw goblin
-            ctx.fillStyle = "#4caf50";
+            ctx.fillStyle = enemy.boss
+    ? "#b71c1c"
+    : "#4caf50";
 
             ctx.fillRect(
                 enemy.x-enemy.size/2,
@@ -1021,6 +1032,26 @@ setInterval(()=>{
         });
 
         // player
+		if(attackFlash > 0){
+
+    attackFlash--;
+
+    ctx.beginPath();
+
+    ctx.arc(
+        player.x,
+        player.y,
+        80,
+        0,
+        Math.PI*2
+    );
+
+    ctx.strokeStyle = "#ffffff";
+
+    ctx.lineWidth = 5;
+
+    ctx.stroke();
+}
         ctx.fillStyle = "#c8a75d";
 
         ctx.fillRect(
@@ -1054,6 +1085,21 @@ setInterval(()=>{
             30,
             120
         );
+		
+		if(wave % 5 === 0){
+
+    ctx.fillStyle = "#ff4444";
+
+    ctx.font = "28px Cinzel";
+
+    ctx.fillText(
+        "BOSS WAVE",
+        30,
+        130
+    );
+
+    ctx.fillStyle = "white";
+}
 		
 		ctx.fillText(
     "Wave: "+wave,
