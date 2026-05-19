@@ -1087,10 +1087,11 @@ const dy = 0-enemy.y;
             // draw goblin
 			ctx.beginPath();
 
-const enemyPos = isoToScreen(
 ctx.fillStyle = enemy.boss
     ? "#b71c1c"
     : "#4caf50";
+
+const enemyPos = isoToScreen(
     enemy.x,
     enemy.y
 );
@@ -1108,7 +1109,7 @@ ctx.fillStyle = "black";
 
 ctx.beginPath();
 ctx.arc(enemyPos.x-6, enemyPos.y-4, 3, 0, Math.PI*2);
-ctx.arc(enemyPos.x-6, enemyPos.y-4, 3, 0, Math.PI*2);
+ctx.arc(enemyPos.x+6, enemyPos.y-4, 3, 0, Math.PI*2);
 ctx.fill();
 
 if(enemy.boss){
