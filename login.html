@@ -354,6 +354,80 @@ button:hover{
 
     </div>
 
+<div class="card" id="festivalCard" style="display:none;">
+
+    <h2 style="color:#c8a75d;">
+        DOGMA FESTIVAL III
+    </h2>
+
+    <div style="
+        border:1px solid #2a2e50;
+        padding:25px;
+        background:linear-gradient(145deg,#121427,#0d1020);
+        margin-top:20px;
+    ">
+
+        <h3 style="color:#c8a75d;">
+            The Rift awakens once more.
+        </h3>
+
+        <p>
+            Welcome to the hidden development version of Dogma Festival III.
+        </p>
+
+        <div style="
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:20px;
+            margin-top:30px;
+        ">
+
+            <div class="characterCard">
+
+                <h3>
+                    Defense of the Rift
+                </h3>
+
+                <p>
+                    Cooperative survival against endless monsters.
+                </p>
+
+                <button onclick="openFestivalPrototype()">
+                    Launch Prototype
+                </button>
+
+            </div>
+
+            <div class="characterCard">
+
+                <h3>
+                    Festival Rankings
+                </h3>
+
+                <p>
+                    Seasonal rankings coming soon.
+                </p>
+
+            </div>
+
+            <div class="characterCard">
+
+                <h3>
+                    Community Goal
+                </h3>
+
+                <p>
+                    Global monster kills will unlock rewards.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 </div>
 
 <!-- Change Password Modal -->
@@ -729,6 +803,25 @@ async function openAutoLoot(){
     await loadItems();
     await loadBlocked();
 
+}
+
+function openFestival(){
+
+    const card = document.getElementById("festivalCard");
+
+    if(card.style.display === "none"){
+
+        card.style.display = "block";
+
+    }else{
+
+        card.style.display = "none";
+    }
+}
+
+function openFestivalPrototype(){
+
+    alert("Riftstone Defense Prototype coming next.");
 }
 
 async function loadItems(){
