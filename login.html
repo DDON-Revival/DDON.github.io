@@ -1022,10 +1022,25 @@ if(player.class === "priest"){
         }
 
         // movement
-        if(keys["w"]) player.y -= player.speed;
-        if(keys["s"]) player.y += player.speed;
-        if(keys["a"]) player.x -= player.speed;
-        if(keys["d"]) player.x += player.speed;
+if(keys["w"]){
+    player.x -= player.speed;
+    player.y -= player.speed;
+}
+
+if(keys["s"]){
+    player.x += player.speed;
+    player.y += player.speed;
+}
+
+if(keys["a"]){
+    player.x -= player.speed;
+    player.y += player.speed;
+}
+
+if(keys["d"]){
+    player.x += player.speed;
+    player.y -= player.speed;
+}
 
         // clear
         ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -1073,6 +1088,9 @@ const dy = 0-enemy.y;
 			ctx.beginPath();
 
 const enemyPos = isoToScreen(
+ctx.fillStyle = enemy.boss
+    ? "#b71c1c"
+    : "#4caf50";
     enemy.x,
     enemy.y
 );
@@ -1089,8 +1107,8 @@ ctx.fill();
 ctx.fillStyle = "black";
 
 ctx.beginPath();
-ctx.arc(enemyPos.x-6, enemy.y-4, 3, 0, Math.PI*2);
-ctx.arc(enemyPos.x+6, enemy.y-4, 3, 0, Math.PI*2);
+ctx.arc(enemyPos.x-6, enemyPos.y-4, 3, 0, Math.PI*2);
+ctx.arc(enemyPos.x-6, enemyPos.y-4, 3, 0, Math.PI*2);
 ctx.fill();
 
 if(enemy.boss){
@@ -1101,10 +1119,6 @@ if(enemy.boss){
 
     ctx.stroke();
 }
-            ctx.fillStyle = enemy.boss
-    ? "#b71c1c"
-    : "#4caf50";
-
             // hit rift
             if(dist < 30){
 
