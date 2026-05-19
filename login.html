@@ -853,20 +853,24 @@ function startRiftPrototype(){
     let attackCooldown = false;
 
     // controls
-    window.onkeydown = (e)=>{
-        keys[e.key.toLowerCase()] = true;
+window.onkeydown = (e)=>{
 
-        if(e.key === " " && !attackCooldown){
+    // 🔥 verhindert Browser Aktionen
+    e.preventDefault();
 
-            attackCooldown = true;
+    keys[e.key.toLowerCase()] = true;
 
-            attack();
+    if(e.code === "Space" && !attackCooldown){
 
-            setTimeout(()=>{
-                attackCooldown = false;
-            },250);
-        }
-    };
+        attackCooldown = true;
+
+        attack();
+
+        setTimeout(()=>{
+            attackCooldown = false;
+        },250);
+    }
+};
 
     window.onkeyup = (e)=>{
         keys[e.key.toLowerCase()] = false;
