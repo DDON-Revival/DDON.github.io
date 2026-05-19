@@ -1051,7 +1051,15 @@ if(keys["d"]){
 
         // rift aura
         ctx.beginPath();
-        ctx.arc(640,360,90,0,Math.PI*2);
+        ctx.ellipse(
+    riftPos.x,
+    riftPos.y,
+    140,
+    70,
+    0,
+    0,
+    Math.PI*2
+);
         ctx.fillStyle = "rgba(127,92,255,0.25)";
         ctx.fill();
 
@@ -1153,13 +1161,18 @@ damageTexts = damageTexts.filter(
 
     ctx.beginPath();
 
-    ctx.arc(
-        player.x,
-        player.y,
-        80,
-        0,
-        Math.PI*2
-    );
+const attackPos = isoToScreen(
+    player.x,
+    player.y
+);
+
+ctx.arc(
+    attackPos.x,
+    attackPos.y,
+    80,
+    0,
+    Math.PI*2
+);
 
     ctx.strokeStyle = "#ffffff";
 
@@ -1259,19 +1272,19 @@ ctx.fillText(
 		ctx.fillText(
     "Wave: "+wave,
     30,
-    170
+    260
 );
 
         ctx.fillText(
             "Kills: "+kills,
             30,
-            210
+            300
         );
 
         ctx.fillText(
             "Rift HP: "+Math.floor(player.hp),
             30,
-            250
+            340
         );
 
         // game over
