@@ -841,6 +841,24 @@ function startRiftPrototype(){
 const TILE_H = 48;
 
 const MAP_SIZE = 12;
+
+const fighterImg = new Image();
+fighterImg.src = "assets/player_fighter.png";
+
+const hunterImg = new Image();
+hunterImg.src = "assets/player_hunter.png";
+
+const priestImg = new Image();
+priestImg.src = "assets/player_priest.png";
+
+const goblinImg = new Image();
+goblinImg.src = "assets/goblin.png";
+
+const bossImg = new Image();
+bossImg.src = "assets/cyclops.png";
+
+const riftImg = new Image();
+riftImg.src = "assets/riftstone.png";
 	
 function isoToScreen(x,y){
 
@@ -1112,20 +1130,13 @@ ctx.fill();
 
         // riftstone
 
-ctx.beginPath();
-
-ctx.ellipse(
-    riftPos.x,
-    riftPos.y-40,
-    60,
-    30,
-    0,
-    0,
-    Math.PI*2
+ctx.drawImage(
+    riftImg,
+    riftPos.x-80,
+    riftPos.y-140,
+    160,
+    160
 );
-
-ctx.fillStyle = "#7f5cff";
-ctx.fill();
 
         // enemies
         enemies.forEach(enemy=>{
@@ -1139,32 +1150,17 @@ const dy = 0-enemy.y;
             enemy.y += (dy/dist)*enemy.speed;
 
             // draw goblin
-			ctx.beginPath();
+const currentEnemySprite = enemy.boss
+    ? bossImg
+    : goblinImg;
 
-ctx.fillStyle = enemy.boss
-    ? "#b71c1c"
-    : "#4caf50";
-
-const enemyPos = isoToScreen(
-    enemy.x,
-    enemy.y
+ctx.drawImage(
+    currentEnemySprite,
+    enemyPos.x-(enemy.size/2),
+    enemyPos.y-enemy.size,
+    enemy.size,
+    enemy.size
 );
-
-ctx.arc(
-    enemyPos.x,
-    enemyPos.y-12,
-    enemy.size/2,
-    0,
-    Math.PI*2
-);
-
-ctx.fill();
-ctx.fillStyle = "black";
-
-ctx.beginPath();
-ctx.arc(enemyPos.x-6, enemyPos.y-4, 3, 0, Math.PI*2);
-ctx.arc(enemyPos.x+6, enemyPos.y-4, 3, 0, Math.PI*2);
-ctx.fill();
 
 if(enemy.boss){
 
@@ -1251,20 +1247,23 @@ const playerPos = isoToScreen(
     player.y
 );
 
-ctx.beginPath();
+let currentPlayerSprite = fighterImg;
 
-ctx.ellipse(
-    playerPos.x,
-    playerPos.y-20,
-    18,
-    28,
-    0,
-    0,
-    Math.PI*2
+if(player.class === "hunter"){
+    currentPlayerSprite = hunterImg;
+}
+
+if(player.class === "priest"){
+    currentPlayerSprite = priestImg;
+}
+
+ctx.drawImage(
+    currentPlayerSprite,
+    playerPos.x-32,
+    playerPos.y-64,
+    64,
+    64
 );
-
-ctx.fill();
-
         // UI
         ctx.fillStyle = "white";
 
