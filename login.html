@@ -847,6 +847,7 @@ function startRiftPrototype(){
     };
 
     let enemies = [];
+	let damageTexts = [];
 
     let kills = 0;
 	let wave = 1;
@@ -957,6 +958,13 @@ enemies.push({
             if(dist < 80){
 
                 enemy.hp--;
+				
+				damageTexts.push({
+    x: enemy.x,
+    y: enemy.y,
+    text: "1",
+    life: 40
+});
 
                 if(enemy.hp <= 0){
 
@@ -992,7 +1000,7 @@ enemies.push({
         // rift aura
         ctx.beginPath();
         ctx.arc(640,360,90,0,Math.PI*2);
-        ctx.fillStyle = "rgba(127,92,255,0.15)";
+        ctx.fillStyle = "rgba(127,92,255,0.25)";
         ctx.fill();
 
         // riftstone
@@ -1013,16 +1021,35 @@ enemies.push({
             enemy.y += (dy/dist)*enemy.speed;
 
             // draw goblin
+			ctx.beginPath();
+
+ctx.arc(
+    enemy.x,
+    enemy.y,
+    enemy.size/2,
+    0,
+    Math.PI*2
+);
+
+ctx.fill();
+ctx.fillStyle = "black";
+
+ctx.beginPath();
+ctx.arc(enemy.x-6, enemy.y-4, 3, 0, Math.PI*2);
+ctx.arc(enemy.x+6, enemy.y-4, 3, 0, Math.PI*2);
+ctx.fill();
+
+if(enemy.boss){
+
+    ctx.strokeStyle = "#ff0000";
+
+    ctx.lineWidth = 5;
+
+    ctx.stroke();
+}
             ctx.fillStyle = enemy.boss
     ? "#b71c1c"
     : "#4caf50";
-
-            ctx.fillRect(
-                enemy.x-enemy.size/2,
-                enemy.y-enemy.size/2,
-                enemy.size,
-                enemy.size
-            );
 
             // hit rift
             if(dist < 60){
@@ -1032,6 +1059,25 @@ enemies.push({
         });
 
         // player
+		damageTexts.forEach(text=>{
+
+    text.y -= 1;
+    text.life--;
+
+    ctx.fillStyle = "#ffffff";
+
+    ctx.font = "22px Cinzel";
+
+    ctx.fillText(
+        text.text,
+        text.x,
+        text.y
+    );
+});
+
+damageTexts = damageTexts.filter(
+    t => t.life > 0
+);
 		if(attackFlash > 0){
 
     attackFlash--;
