@@ -979,9 +979,9 @@ enemies.push({
     x,
     y,
     size: isBoss ? 80 : 28,
-    speed: isBoss
-        ? 0.6
-        : 1.2 + (wave*0.08),
+speed: isBoss
+    ? 0.025
+    : 0.012 + (wave*0.0015),
     hp: isBoss
         ? 25 + (wave*2)
         : 2 + Math.floor(wave/2),
@@ -1263,10 +1263,10 @@ if(player.class === "priest"){
 
 ctx.drawImage(
     currentPlayerSprite,
-    playerPos.x-32,
-    playerPos.y-64,
-    64,
-    64
+    playerPos.x-48
+    playerPos.y-90,
+96,
+96
 );
         // UI
         ctx.fillStyle = "white";
