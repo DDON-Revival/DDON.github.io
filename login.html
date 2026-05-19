@@ -821,9 +821,101 @@ function openFestival(){
 
 function openFestivalPrototype(){
 
-    alert("Riftstone Defense Prototype coming next.");
+    document.getElementById("riftGameOverlay").style.display = "block";
+
+    startRiftPrototype();
 }
 
+function closeRiftPrototype(){
+
+    document.getElementById("riftGameOverlay").style.display = "none";
+}
+
+function startRiftPrototype(){
+
+    const canvas = document.getElementById("riftCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const keys = {};
+
+    let player = {
+        x: 640,
+        y: 360,
+        size: 32,
+        speed: 5
+    };
+
+    window.onkeydown = (e)=>{
+        keys[e.key.toLowerCase()] = true;
+    };
+
+    window.onkeyup = (e)=>{
+        keys[e.key.toLowerCase()] = false;
+    };
+
+    function update(){
+
+        if(document.getElementById("riftGameOverlay").style.display === "none"){
+            return;
+        }
+
+        // movement
+        if(keys["w"]) player.y -= player.speed;
+        if(keys["s"]) player.y += player.speed;
+        if(keys["a"]) player.x -= player.speed;
+        if(keys["d"]) player.x += player.speed;
+
+        // clear
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        // background
+        ctx.fillStyle = "#0b0d18";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        // rift aura
+        ctx.beginPath();
+        ctx.arc(640,360,90,0,Math.PI*2);
+        ctx.fillStyle = "rgba(127,92,255,0.15)";
+        ctx.fill();
+
+        // riftstone
+        ctx.beginPath();
+        ctx.arc(640,360,50,0,Math.PI*2);
+        ctx.fillStyle = "#7f5cff";
+        ctx.fill();
+
+        // player
+        ctx.fillStyle = "#c8a75d";
+        ctx.fillRect(
+            player.x-player.size/2,
+            player.y-player.size/2,
+            player.size,
+            player.size
+        );
+
+        // title
+        ctx.fillStyle = "white";
+        ctx.font = "32px Cinzel";
+
+        ctx.fillText(
+            "Defense of the Rift Prototype",
+            30,
+            50
+        );
+
+        ctx.font = "20px Cinzel";
+
+        ctx.fillText(
+            "WASD to move",
+            30,
+            90
+        );
+
+        requestAnimationFrame(update);
+    }
+
+    update();
+}
 async function loadItems(){
 
     const res = await fetch(
@@ -1042,5 +1134,40 @@ let blockedItems = [];
 </script>
 
 <script src="js/navbar.js"></script>
+
+<div id="riftGameOverlay" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.95);
+    z-index:99999;
+">
+
+    <button onclick="closeRiftPrototype()" style="
+        position:absolute;
+        top:20px;
+        right:20px;
+        z-index:10;
+        background:#c8a75d;
+        color:black;
+        border:none;
+        padding:10px 16px;
+        font-weight:bold;
+        cursor:pointer;
+    ">
+        Close
+    </button>
+
+    <canvas id="riftCanvas"
+            width="1280"
+            height="720"
+            style="
+                width:100%;
+                height:100%;
+                display:block;
+            ">
+    </canvas>
+
+</div>
 </body>
 </html>
