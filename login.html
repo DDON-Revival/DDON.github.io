@@ -837,12 +837,16 @@ function startRiftPrototype(){
     const ctx = canvas.getContext("2d");
 
     const keys = {};
+	const TILE_W = 96;
+const TILE_H = 48;
+
+const MAP_SIZE = 12;
 	
-	function isoToScreen(x,y){
+function isoToScreen(x,y){
 
     return {
-        x: (x - y) + 640,
-        y: (x + y) / 2 + 120
+        x: (x - y) * (TILE_W/2) + 640,
+        y: (x + y) * (TILE_H/2) + 160
     };
 }
 
@@ -852,7 +856,7 @@ let player = {
     x: 0,
     y: 0,
     size: 32,
-    speed: 5,
+    speed: 0.12,
     hp: 100,
     class: selectedClass
 };
@@ -1048,12 +1052,51 @@ if(keys["d"]){
         // background
         ctx.fillStyle = "#0b0d18";
         ctx.fillRect(0,0,canvas.width,canvas.height);
+		for(let y = -MAP_SIZE; y <= MAP_SIZE; y++){
+
+    for(let x = -MAP_SIZE; x <= MAP_SIZE; x++){
+
+        const pos = isoToScreen(x,y);
+
+        ctx.beginPath();
+
+        ctx.moveTo(pos.x, pos.y);
+
+        ctx.lineTo(pos.x + TILE_W/2, pos.y + TILE_H/2);
+
+        ctx.lineTo(pos.x, pos.y + TILE_H);
+
+        ctx.lineTo(pos.x - TILE_W/2, pos.y + TILE_H/2);
+
+        ctx.closePath();
+
+        // center platform
+        const dist = Math.sqrt(x*x+y*y);
+
+        if(dist < 3){
+
+            ctx.fillStyle = "#3d355f";
+
+        }else{
+
+            ctx.fillStyle =
+                (x+y)%2 === 0
+                ? "#1c2333"
+                : "#18202d";
+        }
+
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(255,255,255,0.03)";
+        ctx.stroke();
+    }
+}
 
         // rift aura
         ctx.beginPath();
-        ctx.ellipse(
+ctx.ellipse(
     riftPos.x,
-    riftPos.y,
+    riftPos.y+10,
     140,
     70,
     0,
@@ -1070,7 +1113,7 @@ ctx.beginPath();
 
 ctx.ellipse(
     riftPos.x,
-    riftPos.y,
+    riftPos.y-40,
     60,
     30,
     0,
@@ -1106,7 +1149,7 @@ const enemyPos = isoToScreen(
 
 ctx.arc(
     enemyPos.x,
-    enemyPos.y,
+    enemyPos.y-12,
     enemy.size/2,
     0,
     Math.PI*2
@@ -1201,7 +1244,7 @@ ctx.beginPath();
 
 ctx.ellipse(
     playerPos.x,
-    playerPos.y,
+    playerPos.y-20,
     18,
     28,
     0,
