@@ -837,12 +837,20 @@ function startRiftPrototype(){
     const ctx = canvas.getContext("2d");
 
     const keys = {};
+	
+	function isoToScreen(x,y){
+
+    return {
+        x: (x - y) + 640,
+        y: (x + y) / 2 + 120
+    };
+}
 
 let selectedClass = "fighter";
 
 let player = {
-    x: 640,
-    y: 360,
+    x: 0,
+    y: 0,
     size: 32,
     speed: 5,
     hp: 100,
@@ -924,23 +932,23 @@ setInterval(()=>{
     let y = 0;
 
     if(side === 0){
-        x = 0;
-        y = Math.random()*720;
+x = -500;
+y = Math.random()*500-250;
     }
 
     if(side === 1){
-        x = 1280;
-        y = Math.random()*720;
+x = 500;
+y = Math.random()*500-250;
     }
 
     if(side === 2){
-        x = Math.random()*1280;
-        y = 0;
+x = Math.random()*500-250;
+y = -500;
     }
 
     if(side === 3){
-        x = Math.random()*1280;
-        y = 720;
+x = Math.random()*500-250;
+y = 500;
     }
 
 const isBoss = wave % 5 === 0;
@@ -1033,16 +1041,28 @@ if(player.class === "priest"){
         ctx.fill();
 
         // riftstone
-        ctx.beginPath();
-        ctx.arc(640,360,50,0,Math.PI*2);
-        ctx.fillStyle = "#7f5cff";
-        ctx.fill();
+const riftPos = isoToScreen(0,0);
+
+ctx.beginPath();
+
+ctx.ellipse(
+    riftPos.x,
+    riftPos.y,
+    60,
+    30,
+    0,
+    0,
+    Math.PI*2
+);
+
+ctx.fillStyle = "#7f5cff";
+ctx.fill();
 
         // enemies
         enemies.forEach(enemy=>{
 
-            const dx = 640-enemy.x;
-            const dy = 360-enemy.y;
+const dx = 0-enemy.x;
+const dy = 0-enemy.y;
 
             const dist = Math.sqrt(dx*dx+dy*dy);
 
@@ -1052,9 +1072,14 @@ if(player.class === "priest"){
             // draw goblin
 			ctx.beginPath();
 
-ctx.arc(
+const enemyPos = isoToScreen(
     enemy.x,
-    enemy.y,
+    enemy.y
+);
+
+ctx.arc(
+    enemyPos.x,
+    enemyPos.y,
     enemy.size/2,
     0,
     Math.PI*2
@@ -1064,8 +1089,8 @@ ctx.fill();
 ctx.fillStyle = "black";
 
 ctx.beginPath();
-ctx.arc(enemy.x-6, enemy.y-4, 3, 0, Math.PI*2);
-ctx.arc(enemy.x+6, enemy.y-4, 3, 0, Math.PI*2);
+ctx.arc(enemyPos.x-6, enemy.y-4, 3, 0, Math.PI*2);
+ctx.arc(enemyPos.x+6, enemy.y-4, 3, 0, Math.PI*2);
 ctx.fill();
 
 if(enemy.boss){
@@ -1081,7 +1106,7 @@ if(enemy.boss){
     : "#4caf50";
 
             // hit rift
-            if(dist < 60){
+            if(dist < 30){
 
                 player.hp -= 0.05;
             }
@@ -1139,12 +1164,24 @@ if(player.class === "priest"){
     ctx.fillStyle = "#81c784";
 }
 
-        ctx.fillRect(
-            player.x-player.size/2,
-            player.y-player.size/2,
-            player.size,
-            player.size
-        );
+const playerPos = isoToScreen(
+    player.x,
+    player.y
+);
+
+ctx.beginPath();
+
+ctx.ellipse(
+    playerPos.x,
+    playerPos.y,
+    18,
+    28,
+    0,
+    0,
+    Math.PI*2
+);
+
+ctx.fill();
 
         // UI
         ctx.fillStyle = "white";
