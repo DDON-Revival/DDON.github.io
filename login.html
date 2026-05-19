@@ -842,16 +842,101 @@ function startRiftPrototype(){
         x: 640,
         y: 360,
         size: 32,
-        speed: 5
+        speed: 5,
+        hp: 100
     };
 
+    let enemies = [];
+
+    let kills = 0;
+
+    let attackCooldown = false;
+
+    // controls
     window.onkeydown = (e)=>{
         keys[e.key.toLowerCase()] = true;
+
+        if(e.key === " " && !attackCooldown){
+
+            attackCooldown = true;
+
+            attack();
+
+            setTimeout(()=>{
+                attackCooldown = false;
+            },250);
+        }
     };
 
     window.onkeyup = (e)=>{
         keys[e.key.toLowerCase()] = false;
     };
+
+    // spawn goblins
+    setInterval(()=>{
+
+        if(document.getElementById("riftGameOverlay").style.display === "none")
+            return;
+
+        const side = Math.floor(Math.random()*4);
+
+        let x = 0;
+        let y = 0;
+
+        if(side === 0){
+            x = 0;
+            y = Math.random()*720;
+        }
+
+        if(side === 1){
+            x = 1280;
+            y = Math.random()*720;
+        }
+
+        if(side === 2){
+            x = Math.random()*1280;
+            y = 0;
+        }
+
+        if(side === 3){
+            x = Math.random()*1280;
+            y = 720;
+        }
+
+        enemies.push({
+            x,
+            y,
+            size: 28,
+            speed: 1.2,
+            hp: 3
+        });
+
+    },1500);
+
+    function attack(){
+
+        enemies = enemies.filter(enemy=>{
+
+            const dx = enemy.x-player.x;
+            const dy = enemy.y-player.y;
+
+            const dist = Math.sqrt(dx*dx+dy*dy);
+
+            if(dist < 80){
+
+                enemy.hp--;
+
+                if(enemy.hp <= 0){
+
+                    kills++;
+
+                    return false;
+                }
+            }
+
+            return true;
+        });
+    }
 
     function update(){
 
@@ -884,8 +969,37 @@ function startRiftPrototype(){
         ctx.fillStyle = "#7f5cff";
         ctx.fill();
 
+        // enemies
+        enemies.forEach(enemy=>{
+
+            const dx = 640-enemy.x;
+            const dy = 360-enemy.y;
+
+            const dist = Math.sqrt(dx*dx+dy*dy);
+
+            enemy.x += (dx/dist)*enemy.speed;
+            enemy.y += (dy/dist)*enemy.speed;
+
+            // draw goblin
+            ctx.fillStyle = "#4caf50";
+
+            ctx.fillRect(
+                enemy.x-enemy.size/2,
+                enemy.y-enemy.size/2,
+                enemy.size,
+                enemy.size
+            );
+
+            // hit rift
+            if(dist < 60){
+
+                player.hp -= 0.05;
+            }
+        });
+
         // player
         ctx.fillStyle = "#c8a75d";
+
         ctx.fillRect(
             player.x-player.size/2,
             player.y-player.size/2,
@@ -893,12 +1007,13 @@ function startRiftPrototype(){
             player.size
         );
 
-        // title
+        // UI
         ctx.fillStyle = "white";
+
         ctx.font = "32px Cinzel";
 
         ctx.fillText(
-            "Defense of the Rift Prototype",
+            "Defense of the Rift",
             30,
             50
         );
@@ -906,10 +1021,44 @@ function startRiftPrototype(){
         ctx.font = "20px Cinzel";
 
         ctx.fillText(
-            "WASD to move",
+            "WASD = Move",
             30,
             90
         );
+
+        ctx.fillText(
+            "SPACE = Attack",
+            30,
+            120
+        );
+
+        ctx.fillText(
+            "Kills: "+kills,
+            30,
+            170
+        );
+
+        ctx.fillText(
+            "Rift HP: "+Math.floor(player.hp),
+            30,
+            210
+        );
+
+        // game over
+        if(player.hp <= 0){
+
+            ctx.fillStyle = "red";
+
+            ctx.font = "80px Cinzel";
+
+            ctx.fillText(
+                "RIFT DESTROYED",
+                350,
+                360
+            );
+
+            return;
+        }
 
         requestAnimationFrame(update);
     }
