@@ -1092,8 +1092,11 @@ if(keys["d"]){
     }
 }
 
-        // rift aura
-        ctx.beginPath();
+const riftPos = isoToScreen(0,0);
+
+// rift aura
+ctx.beginPath();
+
 ctx.ellipse(
     riftPos.x,
     riftPos.y+10,
@@ -1103,11 +1106,11 @@ ctx.ellipse(
     0,
     Math.PI*2
 );
-        ctx.fillStyle = "rgba(127,92,255,0.25)";
-        ctx.fill();
+
+ctx.fillStyle = "rgba(127,92,255,0.25)";
+ctx.fill();
 
         // riftstone
-const riftPos = isoToScreen(0,0);
 
 ctx.beginPath();
 
@@ -1188,12 +1191,16 @@ if(enemy.boss){
 
     ctx.font = "22px Cinzel";
 
-    ctx.fillText(
-        text.text,
-        text.x,
-        text.y
-    );
-});
+const dmgPos = isoToScreen(
+    text.x,
+    text.y
+);
+
+ctx.fillText(
+    text.text,
+    dmgPos.x,
+    dmgPos.y-30
+);
 
 damageTexts = damageTexts.filter(
     t => t.life > 0
@@ -1209,10 +1216,12 @@ const attackPos = isoToScreen(
     player.y
 );
 
-ctx.arc(
+ctx.ellipse(
     attackPos.x,
     attackPos.y,
     80,
+    40,
+    0,
     0,
     Math.PI*2
 );
