@@ -1271,10 +1271,14 @@ enemy.animOffset =
 const dx = 0-enemy.x;
 const dy = 0-enemy.y;
 
-            const dist = Math.sqrt(dx*dx+dy*dy);
+const dist = Math.sqrt(dx*dx+dy*dy);
 
-            enemy.x += (dx/dist)*enemy.speed;
-            enemy.y += (dy/dist)*enemy.speed;
+if(dist <= 0.001){
+    return;
+}
+
+enemy.x += (dx/dist)*enemy.speed;
+enemy.y += (dy/dist)*enemy.speed;
 
             // draw goblin
 const enemyPos = isoToScreen(
