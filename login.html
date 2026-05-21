@@ -1172,14 +1172,14 @@ if(fighterAnimTick > 8){
     // WALK
     if(moving){
 
-        if(fighterFrame > 3)
+        if(fighterFrame > 1000)
             fighterFrame = 0;
     }
 
     // IDLE
     else{
 
-        if(fighterFrame > 3)
+        if(fighterFrame > 1000)
             fighterFrame = 0;
     }
 }
@@ -1501,25 +1501,62 @@ ctx.ellipse(
 ctx.fillStyle = "rgba(0,0,0,0.35)";
 ctx.fill();
 
-let frameY = 0;
+const idleFrames = [
+    {x:300,y:40},
+    {x:470,y:40},
+    {x:650,y:40},
+    {x:830,y:40},
+    {x:1010,y:40},
+    {x:1190,y:40}
+];
 
-const frameWidth = 128;
-const frameHeight = 128;
+const walkFrames = [
+    {x:300,y:410},
+    {x:470,y:410},
+    {x:650,y:410},
+    {x:830,y:410},
+    {x:1010,y:410},
+    {x:1190,y:410}
+];
+
+const attackFrames = [
+    {x:20,y:790},
+    {x:220,y:790},
+    {x:450,y:790},
+    {x:700,y:790},
+    {x:940,y:790},
+    {x:1180,y:790}
+];
+
+let animFrames = idleFrames;
+
+if(moving){
+    animFrames = walkFrames;
+}
+
+if(attackFlash > 0){
+    animFrames = attackFrames;
+}
+
+const frame =
+    animFrames[
+        fighterFrame % animFrames.length
+    ];
 
 ctx.drawImage(
     fighterSheet,
 
-    fighterFrame * frameWidth,
-    frameY * frameHeight,
+    frame.x,
+    frame.y,
 
-    frameWidth,
-    frameHeight,
+    180,
+    180,
 
-playerPos.x-48,
-playerPos.y-90+playerFloat,
+    playerPos.x-60,
+    playerPos.y-110+playerFloat,
 
-96,
-96
+    120,
+    120
 );
         // UI
         ctx.fillStyle = "white";
