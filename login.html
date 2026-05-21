@@ -824,9 +824,14 @@ function openFestivalPrototype(){
     document.getElementById("riftGameOverlay").style.display = "block";
 
     startRiftPrototype();
+	
+	bgMusic.play();
 }
 
 function closeRiftPrototype(){
+
+bgMusic.pause();
+bgMusic.currentTime = 0;
 
     document.getElementById("riftGameOverlay").style.display = "none";
 }
@@ -859,6 +864,21 @@ bossImg.src = "assets/cyclops.png";
 
 const riftImg = new Image();
 riftImg.src = "assets/riftstone.png";
+
+const slashSound = new Audio(
+    "assets/sounds/slash.wav"
+);
+
+const hitSound = new Audio(
+    "assets/sounds/hit.wav"
+);
+
+const bgMusic = new Audio(
+    "assets/sounds/music.mp3"
+);
+
+bgMusic.loop = true;
+bgMusic.volume = 0.35;
 	
 function isoToScreen(x,y){
 
@@ -881,6 +901,7 @@ let player = {
 
     let enemies = [];
 	let damageTexts = [];
+	let particles = [];
 
     let kills = 0;
 	let wave = 1;
@@ -889,6 +910,8 @@ let player = {
 
     let attackCooldown = false;
 	let attackFlash = 0;
+	let walkAnim = 0;
+	let screenShake = 0;
 
     // controls
 window.addEventListener("keydown",(e)=>{
@@ -990,7 +1013,7 @@ const isBoss = wave % 5 === 0;
 enemies.push({
     x,
     y,
-    size: isBoss ? 80 : 28,
+    size: isBoss ? 180 : 84,
 speed: isBoss
     ? 0.025
     : 0.012 + (wave*0.0015),
@@ -1003,6 +1026,8 @@ speed: isBoss
 },1000);
 
     function attack(){
+	slashSound.currentTime = 0;
+slashSound.play();
 	attackFlash = 8;
 	
 	let attackRange = 80;
@@ -1027,13 +1052,39 @@ if(player.class === "priest"){
             const dist = Math.sqrt(dx*dx+dy*dy);
 
             if(dist < attackRange){
+			
+			const crit =
+    Math.random() < 0.18;
 
-                enemy.hp--;
+                enemy.hp -= crit ? 2 : 1;
+				hitSound.currentTime = 0;
+				hitSound.play();
+				screenShake = crit
+    ? 14
+    : (enemy.boss ? 14 : 5);
 				
 				damageTexts.push({
+				
+			for(let i = 0; i < 8; i++){
+
+    particles.push({
+
+        x: enemy.x,
+        y: enemy.y,
+
+        vx: Math.random()*0.6-0.3,
+        vy: Math.random()*0.6-0.3,
+
+        life: 25,
+
+        size: 2 + Math.random()*4
+    });
+}	
+	damageTexts.push({			
     x: enemy.x,
     y: enemy.y,
-    text: "1",
+    text: crit ? "CRIT!" : "1",
+crit
     life: 40
 });
 
@@ -1055,7 +1106,18 @@ if(player.class === "priest"){
             return;
         }
 
+let moving = false;
+
         // movement
+if(
+    keys["w"] ||
+    keys["a"] ||
+    keys["s"] ||
+    keys["d"]
+){
+    moving = true;
+}		
+		
 if(keys["w"]){
     player.x -= player.speed;
     player.y -= player.speed;
@@ -1074,10 +1136,32 @@ if(keys["a"]){
 if(keys["d"]){
     player.x += player.speed;
     player.y -= player.speed;
+		
+}
+
+if(moving){
+
+    walkAnim += 0.18;
+
+}else{
+
+    walkAnim *= 0.8;
 }
 
         // clear
         ctx.clearRect(0,0,canvas.width,canvas.height);
+		
+		ctx.save();
+
+if(screenShake > 0){
+
+    ctx.translate(
+        Math.random()*screenShake-screenShake/2,
+        Math.random()*screenShake-screenShake/2
+    );
+
+    screenShake *= 0.85;
+}
 
         // background
         ctx.fillStyle = "#0b0d18";
@@ -1142,6 +1226,21 @@ ctx.fill();
 
         // riftstone
 
+ctx.beginPath();
+
+ctx.ellipse(
+    riftPos.x,
+    riftPos.y+12,
+    90,
+    40,
+    0,
+    0,
+    Math.PI*2
+);
+
+ctx.fillStyle = "rgba(0,0,0,0.4)";
+ctx.fill();
+
 ctx.drawImage(
     riftImg,
 riftPos.x-110,
@@ -1152,6 +1251,11 @@ riftPos.y-190,
 
         // enemies
         enemies.forEach(enemy=>{
+		
+enemy.animOffset =
+    Math.sin(Date.now()*0.005 + enemy.x)*4
+    +
+    Math.sin(Date.now()*0.015 + enemy.y)*3;
 
 const dx = 0-enemy.x;
 const dy = 0-enemy.y;
@@ -1170,12 +1274,33 @@ const currentEnemySprite = enemy.boss
     ? bossImg
     : goblinImg;
 
+const enemySize = enemy.boss ? 180 : 84;
+
+let enemyAnimSize =
+    enemySize +
+    Math.sin(Date.now()*0.01 + enemy.x)*4;
+
+ctx.beginPath();
+
+ctx.ellipse(
+    enemyPos.x,
+    enemyPos.y-6,
+    enemy.boss ? 40 : 18,
+    enemy.boss ? 18 : 8,
+    0,
+    0,
+    Math.PI*2
+);
+
+ctx.fillStyle = "rgba(0,0,0,0.35)";
+ctx.fill();
+
 ctx.drawImage(
     currentEnemySprite,
-    enemyPos.x-(enemy.boss ? 90 : 36),
-    enemyPos.y-(enemy.boss ? 180 : 72),
-    enemy.boss ? 180 : 72,
-    enemy.boss ? 180 : 72
+    enemyPos.x-(enemySize/2),
+    enemyPos.y-enemySize+enemy.animOffset,
+enemyAnimSize,
+enemyAnimSize
 );
 
 if(enemy.boss){
@@ -1199,9 +1324,15 @@ damageTexts.forEach(text=>{
     text.y -= 1;
     text.life--;
 
-    ctx.fillStyle = "#ffffff";
+    ctx.fillStyle =
+    text.crit
+    ? "#ff5252"
+    : "#ffffff";
 
-    ctx.font = "22px Cinzel";
+    ctx.font =
+    text.crit
+    ? "bold 34px Cinzel"
+    : "22px Cinzel";
 
     const dmgPos = isoToScreen(
         text.x,
@@ -1219,6 +1350,38 @@ damageTexts.forEach(text=>{
 damageTexts = damageTexts.filter(
     t => t.life > 0
 );
+
+particles.forEach(p=>{
+
+    p.x += p.vx;
+    p.y += p.vy;
+
+    p.life--;
+
+    const pPos = isoToScreen(
+        p.x,
+        p.y
+    );
+
+    ctx.beginPath();
+
+    ctx.arc(
+        pPos.x,
+        pPos.y,
+        p.size,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fillStyle =
+        "rgba(255,220,120,"+(p.life/25)+")";
+
+    ctx.fill();
+});
+
+particles = particles.filter(
+    p => p.life > 0
+);
 		if(attackFlash > 0){
 
     attackFlash--;
@@ -1230,11 +1393,14 @@ const attackPos = isoToScreen(
     player.y
 );
 
+const attackPulse =
+    80 + Math.sin(Date.now()*0.03)*8;
+
 ctx.ellipse(
     attackPos.x,
     attackPos.y,
-    80,
-    40,
+attackPulse,
+attackPulse/2,
     0,
     0,
     Math.PI*2
@@ -1259,6 +1425,11 @@ if(player.class === "priest"){
 }
 
 const playerPos = isoToScreen(
+
+const playerFloat =
+    Math.sin(Date.now()*0.006)*3
+    +
+    Math.sin(walkAnim)*6;
     player.x,
     player.y
 );
@@ -1275,10 +1446,38 @@ if(player.class === "priest"){
 
 ctx.drawImage(
     currentPlayerSprite,
+
+let playerAnimWidth = 96;
+let playerAnimHeight = 96;
+
+if(moving){
+
+    playerAnimWidth =
+        96 + Math.sin(walkAnim)*6;
+
+    playerAnimHeight =
+        96 - Math.sin(walkAnim)*6;
+}	
+	
+ctx.beginPath();
+
+ctx.ellipse(
+    playerPos.x,
+    playerPos.y-8,
+    22,
+    10,
+    0,
+    0,
+    Math.PI*2
+);
+
+ctx.fillStyle = "rgba(0,0,0,0.35)";
+ctx.fill();	
+	
     playerPos.x-48,
-    playerPos.y-90,
-    96,
-    96
+    playerPos.y-90+playerFloat,
+playerAnimWidth,
+playerAnimHeight
 );
         // UI
         ctx.fillStyle = "white";
@@ -1371,7 +1570,7 @@ ctx.fillText(
 
             return;
         }
-
+ctx.restore();
         requestAnimationFrame(update);
     }
 
