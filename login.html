@@ -854,8 +854,8 @@ const TILE_H = 48;
 
 const MAP_SIZE = 12;
 
-const fighterImg = new Image();
-fighterImg.src = "assets/player_fighter.png";
+const fighterSheet = new Image();
+fighterSheet.src = "assets/fighter_sheet.png";
 
 const hunterImg = new Image();
 hunterImg.src = "assets/player_hunter.png";
@@ -912,6 +912,8 @@ let player = {
 	let attackFlash = 0;
 	let walkAnim = 0;
 	let screenShake = 0;
+	let fighterFrame = 0;
+let fighterAnimTick = 0;
 
     // controls
 window.addEventListener("keydown",(e)=>{
@@ -1157,6 +1159,29 @@ if(moving){
 }else{
 
     walkAnim *= 0.8;
+}
+
+fighterAnimTick++;
+
+if(fighterAnimTick > 8){
+
+    fighterAnimTick = 0;
+
+    fighterFrame++;
+
+    // WALK
+    if(moving){
+
+        if(fighterFrame > 5)
+            fighterFrame = 0;
+    }
+
+    // IDLE
+    else{
+
+        if(fighterFrame > 4)
+            fighterFrame = 0;
+    }
 }
 
         // clear
@@ -1486,12 +1511,35 @@ ctx.ellipse(
 ctx.fillStyle = "rgba(0,0,0,0.35)";
 ctx.fill();
 
+let frameY = 0;
+
+// WALK ROW
+if(moving){
+    frameY = 1;
+}
+
+// ATTACK ROW
+if(attackFlash > 0){
+    frameY = 2;
+}
+
+const frameWidth = 256;
+const frameHeight = 256;
+
 ctx.drawImage(
-    currentPlayerSprite,
-    playerPos.x-48,
-    playerPos.y-90+playerFloat,
-    playerAnimWidth,
-    playerAnimHeight
+    fighterSheet,
+
+    fighterFrame * frameWidth,
+    frameY * frameHeight,
+
+    frameWidth,
+    frameHeight,
+
+    playerPos.x-64,
+    playerPos.y-110+playerFloat,
+
+    128,
+    128
 );
         // UI
         ctx.fillStyle = "white";
