@@ -382,21 +382,25 @@ button:hover{
             margin-top:30px;
         ">
 
-            <div class="characterCard">
+<div class="characterCard">
 
-                <h3>
-                    Defense of the Rift
-                </h3>
+    <h3>
+        Defense of the Rift
+    </h3>
 
-                <p>
-                    Cooperative survival against endless monsters.
-                </p>
+    <p>
+        4 Player Coop Survival
+    </p>
 
-                <button onclick="openFestivalPrototype()">
-                    Launch Prototype
-                </button>
+    <button onclick="createLobby()">
+        Create Lobby
+    </button>
 
-            </div>
+    <button onclick="joinLobbyPrompt()">
+        Join Lobby
+    </button>
+
+</div>
 
             <div class="characterCard">
 
@@ -1521,7 +1525,7 @@ if(attackFlash > 0){
     ctx.drawImage(
         fighterImg,
         playerPos.x-64,
-        playerPos.y-128+bob,
+        playerPos.y-112+bob,
         128,
         128
     );
@@ -1812,6 +1816,209 @@ async function setEmail(){
         t[data.error];
 
     loadEmail();
+}
+
+let currentLobby = null;
+
+function generateLobbyCode(){
+
+    const chars =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ123456789";
+
+    let code = "";
+
+    for(let i = 0; i < 4; i++){
+
+        code +=
+            chars[
+                Math.floor(Math.random()*chars.length)
+            ];
+    }
+
+    return code;
+}
+
+function createLobby(){
+
+    currentLobby = {
+
+        code: generateLobbyCode(),
+
+        players: [
+            {
+                name: "You",
+                class: "fighter",
+                ready: false
+            }
+        ]
+    };
+
+    openLobbyScreen();
+}
+
+function joinLobbyPrompt(){
+
+    const code =
+        prompt("Enter Lobby Code");
+
+    if(!code) return;
+
+    currentLobby = {
+
+        code: code.toUpperCase(),
+
+        players: [
+            {
+                name: "You",
+                class: "fighter",
+                ready: false
+            }
+        ]
+    };
+
+    openLobbyScreen();
+}
+
+function openLobbyScreen(){
+
+    const html = `
+    
+    <div id="lobbyModal" style="
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,0.9);
+        z-index:999999;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    ">
+
+        <div style="
+            width:700px;
+            background:#14182b;
+            border:1px solid #c8a75d;
+            padding:30px;
+        ">
+
+            <h1 style="color:#c8a75d;">
+                Lobby ${currentLobby.code}
+            </h1>
+
+            <div id="lobbyPlayers"></div>
+
+            <div style="
+                display:flex;
+                gap:10px;
+                margin-top:20px;
+            ">
+
+                <button onclick="selectClass('fighter')">
+                    Fighter
+                </button>
+
+                <button onclick="selectClass('hunter')">
+                    Hunter
+                </button>
+
+                <button onclick="selectClass('priest')">
+                    Priest
+                </button>
+
+            </div>
+
+            <div style="
+                margin-top:30px;
+                display:flex;
+                gap:15px;
+            ">
+
+                <button onclick="toggleReady()">
+                    READY
+                </button>
+
+                <button onclick="startLobbyGame()">
+                    START GAME
+                </button>
+
+                <button onclick="closeLobby()">
+                    CLOSE
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+    `;
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        html
+    );
+
+    renderLobbyPlayers();
+}
+
+function renderLobbyPlayers(){
+
+    const container =
+        document.getElementById("lobbyPlayers");
+
+    container.innerHTML = "";
+
+    currentLobby.players.forEach(p=>{
+
+        container.innerHTML += `
+        
+        <div style="
+            background:#1c2338;
+            border:1px solid #2e3550;
+            padding:15px;
+            margin-top:10px;
+        ">
+
+            <b>${p.name}</b>
+            -
+            ${p.class}
+            -
+            ${p.ready ? "READY" : "NOT READY"}
+
+        </div>
+        `;
+    });
+}
+
+function selectClass(cls){
+
+    currentLobby.players[0].class = cls;
+
+    player.class = cls;
+
+    renderLobbyPlayers();
+}
+
+function toggleReady(){
+
+    currentLobby.players[0].ready =
+        !currentLobby.players[0].ready;
+
+    renderLobbyPlayers();
+}
+
+function startLobbyGame(){
+
+    openFestivalPrototype();
+
+    closeLobby();
+}
+
+function closeLobby(){
+
+    const modal =
+        document.getElementById("lobbyModal");
+
+    if(modal)
+        modal.remove();
 }
 
 window.onload = function(){
