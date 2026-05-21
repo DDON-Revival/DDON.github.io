@@ -1172,14 +1172,14 @@ if(fighterAnimTick > 8){
     // WALK
     if(moving){
 
-        if(fighterFrame > 5)
+        if(fighterFrame > 3)
             fighterFrame = 0;
     }
 
     // IDLE
     else{
 
-        if(fighterFrame > 4)
+        if(fighterFrame > 3)
             fighterFrame = 0;
     }
 }
@@ -1473,16 +1473,6 @@ const playerPos = isoToScreen(
     player.x,
     player.y
 );
-
-let currentPlayerSprite = fighterImg;
-
-if(player.class === "hunter"){
-    currentPlayerSprite = hunterImg;
-}
-
-if(player.class === "priest"){
-    currentPlayerSprite = priestImg;
-}
 
 let playerAnimWidth = 96;
 let playerAnimHeight = 96;
