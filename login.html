@@ -1172,8 +1172,8 @@ if(fighterAnimTick > 8){
     // WALK
     if(moving){
 
-        if(fighterFrame > 1000)
-            fighterFrame = 0;
+if(fighterFrame > 5)
+    fighterFrame = 0;
     }
 
     // IDLE
@@ -1501,91 +1501,40 @@ ctx.ellipse(
 ctx.fillStyle = "rgba(0,0,0,0.35)";
 ctx.fill();
 
-const idleFrames = [
-    {x:430,y:20},
-    {x:620,y:20},
-    {x:810,y:20},
-    {x:1000,y:20},
-    {x:1190,y:20},
-    {x:1380,y:20}
-];
+const frameWidth = 256;
+const frameHeight = 256;
 
-const walkFrames = [
-    {x:430,y:360},
-    {x:620,y:360},
-    {x:810,y:360},
-    {x:1000,y:360},
-    {x:1190,y:360},
-    {x:1380,y:360}
-];
+let frameY = 0;
 
-const attackFrames = [
-    {x:40,y:760},
-    {x:250,y:760},
-    {x:500,y:760},
-    {x:760,y:760},
-    {x:1010,y:760},
-    {x:1260,y:760}
-];
+// idle
+if(!moving){
+    frameY = 0;
+}
 
-let animFrames = idleFrames;
-
+// walk
 if(moving){
-    animFrames = walkFrames;
+    frameY = 1;
 }
 
+// attack
 if(attackFlash > 0){
-    animFrames = attackFrames;
-}
-
-const frame =
-    animFrames[
-        fighterFrame % animFrames.length
-    ];
-
-let srcSize = 220;
-
-let drawX = playerPos.x-52;
-let drawY = playerPos.y-110+playerFloat;
-
-let drawSize = 110;
-
-// WALK
-if(moving){
-
-    srcSize = 240;
-
-    drawX = playerPos.x-58;
-    drawY = playerPos.y-118+playerFloat;
-
-    drawSize = 118;
-}
-
-// ATTACK
-if(attackFlash > 0){
-
-    srcSize = 300;
-
-    drawX = playerPos.x-78;
-    drawY = playerPos.y-150+playerFloat;
-
-    drawSize = 150;
+    frameY = 2;
 }
 
 ctx.drawImage(
     fighterSheet,
 
-    frame.x,
-    frame.y,
+    fighterFrame * frameWidth,
+    frameY * frameHeight,
 
-    srcSize,
-    srcSize,
+    frameWidth,
+    frameHeight,
 
-    drawX,
-    drawY,
+    playerPos.x-64,
+    playerPos.y-128+playerFloat,
 
-    drawSize,
-    drawSize
+    128,
+    128
 );
         // UI
         ctx.fillStyle = "white";
