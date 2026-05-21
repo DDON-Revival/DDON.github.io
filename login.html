@@ -988,25 +988,25 @@ setInterval(()=>{
     let x = 0;
     let y = 0;
 
-    if(side === 0){
-x = -500;
-y = Math.random()*500-250;
-    }
+if(side === 0){
+    x = -12;
+    y = Math.random()*12-6;
+}
 
-    if(side === 1){
-x = 500;
-y = Math.random()*500-250;
-    }
+if(side === 1){
+    x = 12;
+    y = Math.random()*12-6;
+}
 
-    if(side === 2){
-x = Math.random()*500-250;
-y = -500;
-    }
+if(side === 2){
+    x = Math.random()*12-6;
+    y = -12;
+}
 
-    if(side === 3){
-x = Math.random()*500-250;
-y = 500;
-    }
+if(side === 3){
+    x = Math.random()*12-6;
+    y = 12;
+}
 
 const isBoss = wave % 5 === 0;
 
