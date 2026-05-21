@@ -1063,9 +1063,7 @@ if(player.class === "priest"){
     ? 14
     : (enemy.boss ? 14 : 5);
 				
-				damageTexts.push({
-				
-			for(let i = 0; i < 8; i++){
+for(let i = 0; i < 8; i++){
 
     particles.push({
 
@@ -1079,12 +1077,17 @@ if(player.class === "priest"){
 
         size: 2 + Math.random()*4
     });
-}	
-	damageTexts.push({			
+}
+
+damageTexts.push({
+
     x: enemy.x,
     y: enemy.y,
+
     text: crit ? "CRIT!" : "1",
-crit
+
+    crit: crit,
+
     life: 40
 });
 
@@ -1424,12 +1427,12 @@ if(player.class === "priest"){
     ctx.fillStyle = "#81c784";
 }
 
-const playerPos = isoToScreen(
-
 const playerFloat =
     Math.sin(Date.now()*0.006)*3
     +
     Math.sin(walkAnim)*6;
+
+const playerPos = isoToScreen(
     player.x,
     player.y
 );
@@ -1444,9 +1447,6 @@ if(player.class === "priest"){
     currentPlayerSprite = priestImg;
 }
 
-ctx.drawImage(
-    currentPlayerSprite,
-
 let playerAnimWidth = 96;
 let playerAnimHeight = 96;
 
@@ -1457,8 +1457,8 @@ if(moving){
 
     playerAnimHeight =
         96 - Math.sin(walkAnim)*6;
-}	
-	
+}
+
 ctx.beginPath();
 
 ctx.ellipse(
@@ -1472,12 +1472,14 @@ ctx.ellipse(
 );
 
 ctx.fillStyle = "rgba(0,0,0,0.35)";
-ctx.fill();	
-	
+ctx.fill();
+
+ctx.drawImage(
+    currentPlayerSprite,
     playerPos.x-48,
     playerPos.y-90+playerFloat,
-playerAnimWidth,
-playerAnimHeight
+    playerAnimWidth,
+    playerAnimHeight
 );
         // UI
         ctx.fillStyle = "white";
