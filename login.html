@@ -891,24 +891,29 @@ let player = {
 	let attackFlash = 0;
 
     // controls
-window.onkeydown = (e)=>{
+window.addEventListener("keydown",(e)=>{
 
-    // 🔥 verhindert Browser Aktionen
+    if(
+        document.getElementById("riftGameOverlay").style.display !== "block"
+    ){
+        return;
+    }
+
     e.preventDefault();
 
     keys[e.key.toLowerCase()] = true;
-	
-	if(e.key === "1"){
-    player.class = "fighter";
-}
 
-if(e.key === "2"){
-    player.class = "hunter";
-}
+    if(e.key === "1"){
+        player.class = "fighter";
+    }
 
-if(e.key === "3"){
-    player.class = "priest";
-}
+    if(e.key === "2"){
+        player.class = "hunter";
+    }
+
+    if(e.key === "3"){
+        player.class = "priest";
+    }
 
     if(e.code === "Space" && !attackCooldown){
 
@@ -920,11 +925,18 @@ if(e.key === "3"){
             attackCooldown = false;
         },250);
     }
-};
+});
 
-    window.onkeyup = (e)=>{
-        keys[e.key.toLowerCase()] = false;
-    };
+window.addEventListener("keyup",(e)=>{
+
+    if(
+        document.getElementById("riftGameOverlay").style.display !== "block"
+    ){
+        return;
+    }
+
+    keys[e.key.toLowerCase()] = false;
+});
 
     // spawn goblins
 setInterval(()=>{
@@ -1263,10 +1275,10 @@ if(player.class === "priest"){
 
 ctx.drawImage(
     currentPlayerSprite,
-    playerPos.x-48
+    playerPos.x-48,
     playerPos.y-90,
-96,
-96
+    96,
+    96
 );
         // UI
         ctx.fillStyle = "white";
