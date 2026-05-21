@@ -1015,8 +1015,8 @@ enemies.push({
     y,
     size: isBoss ? 180 : 84,
 speed: isBoss
-    ? 0.025
-    : 0.012 + (wave*0.0015),
+    ? 0.05
+    : 0.035 + (wave*0.003),
     hp: isBoss
         ? 25 + (wave*2)
         : 2 + Math.floor(wave/2),
@@ -1032,10 +1032,10 @@ slashSound.currentTime = 0;
 slashSound.play().catch(()=>{});
 	attackFlash = 8;
 	
-	let attackRange = 80;
+	let attackRange = 1.8;
 
 if(player.class === "hunter"){
-    attackRange = 180;
+    attackRange = 3.5;
 }
 
 if(player.class === "priest"){
@@ -1327,7 +1327,7 @@ if(enemy.boss){
     ctx.stroke();
 }
             // hit rift
-            if(dist < 30){
+            if(dist < 1.2){
 
                 player.hp -= 0.05;
             }
