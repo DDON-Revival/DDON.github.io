@@ -854,8 +854,8 @@ const TILE_H = 48;
 
 const MAP_SIZE = 12;
 
-const fighterSheet = new Image();
-fighterSheet.src = "assets/fighter_sheet.png";
+const fighterImg = new Image();
+fighterImg.src = "assets/player_fighter.png";
 
 const hunterImg = new Image();
 hunterImg.src = "assets/player_hunter.png";
@@ -1501,41 +1501,43 @@ ctx.ellipse(
 ctx.fillStyle = "rgba(0,0,0,0.35)";
 ctx.fill();
 
-const frameWidth = 170;
-const frameHeight = 170;
+let bob = 0;
 
-let frameY = 0;
-
-// idle
-if(!moving){
-    frameY = 0;
-}
-
-// walk
 if(moving){
-    frameY = 1;
+    bob = Math.sin(Date.now()*0.02)*4;
 }
 
-// attack
 if(attackFlash > 0){
-    frameY = 2;
+
+    ctx.save();
+
+    ctx.translate(
+        playerPos.x+16,
+        playerPos.y
+    );
+
+    ctx.rotate(-0.15);
+
+    ctx.drawImage(
+        fighterImg,
+        playerPos.x-64,
+        playerPos.y-128+bob,
+        128,
+        128
+    );
+
+    ctx.restore();
+
+}else{
+
+    ctx.drawImage(
+        fighterImg,
+        playerPos.x-64,
+        playerPos.y-128+bob,
+        128,
+        128
+    );
 }
-
-ctx.drawImage(
-    fighterSheet,
-
-    fighterFrame * frameWidth,
-    frameY * frameHeight,
-
-    frameWidth,
-    frameHeight,
-
-playerPos.x-48,
-playerPos.y-92+playerFloat,
-
-96,
-96
-);
         // UI
         ctx.fillStyle = "white";
 
