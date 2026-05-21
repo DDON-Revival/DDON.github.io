@@ -11,7 +11,12 @@ default-src 'self' https:;
 script-src 'self' 'unsafe-inline' https:;
 style-src 'self' 'unsafe-inline' https:;
 font-src 'self' https:;
-connect-src 'self' https://api.ddon.org https://raw.githubusercontent.com https:;
+connect-src 'self'
+https://api.ddon.org
+https://raw.githubusercontent.com
+https:
+ws://5.45.109.10:3010
+wss://live.ddon.org/ws;
 img-src 'self' https: data:;
 ">
 
