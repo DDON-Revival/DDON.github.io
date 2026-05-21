@@ -1503,18 +1503,8 @@ ctx.fill();
 
 let frameY = 0;
 
-// WALK ROW
-if(moving){
-    frameY = 1;
-}
-
-// ATTACK ROW
-if(attackFlash > 0){
-    frameY = 2;
-}
-
-const frameWidth = 256;
-const frameHeight = 256;
+const frameWidth = 128;
+const frameHeight = 128;
 
 ctx.drawImage(
     fighterSheet,
@@ -1525,11 +1515,11 @@ ctx.drawImage(
     frameWidth,
     frameHeight,
 
-    playerPos.x-64,
-    playerPos.y-110+playerFloat,
+playerPos.x-48,
+playerPos.y-90+playerFloat,
 
-    128,
-    128
+96,
+96
 );
         // UI
         ctx.fillStyle = "white";
