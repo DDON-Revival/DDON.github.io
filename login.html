@@ -462,6 +462,13 @@ button:hover{
 
 <script>
 
+const bgMusic = new Audio(
+    "assets/sounds/music.mp3"
+);
+
+bgMusic.loop = true;
+bgMusic.volume = 0.35;
+
 const jobMap = {
     1: "Fighter",
     2: "Seeker",
@@ -872,13 +879,6 @@ const slashSound = new Audio(
 const hitSound = new Audio(
     "assets/sounds/hit.wav"
 );
-
-const bgMusic = new Audio(
-    "assets/sounds/music.mp3"
-);
-
-bgMusic.loop = true;
-bgMusic.volume = 0.35;
 	
 function isoToScreen(x,y){
 
@@ -1026,8 +1026,10 @@ speed: isBoss
 },1000);
 
     function attack(){
-	slashSound.currentTime = 0;
-slashSound.play();
+slashSound.pause();
+slashSound.currentTime = 0;
+
+slashSound.play().catch(()=>{});
 	attackFlash = 8;
 	
 	let attackRange = 80;
@@ -1050,6 +1052,10 @@ if(player.class === "priest"){
             const dy = enemy.y-player.y;
 
             const dist = Math.sqrt(dx*dx+dy*dy);
+			
+if(dist <= 0.001){
+    return true;
+}
 
             if(dist < attackRange){
 			
@@ -1057,8 +1063,10 @@ if(player.class === "priest"){
     Math.random() < 0.18;
 
                 enemy.hp -= crit ? 2 : 1;
-				hitSound.currentTime = 0;
-				hitSound.play();
+hitSound.pause();
+hitSound.currentTime = 0;
+
+hitSound.play().catch(()=>{});
 				screenShake = crit
     ? 14
     : (enemy.boss ? 14 : 5);
@@ -1428,9 +1436,9 @@ if(player.class === "priest"){
 }
 
 const playerFloat =
-    Math.sin(Date.now()*0.006)*3
+    Math.sin(Date.now()*0.003)*1
     +
-    Math.sin(walkAnim)*6;
+    Math.sin(walkAnim)*2;
 
 const playerPos = isoToScreen(
     player.x,
@@ -1453,10 +1461,10 @@ let playerAnimHeight = 96;
 if(moving){
 
     playerAnimWidth =
-        96 + Math.sin(walkAnim)*6;
+        96 + Math.sin(walkAnim)*2;
 
     playerAnimHeight =
-        96 - Math.sin(walkAnim)*6;
+        96 - Math.sin(walkAnim)*2;
 }
 
 ctx.beginPath();
