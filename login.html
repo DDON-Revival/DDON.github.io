@@ -892,8 +892,6 @@ function isoToScreen(x,y){
     };
 }
 
-let selectedClass = "fighter";
-
 let player = {
     x: 0,
     y: 0,
@@ -1155,6 +1153,15 @@ if(keys["d"]){
     player.y -= player.speed;
 		
 }
+
+ws.send(JSON.stringify({
+
+    type: "move",
+
+    x: player.x,
+
+    y: player.y
+}));
 
 if(moving){
 
@@ -1511,6 +1518,16 @@ if(moving){
     bob = Math.sin(Date.now()*0.02)*4;
 }
 
+let localSprite = fighterImg;
+
+if(player.class === "hunter"){
+    localSprite = hunterImg;
+}
+
+if(player.class === "priest"){
+    localSprite = priestImg;
+}
+
 if(attackFlash > 0){
 
     ctx.save();
@@ -1523,7 +1540,7 @@ if(attackFlash > 0){
     ctx.rotate(-0.15);
 
     ctx.drawImage(
-        fighterImg,
+    localSprite,
         playerPos.x-64,
         playerPos.y-112+bob,
         128,
@@ -1535,13 +1552,73 @@ if(attackFlash > 0){
 }else{
 
     ctx.drawImage(
-        fighterImg,
+    localSprite,
         playerPos.x-64,
         playerPos.y-128+bob,
         128,
         128
     );
 }
+
+multiplayerPlayers.forEach(mp=>{
+
+    // skip self
+    if(
+        Math.abs(mp.x-player.x) < 0.01 &&
+        Math.abs(mp.y-player.y) < 0.01
+    ){
+        return;
+    }
+
+    const mpPos =
+        isoToScreen(mp.x, mp.y);
+
+    let sprite = fighterImg;
+
+    if(mp.class === "hunter"){
+        sprite = hunterImg;
+    }
+
+    if(mp.class === "priest"){
+        sprite = priestImg;
+    }
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        mpPos.x,
+        mpPos.y-8,
+        22,
+        10,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fillStyle =
+        "rgba(0,0,0,0.35)";
+
+    ctx.fill();
+
+    ctx.drawImage(
+        sprite,
+        mpPos.x-64,
+        mpPos.y-112,
+        128,
+        128
+    );
+
+    ctx.fillStyle = "white";
+
+    ctx.font = "18px Cinzel";
+
+    ctx.fillText(
+        mp.name,
+        mpPos.x-20,
+        mpPos.y-30
+    );
+});
+
         // UI
         ctx.fillStyle = "white";
 
@@ -1820,6 +1897,66 @@ async function setEmail(){
 
 let currentLobby = null;
 
+let selectedClass = "fighter";
+
+const ws = new WebSocket(
+    "ws://5.45.109.10:3010"
+);
+
+let multiplayerPlayers = [];
+
+ws.onmessage = (event)=>{
+
+    const data =
+        JSON.parse(event.data);
+
+    // game started
+    if(data.type === "gameStarted"){
+
+        closeLobby();
+
+        openFestivalPrototype();
+    }
+
+    // room browser
+    if(data.type === "roomList"){
+
+        openRoomBrowser(data.rooms);
+    }
+
+    // room created
+    if(data.type === "roomCreated"){
+
+        currentLobby = {
+
+            code: data.code
+        };
+
+        openLobbyScreen();
+    }
+
+    // room update
+    if(data.type === "roomUpdate"){
+
+        multiplayerPlayers =
+            data.players;
+
+        if(currentLobby){
+
+            currentLobby.players =
+                multiplayerPlayers;
+
+            renderLobbyPlayers();
+        }
+    }
+
+    // errors
+    if(data.type === "error"){
+
+        alert(data.message);
+    }
+};
+
 function generateLobbyCode(){
 
     const chars =
@@ -1840,43 +1977,21 @@ function generateLobbyCode(){
 
 function createLobby(){
 
-    currentLobby = {
+    ws.send(JSON.stringify({
 
-        code: generateLobbyCode(),
+        type: "createRoom",
 
-        players: [
-            {
-                name: "You",
-                class: "fighter",
-                ready: false
-            }
-        ]
-    };
+        name: prompt("Enter Name") || "Player"
 
-    openLobbyScreen();
+    }));
 }
 
 function joinLobbyPrompt(){
 
-    const code =
-        prompt("Enter Lobby Code");
+    ws.send(JSON.stringify({
 
-    if(!code) return;
-
-    currentLobby = {
-
-        code: code.toUpperCase(),
-
-        players: [
-            {
-                name: "You",
-                class: "fighter",
-                ready: false
-            }
-        ]
-    };
-
-    openLobbyScreen();
+        type: "getRooms"
+    }));
 }
 
 function openLobbyScreen(){
@@ -1990,26 +2105,36 @@ function renderLobbyPlayers(){
 
 function selectClass(cls){
 
-    currentLobby.players[0].class = cls;
+    selectedClass = cls;
 
-    player.class = cls;
+    ws.send(JSON.stringify({
 
-    renderLobbyPlayers();
+        type: "class",
+
+        class: cls
+    }));
 }
+
+let localReady = false;
 
 function toggleReady(){
 
-    currentLobby.players[0].ready =
-        !currentLobby.players[0].ready;
+    localReady = !localReady;
 
-    renderLobbyPlayers();
+    ws.send(JSON.stringify({
+
+        type: "ready",
+
+        ready: localReady
+    }));
 }
 
 function startLobbyGame(){
 
-    openFestivalPrototype();
+    ws.send(JSON.stringify({
 
-    closeLobby();
+        type: "startGame"
+    }));
 }
 
 function closeLobby(){
@@ -2019,6 +2144,109 @@ function closeLobby(){
 
     if(modal)
         modal.remove();
+}
+
+function openRoomBrowser(rooms){
+
+    const old =
+        document.getElementById("roomBrowser");
+
+    if(old) old.remove();
+
+    let html = `
+    
+    <div id="roomBrowser" style="
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,0.9);
+        z-index:999999;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    ">
+
+        <div style="
+            width:700px;
+            background:#14182b;
+            border:1px solid #c8a75d;
+            padding:30px;
+            max-height:700px;
+            overflow:auto;
+        ">
+
+            <h1 style="color:#c8a75d;">
+                Join Lobby
+            </h1>
+    `;
+
+    if(!rooms.length){
+
+        html += `
+        <p>No active lobbies found.</p>
+        `;
+    }
+
+    rooms.forEach(room=>{
+
+        html += `
+        
+        <div style="
+            background:#1c2338;
+            border:1px solid #2e3550;
+            padding:20px;
+            margin-top:15px;
+        ">
+
+            <h3>Lobby ${room.code}</h3>
+
+            <p>
+                Players: ${room.players}/4
+            </p>
+
+            <button onclick="
+                joinRoomDirect('${room.code}')
+            ">
+                Join
+            </button>
+
+        </div>
+        `;
+    });
+
+    html += `
+    
+        <button onclick="
+            document.getElementById('roomBrowser').remove()
+        " style="
+            margin-top:20px;
+        ">
+            Close
+        </button>
+
+        </div>
+    </div>
+    `;
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        html
+    );
+}
+
+function joinRoomDirect(code){
+
+    document
+        .getElementById("roomBrowser")
+        ?.remove();
+
+    ws.send(JSON.stringify({
+
+        type: "joinRoom",
+
+        code,
+
+        name: prompt("Enter Name") || "Player"
+    }));
 }
 
 window.onload = function(){
