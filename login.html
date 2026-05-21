@@ -1502,30 +1502,30 @@ ctx.fillStyle = "rgba(0,0,0,0.35)";
 ctx.fill();
 
 const idleFrames = [
-    {x:300,y:40},
-    {x:470,y:40},
-    {x:650,y:40},
-    {x:830,y:40},
-    {x:1010,y:40},
-    {x:1190,y:40}
+    {x:430,y:20},
+    {x:620,y:20},
+    {x:810,y:20},
+    {x:1000,y:20},
+    {x:1190,y:20},
+    {x:1380,y:20}
 ];
 
 const walkFrames = [
-    {x:300,y:410},
-    {x:470,y:410},
-    {x:650,y:410},
-    {x:830,y:410},
-    {x:1010,y:410},
-    {x:1190,y:410}
+    {x:430,y:360},
+    {x:620,y:360},
+    {x:810,y:360},
+    {x:1000,y:360},
+    {x:1190,y:360},
+    {x:1380,y:360}
 ];
 
 const attackFrames = [
-    {x:20,y:790},
-    {x:220,y:790},
-    {x:450,y:790},
-    {x:700,y:790},
-    {x:940,y:790},
-    {x:1180,y:790}
+    {x:40,y:760},
+    {x:250,y:760},
+    {x:500,y:760},
+    {x:760,y:760},
+    {x:1010,y:760},
+    {x:1260,y:760}
 ];
 
 let animFrames = idleFrames;
@@ -1546,18 +1546,17 @@ const frame =
 ctx.drawImage(
     fighterSheet,
 
-    frame.x,
-    frame.y,
+frame.x,
+frame.y,
 
-    180,
-    180,
+220,
+220,
 
-    playerPos.x-60,
-    playerPos.y-110+playerFloat,
+playerPos.x-52,
+playerPos.y-100+playerFloat,
 
-    120,
-    120
-);
+104,
+104
         // UI
         ctx.fillStyle = "white";
 
