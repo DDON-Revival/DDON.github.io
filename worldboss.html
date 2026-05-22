@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; img-src 'self' https: data:; connect-src 'self' https://api.ddon.org wss://api.ddon.org;">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100vh;overflow:hidden;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;}
 .screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;}
 
 /* LOAD */
@@ -151,6 +151,7 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
 .hp-green{background:linear-gradient(90deg,#2d8a3e,#5dbb8a)!important;}
 .hp-yellow{background:linear-gradient(90deg,#8a7a2d,#c8a75d)!important;}
 .hp-red{background:linear-gradient(90deg,#8a2d2d,#ff4040)!important;}
+::selection{background:transparent;}::-moz-selection{background:transparent;}
 </style>
 </head>
 <body>
