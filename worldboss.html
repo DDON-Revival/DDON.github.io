@@ -223,6 +223,7 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
         <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
     </div>
     <button class="hud-party-btn" id="leavePartyBtn" style="display:none;" onclick="leaveParty()">LEAVE PARTY</button>
+    <button onclick="openSkillTree()" style="background:transparent;border:1px solid #333;color:#888;padding:5px 12px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;cursor:pointer;transition:.2s;" onmouseover="this.style.borderColor='#c8a75d';this.style.color='#c8a75d';" onmouseout="this.style.borderColor='#333';this.style.color='#888';">🌳 SKILLS</button>
     <button id="muteBtn" onclick="toggleMute()" style="background:transparent;border:1px solid #333;color:#888;padding:5px 12px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;cursor:pointer;transition:.2s;" onmouseover="this.style.borderColor='#c8a75d';this.style.color='#c8a75d';" onmouseout="this.style.borderColor='#333';this.style.color='#888';">🔊 SOUND</button>
     <div class="hud-right">🪙 <span id="coinCount">0</span> &nbsp;|&nbsp; ONLINE: <span id="onlineCount">0</span></div>
 </div>
@@ -769,5 +770,259 @@ function gainCoins(amount){
 init();
 loadCoins();
 </script>
+
+<!-- Skill Tree Overlay -->
+<div id="skillTreeOverlay" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.92);backdrop-filter:blur(8px);flex-direction:column;align-items:center;justify-content:flex-start;padding:30px 20px;overflow-y:auto;">
+<style>
+.st-wrap{width:100%;max-width:1000px;}
+.st-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.st-title{font-family:'Cinzel Decorative',serif;font-size:22px;color:#c8a75d;letter-spacing:3px;}
+.st-points{font-size:14px;color:#ffd700;letter-spacing:2px;}
+.st-close{background:transparent;border:1px solid #444;color:#888;padding:8px 20px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;cursor:pointer;}
+.st-tiers{display:flex;flex-direction:column;gap:24px;}
+.st-tier{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;}
+.st-tier-label{width:80px;font-size:10px;color:#444;letter-spacing:3px;padding-top:20px;flex-shrink:0;}
+.sk-card{background:linear-gradient(145deg,#181a30,#101222);border:1px solid #2a2e50;padding:16px;width:200px;transition:.2s;position:relative;}
+.sk-card.unlocked{border-color:#c8a75d;}
+.sk-card.available{border-color:#5dbb8a;cursor:pointer;}
+.sk-card.available:hover{box-shadow:0 0 16px rgba(93,187,138,.3);}
+.sk-card.locked{opacity:.45;}
+.sk-card.passive{border-style:dashed;}
+.sk-icon{font-size:11px;letter-spacing:3px;margin-bottom:6px;}
+.sk-type-active{color:#ff6a10;}.sk-type-passive{color:#7a5dbb;}
+.sk-name{font-size:13px;color:#fff;letter-spacing:1px;margin-bottom:6px;}
+.sk-desc{font-size:11px;color:#666;line-height:1.5;margin-bottom:8px;}
+.sk-current{font-size:11px;color:#c8a75d;letter-spacing:1px;margin-bottom:10px;}
+.sk-req{font-size:10px;color:#444;letter-spacing:1px;margin-bottom:8px;}
+.sk-btn{width:100%;padding:7px;background:#c8a75d;border:none;color:#0a0b14;font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;}
+.sk-btn:disabled{opacity:.3;cursor:default;}
+.sk-unlocked-badge{position:absolute;top:8px;right:8px;font-size:10px;color:#c8a75d;}
+.sk-equip-bar{display:flex;gap:10px;margin-top:20px;align-items:center;}
+.sk-equip-label{font-size:11px;color:#555;letter-spacing:2px;}
+.sk-slot{background:#0f1020;border:1px solid #2a2e50;padding:10px 16px;min-width:140px;font-size:12px;color:#888;letter-spacing:1px;cursor:pointer;transition:.2s;text-align:center;}
+.sk-slot.filled{border-color:#c8a75d;color:#c8a75d;}
+.sk-slot:hover{border-color:#5dbb8a;}
+.st-ach-notif{position:fixed;top:80px;right:30px;z-index:600;display:flex;flex-direction:column;gap:8px;}
+.ach-pop{background:linear-gradient(135deg,#181a30,#101222);border:1px solid #c8a75d;padding:14px 20px;min-width:260px;animation:achFade 4s ease forwards;}
+@keyframes achFade{0%{opacity:0;transform:translateX(40px);}10%{opacity:1;transform:translateX(0);}80%{opacity:1;}100%{opacity:0;}}
+.ach-pop-icon{font-size:20px;margin-bottom:4px;}
+.ach-pop-title{font-size:11px;color:#c8a75d;letter-spacing:3px;}
+.ach-pop-name{font-size:14px;color:#fff;letter-spacing:1px;margin-top:2px;}
+</style>
+<div class="st-wrap">
+    <div class="st-header">
+        <div class="st-title">🌳 SKILL TREE</div>
+        <div style="display:flex;gap:20px;align-items:center;">
+            <div class="st-points">🔹 <span id="stPoints">0</span> Points Available</div>
+            <button class="st-close" onclick="closeSkillTree()">✕ CLOSE</button>
+        </div>
+    </div>
+    <div class="sk-equip-bar" style="margin-bottom:24px;">
+        <span class="sk-equip-label">ACTIVE SLOTS:</span>
+        <div class="sk-slot" id="slot0" onclick="openSlotPicker(0)">Q — Empty</div>
+        <div class="sk-slot" id="slot1" onclick="openSlotPicker(1)">E — Empty</div>
+        <div class="sk-slot" id="slot2" onclick="openSlotPicker(2)">R — Empty</div>
+        <button onclick="saveEquip()" style="background:#c8a75d;border:none;color:#0a0b14;padding:9px 20px;font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;">SAVE LOADOUT</button>
+    </div>
+    <div class="st-tiers" id="stTiers"></div>
+</div>
+</div>
+
+<!-- Slot picker -->
+<div id="slotPickerOverlay" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.8);align-items:center;justify-content:center;">
+    <div style="background:linear-gradient(145deg,#181a30,#101222);border:1px solid #c8a75d;padding:30px 40px;min-width:320px;">
+        <div style="font-size:14px;color:#c8a75d;letter-spacing:3px;margin-bottom:20px;">SELECT SKILL FOR SLOT</div>
+        <div id="slotPickerList" style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto;"></div>
+        <button onclick="document.getElementById('slotPickerOverlay').style.display='none'" style="margin-top:16px;width:100%;background:transparent;border:1px solid #333;color:#666;padding:8px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;cursor:pointer;">CANCEL</button>
+    </div>
+</div>
+
+<!-- Achievement notifications -->
+<div class="st-ach-notif" id="achNotifs"></div>
+
+<script>
+let skillData = null;
+let equippedSlots = [null, null, null];
+let editingSlot = -1;
+
+async function openSkillTree(){
+    document.getElementById('skillTreeOverlay').style.display='flex';
+    await loadSkillData();
+    renderSkillTree();
+}
+function closeSkillTree(){ document.getElementById('skillTreeOverlay').style.display='none'; }
+
+async function loadSkillData(){
+    try{
+        const r=await fetch('https://api.ddon.org/api/festival/skills',{credentials:'include'});
+        if(r.ok){ skillData=await r.json(); document.getElementById('stPoints').textContent=skillData.skillPoints; }
+    }catch(_){}
+}
+
+function renderSkillTree(){
+    if(!skillData)return;
+    const tiers={};
+    skillData.tree.skills.forEach(sk=>{
+        if(!tiers[sk.tier])tiers[sk.tier]=[];
+        tiers[sk.tier].push(sk);
+    });
+    const container=document.getElementById('stTiers');
+    container.innerHTML='';
+    const tierLabels={1:'TIER 1',2:'TIER 2',3:'TIER 3',4:'TIER 4 — ULTIMATE'};
+    Object.keys(tiers).sort().forEach(tier=>{
+        const row=document.createElement('div');row.className='st-tier';
+        const label=document.createElement('div');label.className='st-tier-label';
+        label.textContent=tierLabels[tier]||'TIER '+tier;
+        row.appendChild(label);
+        tiers[tier].forEach(sk=>{ row.appendChild(buildSkillCard(sk)); });
+        container.appendChild(row);
+    });
+    // Update equip slots
+    equippedSlots=(skillData.activeSkills||[]).slice(0,3);
+    while(equippedSlots.length<3) equippedSlots.push(null);
+    renderSlots();
+}
+
+function buildSkillCard(sk){
+    const spent=skillData.spentSkills||[];
+    const isUnlocked=spent.includes(sk.id);
+    const reqsMet=sk.requires.every(r=>spent.includes(r));
+    const canAfford=skillData.skillPoints>0;
+    const minLvl=sk.levels[0]?.lvlReq||1;
+    const lvlOk=skillData.level>=minLvl;
+    const isAvailable=!isUnlocked&&reqsMet&&canAfford&&lvlOk;
+    const isLocked=!isUnlocked&&(!reqsMet||!lvlOk);
+
+    const curLvl=isUnlocked?[...sk.levels].filter(l=>l.lvlReq<=skillData.level).pop():null;
+
+    const card=document.createElement('div');
+    card.className='sk-card'+(sk.type==='passive'?' passive':'')+
+        (isUnlocked?' unlocked':isAvailable?' available':' locked');
+
+    const reqNames=sk.requires.map(r=>{
+        const s=skillData.tree.skills.find(x=>x.id===r);
+        return s?s.name:r;
+    }).join(', ');
+
+    card.innerHTML=`
+        <div class="sk-icon sk-type-${sk.type}">${sk.type==='active'?'◆ ACTIVE':'◇ PASSIVE'}</div>
+        <div class="sk-name">${sk.name}</div>
+        <div class="sk-desc">${sk.description}</div>
+        ${curLvl?`<div class="sk-current">${curLvl.desc}</div>`:''}
+        ${!isUnlocked&&minLvl>1?`<div class="sk-req">Requires Lv.${minLvl}</div>`:''}
+        ${sk.requires.length?`<div class="sk-req">Needs: ${reqNames}</div>`:''}
+        ${isUnlocked?'<div class="sk-unlocked-badge">✓ UNLOCKED</div>':''}
+        ${isAvailable?`<button class="sk-btn" onclick="unlockSkill('${sk.id}')">🔹 UNLOCK (1 pt)</button>`:''}
+        ${isLocked&&!isUnlocked?`<button class="sk-btn" disabled>${!lvlOk?`Lv.${minLvl} Required`:'Unlock required first'}</button>`:''}
+    `;
+    return card;
+}
+
+async function unlockSkill(skillId){
+    try{
+        const r=await fetch('https://api.ddon.org/api/festival/skills/unlock',{
+            method:'POST',credentials:'include',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({skillId})
+        });
+        const d=await r.json();
+        if(d.success){
+            skillData.spentSkills=d.spentSkills;
+            skillData.skillPoints=d.skillPoints;
+            document.getElementById('stPoints').textContent=d.skillPoints;
+            renderSkillTree();
+            // Show achievement popups
+            if(d.newAchievements&&d.newAchievements.length){
+                d.newAchievements.forEach(id=>showAchievementPopup(id));
+            }
+        } else {
+            alert(d.error);
+        }
+    }catch(_){}
+}
+
+function renderSlots(){
+    [0,1,2].forEach(i=>{
+        const el=document.getElementById('slot'+i);
+        const slotLabels=['Q','E','R'];
+        if(equippedSlots[i]){
+            const sk=skillData?.tree?.skills?.find(s=>s.id===equippedSlots[i]);
+            el.textContent=slotLabels[i]+' — '+(sk?sk.name:'Unknown');
+            el.classList.add('filled');
+        } else {
+            el.textContent=slotLabels[i]+' — Empty';
+            el.classList.remove('filled');
+        }
+    });
+}
+
+function openSlotPicker(slotIndex){
+    editingSlot=slotIndex;
+    const spent=skillData?.spentSkills||[];
+    const activeSkills=skillData?.tree?.skills?.filter(s=>s.type==='active'&&spent.includes(s.id))||[];
+    const list=document.getElementById('slotPickerList');
+    list.innerHTML='';
+
+    // Empty option
+    const emptyEl=document.createElement('div');
+    emptyEl.className='sk-slot';emptyEl.textContent='— Empty —';
+    emptyEl.onclick=()=>{ equippedSlots[slotIndex]=null; renderSlots(); document.getElementById('slotPickerOverlay').style.display='none'; };
+    list.appendChild(emptyEl);
+
+    activeSkills.forEach(sk=>{
+        const el=document.createElement('div');
+        el.className='sk-slot'+(equippedSlots[slotIndex]===sk.id?' filled':'');
+        el.textContent=sk.name;
+        el.onclick=()=>{
+            equippedSlots[slotIndex]=sk.id;
+            renderSlots();
+            document.getElementById('slotPickerOverlay').style.display='none';
+        };
+        list.appendChild(el);
+    });
+    document.getElementById('slotPickerOverlay').style.display='flex';
+}
+
+async function saveEquip(){
+    try{
+        const r=await fetch('https://api.ddon.org/api/festival/skills/equip',{
+            method:'POST',credentials:'include',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({activeSkills:equippedSlots.filter(Boolean)})
+        });
+        const d=await r.json();
+        if(d.success){
+            profile.activeSkills=d.activeSkills;
+            updateSkillBar();
+            closeSkillTree();
+        }
+    }catch(_){}
+}
+
+function updateSkillBar(){
+    // Update Q/E/R buttons based on equipped skills
+    // For now, slot 0 = Q (existing skill button)
+    if(skillData&&profile.activeSkills){
+        const s0=skillData.tree?.skills?.find(s=>s.id===profile.activeSkills[0]);
+        if(s0) document.getElementById('skillBtnLabel').textContent=s0.icon||'⚡'+' '+s0.name+' [Q]';
+    }
+}
+
+function showAchievementPopup(achievementId){
+    // Fetch achievement name from a simple lookup or just show ID
+    const achNames = {
+        first_skill:'Power Awakens', skills_10:'Path of Mastery',
+        lvl5:'Seasoned Fighter', lvl10:'Veteran', lvl20:'Elite Arisen',
+        lvl30:'Rift Walker', lvl50:'Legend of the Rift'
+    };
+    const name = achNames[achievementId] || achievementId;
+    const container=document.getElementById('achNotifs');
+    const pop=document.createElement('div');pop.className='ach-pop';
+    pop.innerHTML=`<div class="ach-pop-icon">🏆</div><div class="ach-pop-title">ACHIEVEMENT UNLOCKED</div><div class="ach-pop-name">${name}</div>`;
+    container.appendChild(pop);
+    pop.addEventListener('animationend',()=>pop.remove());
+}
+</script>
+
 </body>
 </html>

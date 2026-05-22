@@ -304,6 +304,25 @@ body{
             </div>
         </div>
 
+        <!-- Achievements -->
+        <div class="game-card card-rift" onclick="openAchievements()" style="cursor:pointer;">
+            <div class="card-banner" style="background:linear-gradient(135deg,#0a150a,#0e2a0e,#0a0c16);">
+                <div class="card-banner-icon">🏆</div>
+            </div>
+            <div class="card-body">
+                <div class="card-tag tag-live">● LIVE</div>
+                <div class="card-name">Achievements</div>
+                <div class="card-desc">
+                    Track your progress and flex your accomplishments
+                    across all Festival events.
+                </div>
+                <div class="card-footer">
+                    <button class="card-play-btn">VIEW</button>
+                    <span class="card-players">🏆 <span id="achCount">0</span> unlocked</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Anniversary Store -->
         <div class="game-card card-trial" onclick="openStore()" style="cursor:pointer;">
             <div class="card-banner" style="background:linear-gradient(135deg,#1a120a,#2a1a08,#0a0c16);">
@@ -675,6 +694,99 @@ window.addEventListener('load',()=>{ if(document.getElementById('coinBadge')) lo
 .char-pick-row{background:#0f1020;border:1px solid #2a2e50;padding:14px 20px;cursor:pointer;font-size:14px;color:#fff;letter-spacing:2px;transition:.2s;text-align:left;}
 .char-pick-row:hover{border-color:#c8a75d;color:#c8a75d;}
 </style>
+
+
+<!-- Achievements Overlay -->
+<div id="achOverlay" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.88);backdrop-filter:blur(6px);flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 20px;overflow-y:auto;">
+<style>
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;width:100%;max-width:1000px;}
+.ach-card{background:linear-gradient(145deg,#181a30,#101222);border:1px solid #2a2e50;padding:16px 20px;display:flex;align-items:center;gap:14px;transition:.2s;}
+.ach-card.unlocked{border-color:rgba(200,167,93,.5);background:linear-gradient(145deg,#201f10,#181510);}
+.ach-card.hidden{opacity:.35;}
+.ach-card-icon{font-size:28px;flex-shrink:0;}
+.ach-card-body{flex:1;}
+.ach-card-name{font-size:13px;color:#fff;letter-spacing:1px;margin-bottom:4px;}
+.ach-card.locked .ach-card-name{color:#555;}
+.ach-card-desc{font-size:11px;color:#555;letter-spacing:1px;line-height:1.4;}
+.ach-card.unlocked .ach-card-desc{color:#888;}
+.ach-check{color:#c8a75d;font-size:16px;flex-shrink:0;}
+.ach-filter{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.ach-filter-btn{background:transparent;border:1px solid #2a2e50;color:#555;padding:6px 16px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;cursor:pointer;transition:.2s;}
+.ach-filter-btn.active{border-color:#c8a75d;color:#c8a75d;}
+.ach-filter-btn:hover{border-color:#888;color:#888;}
+</style>
+<div style="width:100%;max-width:1000px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <div>
+            <div style="font-family:'Cinzel Decorative',serif;font-size:22px;color:#c8a75d;letter-spacing:3px;">Achievements</div>
+            <div style="font-size:11px;color:#555;letter-spacing:3px;margin-top:4px;"><span id="achUnlockedCount">0</span> / <span id="achTotalCount">0</span> Unlocked</div>
+        </div>
+        <button onclick="document.getElementById('achOverlay').style.display='none'" style="background:transparent;border:1px solid #444;color:#888;padding:8px 20px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;cursor:pointer;">✕ CLOSE</button>
+    </div>
+    <div class="ach-filter">
+        <button class="ach-filter-btn active" onclick="filterAch('all',this)">ALL</button>
+        <button class="ach-filter-btn" onclick="filterAch('progress',this)">PROGRESS</button>
+        <button class="ach-filter-btn" onclick="filterAch('combat',this)">COMBAT</button>
+        <button class="ach-filter-btn" onclick="filterAch('social',this)">SOCIAL</button>
+        <button class="ach-filter-btn" onclick="filterAch('coins',this)">COINS</button>
+        <button class="ach-filter-btn" onclick="filterAch('class',this)">CLASS</button>
+        <button class="ach-filter-btn" onclick="filterAch('special',this)">SPECIAL</button>
+    </div>
+    <div class="ach-grid" id="achGrid"></div>
+</div>
+</div>
+
+<script>
+let allAchievements = [];
+let earnedAchievements = [];
+let currentAchFilter = 'all';
+
+async function openAchievements(){
+    document.getElementById('achOverlay').style.display='flex';
+    try{
+        const r=await fetch('https://api.ddon.org/api/festival/achievements',{credentials:'include'});
+        if(r.ok){
+            const d=await r.json();
+            allAchievements=d.all;
+            earnedAchievements=d.earned;
+            document.getElementById('achUnlockedCount').textContent=d.count;
+            document.getElementById('achTotalCount').textContent=d.total;
+            document.getElementById('achCount').textContent=d.count;
+            renderAchievements();
+        }
+    }catch(_){}
+}
+
+function filterAch(cat,btn){
+    currentAchFilter=cat;
+    document.querySelectorAll('.ach-filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    renderAchievements();
+}
+
+function renderAchievements(){
+    const grid=document.getElementById('achGrid');
+    grid.innerHTML='';
+    let filtered=allAchievements;
+    if(currentAchFilter!=='all') filtered=filtered.filter(a=>a.category===currentAchFilter);
+    // Sort: unlocked first
+    filtered.sort((a,b)=>b.unlocked-a.unlocked);
+    filtered.forEach(a=>{
+        if(a.hidden&&!a.unlocked) return; // hide secret achievements
+        const card=document.createElement('div');
+        card.className='ach-card'+(a.unlocked?' unlocked':'')+(a.hidden&&!a.unlocked?' hidden':'');
+        card.innerHTML=`
+            <div class="ach-card-icon">${a.unlocked?a.icon:'🔒'}</div>
+            <div class="ach-card-body">
+                <div class="ach-card-name">${a.name}</div>
+                <div class="ach-card-desc">${a.unlocked?a.desc:(a.hidden?'???':a.desc)}</div>
+            </div>
+            ${a.unlocked?'<div class="ach-check">✓</div>':''}
+        `;
+        grid.appendChild(card);
+    });
+}
+</script>
 
 </body>
 </html>
