@@ -704,7 +704,7 @@ function renderParty(members){
 
 // ── Combat ─────────────────────────────────────────────────
 function onEnemyClick(e){
-    startMusic();
+    if(!musicStarted&&!isMuted){musicStarted=true;bgMusic&&bgMusic.play().catch(()=>{});}
     if(gameState!=='combat'||atkCd||!enemy||enemy.hp<=0||isKO)return;
     atkCd=true;setTimeout(()=>atkCd=false,300);
     lastClickX=e.offsetX;lastClickY=e.offsetY;
