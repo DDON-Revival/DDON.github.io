@@ -8,656 +8,616 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100vh;overflow:hidden;}
+.screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;}
 
-/* ── Screens ── */
-.screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}
+/* LOAD */
 #loadScreen{background:#0a0b14;z-index:200;font-size:13px;letter-spacing:6px;color:#333;}
-#classScreen{background:radial-gradient(circle at top,#121425,#0a0b14);z-index:100;flex-direction:column;overflow-y:auto;}
-#gameScreen{flex-direction:column;background:radial-gradient(ellipse at top,#1a0a0a,#0a0b14);}
 
-/* ── HUD ── */
-#hud{
-    position:fixed;top:0;left:0;right:0;z-index:50;
-    display:flex;align-items:center;gap:16px;padding:14px 28px;
-    background:linear-gradient(to bottom,rgba(10,11,20,0.98),transparent);
-    border-bottom:1px solid rgba(200,167,93,0.15);
-}
-.hud-back{background:transparent;border:1px solid #333;color:#666;padding:6px 14px;
-    font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;cursor:pointer;transition:.2s;}
+/* CLASS SELECT */
+#classScreen{background:radial-gradient(circle at top,#121425,#0a0b14);z-index:100;overflow-y:auto;gap:0;}
+.class-title{font-family:'Cinzel Decorative',serif;font-size:28px;color:#c8a75d;letter-spacing:3px;margin-bottom:8px;}
+.class-sub{font-size:12px;color:#555;letter-spacing:3px;margin-bottom:32px;}
+.class-grid{display:grid;grid-template-columns:repeat(4,210px);gap:18px;}
+.class-card{background:linear-gradient(145deg,#181a30,#101222);border:1px solid #2a2e50;padding:26px 20px;cursor:pointer;transition:.3s;text-align:center;}
+.class-card:hover{border-color:#c8a75d;transform:translateY(-4px);}
+.class-card.selected{border-color:#c8a75d;background:linear-gradient(145deg,#201f10,#181510);}
+.cc-icon{font-size:42px;margin-bottom:12px;}.cc-name{font-size:15px;color:#fff;letter-spacing:2px;margin-bottom:7px;}
+.cc-desc{font-size:11px;color:#666;line-height:1.6;margin-bottom:14px;}
+.cc-skill{font-size:11px;color:#c8a75d;letter-spacing:1px;padding:4px 8px;border:1px solid rgba(200,167,93,.3);}
+.class-confirm{margin-top:28px;background:#c8a75d;border:none;color:#0a0b14;padding:13px 56px;font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:3px;cursor:pointer;}
+.class-confirm:disabled{opacity:.3;cursor:default;}
+
+/* LOBBY SCREEN */
+#lobbyScreen{background:radial-gradient(circle at top,#121425,#0a0b14);z-index:90;}
+.lobby-title{font-family:'Cinzel Decorative',serif;font-size:30px;color:#c8a75d;letter-spacing:3px;margin-bottom:8px;}
+.lobby-sub{font-size:12px;color:#555;letter-spacing:3px;margin-bottom:44px;}
+.lobby-options{display:flex;gap:24px;}
+.lobby-opt{background:linear-gradient(145deg,#181a30,#101222);border:1px solid #2a2e50;padding:36px 32px;width:220px;text-align:center;cursor:pointer;transition:.3s;}
+.lobby-opt:hover{border-color:#c8a75d;transform:translateY(-5px);box-shadow:0 0 24px rgba(200,167,93,.15);}
+.lo-icon{font-size:44px;margin-bottom:14px;}.lo-name{font-size:16px;color:#fff;letter-spacing:2px;margin-bottom:8px;}
+.lo-desc{font-size:11px;color:#666;letter-spacing:1px;}
+
+/* Create lobby */
+#createLobbyBox{display:none;flex-direction:column;align-items:center;gap:16px;width:400px;}
+.lobby-input{width:100%;padding:13px 16px;background:#0f1020;border:1px solid #2a2e50;color:#fff;font-family:'Cinzel',serif;font-size:15px;text-align:center;letter-spacing:2px;outline:none;}
+.lobby-input:focus{border-color:#c8a75d;}
+.lobby-btn{background:#c8a75d;border:none;color:#0a0b14;padding:12px 40px;font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:3px;cursor:pointer;width:100%;}
+.lobby-btn-ghost{background:transparent;border:1px solid #333;color:#666;padding:10px 40px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;cursor:pointer;width:100%;}
+.lobby-btn-ghost:hover{border-color:#c8a75d;color:#c8a75d;}
+
+/* Join lobby list */
+#joinLobbyBox{display:none;flex-direction:column;align-items:center;gap:12px;width:520px;max-height:70vh;}
+.lobby-list-wrap{width:100%;overflow-y:auto;max-height:380px;display:flex;flex-direction:column;gap:8px;}
+.lobby-row{display:flex;justify-content:space-between;align-items:center;background:#111320;border:1px solid #2a2d48;padding:14px 20px;cursor:pointer;transition:.2s;}
+.lobby-row:hover{border-color:#c8a75d;}
+.lr-name{font-size:14px;color:#fff;letter-spacing:1px;}
+.lr-count{font-size:12px;color:#c8a75d;letter-spacing:2px;}
+.lr-full{color:#555;}
+.lobby-empty{color:#444;font-size:12px;letter-spacing:3px;padding:30px 0;text-align:center;}
+.lobby-list-btns{display:flex;gap:12px;width:100%;}
+
+/* HUD */
+#hud{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:14px;padding:13px 26px;background:linear-gradient(to bottom,rgba(10,11,20,.98),transparent);border-bottom:1px solid rgba(200,167,93,.15);}
+.hud-back{background:transparent;border:1px solid #333;color:#666;padding:6px 14px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;cursor:pointer;transition:.2s;}
 .hud-back:hover{border-color:#c8a75d;color:#c8a75d;}
 .hud-name{color:#c8a75d;font-size:14px;letter-spacing:2px;}
 .hud-class{font-size:11px;color:#888;letter-spacing:2px;padding:3px 10px;border:1px solid #333;}
-.hud-level{font-size:13px;color:#fff;letter-spacing:1px;min-width:50px;}
-#xpBarWrap{flex:1;max-width:220px;}
+.hud-level{font-size:13px;color:#fff;letter-spacing:1px;}
+.hud-hp{display:flex;align-items:center;gap:8px;font-size:11px;color:#888;letter-spacing:1px;}
+.hud-hp-track{width:100px;height:6px;background:#1a1a2a;border:1px solid #333;overflow:hidden;}
+.hud-hp-fill{height:100%;background:linear-gradient(90deg,#ff4040,#ff8040);transition:width .3s;}
+#xpBarWrap{flex:1;max-width:180px;}
 .xp-label{font-size:10px;color:#555;letter-spacing:2px;margin-bottom:3px;}
-.xp-track{height:4px;background:#1a1a2a;border:1px solid #222;overflow:hidden;}
-.xp-fill{height:100%;background:linear-gradient(90deg,#c8a75d,#ffd97a);transition:width .4s ease;}
+.xp-track{height:4px;background:#1a1a2a;overflow:hidden;}
+.xp-fill{height:100%;background:linear-gradient(90deg,#c8a75d,#ffd97a);transition:width .4s;}
 .hud-right{margin-left:auto;font-size:12px;color:#555;letter-spacing:2px;}
+.hud-party-btn{background:transparent;border:1px solid #2a2e50;color:#666;padding:5px 12px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;cursor:pointer;transition:.2s;}
+.hud-party-btn:hover{border-color:#c8a75d;color:#c8a75d;}
 
-/* ── Class selection ── */
-.class-title{font-family:'Cinzel Decorative',serif;font-size:28px;color:#c8a75d;letter-spacing:3px;margin-bottom:8px;text-align:center;}
-.class-sub{font-size:12px;color:#555;letter-spacing:3px;margin-bottom:40px;text-align:center;}
-.class-grid{display:grid;grid-template-columns:repeat(4,220px);gap:20px;}
-.class-card{background:linear-gradient(145deg,#181a30,#101222);border:1px solid #2a2e50;
-    padding:28px 22px;cursor:pointer;transition:.3s;text-align:center;}
-.class-card:hover{border-color:#c8a75d;transform:translateY(-4px);box-shadow:0 0 20px rgba(200,167,93,.2);}
-.class-card.selected{border-color:#c8a75d;background:linear-gradient(145deg,#201f10,#181510);}
-.cc-icon{font-size:44px;margin-bottom:14px;}
-.cc-name{font-size:16px;color:#fff;letter-spacing:2px;margin-bottom:8px;}
-.cc-desc{font-size:11px;color:#666;line-height:1.6;margin-bottom:16px;}
-.cc-skill{font-size:11px;color:#c8a75d;letter-spacing:1px;padding:5px 10px;border:1px solid rgba(200,167,93,.3);}
-.class-confirm{margin-top:32px;background:#c8a75d;border:none;color:#0a0b14;
-    padding:14px 60px;font-family:'Cinzel',serif;font-size:14px;font-weight:700;
-    letter-spacing:3px;cursor:pointer;transition:.2s;}
-.class-confirm:hover{box-shadow:0 0 20px rgba(200,167,93,.4);}
-.class-confirm:disabled{opacity:.3;cursor:default;}
+/* PARTY PANEL (left) */
+#partyPanel{position:fixed;left:20px;top:68px;width:210px;z-index:40;}
+.party-header{font-size:11px;letter-spacing:3px;color:#c8a75d;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+.party-leave{font-size:9px;color:#444;cursor:pointer;letter-spacing:2px;padding:3px 8px;border:1px solid #222;}
+.party-leave:hover{color:#c8a75d;border-color:#c8a75d;}
+.pm{background:rgba(0,0,0,.5);border:1px solid rgba(200,167,93,.15);padding:10px 12px;margin-bottom:6px;transition:.2s;}
+.pm.ko{opacity:.5;border-color:#ff4040;}
+.pm-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.pm-icon{font-size:16px;}.pm-name{font-size:12px;color:#fff;letter-spacing:1px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pm-lv{font-size:10px;color:#888;}.pm-ko-label{font-size:9px;color:#ff4040;letter-spacing:2px;}
+.pm-hp-track{height:5px;background:#111;overflow:hidden;}
+.pm-hp-fill{height:100%;transition:width .3s;}
 
-/* ── Game area ── */
-#gameMain{
-    position:fixed;inset:0;top:60px;
-    display:flex;align-items:center;justify-content:center;
-}
+/* LEADERBOARD (right) */
+#lb{position:fixed;right:20px;top:68px;width:250px;background:rgba(0,0,0,.55);border:1px solid rgba(200,167,93,.2);padding:16px 18px;backdrop-filter:blur(4px);}
+#lb h3{color:#c8a75d;font-size:12px;letter-spacing:3px;margin-bottom:10px;}
+.lb-row{display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-top:6px;letter-spacing:1px;}
+.lb-row.gold{color:#ffd700;font-weight:700;}.lb-row.me{color:#c8a75d;font-weight:700;}
+.lb-row.bot{color:#555;font-style:italic;}
 
-/* ── Enemy display ── */
-#enemyArea{
-    position:relative;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;
-    width:560px;
-}
-.enemy-type-badge{
-    font-size:10px;letter-spacing:5px;text-transform:uppercase;
-    padding:4px 16px;border:1px solid currentColor;margin-bottom:10px;
-}
-.type-normal{color:#5dbb8a;}
-.type-elite{color:#bb8a5d;}
-.type-boss{color:#ff4d4d;}
-.enemy-name{font-size:22px;color:#fff;letter-spacing:3px;margin-bottom:20px;}
-
-#enemyVisual{
-    width:420px;height:300px;cursor:crosshair;position:relative;
-    display:flex;align-items:center;justify-content:center;
-    transition:.2s;
-}
+/* GAME MAIN */
+#gameMain{position:fixed;inset:0;top:60px;display:flex;align-items:center;justify-content:center;}
+#combatView{display:flex;flex-direction:column;align-items:center;}
+.enemy-type-badge{font-size:10px;letter-spacing:5px;text-transform:uppercase;padding:4px 16px;border:1px solid currentColor;margin-bottom:10px;}
+.type-normal{color:#5dbb8a;}.type-elite{color:#bb8a5d;}.type-boss{color:#ff4d4d;}
+.enemy-name{font-size:22px;color:#fff;letter-spacing:3px;margin-bottom:18px;}
+#enemyVisual{width:400px;height:280px;cursor:crosshair;position:relative;display:flex;align-items:center;justify-content:center;}
 #enemyVisual:hover{filter:brightness(1.1);}
-#enemyImg{width:100%;height:100%;object-fit:contain;
-    animation:float 3s infinite ease-in-out;pointer-events:none;user-select:none;}
-#enemyEmoji{font-size:160px;animation:float 3s infinite ease-in-out;
-    pointer-events:none;user-select:none;filter:drop-shadow(0 0 30px currentColor);}
-#hitOverlay{position:absolute;inset:0;pointer-events:none;border-radius:8px;}
+#enemyImg{width:100%;height:100%;object-fit:contain;animation:float 3s infinite ease-in-out;pointer-events:none;}
+#hitOverlay{position:absolute;inset:0;pointer-events:none;border-radius:6px;}
 #hitOverlay.flash{animation:redFlash .3s ease forwards;}
+.hp-wrap{width:480px;margin-top:18px;}
+.hp-track{height:34px;background:#111;border:1px solid rgba(255,77,77,.4);overflow:hidden;position:relative;}
+.hp-fill{height:100%;background:linear-gradient(90deg,#cc1010,#ff6a10);transition:width .25s;}
+.hp-text{text-align:center;font-size:12px;color:#ffdddd;letter-spacing:2px;margin-top:5px;}
 
+#waitScreen{display:none;flex-direction:column;align-items:center;gap:14px;}
+.wait-title{font-size:18px;letter-spacing:4px;color:#c8a75d;}
+.next-badge{font-size:10px;letter-spacing:4px;padding:5px 16px;border:1px solid #333;color:#888;}
+#countdown{font-size:48px;color:#fff;}
+
+/* SKILL BAR */
+#skillBar{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:7px;}
+.click-hint{font-size:10px;color:rgba(255,180,180,.3);letter-spacing:4px;animation:hintPulse 2s infinite;}
+#skillBtn{background:rgba(200,167,93,.12);border:1px solid rgba(200,167,93,.45);color:#c8a75d;padding:11px 34px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;cursor:pointer;transition:.2s;position:relative;min-width:210px;text-align:center;}
+#skillBtn:hover:not(:disabled){background:rgba(200,167,93,.22);}
+#skillBtn:disabled{opacity:.3;cursor:default;}
+#cdOverlay{position:absolute;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;}
+.ko-banner{font-size:13px;color:#ff4040;letter-spacing:3px;animation:hintPulse 1s infinite;}
+
+/* Phase banners */
+#phaseBanner{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;text-align:center;pointer-events:none;animation:phaseFade 2.5s ease forwards;}
+#phaseBanner h2{font-size:36px;letter-spacing:6px;}
+#phaseBanner p{font-size:12px;letter-spacing:4px;margin-top:8px;}
+@keyframes phaseFade{0%{opacity:0;transform:translate(-50%,-60%);}20%{opacity:1;transform:translate(-50%,-50%);}80%{opacity:1;}100%{opacity:0;}}
+
+/* Animations */
 @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
 @keyframes redFlash{0%{background:rgba(255,30,0,0);}30%{background:rgba(255,30,0,.5);}100%{background:rgba(255,30,0,0);}}
 @keyframes shake{0%{transform:translateX(0);}20%{transform:translateX(-14px);}40%{transform:translateX(14px);}60%{transform:translateX(-8px);}80%{transform:translateX(8px);}100%{transform:translateX(0);}}
-@keyframes crumble{0%{transform:translateY(0) scale(1);opacity:1;filter:brightness(1);}50%{transform:translateY(20px) scale(.95);opacity:.6;filter:brightness(.5) saturate(0);}100%{transform:translateY(60px) scale(.85);opacity:0;filter:brightness(0);}}
+@keyframes hintPulse{0%,100%{opacity:.25;}50%{opacity:.75;}}
+.dmgPop{position:absolute;font-family:'Cinzel',serif;font-weight:700;pointer-events:none;animation:dmgFloat .9s ease-out forwards;z-index:300;white-space:nowrap;}
+.dmgPop.normal{font-size:26px;color:#ffe082;}.dmgPop.crit{font-size:38px;color:#ff6b35;}.dmgPop.heal{font-size:24px;color:#5dbb8a;}
+@keyframes dmgFloat{0%{opacity:1;transform:translateY(0) scale(1);}30%{opacity:1;transform:translateY(-28px) scale(1.2);}100%{opacity:0;transform:translateY(-85px) scale(.8);}}
+.slash{position:absolute;pointer-events:none;width:44px;height:44px;animation:slashA .42s ease-out forwards;z-index:200;}
+.slash::before,.slash::after{content:'';position:absolute;width:100%;height:3px;background:#ff4d4d;top:50%;border-radius:2px;}
+.slash::before{transform:rotate(45deg);}.slash::after{transform:rotate(-45deg);}
+@keyframes slashA{0%{opacity:1;transform:scale(.3);}50%{opacity:1;transform:scale(1.1);}100%{opacity:0;transform:scale(1.3) translateY(-14px);}}
+.xpPop{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:15px;color:#c8a75d;pointer-events:none;animation:xpFloat 1.4s ease-out forwards;z-index:999;}
+@keyframes xpFloat{0%{opacity:1;transform:translateX(-50%) translateY(0);}100%{opacity:0;transform:translateX(-50%) translateY(-50px);}}
+.lvlBanner{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(10,11,20,.95);border:1px solid #c8a75d;padding:22px 50px;text-align:center;z-index:900;pointer-events:none;animation:phaseFade 2.5s ease forwards;}
+.lvlBanner h2{font-size:26px;color:#c8a75d;letter-spacing:4px;}.lvlBanner p{font-size:11px;color:#888;letter-spacing:3px;margin-top:5px;}
 
-#enemyVisual.shaking #enemyImg,
-#enemyVisual.shaking #enemyEmoji{animation:shake .35s ease !important;}
-#enemyVisual.dead #enemyImg,
-#enemyVisual.dead #enemyEmoji{animation:crumble 2s ease forwards !important;}
-
-/* HP bar */
-.hp-wrap{width:500px;margin-top:20px;}
-.hp-track{height:36px;background:#111;border:1px solid rgba(255,77,77,.4);overflow:hidden;position:relative;}
-.hp-fill{height:100%;background:linear-gradient(90deg,#cc1010,#ff6a10);transition:width .25s ease;}
-.hp-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.12),transparent);}
-.hp-text{text-align:center;font-size:13px;color:#ffdddd;letter-spacing:2px;margin-top:6px;}
-
-/* waiting */
-#waitScreen{display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
-.wait-title{font-size:18px;letter-spacing:4px;color:#c8a75d;}
-.wait-next{font-size:12px;color:#555;letter-spacing:3px;}
-#countdown{font-size:48px;color:#fff;letter-spacing:4px;}
-.next-type-badge{font-size:10px;letter-spacing:4px;padding:5px 16px;border:1px solid #333;color:#888;}
-
-/* skill button */
-#skillBar{
-    position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
-    display:flex;flex-direction:column;align-items:center;gap:8px;
-}
-.click-hint{font-size:11px;color:rgba(255,180,180,.35);letter-spacing:4px;animation:hintPulse 2s infinite;}
-@keyframes hintPulse{0%,100%{opacity:.25;}50%{opacity:.7;}}
-#skillBtn{
-    background:rgba(200,167,93,.15);border:1px solid rgba(200,167,93,.5);
-    color:#c8a75d;padding:12px 36px;font-family:'Cinzel',serif;
-    font-size:13px;letter-spacing:2px;cursor:pointer;transition:.2s;
-    position:relative;min-width:220px;text-align:center;
-}
-#skillBtn:hover:not(:disabled){background:rgba(200,167,93,.25);box-shadow:0 0 16px rgba(200,167,93,.3);}
-#skillBtn:disabled{opacity:.35;cursor:default;}
-#skillBtn.active{background:rgba(200,167,93,.35);border-color:#c8a75d;}
-#cdOverlay{
-    position:absolute;inset:0;background:rgba(0,0,0,.6);
-    display:flex;align-items:center;justify-content:center;
-    font-size:18px;color:#fff;letter-spacing:0;
-}
-
-/* Leaderboard */
-#lb{
-    position:fixed;right:24px;top:80px;width:260px;
-    background:rgba(0,0,0,.55);border:1px solid rgba(200,167,93,.25);
-    padding:18px 20px;backdrop-filter:blur(4px);
-}
-#lb h3{color:#c8a75d;font-size:13px;letter-spacing:3px;margin-bottom:12px;}
-.lb-row{display:flex;justify-content:space-between;font-size:12px;
-    color:#aaa;margin-top:7px;letter-spacing:1px;}
-.lb-row.me{color:#c8a75d;font-weight:700;}
-.lb-row.gold{color:#ffd700;}
-
-/* XP popup */
-.xpPop{position:fixed;font-family:'Cinzel',serif;font-size:16px;color:#c8a75d;
-    pointer-events:none;animation:xpFloat 1.2s ease-out forwards;z-index:999;}
-@keyframes xpFloat{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-70px);}}
-
-/* Level up */
-#lvlUpBanner{
-    position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-    background:rgba(10,11,20,.95);border:1px solid #c8a75d;
-    padding:24px 50px;text-align:center;z-index:900;
-    animation:lvlFade 2.5s ease forwards;pointer-events:none;
-}
-@keyframes lvlFade{0%{opacity:0;transform:translate(-50%,-60%);}20%{opacity:1;transform:translate(-50%,-50%);}80%{opacity:1;}100%{opacity:0;transform:translate(-50%,-40%);}}
-#lvlUpBanner h2{font-size:28px;color:#c8a75d;letter-spacing:4px;}
-#lvlUpBanner p{font-size:12px;color:#888;letter-spacing:3px;margin-top:6px;}
-
-/* Damage numbers */
-.dmgPop{position:absolute;font-family:'Cinzel',serif;font-weight:700;
-    pointer-events:none;animation:dmgFloat .9s ease-out forwards;z-index:300;}
-.dmgPop.normal{font-size:28px;color:#ffe082;}
-.dmgPop.crit{font-size:40px;color:#ff6b35;}
-.dmgPop.skill{font-size:36px;color:#c8a75d;}
-@keyframes dmgFloat{0%{opacity:1;transform:translateY(0) scale(1);}30%{opacity:1;transform:translateY(-30px) scale(1.2);}100%{opacity:0;transform:translateY(-90px) scale(.8);}}
-
-.slash{position:absolute;pointer-events:none;width:48px;height:48px;animation:slashA .45s ease-out forwards;z-index:200;}
-.slash::before,.slash::after{content:'';position:absolute;width:100%;height:3px;background:#ff4d4d;top:50%;left:0;border-radius:2px;}
-.slash::before{transform:rotate(45deg);}
-.slash::after{transform:rotate(-45deg);}
-@keyframes slashA{0%{opacity:1;transform:scale(.3);}50%{opacity:1;transform:scale(1.1);}100%{opacity:0;transform:scale(1.3) translateY(-16px);}}
+/* HP color */
+.hp-green{background:linear-gradient(90deg,#2d8a3e,#5dbb8a)!important;}
+.hp-yellow{background:linear-gradient(90deg,#8a7a2d,#c8a75d)!important;}
+.hp-red{background:linear-gradient(90deg,#8a2d2d,#ff4040)!important;}
 </style>
 </head>
 <body>
 
-<!-- Load -->
 <div class="screen" id="loadScreen">LOADING ···</div>
 
 <!-- Class select -->
 <div class="screen" id="classScreen" style="display:none;">
     <div class="class-title">Choose Your Vocation</div>
-    <div class="class-sub">YOUR CLASS IS LOCKED AFTER LEVEL 5</div>
+    <div class="class-sub">LOCKED AFTER LEVEL 5</div>
     <div class="class-grid" id="classGrid"></div>
-    <button class="class-confirm" id="classConfirmBtn" disabled onclick="confirmClass()">ENTER BATTLE</button>
+    <button class="class-confirm" id="classConfirmBtn" disabled onclick="confirmClass()">CONFIRM VOCATION</button>
 </div>
 
-<!-- HUD (game) -->
+<!-- Lobby screen -->
+<div class="screen" id="lobbyScreen" style="display:none;">
+    <div class="lobby-title">Enter the Battle</div>
+    <div class="lobby-sub">CHOOSE YOUR PATH</div>
+
+    <div class="lobby-options" id="lobbyOptions">
+        <div class="lobby-opt" onclick="playSolo()">
+            <div class="lo-icon">⚔️</div>
+            <div class="lo-name">Play Solo</div>
+            <div class="lo-desc">Enter battle alone</div>
+        </div>
+        <div class="lobby-opt" onclick="showCreateLobby()">
+            <div class="lo-icon">👑</div>
+            <div class="lo-name">Create Party</div>
+            <div class="lo-desc">Lead your own group</div>
+        </div>
+        <div class="lobby-opt" onclick="showJoinLobby()">
+            <div class="lo-icon">🛡️</div>
+            <div class="lo-name">Join Party</div>
+            <div class="lo-desc">Find an existing group</div>
+        </div>
+    </div>
+
+    <!-- Create form -->
+    <div id="createLobbyBox">
+        <div style="font-size:12px;letter-spacing:3px;color:#888;margin-bottom:8px;">PARTY NAME</div>
+        <input class="lobby-input" id="lobbyNameInput" type="text" maxlength="30" placeholder="Arisen's Vanguard">
+        <button class="lobby-btn" onclick="createLobby()">CREATE PARTY</button>
+        <button class="lobby-btn-ghost" onclick="showLobbyOptions()">← BACK</button>
+    </div>
+
+    <!-- Join list -->
+    <div id="joinLobbyBox">
+        <div style="font-size:12px;letter-spacing:3px;color:#888;margin-bottom:12px;align-self:flex-start;">OPEN PARTIES</div>
+        <div class="lobby-list-wrap" id="lobbyListEl"></div>
+        <div class="lobby-list-btns">
+            <button class="lobby-btn" style="font-size:11px;" onclick="requestLobbyList()">↺ REFRESH</button>
+            <button class="lobby-btn-ghost" style="font-size:11px;" onclick="showLobbyOptions()">← BACK</button>
+        </div>
+    </div>
+</div>
+
+<!-- HUD -->
 <div id="hud" style="display:none;">
     <button class="hud-back" onclick="location.href='festival.html'">← FESTIVAL</button>
     <span class="hud-name" id="hudName">···</span>
     <span class="hud-class" id="hudClass">···</span>
     <span class="hud-level" id="hudLevel">Lv.1</span>
+    <div class="hud-hp" id="hudHpWrap">
+        <span id="hudHpText">HP</span>
+        <div class="hud-hp-track"><div class="hud-hp-fill" id="hudHpFill" style="width:100%"></div></div>
+    </div>
     <div id="xpBarWrap">
-        <div class="xp-label">XP <span id="xpLabel">0 / 100</span></div>
+        <div class="xp-label">XP <span id="xpLabel">0/100</span></div>
         <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
     </div>
+    <button class="hud-party-btn" id="leavePartyBtn" style="display:none;" onclick="leaveParty()">LEAVE PARTY</button>
     <div class="hud-right">ONLINE: <span id="onlineCount">0</span></div>
 </div>
 
-<!-- Game main -->
-<div id="gameMain" style="display:none;">
-
-    <!-- Combat -->
-    <div id="combatView">
-        <div id="enemyArea">
-            <div class="enemy-type-badge" id="enemyTypeBadge">NORMAL</div>
-            <div class="enemy-name" id="enemyNameEl">···</div>
-            <div id="enemyVisual" onclick="onEnemyClick(event)">
-                <img id="enemyImg" src="" style="display:none;">
-                <div id="enemyEmoji"></div>
-                <div id="hitOverlay"></div>
-            </div>
-            <div class="hp-wrap">
-                <div class="hp-track"><div class="hp-fill" id="hpFill" style="width:100%"></div></div>
-                <div class="hp-text" id="hpText">— / — HP</div>
-            </div>
-        </div>
+<!-- Party panel (left) -->
+<div id="partyPanel" style="display:none;">
+    <div class="party-header">
+        <span id="partyName">PARTY</span>
     </div>
-
-    <!-- Waiting -->
-    <div id="waitScreen">
-        <div class="wait-title">ENEMY DEFEATED</div>
-        <div class="next-type-badge" id="nextTypeBadge">NEXT: NORMAL ENEMY</div>
-        <div id="countdown">—</div>
-        <div class="wait-next">NEXT BATTLE IN</div>
-    </div>
-
+    <div id="partyMembers"></div>
 </div>
 
-<!-- Skill bar -->
-<div id="skillBar" style="display:none;">
-    <div class="click-hint">⚔ CLICK ENEMY TO ATTACK ⚔</div>
-    <button id="skillBtn" onclick="useSkill()" disabled>
-        <span id="skillBtnLabel">Skill</span>
-        <div id="cdOverlay" style="display:none;"></div>
-    </button>
-    <div style="font-size:10px;color:#333;letter-spacing:2px;">PRESS Q</div>
-</div>
-
-<!-- Leaderboard -->
+<!-- Leaderboard (right) -->
 <div id="lb" style="display:none;">
     <h3>⚔ FIGHT DAMAGE</h3>
     <div id="lbRows"></div>
 </div>
 
+<!-- Game -->
+<div id="gameMain" style="display:none;">
+    <div id="combatView">
+        <div class="enemy-type-badge" id="enemyTypeBadge">···</div>
+        <div class="enemy-name" id="enemyNameEl">···</div>
+        <div id="enemyVisual" onclick="onEnemyClick(event)">
+            <img id="enemyImg" src="" style="display:none;">
+            <div id="hitOverlay"></div>
+        </div>
+        <div class="hp-wrap">
+            <div class="hp-track"><div class="hp-fill" id="hpFill" style="width:100%"></div></div>
+            <div class="hp-text" id="hpText">— / —</div>
+        </div>
+    </div>
+    <div id="waitScreen">
+        <div class="wait-title">ENEMY DEFEATED</div>
+        <div class="next-badge" id="nextTypeBadge">NEXT: NORMAL</div>
+        <div id="countdown">—</div>
+        <div style="font-size:11px;color:#555;letter-spacing:3px;">NEXT BATTLE IN</div>
+    </div>
+</div>
+
+<!-- Skill bar -->
+<div id="skillBar" style="display:none;">
+    <div class="click-hint" id="clickHint">⚔ CLICK ENEMY TO ATTACK ⚔</div>
+    <button id="skillBtn" onclick="useSkill()" disabled>
+        <span id="skillBtnLabel">Skill</span>
+        <div id="cdOverlay" style="display:none;"></div>
+    </button>
+    <div style="font-size:9px;color:#333;letter-spacing:2px;">PRESS Q</div>
+</div>
+
 <script>
-// ── Class definitions ────────────────────────────────────────
 const CLASSES = {
-    fighter:{ name:'Fighter', icon:'⚔️', color:'#c8a75d',
-              desc:'High sustained damage. Every swing counts.',
-              skill:'Berserk Slash', skillDesc:'3× damage hit', skillCd:10 },
-    hunter: { name:'Hunter',  icon:'🏹', color:'#5dbb8a',
-              desc:'High critical rate. Rapid Shot fires 5 arrows.',
-              skill:'Rapid Shot',    skillDesc:'5× rapid hits',  skillCd:8  },
-    mage:   { name:'Mage',    icon:'🔮', color:'#7a5dbb',
-              desc:'Explosive burst. Deals the highest single hit.',
-              skill:'Arcane Burst', skillDesc:'4× magic burst',  skillCd:15 },
-    priest: { name:'Priest',  icon:'✨', color:'#bb8a5d',
-              desc:'Support class. Divine Seal empowers your attacks.',
-              skill:'Divine Seal',  skillDesc:'2× next hit',     skillCd:20 },
+    fighter:{ name:'Fighter', icon:'⚔️', color:'#c8a75d', desc:'High sustained damage. Every swing counts.', skill:'Berserk Slash', skillDesc:'3× hit', skillCd:10 },
+    hunter: { name:'Hunter',  icon:'🏹', color:'#5dbb8a', desc:'High crit rate. Rapid Shot fires 5 arrows.',   skill:'Rapid Shot',   skillDesc:'5× arrows', skillCd:8  },
+    mage:   { name:'Mage',    icon:'🔮', color:'#7a5dbb', desc:'Explosive burst. Highest single hit damage.',   skill:'Arcane Burst', skillDesc:'4× burst',  skillCd:15 },
+    priest: { name:'Priest',  icon:'✨', color:'#bb8a5d', desc:'Heals your party. Divine Seal restores HP.',    skill:'Divine Seal',  skillDesc:'Heal party',skillCd:20 },
 };
 
-// ── State ────────────────────────────────────────────────────
-let profile   = null;  // { username, class, level, xp, kills, boss_kills }
-let enemy     = null;
-let ws        = null;
-let atkCd     = false;
-let skillCd   = false;
-let cdInterval= null;
-let gameState = 'combat'; // 'combat' | 'waiting'
-let lastClickX= 200, lastClickY= 150;
-let selectedClass = null;
+let profile=null, ws=null, enemy=null;
+let atkCd=false, skillCd=false, cdInterval=null;
+let gameState='combat';
+let lastClickX=200, lastClickY=140;
+let selectedClass=null;
+let myHp=0, myMaxHp=0, isKO=false;
+let currentLobbyId=null, currentLobbyName=null;
+let isSolo=false;
 
-// ── Audio ────────────────────────────────────────────────────
-let actx = null;
-function getCtx(){ if(!actx) actx=new(window.AudioContext||window.webkitAudioContext)(); if(actx.state==='suspended')actx.resume(); return actx; }
+// ── Audio ──────────────────────────────────────────────────
+let actx=null;
+function getCtx(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();return actx;}
 function playHit(){try{const c=getCtx(),t=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type='sawtooth';o.frequency.setValueAtTime(240,t);o.frequency.exponentialRampToValueAtTime(40,t+.18);g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.001,t+.22);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+.22);}catch(e){}}
 function playCrit(){try{const c=getCtx(),t=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type='square';o.frequency.setValueAtTime(320,t);o.frequency.exponentialRampToValueAtTime(80,t+.25);g.gain.setValueAtTime(.4,t);g.gain.exponentialRampToValueAtTime(.001,t+.28);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+.28);}catch(e){}}
 function playDeath(){try{const c=getCtx(),t=c.currentTime;[140,95,62].forEach((f,i)=>{const o=c.createOscillator(),g=c.createGain();o.type='sawtooth';o.frequency.setValueAtTime(f*1.8,t+i*.1);o.frequency.exponentialRampToValueAtTime(f*.25,t+2.5);g.gain.setValueAtTime(.18,t+i*.1);g.gain.exponentialRampToValueAtTime(.001,t+2.5);o.connect(g);g.connect(c.destination);o.start(t+i*.1);o.stop(t+2.5);});}catch(e){}}
+function playBossHit(){try{const c=getCtx(),t=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type='sawtooth';o.frequency.setValueAtTime(60,t);o.frequency.exponentialRampToValueAtTime(20,t+.4);g.gain.setValueAtTime(.5,t);g.gain.exponentialRampToValueAtTime(.001,t+.45);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+.45);}catch(e){}}
 
-// ── Init ─────────────────────────────────────────────────────
+// ── Init ───────────────────────────────────────────────────
 async function init(){
-    // Auth
     try{
         const r=await fetch('https://api.ddon.org/api/me',{credentials:'include'});
         if(!r.ok){location.href='festival.html';return;}
     }catch(_){location.href='festival.html';return;}
-
-    // Festival profile
     try{
         const r=await fetch('https://api.ddon.org/api/festival/me',{credentials:'include'});
-        if(r.ok){
-            const d=await r.json();
-            if(d.exists){
-                profile=d;
-                sessionStorage.setItem('festivalName',d.username);
-            }
-        }
+        if(r.ok){const d=await r.json();if(d.exists){profile=d;sessionStorage.setItem('festivalName',d.username);}}
     }catch(_){}
-
     if(!profile){location.href='festival.html';return;}
-
-    // Class selection if new (level 1, no kills) or class is default and unkosen
-    if(profile.level===1 && profile.kills===0){
-        showClassScreen();
-    } else {
-        startGame();
-    }
     document.getElementById('loadScreen').style.display='none';
+    if(profile.level===1&&profile.kills===0) showClassScreen();
+    else showLobbyScreen();
 }
 
-// ── Class screen ─────────────────────────────────────────────
+// ── Class screen ───────────────────────────────────────────
 function showClassScreen(){
     document.getElementById('classScreen').style.display='flex';
-    const grid=document.getElementById('classGrid');
-    grid.innerHTML='';
+    const grid=document.getElementById('classGrid');grid.innerHTML='';
     Object.entries(CLASSES).forEach(([id,c])=>{
-        const card=document.createElement('div');
-        card.className='class-card';
-        card.dataset.class=id;
-        card.innerHTML=`
-            <div class="cc-icon">${c.icon}</div>
-            <div class="cc-name" style="color:${c.color}">${c.name}</div>
-            <div class="cc-desc">${c.desc}</div>
-            <div class="cc-skill">${c.skill} · ${c.skillDesc} · ${c.skillCd}s</div>`;
-        card.onclick=()=>selectClass(id,card);
+        const card=document.createElement('div');card.className='class-card';card.dataset.class=id;
+        card.innerHTML=`<div class="cc-icon">${c.icon}</div><div class="cc-name" style="color:${c.color}">${c.name}</div><div class="cc-desc">${c.desc}</div><div class="cc-skill">${c.skill} · ${c.skillDesc} · ${c.skillCd}s cd</div>`;
+        card.onclick=()=>{selectedClass=id;document.querySelectorAll('.class-card').forEach(x=>x.classList.remove('selected'));card.classList.add('selected');document.getElementById('classConfirmBtn').disabled=false;};
         grid.appendChild(card);
     });
 }
-
-function selectClass(id,card){
-    selectedClass=id;
-    document.querySelectorAll('.class-card').forEach(c=>c.classList.remove('selected'));
-    card.classList.add('selected');
-    document.getElementById('classConfirmBtn').disabled=false;
-}
-
 async function confirmClass(){
     if(!selectedClass)return;
-    const btn=document.getElementById('classConfirmBtn');
-    btn.disabled=true; btn.textContent='···';
-    try{
-        const r=await fetch('https://api.ddon.org/api/festival/class',{
-            method:'POST',credentials:'include',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({class:selectedClass})
-        });
-        if(r.ok){ profile.class=selectedClass; }
-    }catch(_){}
+    const btn=document.getElementById('classConfirmBtn');btn.disabled=true;btn.textContent='···';
+    try{const r=await fetch('https://api.ddon.org/api/festival/class',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({class:selectedClass})});if(r.ok)profile.class=selectedClass;}catch(_){}
     document.getElementById('classScreen').style.display='none';
-    startGame();
+    showLobbyScreen();
 }
 
-// ── Game start ───────────────────────────────────────────────
-function startGame(){
+// ── Lobby screen ───────────────────────────────────────────
+function showLobbyScreen(){
+    document.getElementById('lobbyScreen').style.display='flex';
+    showLobbyOptions();
+}
+function showLobbyOptions(){
+    document.getElementById('lobbyOptions').style.display='flex';
+    document.getElementById('createLobbyBox').style.display='none';
+    document.getElementById('joinLobbyBox').style.display='none';
+}
+function showCreateLobby(){
+    document.getElementById('lobbyOptions').style.display='none';
+    document.getElementById('createLobbyBox').style.display='flex';
+    document.getElementById('lobbyNameInput').value='';
+}
+function showJoinLobby(){
+    document.getElementById('lobbyOptions').style.display='none';
+    document.getElementById('joinLobbyBox').style.display='flex';
+    // connect WS first to get lobby list
+    if(!ws||ws.readyState!==WebSocket.OPEN) connectWS(()=>requestLobbyList());
+    else requestLobbyList();
+}
+function playSolo(){
+    isSolo=true;
+    document.getElementById('lobbyScreen').style.display='none';
+    startGame();
+}
+function createLobby(){
+    const name=document.getElementById('lobbyNameInput').value.trim()||profile.username+"'s Party";
+    isSolo=false;
+    document.getElementById('lobbyScreen').style.display='none';
+    startGame(()=>{
+        ws.send(JSON.stringify({type:'createLobby',name}));
+    });
+}
+function requestLobbyList(){
+    if(ws&&ws.readyState===WebSocket.OPEN) ws.send(JSON.stringify({type:'getLobbyList'}));
+}
+function renderLobbyList(lobbies){
+    const el=document.getElementById('lobbyListEl');el.innerHTML='';
+    if(!lobbies||lobbies.length===0){el.innerHTML='<div class="lobby-empty">NO OPEN PARTIES — CREATE ONE</div>';return;}
+    lobbies.forEach(l=>{
+        const row=document.createElement('div');row.className='lobby-row';
+        const full=l.count>=l.max;
+        row.innerHTML=`<span class="lr-name">${l.name}</span><span class="lr-count ${full?'lr-full':''}">${l.count}/${l.max}${full?' FULL':''}</span>`;
+        if(!full) row.onclick=()=>joinLobby(l.id,l.name);
+        el.appendChild(row);
+    });
+}
+function joinLobby(id,name){
+    isSolo=false;
+    document.getElementById('lobbyScreen').style.display='none';
+    startGame(()=>{
+        ws.send(JSON.stringify({type:'joinLobby',lobbyId:id}));
+    });
+}
+function leaveParty(){
+    if(ws&&ws.readyState===WebSocket.OPEN) ws.send(JSON.stringify({type:'leaveLobby'}));
+    currentLobbyId=null;currentLobbyName=null;isSolo=true;
+    document.getElementById('partyPanel').style.display='none';
+    document.getElementById('leavePartyBtn').style.display='none';
+}
+
+// ── Start game ─────────────────────────────────────────────
+function startGame(onReady){
     document.getElementById('hud').style.display='flex';
     document.getElementById('gameMain').style.display='flex';
     document.getElementById('skillBar').style.display='flex';
     document.getElementById('lb').style.display='block';
-    updateHUD();
-    setupSkillBtn();
-    connectWS();
-    document.addEventListener('keydown',e=>{ if(e.key==='q'||e.key==='Q') useSkill(); });
+    updateHUD();setupSkillBtn();
+    connectWS(onReady);
+    document.addEventListener('keydown',e=>{if(e.key==='q'||e.key==='Q')useSkill();});
 }
-
 function updateHUD(){
     const cls=CLASSES[profile.class]||CLASSES.fighter;
-    document.getElementById('hudName').textContent='⚔ '+(profile.username||'Arisen');
+    document.getElementById('hudName').textContent='⚔ '+profile.username;
     document.getElementById('hudClass').textContent=cls.icon+' '+cls.name;
     document.getElementById('hudLevel').textContent='Lv.'+profile.level;
-    const threshold=profile.level*100;
-    const pct=Math.min(100,(profile.xp/threshold)*100);
-    document.getElementById('xpFill').style.width=pct+'%';
-    document.getElementById('xpLabel').textContent=profile.xp+' / '+threshold;
+    const thr=profile.level*100;
+    document.getElementById('xpFill').style.width=Math.min(100,(profile.xp/thr)*100)+'%';
+    document.getElementById('xpLabel').textContent=profile.xp+'/'+thr;
 }
-
 function setupSkillBtn(){
     const cls=CLASSES[profile.class]||CLASSES.fighter;
     document.getElementById('skillBtnLabel').textContent=cls.icon+' '+cls.skill+' [Q]';
 }
+function updatePlayerHpHud(){
+    const pct=myMaxHp>0?Math.max(0,(myHp/myMaxHp)*100):100;
+    document.getElementById('hudHpFill').style.width=pct+'%';
+    document.getElementById('hudHpText').textContent=myHp+'/'+myMaxHp+' HP';
+    const fill=document.getElementById('hudHpFill');
+    fill.className='hud-hp-fill'+(pct>50?' hp-green':pct>25?' hp-yellow':' hp-red').replace('hud-hp-fill ','');
+    fill.style.width=pct+'%';
+}
 
-// ── WebSocket ────────────────────────────────────────────────
-async function connectWS(){
-    // Einmaliges Token vom Server holen
-    let token = null;
-    try {
-        const r = await fetch('https://api.ddon.org/api/festival/wstoken',
-            { credentials:'include' });
-        if(r.ok){ const d=await r.json(); token=d.token; }
-    } catch(_){}
+// ── WebSocket ──────────────────────────────────────────────
+async function connectWS(onReady){
+    let token=null;
+    try{const r=await fetch('https://api.ddon.org/api/festival/wstoken',{credentials:'include'});if(r.ok){const d=await r.json();token=d.token;}}catch(_){}
+    if(!token){console.error('No WS token');return;}
 
-    if(!token){ console.error('Kein WS-Token'); return; }
-
-    ws = new WebSocket('wss://api.ddon.org/ws');
-
-    ws.onopen = () => {
-        // Auth-Message sofort senden
-        ws.send(JSON.stringify({ type:'auth', token }));
-    };
-
-    ws.onmessage = e => {
-        try {
-            const d = JSON.parse(e.data);
+    ws=new WebSocket('wss://api.ddon.org/ws');
+    ws.onopen=()=>{ws.send(JSON.stringify({type:'auth',token}));};
+    ws.onmessage=e=>{
+        try{
+            const d=JSON.parse(e.data);
             if(d.type==='authOk'){
-                console.log('WS Auth OK:', d.username);
+                myHp=d.hp||500;myMaxHp=d.maxHp||500;
+                updatePlayerHpHud();
+                if(onReady) onReady();
                 return;
             }
-            if(d.type==='authFailed'){
-                console.error('WS Auth fehlgeschlagen:', d.reason);
-                return;
+            if(d.type==='authFailed'){console.error('WS auth failed');return;}
+            if(d.type==='kicked'){ws._kicked=true;ws.close();alert('Verbindung übernommen (anderer Tab).');location.href='festival.html';return;}
+            if(d.type==='lobbyList'){renderLobbyList(d.lobbies);return;}
+            if(d.type==='lobbyListUpdate'){renderLobbyList(d.lobbies);return;}
+            if(d.type==='lobbyJoined'){
+                currentLobbyId=d.lobbyId;currentLobbyName=d.lobbyName;
+                document.getElementById('partyPanel').style.display='block';
+                document.getElementById('partyName').textContent='⚔ '+d.lobbyName.toUpperCase();
+                document.getElementById('leavePartyBtn').style.display='inline-block';
+                renderParty(d.party);return;
             }
-            if(d.type==='kicked'){
-                ws._kicked = true;
-                ws.close();
-                alert('Du hast das Spiel in einem anderen Tab geöffnet. Bitte nur einen Tab nutzen.');
-                location.href='festival.html';
-                return;
-            }
+            if(d.type==='lobbyLeft'){currentLobbyId=null;document.getElementById('partyPanel').style.display='none';document.getElementById('leavePartyBtn').style.display='none';return;}
             handleMsg(d);
-        } catch(_){}
+        }catch(_){}
     };
-
-    ws.onclose = () => {
-        // Nur reconnecten wenn NICHT gekickt
-        if(!ws._kicked) setTimeout(connectWS, 3000);
-    };
+    ws.onclose=()=>{if(!ws._kicked)setTimeout(()=>connectWS(null),3000);};
 }
 
 function handleMsg(d){
     if(d.type==='online') document.getElementById('onlineCount').textContent=d.count;
-
-    if(d.type==='enemyState'||d.type==='enemySpawn'){
-        if(d.enemy){ setEnemy(d.enemy); showCombat(); }
-        else { showWaiting(null,null); }
-    }
-
+    if(d.type==='enemyState'||d.type==='enemySpawn'){if(d.enemy){setEnemy(d.enemy);showCombat();}else showWaiting();}
     if(d.type==='hit'){
-        if(d.rapid){
-            // hunter rapid: small slash each time
-            setTimeout(()=>spawnSlash(
-                lastClickX+Math.random()*60-30,
-                lastClickY+Math.random()*60-30
-            ),Math.random()*200);
-        } else {
-            triggerHitVfx(d.damage, d.isCrit);
-        }
-        if(enemy) enemy.hp=d.hp;
+        if(enemy)enemy.hp=d.hp;
         updateEnemyBar();
         renderLB(d.leaderboard);
+        if(!d.isBot&&!d.rapid) triggerHitVfx(d.damage,d.isCrit);
+        else if(d.rapid){setTimeout(()=>spawnSlash(lastClickX+Math.random()*50-25,lastClickY+Math.random()*50-25),Math.random()*150);}
     }
-
     if(d.type==='enemyDead'){
         document.getElementById('enemyVisual').classList.add('dead');
         playDeath();
-        // XP reward for this player
-        const myReward=d.rewards&&d.rewards[profile.username];
-        if(myReward){
-            gainXP(myReward.xp);
-            spawnXpPop('+'+myReward.xp+' XP');
-        }
-        setTimeout(()=>{ showWaiting(); }, 1500);
+        const myRew=d.rewards&&d.rewards[profile.username];
+        if(myRew) gainXP(myRew.xp);
+        setTimeout(showWaiting,1600);
     }
-
-    if(d.type==='nextEnemyIn'){
-        showWaiting(d.seconds, d.nextType);
+    if(d.type==='nextEnemyIn'){showWaiting(d.seconds,d.nextType);}
+    if(d.type==='bossAttack'){
+        const myUpd=d.playerUpdates&&d.playerUpdates[profile.username];
+        if(myUpd){myHp=myUpd.hp;myMaxHp=myUpd.maxHp;isKO=myUpd.isKO;updatePlayerHpHud();if(isKO)showKO(myUpd.koUntil);}
+        playBossHit();
+        // Red flash on body
+        document.body.style.boxShadow='inset 0 0 80px rgba(255,0,0,.4)';
+        setTimeout(()=>document.body.style.boxShadow='',400);
     }
+    if(d.type==='playerRecovered'){myHp=d.hp;myMaxHp=d.maxHp;isKO=false;updatePlayerHpHud();document.getElementById('clickHint').textContent='⚔ CLICK ENEMY TO ATTACK ⚔';document.getElementById('skillBtn').disabled=skillCd;}
+    if(d.type==='partyUpdate'){if(currentLobbyId)renderParty(d.party);}
+    if(d.type==='partyHealed'){myHp=myMaxHp;updatePlayerHpHud();if(currentLobbyId&&d.party)renderParty(d.party);}
+    if(d.type==='priestHeal'){spawnXpLike('+'+d.amount+' HP','#5dbb8a');}
+    if(d.type==='phaseChange'){showPhaseBanner(d.phase);}
+    if(d.type==='partyUpdate'&&d.party){renderParty(d.party);}
 }
 
-// ── Enemy display ────────────────────────────────────────────
+// ── Enemy display ──────────────────────────────────────────
 function setEnemy(e){
     enemy=e;
     document.getElementById('enemyVisual').classList.remove('dead','shaking');
-
-    // Type badge
     const badge=document.getElementById('enemyTypeBadge');
-    badge.textContent=e.type.toUpperCase();
-    badge.className='enemy-type-badge type-'+e.type;
+    badge.textContent=e.type.toUpperCase();badge.className='enemy-type-badge type-'+e.type;
     document.getElementById('enemyNameEl').textContent=e.name;
-
-    // Visual – alle Enemies haben jetzt ein Bild
     const img=document.getElementById('enemyImg');
-    const emo=document.getElementById('enemyEmoji');
-    if(e.img){
-        img.src=e.img; img.style.display='block'; emo.style.display='none';
-    } else {
-        img.style.display='none';
-        emo.style.display='block';
-        emo.textContent='?'; emo.style.color=e.color||'#fff';
-    }
-
+    img.src=e.img||'';img.style.display=e.img?'block':'none';
     updateEnemyBar();
 }
-
 function updateEnemyBar(){
     if(!enemy)return;
     const pct=Math.max(0,(enemy.hp/enemy.maxHp)*100);
     document.getElementById('hpFill').style.width=pct+'%';
-    document.getElementById('hpText').textContent=
-        Number(enemy.hp).toLocaleString()+' / '+Number(enemy.maxHp).toLocaleString()+' HP';
+    document.getElementById('hpText').textContent=Number(enemy.hp).toLocaleString()+' / '+Number(enemy.maxHp).toLocaleString()+' HP';
 }
-
 function showCombat(){
     gameState='combat';
     document.getElementById('combatView').style.display='flex';
     document.getElementById('waitScreen').style.display='none';
-    document.getElementById('skillBtn').disabled=skillCd;
+    if(!isKO)document.getElementById('skillBtn').disabled=skillCd;
 }
-
 function showWaiting(seconds,nextType){
-    gameState='waiting';
-    enemy=null;
+    gameState='waiting';enemy=null;
     document.getElementById('combatView').style.display='none';
     document.getElementById('waitScreen').style.display='flex';
     document.getElementById('skillBtn').disabled=true;
-
-    if(nextType){
-        const labels={normal:'NORMAL ENEMY',elite:'ELITE ENEMY',boss:'⚠ WORLD BOSS'};
-        document.getElementById('nextTypeBadge').textContent='NEXT: '+(labels[nextType]||nextType.toUpperCase());
-    }
-
-    if(seconds){
-        let s=Math.ceil(seconds);
-        document.getElementById('countdown').textContent=s;
-        const t=setInterval(()=>{
-            s--;
-            document.getElementById('countdown').textContent=Math.max(0,s);
-            if(s<=0)clearInterval(t);
-        },1000);
-    }
+    if(nextType){const labels={normal:'NORMAL ENEMY',elite:'ELITE ENEMY',boss:'⚠ WORLD BOSS'};document.getElementById('nextTypeBadge').textContent='NEXT: '+(labels[nextType]||nextType.toUpperCase());}
+    if(seconds){let s=Math.ceil(seconds);document.getElementById('countdown').textContent=s;const t=setInterval(()=>{s--;document.getElementById('countdown').textContent=Math.max(0,s);if(s<=0)clearInterval(t);},1000);}
+}
+function showKO(koUntil){
+    isKO=true;
+    document.getElementById('clickHint').textContent='☠ KO — RECOVERING ☠';
+    document.getElementById('skillBtn').disabled=true;
+    const sec=Math.ceil((koUntil-Date.now())/1000);
+    let s=sec;const t=setInterval(()=>{s--;document.getElementById('clickHint').textContent=`☠ KO — ${Math.max(0,s)}s ☠`;if(s<=0)clearInterval(t);},1000);
 }
 
-// ── Attack ───────────────────────────────────────────────────
+// ── Party panel ────────────────────────────────────────────
+function renderParty(members){
+    const el=document.getElementById('partyMembers');el.innerHTML='';
+    (members||[]).forEach(m=>{
+        const cls=CLASSES[m.class]||CLASSES.fighter;
+        const pct=m.maxHp>0?Math.max(0,Math.min(100,(m.hp/m.maxHp)*100)):0;
+        const hpColor=pct>50?'#5dbb8a':pct>25?'#c8a75d':'#ff4040';
+        const isMe=m.username===profile.username;
+        const div=document.createElement('div');
+        div.className='pm'+(m.isKO?' ko':'');
+        div.innerHTML=`<div class="pm-top"><span class="pm-icon">${cls.icon}</span><span class="pm-name">${m.username}${isMe?' (You)':''}</span><span class="pm-lv">Lv.${m.level}</span>${m.isKO?'<span class="pm-ko-label">KO</span>':''}</div><div class="pm-hp-track"><div class="pm-hp-fill" style="width:${pct}%;background:${hpColor};"></div></div>`;
+        el.appendChild(div);
+    });
+}
+
+// ── Combat ─────────────────────────────────────────────────
 function onEnemyClick(e){
-    if(gameState!=='combat'||atkCd||!enemy||enemy.hp<=0)return;
-    atkCd=true; setTimeout(()=>atkCd=false,300);
-    lastClickX=e.offsetX; lastClickY=e.offsetY;
+    if(gameState!=='combat'||atkCd||!enemy||enemy.hp<=0||isKO)return;
+    atkCd=true;setTimeout(()=>atkCd=false,300);
+    lastClickX=e.offsetX;lastClickY=e.offsetY;
     spawnSlash(e.offsetX,e.offsetY);
     sendAttack(false);
 }
-
 function useSkill(){
-    if(gameState!=='combat'||skillCd||!enemy||enemy.hp<=0)return;
+    if(gameState!=='combat'||skillCd||!enemy||enemy.hp<=0||isKO)return;
     const cls=CLASSES[profile.class]||CLASSES.fighter;
     startSkillCd(cls.skillCd);
     sendAttack(true);
-    // Extra visual for skill
-    spawnSlash(lastClickX-20,lastClickY-20);
-    spawnSlash(lastClickX+20,lastClickY);
-    spawnSlash(lastClickX,lastClickY+20);
+    spawnSlash(lastClickX-18,lastClickY-18);spawnSlash(lastClickX+18,lastClickY);spawnSlash(lastClickX,lastClickY+18);
 }
-
 function sendAttack(isSkill){
     if(!ws||ws.readyState!==WebSocket.OPEN)return;
-    // name/class/level kommen vom Server (nach Auth verifiziert)
-    ws.send(JSON.stringify({ type:'attack', skill:isSkill }));
+    ws.send(JSON.stringify({type:'attack',skill:isSkill}));
 }
-
-function startSkillCd(seconds){
-    skillCd=true;
-    const btn=document.getElementById('skillBtn');
-    const overlay=document.getElementById('cdOverlay');
-    btn.disabled=true;
-    overlay.style.display='flex';
-    let s=seconds;
-    overlay.textContent=s;
+function startSkillCd(sec){
+    skillCd=true;const btn=document.getElementById('skillBtn'),ov=document.getElementById('cdOverlay');
+    btn.disabled=true;ov.style.display='flex';let s=sec;ov.textContent=s;
     if(cdInterval)clearInterval(cdInterval);
-    cdInterval=setInterval(()=>{
-        s--;
-        overlay.textContent=Math.max(0,s);
-        if(s<=0){
-            clearInterval(cdInterval);
-            skillCd=false;
-            if(gameState==='combat') btn.disabled=false;
-            overlay.style.display='none';
-        }
-    },1000);
+    cdInterval=setInterval(()=>{s--;ov.textContent=Math.max(0,s);if(s<=0){clearInterval(cdInterval);skillCd=false;if(gameState==='combat'&&!isKO)btn.disabled=false;ov.style.display='none';}},1000);
 }
 
-// ── VFX ─────────────────────────────────────────────────────
+// ── VFX ───────────────────────────────────────────────────
 function triggerHitVfx(dmg,isCrit){
-    // Shake
     const vis=document.getElementById('enemyVisual');
-    vis.classList.remove('shaking'); void vis.offsetWidth; vis.classList.add('shaking');
+    vis.classList.remove('shaking');void vis.offsetWidth;vis.classList.add('shaking');
     vis.addEventListener('animationend',()=>vis.classList.remove('shaking'),{once:true});
-    // Flash
     const ov=document.getElementById('hitOverlay');
-    ov.classList.remove('flash'); void ov.offsetWidth; ov.classList.add('flash');
+    ov.classList.remove('flash');void ov.offsetWidth;ov.classList.add('flash');
     ov.addEventListener('animationend',()=>ov.classList.remove('flash'),{once:true});
-    // Damage number
-    spawnDmgNum(dmg,isCrit);
-    spawnSlash(lastClickX,lastClickY);
-    isCrit?playCrit():playHit();
+    spawnDmgNum(dmg,isCrit);isCrit?playCrit():playHit();
+}
+function spawnSlash(x,y){const el=document.createElement('div');el.className='slash';el.style.left=(x-22)+'px';el.style.top=(y-22)+'px';document.getElementById('enemyVisual').appendChild(el);el.addEventListener('animationend',()=>el.remove());}
+function spawnDmgNum(dmg,isCrit){const el=document.createElement('div');el.className='dmgPop '+(isCrit?'crit':'normal');el.textContent=(isCrit?'CRIT! ':'-')+Number(dmg).toLocaleString();el.style.left=(lastClickX+Math.random()*30-15)+'px';el.style.top=(lastClickY-20)+'px';document.getElementById('enemyVisual').appendChild(el);el.addEventListener('animationend',()=>el.remove());}
+function spawnXpLike(text,color){const el=document.createElement('div');el.className='xpPop';el.textContent=text;el.style.color=color||'#c8a75d';document.body.appendChild(el);el.addEventListener('animationend',()=>el.remove());}
+
+// ── Phase banner ───────────────────────────────────────────
+function showPhaseBanner(phase){
+    document.getElementById('phaseBanner')?.remove();
+    const cfg={2:{text:'PHASE 2',sub:'THE BEAST STIRS',color:'#bb8a5d'},3:{text:'PHASE 3',sub:'DESPERATE FURY',color:'#ff6a10'},4:{text:'ENRAGED',sub:'UNSTOPPABLE RAGE',color:'#ff2020'}};
+    const c=cfg[phase];if(!c)return;
+    const el=document.createElement('div');el.id='phaseBanner';
+    el.innerHTML=`<h2 style="color:${c.color}">${c.text}</h2><p style="color:${c.color}80">${c.sub}</p>`;
+    document.body.appendChild(el);el.addEventListener('animationend',()=>el.remove());
 }
 
-function spawnSlash(x,y){
-    const el=document.createElement('div');
-    el.className='slash';
-    el.style.left=(x-24)+'px'; el.style.top=(y-24)+'px';
-    document.getElementById('enemyVisual').appendChild(el);
-    el.addEventListener('animationend',()=>el.remove());
-}
-
-function spawnDmgNum(dmg,isCrit){
-    const el=document.createElement('div');
-    el.className='dmgPop '+(isCrit?'crit':'normal');
-    el.textContent=(isCrit?'CRIT! ':'-')+Number(dmg).toLocaleString();
-    const rx=lastClickX+(Math.random()*40-20);
-    const ry=lastClickY-20;
-    el.style.left=rx+'px'; el.style.top=ry+'px';
-    document.getElementById('enemyVisual').appendChild(el);
-    el.addEventListener('animationend',()=>el.remove());
-}
-
-function spawnXpPop(text){
-    const el=document.createElement('div');
-    el.className='xpPop';
-    el.textContent=text;
-    el.style.left='50%'; el.style.top='40%';
-    el.style.transform='translateX(-50%)';
-    document.body.appendChild(el);
-    el.addEventListener('animationend',()=>el.remove());
-}
-
-// ── XP + Level ───────────────────────────────────────────────
+// ── XP + Level ─────────────────────────────────────────────
 function gainXP(amount){
-    profile.xp+=amount;
-    let leveled=false;
-    while(profile.xp>=profile.level*100&&profile.level<50){
-        profile.xp-=profile.level*100;
-        profile.level++;
-        leveled=true;
-    }
-    if(leveled) showLevelUp(profile.level);
-    updateHUD();
+    profile.xp+=amount;let leveled=false;
+    while(profile.xp>=profile.level*100&&profile.level<50){profile.xp-=profile.level*100;profile.level++;leveled=true;}
+    if(leveled){const el=document.createElement('div');el.className='lvlBanner';el.innerHTML=`<h2>LEVEL UP!</h2><p>YOU ARE NOW LEVEL ${profile.level}</p>`;document.body.appendChild(el);el.addEventListener('animationend',()=>el.remove());}
+    spawnXpLike('+'+amount+' XP');updateHUD();
 }
 
-function showLevelUp(level){
-    const old=document.getElementById('lvlUpBanner');
-    if(old)old.remove();
-    const el=document.createElement('div');
-    el.id='lvlUpBanner';
-    el.innerHTML='<h2>LEVEL UP!</h2><p>YOU ARE NOW LEVEL '+level+'</p>';
-    document.body.appendChild(el);
-    el.addEventListener('animationend',()=>el.remove());
-}
-
-// ── Leaderboard ──────────────────────────────────────────────
+// ── Leaderboard ────────────────────────────────────────────
 function renderLB(players){
-    const container=document.getElementById('lbRows');
-    container.innerHTML='';
+    const el=document.getElementById('lbRows');el.innerHTML='';
     (players||[]).forEach((p,i)=>{
         const row=document.createElement('div');
-        row.className='lb-row'+(i===0?' gold':'')+(p.name===profile.username?' me':'');
+        const isMe=p.name===profile.username;
+        const isBot=!isMe&&p.name.match(/^[A-Z][a-z]+\d+$/);
+        row.className='lb-row'+(i===0?' gold':'')+(isMe?' me':'')+(isBot?' bot':'');
         const medals=['🥇','🥈','🥉'];
         row.innerHTML=`<span>${medals[i]||(i+1+'.')} ${p.name}</span><span>${Number(p.damage).toLocaleString()}</span>`;
-        container.appendChild(row);
+        el.appendChild(row);
     });
 }
 
