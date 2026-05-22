@@ -470,6 +470,8 @@ function playDeathSound() {
 let bossHp         = 10000000;
 let maxHp          = 10000000;
 let attackCooldown = false;
+let playerName    = null;  // set on init
+let playerName    = null; // wird beim Init befüllt
 let isDead         = false;
 let lastClickX     = 200;
 let lastClickY     = 200;
@@ -537,7 +539,7 @@ function onBossClick(e) {
 
     ws.send(JSON.stringify({
         type: 'attackBoss',
-        name: localStorage.getItem('accountName') || 'Player'
+        name: playerName
     }));
 }
 
@@ -617,7 +619,13 @@ function renderLeaderboard(players) {
     players.forEach((p, i) => {
         const row = document.createElement('div');
         row.className = 'playerRow';
-        row.innerHTML = `<span>${i + 1}. ${p.name}</span><span>${Number(p.damage).toLocaleString()}</span>`;
+        // eigenen Spieler gold highlighten
+        if (playerName && p.name === playerName) {
+            row.style.color  = '#ffd700';
+            row.style.fontWeight = 'bold';
+        }
+        const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1) + '.';
+        row.innerHTML = `<span>${medal} ${p.name}</span><span>${Number(p.damage).toLocaleString()}</span>`;
         topPlayers.appendChild(row);
     });
 }
@@ -642,6 +650,46 @@ function scheduleRoar() {
     }, delay);
 }
 scheduleRoar();
+
+
+// ─────────────────────────────────────────────────────────────
+// Player name – Login integration
+// ─────────────────────────────────────────────────────────────
+async function resolvePlayerName() {
+    // ① Euer Login-API (Endpoint ggf. anpassen)
+    try {
+        const res = await fetch('/api/me', { credentials: 'include' });
+        if (res.ok) {
+            const d = await res.json();
+            const n = d.username || d.name || d.account_name || d.accountName;
+            if (n) return n;
+        }
+    } catch (_) {}
+
+    // ② localStorage-Keys eures Login-Systems (ggf. ergänzen)
+    const keys = ['accountName', 'username', 'loginName', 'charName'];
+    for (const k of keys) {
+        const v = localStorage.getItem(k);
+        if (v) return v;
+    }
+
+    // ③ Fallback: stabiler zufälliger Name pro Browser-Tab
+    let uid = sessionStorage.getItem('_bossUid');
+    if (!uid) {
+        uid = 'Arisen_' + Math.random().toString(36).slice(2, 6).toUpperCase();
+        sessionStorage.setItem('_bossUid', uid);
+    }
+    return uid;
+}
+
+// Init
+(async () => {
+    playerName = await resolvePlayerName();
+    // Eigenen Namen in der Leaderboard-Zeile highlighten
+    document.querySelectorAll('.playerRow').forEach(r => {
+        if (r.textContent.includes(playerName)) r.style.color = '#ffd700';
+    });
+})();
 
 </script>
 </body>
