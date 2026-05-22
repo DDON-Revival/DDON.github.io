@@ -353,11 +353,11 @@ function showJoinLobby(){
     fetchLobbyList();
 }
 
-async function fetchLobbyList(){
-    try{
-        const r = await fetch('https://api.ddon.org/api/festival/lobbies',{credentials:'include'});
-        if(r.ok){ const d=await r.json(); renderLobbyList(d); }
-    }catch(_){ renderLobbyList([]); }
+function fetchLobbyList(){
+    ensureWS(()=>{
+        if(ws&&ws.readyState===WebSocket.OPEN)
+            ws.send(JSON.stringify({type:'getLobbyList'}));
+    });
 }
 function playSolo(){
     isSolo=true;
@@ -412,7 +412,7 @@ function startGame(onReady){
     document.getElementById('skillBar').style.display='flex';
     document.getElementById('lb').style.display='block';
     updateHUD();setupSkillBtn();
-    connectWS(onReady);
+    ensureWS(onReady);
     document.addEventListener('keydown',e=>{if(e.key==='q'||e.key==='Q')useSkill();});
 }
 function updateHUD(){
@@ -438,29 +438,52 @@ function updatePlayerHpHud(){
 }
 
 // ── WebSocket ──────────────────────────────────────────────
-async function connectWS(onReady){
+// Single WS connection for everything
+let wsReady = false;
+let wsReadyCallbacks = [];
+
+async function ensureWS(onReady){
+    // If already open and authed → run callback immediately
+    if(ws && ws.readyState===WebSocket.OPEN && wsReady){
+        if(onReady) onReady();
+        return;
+    }
+    // Queue callback
+    if(onReady) wsReadyCallbacks.push(onReady);
+    // Already connecting → wait
+    if(ws && (ws.readyState===WebSocket.CONNECTING || ws.readyState===WebSocket.OPEN)) return;
+
+    // New connection
     let token=null;
     try{const r=await fetch('https://api.ddon.org/api/festival/wstoken',{credentials:'include'});if(r.ok){const d=await r.json();token=d.token;}}catch(_){}
     if(!token){console.error('No WS token');return;}
 
     ws=new WebSocket('wss://api.ddon.org/ws');
+    wsReady=false;
+
     ws.onopen=()=>{ws.send(JSON.stringify({type:'auth',token}));};
     ws.onmessage=e=>{
         try{
             const d=JSON.parse(e.data);
             if(d.type==='authOk'){
                 myHp=d.hp||500;myMaxHp=d.maxHp||500;
+                wsReady=true;
                 updatePlayerHpHud();
-                if(onReady) onReady();
+                // Fire all queued callbacks
+                wsReadyCallbacks.forEach(cb=>cb());
+                wsReadyCallbacks=[];
                 return;
             }
             if(d.type==='authFailed'){console.error('WS auth failed');return;}
-            if(d.type==='kicked'){ws._kicked=true;ws.close();return;} // kicked = ignore, new session takes over
-            if(d.type==='lobbyList'||d.type==='lobbyListUpdate'){if(document.getElementById('joinLobbyBox').style.display!=='none')renderLobbyList(d.lobbies);return;}
+            if(d.type==='kicked'){ws._kicked=true;wsReady=false;ws.close();return;}
+            if(d.type==='lobbyList'||d.type==='lobbyListUpdate'){
+                if(document.getElementById('joinLobbyBox').style.display!=='none')
+                    renderLobbyList(d.lobbies);
+                return;
+            }
             if(d.type==='lobbyJoined'){
                 currentLobbyId=d.lobbyId;currentLobbyName=d.lobbyName;
-                const pp=document.getElementById('partyPanel');
-                pp.style.display='block';
+                document.getElementById('partyPanel').style.display='block';
                 document.getElementById('partyName').textContent='⚔ '+d.lobbyName.toUpperCase();
                 document.getElementById('leavePartyBtn').style.display='inline-block';
                 if(d.party&&d.party.length>0) renderParty(d.party);
@@ -470,8 +493,14 @@ async function connectWS(onReady){
             handleMsg(d);
         }catch(_){}
     };
-    ws.onclose=()=>{if(!ws._kicked)setTimeout(()=>connectWS(null),3000);};
+    ws.onclose=()=>{
+        wsReady=false;
+        if(!ws._kicked) setTimeout(()=>ensureWS(null),3000);
+    };
 }
+
+// Alias for backward compat
+function connectWS(onReady){ ensureWS(onReady); }
 
 function handleMsg(d){
     if(d.type==='online') document.getElementById('onlineCount').textContent=d.count;
