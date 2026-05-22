@@ -384,11 +384,45 @@ function setupSkillBtn(){
 }
 
 // ── WebSocket ────────────────────────────────────────────────
-function connectWS(){
-    ws=new WebSocket('wss://api.ddon.org/ws');
-    ws.onopen=()=>{ console.log('WS connected'); };
-    ws.onmessage=e=>{ try{ handleMsg(JSON.parse(e.data)); }catch(_){} };
-    ws.onclose=()=>{ setTimeout(connectWS,3000); };
+async function connectWS(){
+    // Einmaliges Token vom Server holen
+    let token = null;
+    try {
+        const r = await fetch('https://api.ddon.org/api/festival/wstoken',
+            { credentials:'include' });
+        if(r.ok){ const d=await r.json(); token=d.token; }
+    } catch(_){}
+
+    if(!token){ console.error('Kein WS-Token'); return; }
+
+    ws = new WebSocket('wss://api.ddon.org/ws');
+
+    ws.onopen = () => {
+        // Auth-Message sofort senden
+        ws.send(JSON.stringify({ type:'auth', token }));
+    };
+
+    ws.onmessage = e => {
+        try {
+            const d = JSON.parse(e.data);
+            if(d.type==='authOk'){
+                console.log('WS Auth OK:', d.username);
+                return;
+            }
+            if(d.type==='authFailed'){
+                console.error('WS Auth fehlgeschlagen:', d.reason);
+                return;
+            }
+            if(d.type==='kicked'){
+                alert('Du wurdest getrennt — anderer Tab geöffnet.');
+                location.href='festival.html';
+                return;
+            }
+            handleMsg(d);
+        } catch(_){}
+    };
+
+    ws.onclose = () => { setTimeout(connectWS, 3000); };
 }
 
 function handleMsg(d){
@@ -516,13 +550,8 @@ function useSkill(){
 
 function sendAttack(isSkill){
     if(!ws||ws.readyState!==WebSocket.OPEN)return;
-    ws.send(JSON.stringify({
-        type:'attack',
-        name:profile.username,
-        class:profile.class||'fighter',
-        level:profile.level||1,
-        skill:isSkill
-    }));
+    // name/class/level kommen vom Server (nach Auth verifiziert)
+    ws.send(JSON.stringify({ type:'attack', skill:isSkill }));
 }
 
 function startSkillCd(seconds){
