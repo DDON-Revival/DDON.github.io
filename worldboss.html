@@ -312,16 +312,44 @@ let isSolo=false;
 // ── Audio ──────────────────────────────────────────────────
 let actx=null;
 let isMuted = false;
+let musicStarted = false;
+let bgMusic = null;
+const sounds = {};
+
+function initAudio(){
+    try{
+        const BASE = "https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/sounds/";
+        bgMusic = new Audio(BASE + "music.mp3");
+        bgMusic.loop = true;
+        bgMusic.volume = 0.35;
+        const hit   = new Audio(BASE + "hit.wav");   hit.preload='auto';   sounds.hit=hit;
+        const slash = new Audio(BASE + "slash.wav"); slash.preload='auto'; sounds.slash=slash;
+    }catch(e){}
+}
+initAudio();
+
+function tryStartMusic(){
+    if(musicStarted||isMuted||!bgMusic) return;
+    musicStarted=true;
+    bgMusic.play().catch(()=>{});
+}
+
+function playSound(name, vol){
+    if(isMuted) return;
+    try{ const s=sounds[name]; if(!s) return; const c=s.cloneNode(); c.volume=vol||0.7; c.play().catch(()=>{}); }catch(e){}
+}
+
+function playHit()    { playSound('hit',   0.6); }
+function playCrit()   { playSound('slash', 0.8); }
+function playDeath()  { playSound('slash', 1.0); }
+function playBossHit(){ playSound('hit',   0.9); }
 function toggleMute(){
     isMuted=!isMuted;
     document.getElementById('muteBtn').textContent=isMuted?'🔇 MUTED':'🔊 SOUND';
     document.getElementById('muteBtn').style.color=isMuted?'#ff4d4d':'#888';
-}
-function getCtx(){
-    if(isMuted) return null;
-    if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();
-    if(actx.state==='suspended')actx.resume();
-    return actx;
+    if(!bgMusic) return;
+    if(isMuted) bgMusic.pause();
+    else{ if(!musicStarted){musicStarted=true;} bgMusic.play().catch(()=>{}); }
 }
 
 
@@ -333,7 +361,13 @@ async function init(){
     }catch(_){location.href='festival.html';return;}
     try{
         const r=await fetch('https://api.ddon.org/api/festival/me',{credentials:'include'});
-        if(r.ok){const d=await r.json();if(d.exists){profile=d;sessionStorage.setItem('festivalName',d.username);}}
+        if(r.ok){const d=await r.json();if(d.exists){
+            profile=d;
+            // Map snake_case DB fields to camelCase
+            profile.activeSkills = d.active_skills || [];
+            profile.spentSkills  = d.spent_skills  || [];
+            sessionStorage.setItem('festivalName',d.username);
+        }}
     }catch(_){}
     if(!profile){location.href='festival.html';return;}
     document.getElementById('loadScreen').style.display='none';
@@ -564,7 +598,6 @@ async function ensureWS(onReady){
     };
 }
 
-// Alias for backward compat
 function connectWS(onReady){ ensureWS(onReady); }
 
 function handleMsg(d){
@@ -591,13 +624,14 @@ function handleMsg(d){
                 const ov=document.getElementById('hitOverlay');
                 ov.classList.remove('flash');void ov.offsetWidth;ov.classList.add('flash');
                 ov.addEventListener('animationend',()=>ov.classList.remove('flash'),{once:true});
-                playHit();
+                
             },Math.random()*200);
         }
     }
     if(d.type==='enemyDead'){
         document.getElementById('enemyVisual').classList.add('dead');
         playDeath();
+        
         const myRew=d.rewards&&d.rewards[profile.username];
         if(myRew) gainXP(myRew.xp);
         setTimeout(showWaiting,1600);
@@ -606,6 +640,7 @@ function handleMsg(d){
     if(d.type==='bossAttack'){
         const myUpd=d.playerUpdates&&d.playerUpdates[profile.username];
         if(myUpd){myHp=myUpd.hp;myMaxHp=myUpd.maxHp;isKO=myUpd.isKO;updatePlayerHpHud();if(isKO)showKO(myUpd.koUntil);}
+        
         playBossHit();
         document.body.style.boxShadow='inset 0 0 80px rgba(255,0,0,.4)';
         setTimeout(()=>document.body.style.boxShadow='',400);
@@ -704,7 +739,8 @@ function renderParty(members){
 
 // ── Combat ─────────────────────────────────────────────────
 function onEnemyClick(e){
-    if(!musicStarted&&!isMuted){musicStarted=true;bgMusic&&bgMusic.play().catch(()=>{});}
+    tryStartMusic();
+    
     if(gameState!=='combat'||atkCd||!enemy||enemy.hp<=0||isKO)return;
     atkCd=true;setTimeout(()=>atkCd=false,300);
     lastClickX=e.offsetX;lastClickY=e.offsetY;
@@ -767,7 +803,8 @@ function triggerHitVfx(dmg,isCrit){
     const ov=document.getElementById('hitOverlay');
     ov.classList.remove('flash');void ov.offsetWidth;ov.classList.add('flash');
     ov.addEventListener('animationend',()=>ov.classList.remove('flash'),{once:true});
-    spawnDmgNum(dmg,isCrit);isCrit?playCrit():playHit();
+    spawnDmgNum(dmg,isCrit);
+    if(isCrit) playCrit(); else playHit();
 }
 function spawnSlash(x,y){const el=document.createElement('div');el.className='slash';el.style.left=(x-22)+'px';el.style.top=(y-22)+'px';document.getElementById('enemyVisual').appendChild(el);el.addEventListener('animationend',()=>el.remove());}
 function spawnDmgNum(dmg,isCrit,cx,cy){
