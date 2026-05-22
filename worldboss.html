@@ -524,9 +524,24 @@ function handleMsg(d){
         const myUpd=d.playerUpdates&&d.playerUpdates[profile.username];
         if(myUpd){myHp=myUpd.hp;myMaxHp=myUpd.maxHp;isKO=myUpd.isKO;updatePlayerHpHud();if(isKO)showKO(myUpd.koUntil);}
         playBossHit();
-        // Red flash on body
         document.body.style.boxShadow='inset 0 0 80px rgba(255,0,0,.4)';
         setTimeout(()=>document.body.style.boxShadow='',400);
+        // Update party panel HP directly from playerUpdates
+        if(currentLobbyId && d.playerUpdates){
+            const members=document.getElementById('partyMembers').querySelectorAll('.pm');
+            members.forEach(pm=>{
+                const nameEl=pm.querySelector('.pm-name');
+                if(!nameEl) return;
+                const name=nameEl.textContent.replace(' (You)','').trim();
+                const upd=d.playerUpdates[name];
+                if(!upd) return;
+                const pct=upd.maxHp>0?Math.max(0,Math.min(100,(upd.hp/upd.maxHp)*100)):0;
+                const hpColor=pct>50?'#5dbb8a':pct>25?'#c8a75d':'#ff4040';
+                const bar=pm.querySelector('.pm-hp-fill');
+                if(bar){bar.style.width=pct+'%';bar.style.background=hpColor;}
+                if(upd.isKO) pm.classList.add('ko'); else pm.classList.remove('ko');
+            });
+        }
     }
     if(d.type==='playerRecovered'){myHp=d.hp;myMaxHp=d.maxHp;isKO=false;updatePlayerHpHud();document.getElementById('clickHint').textContent='⚔ CLICK ENEMY TO ATTACK ⚔';document.getElementById('skillBtn').disabled=skillCd;}
     if(d.type==='partyUpdate'){
