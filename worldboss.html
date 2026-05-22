@@ -483,13 +483,20 @@ function startGame(onReady){
     document.getElementById('gameMain').style.display='flex';
     document.getElementById('skillBar').style.display='flex';
     document.getElementById('lb').style.display='block';
-    updateHUD();setupSkillBtn();
+    updateHUD();
+    // Load skill data immediately so buttons show correct labels
+    loadSkillData().then(()=>{
+        // Restore saved loadout from profile
+        equippedSlots = (profile.activeSkills||[]).slice(0,3);
+        while(equippedSlots.length<3) equippedSlots.push(null);
+        updateSkillButtons();
+    });
     ensureWS(onReady);
     document.addEventListener('keydown',e=>{
-    if(e.key==='q'||e.key==='Q') useSkillSlot(0);
-    if(e.key==='e'||e.key==='E') useSkillSlot(1);
-    if(e.key==='r'||e.key==='R') useSkillSlot(2);
-});
+        if(e.key==='q'||e.key==='Q') useSkillSlot(0);
+        if(e.key==='e'||e.key==='E') useSkillSlot(1);
+        if(e.key==='r'||e.key==='R') useSkillSlot(2);
+    });
 }
 function updateHUD(){
     const cls=CLASSES[profile.class]||CLASSES.fighter;
