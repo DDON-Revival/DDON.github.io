@@ -350,9 +350,14 @@ function showCreateLobby(){
 function showJoinLobby(){
     document.getElementById('lobbyOptions').style.display='none';
     document.getElementById('joinLobbyBox').style.display='flex';
-    // connect WS first to get lobby list
-    if(!ws||ws.readyState!==WebSocket.OPEN) connectWS(()=>requestLobbyList());
-    else requestLobbyList();
+    fetchLobbyList();
+}
+
+async function fetchLobbyList(){
+    try{
+        const r = await fetch('https://api.ddon.org/api/festival/lobbies',{credentials:'include'});
+        if(r.ok){ const d=await r.json(); renderLobbyList(d); }
+    }catch(_){ renderLobbyList([]); }
 }
 function playSolo(){
     isSolo=true;
@@ -367,9 +372,7 @@ function createLobby(){
         ws.send(JSON.stringify({type:'createLobby',name}));
     });
 }
-function requestLobbyList(){
-    if(ws&&ws.readyState===WebSocket.OPEN) ws.send(JSON.stringify({type:'getLobbyList'}));
-}
+function requestLobbyList(){ fetchLobbyList(); }
 function renderLobbyList(lobbies){
     const el=document.getElementById('lobbyListEl');el.innerHTML='';
     if(!lobbies||lobbies.length===0){el.innerHTML='<div class="lobby-empty">NO OPEN PARTIES — CREATE ONE</div>';return;}
@@ -387,6 +390,13 @@ function joinLobby(id,name){
     startGame(()=>{
         ws.send(JSON.stringify({type:'joinLobby',lobbyId:id}));
     });
+}
+
+// Refresh lobby list via WS if connected, else fetch
+function refreshLobbies(){
+    if(ws&&ws.readyState===WebSocket.OPEN)
+        ws.send(JSON.stringify({type:'getLobbyList'}));
+    else fetchLobbyList();
 }
 function leaveParty(){
     if(ws&&ws.readyState===WebSocket.OPEN) ws.send(JSON.stringify({type:'leaveLobby'}));
@@ -446,14 +456,15 @@ async function connectWS(onReady){
             }
             if(d.type==='authFailed'){console.error('WS auth failed');return;}
             if(d.type==='kicked'){ws._kicked=true;ws.close();alert('Verbindung übernommen (anderer Tab).');location.href='festival.html';return;}
-            if(d.type==='lobbyList'){renderLobbyList(d.lobbies);return;}
-            if(d.type==='lobbyListUpdate'){renderLobbyList(d.lobbies);return;}
+            if(d.type==='lobbyList'||d.type==='lobbyListUpdate'){if(document.getElementById('joinLobbyBox').style.display!=='none')renderLobbyList(d.lobbies);return;}
             if(d.type==='lobbyJoined'){
                 currentLobbyId=d.lobbyId;currentLobbyName=d.lobbyName;
-                document.getElementById('partyPanel').style.display='block';
+                const pp=document.getElementById('partyPanel');
+                pp.style.display='block';
                 document.getElementById('partyName').textContent='⚔ '+d.lobbyName.toUpperCase();
                 document.getElementById('leavePartyBtn').style.display='inline-block';
-                renderParty(d.party);return;
+                if(d.party&&d.party.length>0) renderParty(d.party);
+                return;
             }
             if(d.type==='lobbyLeft'){currentLobbyId=null;document.getElementById('partyPanel').style.display='none';document.getElementById('leavePartyBtn').style.display='none';return;}
             handleMsg(d);
@@ -489,7 +500,12 @@ function handleMsg(d){
         setTimeout(()=>document.body.style.boxShadow='',400);
     }
     if(d.type==='playerRecovered'){myHp=d.hp;myMaxHp=d.maxHp;isKO=false;updatePlayerHpHud();document.getElementById('clickHint').textContent='⚔ CLICK ENEMY TO ATTACK ⚔';document.getElementById('skillBtn').disabled=skillCd;}
-    if(d.type==='partyUpdate'){if(currentLobbyId)renderParty(d.party);}
+    if(d.type==='partyUpdate'){
+        if(currentLobbyId&&d.party&&d.party.length>0){
+            document.getElementById('partyPanel').style.display='block';
+            renderParty(d.party);
+        }
+    }
     if(d.type==='partyHealed'){myHp=myMaxHp;updatePlayerHpHud();if(currentLobbyId&&d.party)renderParty(d.party);}
     if(d.type==='priestHeal'){spawnXpLike('+'+d.amount+' HP','#5dbb8a');}
     if(d.type==='phaseChange'){showPhaseBanner(d.phase);}
