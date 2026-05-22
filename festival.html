@@ -470,8 +470,7 @@ function playDeathSound() {
 let bossHp         = 10000000;
 let maxHp          = 10000000;
 let attackCooldown = false;
-let playerName    = null;  // set on init
-let playerName    = null; // wird beim Init befüllt
+let playerName    = null;
 let isDead         = false;
 let lastClickX     = 200;
 let lastClickY     = 200;
@@ -656,24 +655,18 @@ scheduleRoar();
 // Player name – Login integration
 // ─────────────────────────────────────────────────────────────
 async function resolvePlayerName() {
-    // ① Euer Login-API (Endpoint ggf. anpassen)
+    // ① Euer /me Endpoint – gibt { id, name, mail, flags }
     try {
-        const res = await fetch('/api/me', { credentials: 'include' });
+        const res = await fetch('https://api.ddon.org/api/me', {
+            credentials: 'include'
+        });
         if (res.ok) {
             const d = await res.json();
-            const n = d.username || d.name || d.account_name || d.accountName;
-            if (n) return n;
+            if (d.name) return d.name;   // account.name aus der DB
         }
     } catch (_) {}
 
-    // ② localStorage-Keys eures Login-Systems (ggf. ergänzen)
-    const keys = ['accountName', 'username', 'loginName', 'charName'];
-    for (const k of keys) {
-        const v = localStorage.getItem(k);
-        if (v) return v;
-    }
-
-    // ③ Fallback: stabiler zufälliger Name pro Browser-Tab
+    // ② Fallback: einmaliger zufälliger Name pro Tab (falls nicht eingeloggt)
     let uid = sessionStorage.getItem('_bossUid');
     if (!uid) {
         uid = 'Arisen_' + Math.random().toString(36).slice(2, 6).toUpperCase();
