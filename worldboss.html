@@ -100,7 +100,7 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
 .enemy-type-badge{font-size:10px;letter-spacing:5px;text-transform:uppercase;padding:4px 16px;border:1px solid currentColor;margin-bottom:10px;}
 .type-normal{color:#5dbb8a;}.type-elite{color:#bb8a5d;}.type-boss{color:#ff4d4d;}
 .enemy-name{font-size:22px;color:#fff;letter-spacing:3px;margin-bottom:18px;}
-#enemyVisual{width:400px;height:280px;cursor:crosshair;position:relative;display:flex;align-items:center;justify-content:center;}
+#enemyVisual{width:400px;height:280px;cursor:crosshair;position:relative;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-user-select:none;}
 #enemyVisual:hover{filter:brightness(1.1);}
 #enemyImg{width:100%;height:100%;object-fit:contain;animation:float 3s infinite ease-in-out;pointer-events:none;mix-blend-mode:screen;}
 #hitOverlay{position:absolute;inset:0;pointer-events:none;border-radius:6px;}
@@ -244,7 +244,7 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
     <div id="combatView">
         <div class="enemy-type-badge" id="enemyTypeBadge">···</div>
         <div class="enemy-name" id="enemyNameEl">···</div>
-        <div id="enemyVisual" onclick="onEnemyClick(event)">
+        <div id="enemyVisual" onclick="onEnemyClick(event)" onmousedown="event.preventDefault()" ondragstart="return false">
             <img id="enemyImg" src="" style="display:none;">
             <div id="hitOverlay"></div>
         </div>
