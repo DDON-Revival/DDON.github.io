@@ -267,11 +267,29 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
 <!-- Skill bar -->
 <div id="skillBar" style="display:none;">
     <div class="click-hint" id="clickHint">⚔ CLICK ENEMY TO ATTACK ⚔</div>
-    <button id="skillBtn" onclick="useSkill()" disabled>
-        <span id="skillBtnLabel">Skill</span>
-        <div id="cdOverlay" style="display:none;"></div>
-    </button>
-    <div style="font-size:9px;color:#333;letter-spacing:2px;">PRESS Q</div>
+    <div style="display:flex;gap:12px;align-items:center;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+            <button id="skillBtn0" onclick="useSkillSlot(0)" disabled style="background:rgba(200,167,93,.12);border:1px solid rgba(200,167,93,.45);color:#c8a75d;padding:11px 28px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;cursor:pointer;transition:.2s;position:relative;min-width:180px;text-align:center;">
+                <span id="skillBtnLabel0">— Empty —</span>
+                <div id="cdOverlay0" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;font-size:18px;color:#fff;"></div>
+            </button>
+            <div style="font-size:9px;color:#333;letter-spacing:2px;">PRESS Q</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+            <button id="skillBtn1" onclick="useSkillSlot(1)" disabled style="background:rgba(200,167,93,.12);border:1px solid rgba(200,167,93,.45);color:#c8a75d;padding:11px 28px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;cursor:pointer;transition:.2s;position:relative;min-width:180px;text-align:center;">
+                <span id="skillBtnLabel1">— Empty —</span>
+                <div id="cdOverlay1" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;font-size:18px;color:#fff;"></div>
+            </button>
+            <div style="font-size:9px;color:#333;letter-spacing:2px;">PRESS E</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+            <button id="skillBtn2" onclick="useSkillSlot(2)" disabled style="background:rgba(200,167,93,.12);border:1px solid rgba(200,167,93,.45);color:#c8a75d;padding:11px 28px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;cursor:pointer;transition:.2s;position:relative;min-width:180px;text-align:center;">
+                <span id="skillBtnLabel2">— Empty —</span>
+                <div id="cdOverlay2" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;font-size:18px;color:#fff;"></div>
+            </button>
+            <div style="font-size:9px;color:#333;letter-spacing:2px;">PRESS R</div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -436,7 +454,11 @@ function startGame(onReady){
     document.getElementById('lb').style.display='block';
     updateHUD();setupSkillBtn();
     ensureWS(onReady);
-    document.addEventListener('keydown',e=>{if(e.key==='q'||e.key==='Q')useSkill();});
+    document.addEventListener('keydown',e=>{
+    if(e.key==='q'||e.key==='Q') useSkillSlot(0);
+    if(e.key==='e'||e.key==='E') useSkillSlot(1);
+    if(e.key==='r'||e.key==='R') useSkillSlot(2);
+});
 }
 function updateHUD(){
     const cls=CLASSES[profile.class]||CLASSES.fighter;
@@ -447,9 +469,31 @@ function updateHUD(){
     document.getElementById('xpFill').style.width=Math.min(100,(profile.xp/thr)*100)+'%';
     document.getElementById('xpLabel').textContent=profile.xp+'/'+thr;
 }
+let skillCooldowns=[false,false,false];
+let skillCdEndsAt=[0,0,0];
+
 function setupSkillBtn(){
-    const cls=CLASSES[profile.class]||CLASSES.fighter;
-    document.getElementById('skillBtnLabel').textContent=cls.icon+' '+cls.skill+' [Q]';
+    updateSkillButtons();
+}
+
+function updateSkillButtons(){
+    const slots=profile.activeSkills||[];
+    [0,1,2].forEach(i=>{
+        const btn=document.getElementById('skillBtn'+i);
+        const lbl=document.getElementById('skillBtnLabel'+i);
+        if(!btn||!lbl)return;
+        const skillId=slots[i];
+        if(!skillId||!skillData){
+            lbl.textContent='— Empty —';
+            btn.disabled=true;
+            return;
+        }
+        const sk=skillData?.tree?.skills?.find(s=>s.id===skillId);
+        if(sk){
+            lbl.textContent=(sk.icon||'⚡')+' '+sk.name;
+            btn.disabled=skillCooldowns[i]||isKO||gameState!=='combat';
+        }
+    });
 }
 function updatePlayerHpHud(){
     const pct=myMaxHp>0?Math.max(0,(myHp/myMaxHp)*100):100;
@@ -619,7 +663,7 @@ function showCombat(){
     gameState='combat';
     document.getElementById('combatView').style.display='flex';
     document.getElementById('waitScreen').style.display='none';
-    if(!isKO)document.getElementById('skillBtn').disabled=skillCd;
+    if(!isKO) updateSkillButtons();
 }
 function showWaiting(seconds,nextType){
     gameState='waiting';enemy=null;
@@ -654,48 +698,59 @@ function renderParty(members){
 
 // ── Combat ─────────────────────────────────────────────────
 function onEnemyClick(e){
+    startMusic();
     if(gameState!=='combat'||atkCd||!enemy||enemy.hp<=0||isKO)return;
     atkCd=true;setTimeout(()=>atkCd=false,300);
     lastClickX=e.offsetX;lastClickY=e.offsetY;
     spawnSlash(e.offsetX,e.offsetY);
     sendAttack(false);
 }
-function useSkill(){
-    if(gameState!=='combat'||skillCd||!enemy||enemy.hp<=0||isKO)return;
-    const cls=CLASSES[profile.class]||CLASSES.fighter;
-    startSkillCd(cls.skillCd);
-    sendAttack(true);
-    spawnSlash(lastClickX-18,lastClickY-18);spawnSlash(lastClickX+18,lastClickY);spawnSlash(lastClickX,lastClickY+18);
+function useSkillSlot(slot){
+    if(gameState!=='combat'||!enemy||enemy.hp<=0||isKO)return;
+    if(skillCooldowns[slot])return;
+    const slots=profile.activeSkills||[];
+    const skillId=slots[slot];
+    if(!skillId||!skillData)return;
+    const sk=skillData.tree.skills.find(s=>s.id===skillId);
+    if(!sk||sk.type!=='active')return;
+    const curLvl=[...sk.levels].filter(l=>l.lvlReq<=profile.level).pop();
+    if(!curLvl)return;
+    const cd=curLvl.cd||10;
+    startSkillCdSlot(slot,cd);
+    sendAttack(true,skillId);
+    spawnSlash(lastClickX-18,lastClickY-18);
+    spawnSlash(lastClickX+18,lastClickY);
+    spawnSlash(lastClickX,lastClickY+18);
 }
+// Legacy alias
+function useSkill(){ useSkillSlot(0); }
 function sendAttack(isSkill){
     if(!ws||ws.readyState!==WebSocket.OPEN)return;
     ws.send(JSON.stringify({type:'attack',skill:isSkill}));
 }
-let skillCdEndsAt = 0;
-
-function startSkillCd(sec){
-    skillCd=true;
-    skillCdEndsAt=Date.now()+(sec*1000);
-    applySkillCd();
-}
-
-function applySkillCd(){
-    const remaining=Math.ceil((skillCdEndsAt-Date.now())/1000);
-    if(remaining<=0){skillCd=false;skillCdEndsAt=0;
-        const btn=document.getElementById('skillBtn'),ov=document.getElementById('cdOverlay');
-        if(gameState==='combat'&&!isKO)btn.disabled=false;
-        ov.style.display='none';return;
-    }
-    const btn=document.getElementById('skillBtn'),ov=document.getElementById('cdOverlay');
-    btn.disabled=true;ov.style.display='flex';ov.textContent=remaining;
-    if(cdInterval)clearInterval(cdInterval);
-    cdInterval=setInterval(()=>{
-        const s=Math.ceil((skillCdEndsAt-Date.now())/1000);
-        ov.textContent=Math.max(0,s);
-        if(s<=0){clearInterval(cdInterval);skillCd=false;skillCdEndsAt=0;
-            if(gameState==='combat'&&!isKO)btn.disabled=false;
-            ov.style.display='none';}
+function startSkillCdSlot(slot,sec){
+    skillCooldowns[slot]=true;
+    skillCdEndsAt[slot]=Date.now()+(sec*1000);
+    const btn=document.getElementById('skillBtn'+slot);
+    const ov=document.getElementById('cdOverlay'+slot);
+    if(btn) btn.disabled=true;
+    if(ov){ ov.style.display='flex'; ov.textContent=sec; }
+    const interval=setInterval(()=>{
+        const s=Math.ceil((skillCdEndsAt[slot]-Date.now())/1000);
+        if(ov) ov.textContent=Math.max(0,s);
+        if(s<=0){
+            clearInterval(interval);
+            skillCooldowns[slot]=false;
+            skillCdEndsAt[slot]=0;
+            if(ov) ov.style.display='none';
+            if(btn&&gameState==='combat'&&!isKO) btn.disabled=false;
+        }
     },1000);
+}
+// Legacy
+function startSkillCd(sec){ startSkillCdSlot(0,sec); }
+function applySkillCd(){
+    if(skillCdEndsAt[0]>Date.now()) startSkillCdSlot(0,Math.ceil((skillCdEndsAt[0]-Date.now())/1000));
 }
 
 // ── VFX ───────────────────────────────────────────────────
@@ -999,14 +1054,7 @@ async function saveEquip(){
     }catch(_){}
 }
 
-function updateSkillBar(){
-    // Update Q/E/R buttons based on equipped skills
-    // For now, slot 0 = Q (existing skill button)
-    if(skillData&&profile.activeSkills){
-        const s0=skillData.tree?.skills?.find(s=>s.id===profile.activeSkills[0]);
-        if(s0) document.getElementById('skillBtnLabel').textContent=s0.icon||'⚡'+' '+s0.name+' [Q]';
-    }
-}
+function updateSkillBar(){ updateSkillButtons(); }
 
 function showAchievementPopup(achievementId){
     // Fetch achievement name from a simple lookup or just show ID
