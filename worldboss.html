@@ -414,7 +414,9 @@ async function connectWS(){
                 return;
             }
             if(d.type==='kicked'){
-                alert('Du wurdest getrennt — anderer Tab geöffnet.');
+                ws._kicked = true;
+                ws.close();
+                alert('Du hast das Spiel in einem anderen Tab geöffnet. Bitte nur einen Tab nutzen.');
                 location.href='festival.html';
                 return;
             }
@@ -422,7 +424,10 @@ async function connectWS(){
         } catch(_){}
     };
 
-    ws.onclose = () => { setTimeout(connectWS, 3000); };
+    ws.onclose = () => {
+        // Nur reconnecten wenn NICHT gekickt
+        if(!ws._kicked) setTimeout(connectWS, 3000);
+    };
 }
 
 function handleMsg(d){
