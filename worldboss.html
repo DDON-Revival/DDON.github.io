@@ -3,720 +3,632 @@
 <head>
 <meta charset="UTF-8">
 <title>World Boss – Dogma Festival III</title>
-
-<meta http-equiv="Content-Security-Policy"
-content="
-default-src 'self' https:;
-script-src 'self' 'unsafe-inline' https:;
-style-src 'self' 'unsafe-inline' https:;
-connect-src 'self' https: wss://api.ddon.org;
-img-src 'self' https: data:;
-">
-
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; img-src 'self' https: data:; connect-src 'self' https://api.ddon.org wss://api.ddon.org;">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100vh;overflow:hidden;}
 
-body {
-    margin: 0;
-    background: #0a0c16;
-    color: white;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
+/* ── Screens ── */
+.screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}
+#loadScreen{background:#0a0b14;z-index:200;font-size:13px;letter-spacing:6px;color:#333;}
+#classScreen{background:radial-gradient(circle at top,#121425,#0a0b14);z-index:100;flex-direction:column;overflow-y:auto;}
+#gameScreen{flex-direction:column;background:radial-gradient(ellipse at top,#1a0a0a,#0a0b14);}
+
+/* ── HUD ── */
+#hud{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;align-items:center;gap:16px;padding:14px 28px;
+    background:linear-gradient(to bottom,rgba(10,11,20,0.98),transparent);
+    border-bottom:1px solid rgba(200,167,93,0.15);
+}
+.hud-back{background:transparent;border:1px solid #333;color:#666;padding:6px 14px;
+    font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;cursor:pointer;transition:.2s;}
+.hud-back:hover{border-color:#c8a75d;color:#c8a75d;}
+.hud-name{color:#c8a75d;font-size:14px;letter-spacing:2px;}
+.hud-class{font-size:11px;color:#888;letter-spacing:2px;padding:3px 10px;border:1px solid #333;}
+.hud-level{font-size:13px;color:#fff;letter-spacing:1px;min-width:50px;}
+#xpBarWrap{flex:1;max-width:220px;}
+.xp-label{font-size:10px;color:#555;letter-spacing:2px;margin-bottom:3px;}
+.xp-track{height:4px;background:#1a1a2a;border:1px solid #222;overflow:hidden;}
+.xp-fill{height:100%;background:linear-gradient(90deg,#c8a75d,#ffd97a);transition:width .4s ease;}
+.hud-right{margin-left:auto;font-size:12px;color:#555;letter-spacing:2px;}
+
+/* ── Class selection ── */
+.class-title{font-family:'Cinzel Decorative',serif;font-size:28px;color:#c8a75d;letter-spacing:3px;margin-bottom:8px;text-align:center;}
+.class-sub{font-size:12px;color:#555;letter-spacing:3px;margin-bottom:40px;text-align:center;}
+.class-grid{display:grid;grid-template-columns:repeat(4,220px);gap:20px;}
+.class-card{background:linear-gradient(145deg,#181a30,#101222);border:1px solid #2a2e50;
+    padding:28px 22px;cursor:pointer;transition:.3s;text-align:center;}
+.class-card:hover{border-color:#c8a75d;transform:translateY(-4px);box-shadow:0 0 20px rgba(200,167,93,.2);}
+.class-card.selected{border-color:#c8a75d;background:linear-gradient(145deg,#201f10,#181510);}
+.cc-icon{font-size:44px;margin-bottom:14px;}
+.cc-name{font-size:16px;color:#fff;letter-spacing:2px;margin-bottom:8px;}
+.cc-desc{font-size:11px;color:#666;line-height:1.6;margin-bottom:16px;}
+.cc-skill{font-size:11px;color:#c8a75d;letter-spacing:1px;padding:5px 10px;border:1px solid rgba(200,167,93,.3);}
+.class-confirm{margin-top:32px;background:#c8a75d;border:none;color:#0a0b14;
+    padding:14px 60px;font-family:'Cinzel',serif;font-size:14px;font-weight:700;
+    letter-spacing:3px;cursor:pointer;transition:.2s;}
+.class-confirm:hover{box-shadow:0 0 20px rgba(200,167,93,.4);}
+.class-confirm:disabled{opacity:.3;cursor:default;}
+
+/* ── Game area ── */
+#gameMain{
+    position:fixed;inset:0;top:60px;
+    display:flex;align-items:center;justify-content:center;
 }
 
-#bg {
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(ellipse at top, #2a0e0e 0%, #0a0c16 55%);
-    transition: background 1s;
+/* ── Enemy display ── */
+#enemyArea{
+    position:relative;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    width:560px;
+}
+.enemy-type-badge{
+    font-size:10px;letter-spacing:5px;text-transform:uppercase;
+    padding:4px 16px;border:1px solid currentColor;margin-bottom:10px;
+}
+.type-normal{color:#5dbb8a;}
+.type-elite{color:#bb8a5d;}
+.type-boss{color:#ff4d4d;}
+.enemy-name{font-size:22px;color:#fff;letter-spacing:3px;margin-bottom:20px;}
+
+#enemyVisual{
+    width:420px;height:300px;cursor:crosshair;position:relative;
+    display:flex;align-items:center;justify-content:center;
+    transition:.2s;
+}
+#enemyVisual:hover{filter:brightness(1.1);}
+#enemyImg{width:100%;height:100%;object-fit:contain;
+    animation:float 3s infinite ease-in-out;pointer-events:none;user-select:none;}
+#enemyEmoji{font-size:160px;animation:float 3s infinite ease-in-out;
+    pointer-events:none;user-select:none;filter:drop-shadow(0 0 30px currentColor);}
+#hitOverlay{position:absolute;inset:0;pointer-events:none;border-radius:8px;}
+#hitOverlay.flash{animation:redFlash .3s ease forwards;}
+
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+@keyframes redFlash{0%{background:rgba(255,30,0,0);}30%{background:rgba(255,30,0,.5);}100%{background:rgba(255,30,0,0);}}
+@keyframes shake{0%{transform:translateX(0);}20%{transform:translateX(-14px);}40%{transform:translateX(14px);}60%{transform:translateX(-8px);}80%{transform:translateX(8px);}100%{transform:translateX(0);}}
+@keyframes crumble{0%{transform:translateY(0) scale(1);opacity:1;filter:brightness(1);}50%{transform:translateY(20px) scale(.95);opacity:.6;filter:brightness(.5) saturate(0);}100%{transform:translateY(60px) scale(.85);opacity:0;filter:brightness(0);}}
+
+#enemyVisual.shaking #enemyImg,
+#enemyVisual.shaking #enemyEmoji{animation:shake .35s ease !important;}
+#enemyVisual.dead #enemyImg,
+#enemyVisual.dead #enemyEmoji{animation:crumble 2s ease forwards !important;}
+
+/* HP bar */
+.hp-wrap{width:500px;margin-top:20px;}
+.hp-track{height:36px;background:#111;border:1px solid rgba(255,77,77,.4);overflow:hidden;position:relative;}
+.hp-fill{height:100%;background:linear-gradient(90deg,#cc1010,#ff6a10);transition:width .25s ease;}
+.hp-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.12),transparent);}
+.hp-text{text-align:center;font-size:13px;color:#ffdddd;letter-spacing:2px;margin-top:6px;}
+
+/* waiting */
+#waitScreen{display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+.wait-title{font-size:18px;letter-spacing:4px;color:#c8a75d;}
+.wait-next{font-size:12px;color:#555;letter-spacing:3px;}
+#countdown{font-size:48px;color:#fff;letter-spacing:4px;}
+.next-type-badge{font-size:10px;letter-spacing:4px;padding:5px 16px;border:1px solid #333;color:#888;}
+
+/* skill button */
+#skillBar{
+    position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.click-hint{font-size:11px;color:rgba(255,180,180,.35);letter-spacing:4px;animation:hintPulse 2s infinite;}
+@keyframes hintPulse{0%,100%{opacity:.25;}50%{opacity:.7;}}
+#skillBtn{
+    background:rgba(200,167,93,.15);border:1px solid rgba(200,167,93,.5);
+    color:#c8a75d;padding:12px 36px;font-family:'Cinzel',serif;
+    font-size:13px;letter-spacing:2px;cursor:pointer;transition:.2s;
+    position:relative;min-width:220px;text-align:center;
+}
+#skillBtn:hover:not(:disabled){background:rgba(200,167,93,.25);box-shadow:0 0 16px rgba(200,167,93,.3);}
+#skillBtn:disabled{opacity:.35;cursor:default;}
+#skillBtn.active{background:rgba(200,167,93,.35);border-color:#c8a75d;}
+#cdOverlay{
+    position:absolute;inset:0;background:rgba(0,0,0,.6);
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;color:#fff;letter-spacing:0;
 }
 
-#bg.rage {
-    background: radial-gradient(ellipse at top, #4a0a0a 0%, #0a0c16 55%);
+/* Leaderboard */
+#lb{
+    position:fixed;right:24px;top:80px;width:260px;
+    background:rgba(0,0,0,.55);border:1px solid rgba(200,167,93,.25);
+    padding:18px 20px;backdrop-filter:blur(4px);
 }
+#lb h3{color:#c8a75d;font-size:13px;letter-spacing:3px;margin-bottom:12px;}
+.lb-row{display:flex;justify-content:space-between;font-size:12px;
+    color:#aaa;margin-top:7px;letter-spacing:1px;}
+.lb-row.me{color:#c8a75d;font-weight:700;}
+.lb-row.gold{color:#ffd700;}
 
-.container {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+/* XP popup */
+.xpPop{position:fixed;font-family:'Cinzel',serif;font-size:16px;color:#c8a75d;
+    pointer-events:none;animation:xpFloat 1.2s ease-out forwards;z-index:999;}
+@keyframes xpFloat{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-70px);}}
+
+/* Level up */
+#lvlUpBanner{
+    position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+    background:rgba(10,11,20,.95);border:1px solid #c8a75d;
+    padding:24px 50px;text-align:center;z-index:900;
+    animation:lvlFade 2.5s ease forwards;pointer-events:none;
 }
+@keyframes lvlFade{0%{opacity:0;transform:translate(-50%,-60%);}20%{opacity:1;transform:translate(-50%,-50%);}80%{opacity:1;}100%{opacity:0;transform:translate(-50%,-40%);}}
+#lvlUpBanner h2{font-size:28px;color:#c8a75d;letter-spacing:4px;}
+#lvlUpBanner p{font-size:12px;color:#888;letter-spacing:3px;margin-top:6px;}
 
-h1 {
-    color: #ff4d4d;
-    font-size: 58px;
-    margin-bottom: 6px;
-    text-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
-    letter-spacing: 4px;
-}
+/* Damage numbers */
+.dmgPop{position:absolute;font-family:'Cinzel',serif;font-weight:700;
+    pointer-events:none;animation:dmgFloat .9s ease-out forwards;z-index:300;}
+.dmgPop.normal{font-size:28px;color:#ffe082;}
+.dmgPop.crit{font-size:40px;color:#ff6b35;}
+.dmgPop.skill{font-size:36px;color:#c8a75d;}
+@keyframes dmgFloat{0%{opacity:1;transform:translateY(0) scale(1);}30%{opacity:1;transform:translateY(-30px) scale(1.2);}100%{opacity:0;transform:translateY(-90px) scale(.8);}}
 
-#bossName {
-    font-size: 26px;
-    margin-bottom: 18px;
-    color: #ffcccc;
-    letter-spacing: 2px;
-}
-
-/* ── Boss container ──────────────────────────── */
-#bossContainer {
-    position: relative;
-    width: 620px;
-    height: 400px;
-    margin-bottom: 24px;
-    cursor: crosshair;
-    user-select: none;
-}
-
-#boss {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    animation: float 3.2s infinite ease-in-out;
-    user-select: none;
-    pointer-events: none;
-    transform-origin: center center;
-}
-
-/* red flash overlay */
-#hitOverlay {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    border-radius: 8px;
-    mix-blend-mode: screen;
-}
-
-#hitOverlay.flash {
-    animation: redFlash 0.35s ease forwards;
-}
-
-@keyframes redFlash {
-    0%   { background: rgba(255,30,0,0); }
-    25%  { background: rgba(255,30,0,0.55); }
-    100% { background: rgba(255,30,0,0); }
-}
-
-/* ── Animations ──────────────────────────────── */
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50%       { transform: translateY(-14px); }
-}
-
-@keyframes hitShake {
-    0%   { transform: translateX(0) translateY(-7px); }
-    15%  { transform: translateX(-16px) translateY(-7px); }
-    35%  { transform: translateX(16px) translateY(-7px); }
-    55%  { transform: translateX(-9px) translateY(-7px); }
-    75%  { transform: translateX(9px) translateY(-7px); }
-    100% { transform: translateX(0) translateY(-7px); }
-}
-
-@keyframes deathCrumble {
-    0%   { transform: translateY(0) rotate(0deg) scale(1);   opacity: 1; filter: brightness(1); }
-    20%  { transform: translateY(6px) rotate(-3deg) scale(1.02); opacity: 0.9; filter: brightness(2.5) saturate(0.5); }
-    50%  { transform: translateY(20px) rotate(-8deg) scale(0.95); opacity: 0.6; filter: brightness(0.5) saturate(0); }
-    100% { transform: translateY(70px) rotate(-14deg) scale(0.85); opacity: 0;   filter: brightness(0) saturate(0); }
-}
-
-#boss.shaking {
-    animation: hitShake 0.38s ease !important;
-}
-
-#boss.dead {
-    animation: deathCrumble 2.2s ease forwards !important;
-}
-
-/* ── Slash hit mark ──────────────────────────── */
-.slash {
-    position: absolute;
-    pointer-events: none;
-    width: 54px;
-    height: 54px;
-    animation: slashAnim 0.5s ease-out forwards;
-    z-index: 10;
-}
-
-.slash::before,
-.slash::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 3px;
-    background: #ff4d4d;
-    top: 50%;
-    left: 0;
-    box-shadow: 0 0 8px #ff2200, 0 0 18px rgba(255,50,0,0.6);
-    border-radius: 2px;
-}
-
-.slash::before { transform: rotate(45deg); }
-.slash::after  { transform: rotate(-45deg); }
-
-@keyframes slashAnim {
-    0%   { opacity: 1; transform: scale(0.4) rotate(-10deg); }
-    40%  { opacity: 1; transform: scale(1.15) rotate(-10deg); }
-    100% { opacity: 0; transform: scale(1.4) rotate(-10deg) translateY(-18px); }
-}
-
-/* ── Floating damage numbers ─────────────────── */
-.dmgPop {
-    position: absolute;
-    color: #ffe082;
-    font-size: 40px;
-    font-weight: bold;
-    pointer-events: none;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.9), 0 0 6px rgba(255,150,0,0.5);
-    animation: dmgFloat 1s ease-out forwards;
-    z-index: 20;
-    white-space: nowrap;
-}
-
-@keyframes dmgFloat {
-    0%   { opacity: 1; transform: translateY(0) scale(1); }
-    25%  { opacity: 1; transform: translateY(-28px) scale(1.25); }
-    100% { opacity: 0; transform: translateY(-90px) scale(0.85); }
-}
-
-/* ── HP bar ──────────────────────────────────── */
-.hpBar {
-    width: 700px;
-    height: 40px;
-    background: #141414;
-    border: 2px solid #ff4d4d;
-    overflow: hidden;
-    margin-bottom: 10px;
-    position: relative;
-}
-
-.hpFill {
-    height: 100%;
-    width: 100%;
-    background: linear-gradient(90deg, #cc1010, #ff6a10);
-    transition: width 0.3s ease;
-    position: relative;
-}
-
-/* HP bar sheen */
-.hpFill::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 60%);
-}
-
-#hpText {
-    font-size: 24px;
-    margin-bottom: 16px;
-    letter-spacing: 1px;
-    color: #ffdddd;
-}
-
-/* ── Click hint ──────────────────────────────── */
-#clickHint {
-    font-size: 13px;
-    color: rgba(255, 180, 180, 0.45);
-    margin-top: -6px;
-    margin-bottom: 14px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    animation: hintPulse 2.2s ease-in-out infinite;
-}
-
-@keyframes hintPulse {
-    0%, 100% { opacity: 0.35; }
-    50%       { opacity: 0.75; }
-}
-
-/* ── Leaderboard ─────────────────────────────── */
-#leaderboard {
-    position: fixed;
-    right: 30px;
-    top: 30px;
-    width: 300px;
-    background: rgba(0, 0, 0, 0.55);
-    border: 1px solid rgba(255, 77, 77, 0.5);
-    padding: 18px 20px;
-    backdrop-filter: blur(4px);
-}
-
-#leaderboard h2 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: #ff4d4d;
-    font-size: 18px;
-    letter-spacing: 3px;
-}
-
-.playerRow {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 8px;
-    font-size: 15px;
-    color: #ffcccc;
-}
-
-.playerRow:first-child {
-    color: #ffd700;
-    font-weight: bold;
-}
-
-/* ── Online counter ──────────────────────────── */
-#online {
-    position: fixed;
-    left: 30px;
-    top: 30px;
-    font-size: 22px;
-    color: rgba(255, 200, 200, 0.7);
-    letter-spacing: 2px;
-}
-
-/* ── Screen shake ────────────────────────────── */
-@keyframes screenShake {
-    0%, 100% { transform: translate(0, 0); }
-    20%       { transform: translate(-6px, 3px); }
-    40%       { transform: translate(6px, -3px); }
-    60%       { transform: translate(-4px, 2px); }
-    80%       { transform: translate(4px, -2px); }
-}
-
-.container.screenShake {
-    animation: screenShake 0.35s ease !important;
-}
+.slash{position:absolute;pointer-events:none;width:48px;height:48px;animation:slashA .45s ease-out forwards;z-index:200;}
+.slash::before,.slash::after{content:'';position:absolute;width:100%;height:3px;background:#ff4d4d;top:50%;left:0;border-radius:2px;}
+.slash::before{transform:rotate(45deg);}
+.slash::after{transform:rotate(-45deg);}
+@keyframes slashA{0%{opacity:1;transform:scale(.3);}50%{opacity:1;transform:scale(1.1);}100%{opacity:0;transform:scale(1.3) translateY(-16px);}}
 </style>
 </head>
-
 <body>
 
-<div id="bg"></div>
-<div style="position:fixed;top:20px;left:20px;z-index:100;">
-    <button onclick="location.href='festival.html'" style="
-        background:transparent;
-        border:1px solid #555;
-        color:#888;
-        padding:8px 16px;
-        font-family:Arial,sans-serif;
-        font-size:12px;
-        letter-spacing:2px;
-        cursor:pointer;
-        transition:.2s;
-    "
-    onmouseover="this.style.borderColor='#ff4d4d';this.style.color='#ff4d4d';"
-    onmouseout="this.style.borderColor='#555';this.style.color='#888';">
-        ← FESTIVAL
+<!-- Load -->
+<div class="screen" id="loadScreen">LOADING ···</div>
+
+<!-- Class select -->
+<div class="screen" id="classScreen" style="display:none;">
+    <div class="class-title">Choose Your Vocation</div>
+    <div class="class-sub">YOUR CLASS IS LOCKED AFTER LEVEL 5</div>
+    <div class="class-grid" id="classGrid"></div>
+    <button class="class-confirm" id="classConfirmBtn" disabled onclick="confirmClass()">ENTER BATTLE</button>
+</div>
+
+<!-- HUD (game) -->
+<div id="hud" style="display:none;">
+    <button class="hud-back" onclick="location.href='festival.html'">← FESTIVAL</button>
+    <span class="hud-name" id="hudName">···</span>
+    <span class="hud-class" id="hudClass">···</span>
+    <span class="hud-level" id="hudLevel">Lv.1</span>
+    <div id="xpBarWrap">
+        <div class="xp-label">XP <span id="xpLabel">0 / 100</span></div>
+        <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+    </div>
+    <div class="hud-right">ONLINE: <span id="onlineCount">0</span></div>
+</div>
+
+<!-- Game main -->
+<div id="gameMain" style="display:none;">
+
+    <!-- Combat -->
+    <div id="combatView">
+        <div id="enemyArea">
+            <div class="enemy-type-badge" id="enemyTypeBadge">NORMAL</div>
+            <div class="enemy-name" id="enemyNameEl">···</div>
+            <div id="enemyVisual" onclick="onEnemyClick(event)">
+                <img id="enemyImg" src="" style="display:none;">
+                <div id="enemyEmoji"></div>
+                <div id="hitOverlay"></div>
+            </div>
+            <div class="hp-wrap">
+                <div class="hp-track"><div class="hp-fill" id="hpFill" style="width:100%"></div></div>
+                <div class="hp-text" id="hpText">— / — HP</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Waiting -->
+    <div id="waitScreen">
+        <div class="wait-title">ENEMY DEFEATED</div>
+        <div class="next-type-badge" id="nextTypeBadge">NEXT: NORMAL ENEMY</div>
+        <div id="countdown">—</div>
+        <div class="wait-next">NEXT BATTLE IN</div>
+    </div>
+
+</div>
+
+<!-- Skill bar -->
+<div id="skillBar" style="display:none;">
+    <div class="click-hint">⚔ CLICK ENEMY TO ATTACK ⚔</div>
+    <button id="skillBtn" onclick="useSkill()" disabled>
+        <span id="skillBtnLabel">Skill</span>
+        <div id="cdOverlay" style="display:none;"></div>
     </button>
+    <div style="font-size:10px;color:#333;letter-spacing:2px;">PRESS Q</div>
 </div>
 
-
-<div id="online">ONLINE: 0</div>
-
-<div id="leaderboard">
-    <h2>TOP DAMAGE</h2>
-    <div id="topPlayers"></div>
-</div>
-
-<div class="container" id="mainContainer">
-
-    <h1>WORLD BOSS</h1>
-    <div id="bossName">The Abyssal Hydra</div>
-
-    <div id="bossContainer" onclick="onBossClick(event)">
-        <!--
-            Bild-Pfad anpassen:
-            https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/hydra01.png
-        -->
-        <img id="boss"
-             src="https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/Hydra01.png"
-             alt="Abyssal Hydra Boss">
-        <div id="hitOverlay"></div>
-    </div>
-
-    <div id="clickHint">⚔ Click the Hydra to attack ⚔</div>
-
-    <div class="hpBar">
-        <div class="hpFill" id="hpFill"></div>
-    </div>
-
-    <div id="hpText">10,000,000 / 10,000,000 HP</div>
-
+<!-- Leaderboard -->
+<div id="lb" style="display:none;">
+    <h3>⚔ FIGHT DAMAGE</h3>
+    <div id="lbRows"></div>
 </div>
 
 <script>
-
-// ─────────────────────────────────────────────────────────────
-// Web Audio – synthesized sounds
-// ─────────────────────────────────────────────────────────────
-let audioCtx = null;
-
-function getCtx() {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    return audioCtx;
-}
-
-function playHitSound() {
-    try {
-        const ctx = getCtx();
-        const t   = ctx.currentTime;
-
-        // Thud (pitch drop)
-        const osc     = ctx.createOscillator();
-        const oscGain = ctx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(260, t);
-        osc.frequency.exponentialRampToValueAtTime(45, t + 0.18);
-        oscGain.gain.setValueAtTime(0.38, t);
-        oscGain.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
-        osc.connect(oscGain);
-        oscGain.connect(ctx.destination);
-        osc.start(t);
-        osc.stop(t + 0.22);
-
-        // Noise burst (impact crunch)
-        const bufLen = Math.floor(ctx.sampleRate * 0.14);
-        const buf    = ctx.createBuffer(1, bufLen, ctx.sampleRate);
-        const data   = buf.getChannelData(0);
-        for (let i = 0; i < bufLen; i++) data[i] = (Math.random() * 2 - 1);
-        const noise  = ctx.createBufferSource();
-        noise.buffer = buf;
-        const ng     = ctx.createGain();
-        ng.gain.setValueAtTime(0.45, t);
-        ng.gain.exponentialRampToValueAtTime(0.001, t + 0.14);
-        noise.connect(ng);
-        ng.connect(ctx.destination);
-        noise.start(t);
-    } catch(e) { console.warn('Audio error:', e); }
-}
-
-function playRoarSound() {
-    try {
-        const ctx    = getCtx();
-        const t      = ctx.currentTime;
-        const master = ctx.createGain();
-        master.gain.setValueAtTime(0.55, t);
-        master.connect(ctx.destination);
-
-        // Three layered oscillators – low serpentine roar
-        const layers = [
-            { freq: 55, type: 'sawtooth', vol: 0.18 },
-            { freq: 88, type: 'sine',     vol: 0.10 },
-            { freq: 42, type: 'square',   vol: 0.07 },
-        ];
-
-        layers.forEach(({ freq, type, vol }) => {
-            const osc = ctx.createOscillator();
-            const g   = ctx.createGain();
-            osc.type  = type;
-            osc.frequency.setValueAtTime(freq, t);
-            osc.frequency.linearRampToValueAtTime(freq * 1.35, t + 0.5);
-            osc.frequency.exponentialRampToValueAtTime(freq * 0.65, t + 1.6);
-            g.gain.setValueAtTime(0, t);
-            g.gain.linearRampToValueAtTime(vol, t + 0.25);
-            g.gain.exponentialRampToValueAtTime(0.001, t + 2.0);
-            osc.connect(g);
-            g.connect(master);
-            osc.start(t);
-            osc.stop(t + 2.0);
-        });
-
-        // Noise rumble
-        const bLen = Math.floor(ctx.sampleRate * 1.5);
-        const bBuf = ctx.createBuffer(1, bLen, ctx.sampleRate);
-        const bd   = bBuf.getChannelData(0);
-        for (let i = 0; i < bLen; i++) bd[i] = (Math.random() * 2 - 1) * 0.5;
-        const ns  = ctx.createBufferSource();
-        ns.buffer = bBuf;
-        const nlp = ctx.createBiquadFilter();
-        nlp.type  = 'lowpass';
-        nlp.frequency.value = 200;
-        const ng  = ctx.createGain();
-        ng.gain.setValueAtTime(0, t);
-        ng.gain.linearRampToValueAtTime(0.12, t + 0.4);
-        ng.gain.exponentialRampToValueAtTime(0.001, t + 1.8);
-        ns.connect(nlp);
-        nlp.connect(ng);
-        ng.connect(master);
-        ns.start(t);
-    } catch(e) { console.warn('Audio error:', e); }
-}
-
-function playDeathSound() {
-    try {
-        const ctx    = getCtx();
-        const t      = ctx.currentTime;
-        const master = ctx.createGain();
-        master.gain.setValueAtTime(0.7, t);
-        master.connect(ctx.destination);
-
-        // Dramatic descending tones
-        [140, 95, 62].forEach((freq, i) => {
-            const osc = ctx.createOscillator();
-            const g   = ctx.createGain();
-            osc.type  = 'sawtooth';
-            osc.frequency.setValueAtTime(freq * 1.8, t + i * 0.1);
-            osc.frequency.exponentialRampToValueAtTime(freq * 0.25, t + 2.8);
-            g.gain.setValueAtTime(0.22 - i * 0.04, t + i * 0.1);
-            g.gain.exponentialRampToValueAtTime(0.001, t + 2.8);
-            osc.connect(g);
-            g.connect(master);
-            osc.start(t + i * 0.1);
-            osc.stop(t + 2.8);
-        });
-
-        // Final crash noise
-        const bLen = Math.floor(ctx.sampleRate * 1.2);
-        const bBuf = ctx.createBuffer(1, bLen, ctx.sampleRate);
-        const bd   = bBuf.getChannelData(0);
-        for (let i = 0; i < bLen; i++) bd[i] = (Math.random() * 2 - 1) * (1 - i / bLen);
-        const ns  = ctx.createBufferSource();
-        ns.buffer = bBuf;
-        const ng  = ctx.createGain();
-        ng.gain.setValueAtTime(0.32, t + 1.4);
-        ng.gain.exponentialRampToValueAtTime(0.001, t + 2.6);
-        ns.connect(ng);
-        ng.connect(master);
-        ns.start(t + 1.4);
-    } catch(e) { console.warn('Audio error:', e); }
-}
-
-// ─────────────────────────────────────────────────────────────
-// State & DOM refs
-// ─────────────────────────────────────────────────────────────
-let bossHp         = 10000000;
-let maxHp          = 10000000;
-let attackCooldown = false;
-let playerName    = null;
-let isDead         = false;
-let lastClickX     = 200;
-let lastClickY     = 200;
-
-const hpFill        = document.getElementById('hpFill');
-const hpText        = document.getElementById('hpText');
-const bossEl        = document.getElementById('boss');
-const bossBox       = document.getElementById('bossContainer');
-const hitOverlay    = document.getElementById('hitOverlay');
-const topPlayers    = document.getElementById('topPlayers');
-const mainContainer = document.getElementById('mainContainer');
-const bg            = document.getElementById('bg');
-
-// ─────────────────────────────────────────────────────────────
-// WebSocket
-// ─────────────────────────────────────────────────────────────
-const ws = new WebSocket('wss://api.ddon.org/ws');
-
-ws.onopen = () => {
-    console.log('WS CONNECTED');
-    ws.send(JSON.stringify({ type: 'worldBossConnect' }));
+// ── Class definitions ────────────────────────────────────────
+const CLASSES = {
+    fighter:{ name:'Fighter', icon:'⚔️', color:'#c8a75d',
+              desc:'High sustained damage. Every swing counts.',
+              skill:'Berserk Slash', skillDesc:'3× damage hit', skillCd:10 },
+    hunter: { name:'Hunter',  icon:'🏹', color:'#5dbb8a',
+              desc:'High critical rate. Rapid Shot fires 5 arrows.',
+              skill:'Rapid Shot',    skillDesc:'5× rapid hits',  skillCd:8  },
+    mage:   { name:'Mage',    icon:'🔮', color:'#7a5dbb',
+              desc:'Explosive burst. Deals the highest single hit.',
+              skill:'Arcane Burst', skillDesc:'4× magic burst',  skillCd:15 },
+    priest: { name:'Priest',  icon:'✨', color:'#bb8a5d',
+              desc:'Support class. Divine Seal empowers your attacks.',
+              skill:'Divine Seal',  skillDesc:'2× next hit',     skillCd:20 },
 };
 
-ws.onmessage = (event) => {
-    const data = JSON.parse(event.data);
+// ── State ────────────────────────────────────────────────────
+let profile   = null;  // { username, class, level, xp, kills, boss_kills }
+let enemy     = null;
+let ws        = null;
+let atkCd     = false;
+let skillCd   = false;
+let cdInterval= null;
+let gameState = 'combat'; // 'combat' | 'waiting'
+let lastClickX= 200, lastClickY= 150;
+let selectedClass = null;
 
-    if (data.type === 'bossState') {
-        bossHp = data.hp;
-        maxHp  = data.maxHp;
-        updateBossBar();
+// ── Audio ────────────────────────────────────────────────────
+let actx = null;
+function getCtx(){ if(!actx) actx=new(window.AudioContext||window.webkitAudioContext)(); if(actx.state==='suspended')actx.resume(); return actx; }
+function playHit(){try{const c=getCtx(),t=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type='sawtooth';o.frequency.setValueAtTime(240,t);o.frequency.exponentialRampToValueAtTime(40,t+.18);g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.001,t+.22);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+.22);}catch(e){}}
+function playCrit(){try{const c=getCtx(),t=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type='square';o.frequency.setValueAtTime(320,t);o.frequency.exponentialRampToValueAtTime(80,t+.25);g.gain.setValueAtTime(.4,t);g.gain.exponentialRampToValueAtTime(.001,t+.28);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+.28);}catch(e){}}
+function playDeath(){try{const c=getCtx(),t=c.currentTime;[140,95,62].forEach((f,i)=>{const o=c.createOscillator(),g=c.createGain();o.type='sawtooth';o.frequency.setValueAtTime(f*1.8,t+i*.1);o.frequency.exponentialRampToValueAtTime(f*.25,t+2.5);g.gain.setValueAtTime(.18,t+i*.1);g.gain.exponentialRampToValueAtTime(.001,t+2.5);o.connect(g);g.connect(c.destination);o.start(t+i*.1);o.stop(t+2.5);});}catch(e){}}
+
+// ── Init ─────────────────────────────────────────────────────
+async function init(){
+    // Auth
+    try{
+        const r=await fetch('https://api.ddon.org/api/me',{credentials:'include'});
+        if(!r.ok){location.href='festival.html';return;}
+    }catch(_){location.href='festival.html';return;}
+
+    // Festival profile
+    try{
+        const r=await fetch('https://api.ddon.org/api/festival/me',{credentials:'include'});
+        if(r.ok){
+            const d=await r.json();
+            if(d.exists){
+                profile=d;
+                sessionStorage.setItem('festivalName',d.username);
+            }
+        }
+    }catch(_){}
+
+    if(!profile){location.href='festival.html';return;}
+
+    // Class selection if new (level 1, no kills) or class is default and unkosen
+    if(profile.level===1 && profile.kills===0){
+        showClassScreen();
+    } else {
+        startGame();
+    }
+    document.getElementById('loadScreen').style.display='none';
+}
+
+// ── Class screen ─────────────────────────────────────────────
+function showClassScreen(){
+    document.getElementById('classScreen').style.display='flex';
+    const grid=document.getElementById('classGrid');
+    grid.innerHTML='';
+    Object.entries(CLASSES).forEach(([id,c])=>{
+        const card=document.createElement('div');
+        card.className='class-card';
+        card.dataset.class=id;
+        card.innerHTML=`
+            <div class="cc-icon">${c.icon}</div>
+            <div class="cc-name" style="color:${c.color}">${c.name}</div>
+            <div class="cc-desc">${c.desc}</div>
+            <div class="cc-skill">${c.skill} · ${c.skillDesc} · ${c.skillCd}s</div>`;
+        card.onclick=()=>selectClass(id,card);
+        grid.appendChild(card);
+    });
+}
+
+function selectClass(id,card){
+    selectedClass=id;
+    document.querySelectorAll('.class-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    document.getElementById('classConfirmBtn').disabled=false;
+}
+
+async function confirmClass(){
+    if(!selectedClass)return;
+    const btn=document.getElementById('classConfirmBtn');
+    btn.disabled=true; btn.textContent='···';
+    try{
+        const r=await fetch('https://api.ddon.org/api/festival/class',{
+            method:'POST',credentials:'include',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({class:selectedClass})
+        });
+        if(r.ok){ profile.class=selectedClass; }
+    }catch(_){}
+    document.getElementById('classScreen').style.display='none';
+    startGame();
+}
+
+// ── Game start ───────────────────────────────────────────────
+function startGame(){
+    document.getElementById('hud').style.display='flex';
+    document.getElementById('gameMain').style.display='flex';
+    document.getElementById('skillBar').style.display='flex';
+    document.getElementById('lb').style.display='block';
+    updateHUD();
+    setupSkillBtn();
+    connectWS();
+    document.addEventListener('keydown',e=>{ if(e.key==='q'||e.key==='Q') useSkill(); });
+}
+
+function updateHUD(){
+    const cls=CLASSES[profile.class]||CLASSES.fighter;
+    document.getElementById('hudName').textContent='⚔ '+(profile.username||'Arisen');
+    document.getElementById('hudClass').textContent=cls.icon+' '+cls.name;
+    document.getElementById('hudLevel').textContent='Lv.'+profile.level;
+    const threshold=profile.level*100;
+    const pct=Math.min(100,(profile.xp/threshold)*100);
+    document.getElementById('xpFill').style.width=pct+'%';
+    document.getElementById('xpLabel').textContent=profile.xp+' / '+threshold;
+}
+
+function setupSkillBtn(){
+    const cls=CLASSES[profile.class]||CLASSES.fighter;
+    document.getElementById('skillBtnLabel').textContent=cls.icon+' '+cls.skill+' [Q]';
+}
+
+// ── WebSocket ────────────────────────────────────────────────
+function connectWS(){
+    ws=new WebSocket('wss://api.ddon.org/ws');
+    ws.onopen=()=>{ console.log('WS connected'); };
+    ws.onmessage=e=>{ try{ handleMsg(JSON.parse(e.data)); }catch(_){} };
+    ws.onclose=()=>{ setTimeout(connectWS,3000); };
+}
+
+function handleMsg(d){
+    if(d.type==='online') document.getElementById('onlineCount').textContent=d.count;
+
+    if(d.type==='enemyState'||d.type==='enemySpawn'){
+        if(d.enemy){ setEnemy(d.enemy); showCombat(); }
+        else { showWaiting(null,null); }
     }
 
-    if (data.type === 'bossHit') {
-        bossHp = data.hp;
-        updateBossBar();
-        triggerHit(data.damage);
-        checkRageMode();
+    if(d.type==='hit'){
+        if(d.rapid){
+            // hunter rapid: small slash each time
+            setTimeout(()=>spawnSlash(
+                lastClickX+Math.random()*60-30,
+                lastClickY+Math.random()*60-30
+            ),Math.random()*200);
+        } else {
+            triggerHitVfx(d.damage, d.isCrit);
+        }
+        if(enemy) enemy.hp=d.hp;
+        updateEnemyBar();
+        renderLB(d.leaderboard);
     }
 
-    if (data.type === 'leaderboard') {
-        renderLeaderboard(data.players);
+    if(d.type==='enemyDead'){
+        document.getElementById('enemyVisual').classList.add('dead');
+        playDeath();
+        // XP reward for this player
+        const myReward=d.rewards&&d.rewards[profile.username];
+        if(myReward){
+            gainXP(myReward.xp);
+            spawnXpPop('+'+myReward.xp+' XP');
+        }
+        setTimeout(()=>{ showWaiting(); }, 1500);
     }
 
-    if (data.type === 'online') {
-        document.getElementById('online').innerText = 'ONLINE: ' + data.count;
+    if(d.type==='nextEnemyIn'){
+        showWaiting(d.seconds, d.nextType);
+    }
+}
+
+// ── Enemy display ────────────────────────────────────────────
+function setEnemy(e){
+    enemy=e;
+    document.getElementById('enemyVisual').classList.remove('dead','shaking');
+
+    // Type badge
+    const badge=document.getElementById('enemyTypeBadge');
+    badge.textContent=e.type.toUpperCase();
+    badge.className='enemy-type-badge type-'+e.type;
+    document.getElementById('enemyNameEl').textContent=e.name;
+
+    // Visual
+    const img=document.getElementById('enemyImg');
+    const emo=document.getElementById('enemyEmoji');
+    if(e.img){
+        img.src=e.img; img.style.display='block'; emo.style.display='none';
+    } else {
+        img.style.display='none';
+        emo.style.display='block';
+        emo.textContent=e.emoji||'👾';
+        emo.style.color=e.color||'#fff';
     }
 
-    if (data.type === 'bossDead') {
-        triggerDeath();
+    updateEnemyBar();
+}
+
+function updateEnemyBar(){
+    if(!enemy)return;
+    const pct=Math.max(0,(enemy.hp/enemy.maxHp)*100);
+    document.getElementById('hpFill').style.width=pct+'%';
+    document.getElementById('hpText').textContent=
+        Number(enemy.hp).toLocaleString()+' / '+Number(enemy.maxHp).toLocaleString()+' HP';
+}
+
+function showCombat(){
+    gameState='combat';
+    document.getElementById('combatView').style.display='flex';
+    document.getElementById('waitScreen').style.display='none';
+    document.getElementById('skillBtn').disabled=skillCd;
+}
+
+function showWaiting(seconds,nextType){
+    gameState='waiting';
+    enemy=null;
+    document.getElementById('combatView').style.display='none';
+    document.getElementById('waitScreen').style.display='flex';
+    document.getElementById('skillBtn').disabled=true;
+
+    if(nextType){
+        const labels={normal:'NORMAL ENEMY',elite:'ELITE ENEMY',boss:'⚠ WORLD BOSS'};
+        document.getElementById('nextTypeBadge').textContent='NEXT: '+(labels[nextType]||nextType.toUpperCase());
     }
-};
 
-// ─────────────────────────────────────────────────────────────
-// Click-to-attack
-// ─────────────────────────────────────────────────────────────
-function onBossClick(e) {
-    if (isDead || attackCooldown) return;
-    attackCooldown = true;
-    setTimeout(() => { attackCooldown = false; }, 300);
+    if(seconds){
+        let s=Math.ceil(seconds);
+        document.getElementById('countdown').textContent=s;
+        const t=setInterval(()=>{
+            s--;
+            document.getElementById('countdown').textContent=Math.max(0,s);
+            if(s<=0)clearInterval(t);
+        },1000);
+    }
+}
 
-    lastClickX = e.offsetX;
-    lastClickY = e.offsetY;
+// ── Attack ───────────────────────────────────────────────────
+function onEnemyClick(e){
+    if(gameState!=='combat'||atkCd||!enemy||enemy.hp<=0)return;
+    atkCd=true; setTimeout(()=>atkCd=false,300);
+    lastClickX=e.offsetX; lastClickY=e.offsetY;
+    spawnSlash(e.offsetX,e.offsetY);
+    sendAttack(false);
+}
 
-    spawnSlash(e.offsetX, e.offsetY);
+function useSkill(){
+    if(gameState!=='combat'||skillCd||!enemy||enemy.hp<=0)return;
+    const cls=CLASSES[profile.class]||CLASSES.fighter;
+    startSkillCd(cls.skillCd);
+    sendAttack(true);
+    // Extra visual for skill
+    spawnSlash(lastClickX-20,lastClickY-20);
+    spawnSlash(lastClickX+20,lastClickY);
+    spawnSlash(lastClickX,lastClickY+20);
+}
 
+function sendAttack(isSkill){
+    if(!ws||ws.readyState!==WebSocket.OPEN)return;
     ws.send(JSON.stringify({
-        type: 'attackBoss',
-        name: playerName
+        type:'attack',
+        name:profile.username,
+        class:profile.class||'fighter',
+        level:profile.level||1,
+        skill:isSkill
     }));
 }
 
-// ─────────────────────────────────────────────────────────────
-// Visual effects
-// ─────────────────────────────────────────────────────────────
-function triggerHit(dmg) {
-    // Shake boss
-    bossEl.classList.remove('shaking');
-    void bossEl.offsetWidth;
-    bossEl.classList.add('shaking');
-    bossEl.addEventListener('animationend', () => bossEl.classList.remove('shaking'), { once: true });
-
-    // Red flash overlay
-    hitOverlay.classList.remove('flash');
-    void hitOverlay.offsetWidth;
-    hitOverlay.classList.add('flash');
-    hitOverlay.addEventListener('animationend', () => hitOverlay.classList.remove('flash'), { once: true });
-
-    // Screen micro-shake
-    mainContainer.classList.remove('screenShake');
-    void mainContainer.offsetWidth;
-    mainContainer.classList.add('screenShake');
-    mainContainer.addEventListener('animationend', () => mainContainer.classList.remove('screenShake'), { once: true });
-
-    // Damage popup
-    spawnDmgNumber(dmg);
-
-    // Sound
-    playHitSound();
-}
-
-function triggerDeath() {
-    if (isDead) return;
-    isDead = true;
-
-    document.getElementById('bossName').innerText = '☠  DEFEATED  ☠';
-    document.getElementById('clickHint').innerText = '— The Abyssal Hydra has fallen —';
-    document.getElementById('clickHint').style.color = 'rgba(255,200,200,0.5)';
-
-    bossEl.classList.remove('shaking');
-    bossEl.classList.add('dead');
-
-    playDeathSound();
-}
-
-function spawnSlash(x, y) {
-    const el = document.createElement('div');
-    el.className = 'slash';
-    el.style.left = (x - 27) + 'px';
-    el.style.top  = (y - 27) + 'px';
-    bossBox.appendChild(el);
-    el.addEventListener('animationend', () => el.remove());
-}
-
-function spawnDmgNumber(dmg) {
-    const el = document.createElement('div');
-    el.className = 'dmgPop';
-    el.innerText = '-' + Number(dmg).toLocaleString();
-    const rx = lastClickX + (Math.random() * 50 - 25);
-    const ry = lastClickY - 30;
-    el.style.left = rx + 'px';
-    el.style.top  = ry + 'px';
-    bossBox.appendChild(el);
-    el.addEventListener('animationend', () => el.remove());
-}
-
-function updateBossBar() {
-    const pct = Math.max(0, (bossHp / maxHp) * 100);
-    hpFill.style.width = pct + '%';
-    hpText.innerText   = Number(bossHp).toLocaleString()
-        + ' / ' + Number(maxHp).toLocaleString() + ' HP';
-}
-
-function renderLeaderboard(players) {
-    topPlayers.innerHTML = '';
-    players.forEach((p, i) => {
-        const row = document.createElement('div');
-        row.className = 'playerRow';
-        // eigenen Spieler gold highlighten
-        if (playerName && p.name === playerName) {
-            row.style.color  = '#ffd700';
-            row.style.fontWeight = 'bold';
+function startSkillCd(seconds){
+    skillCd=true;
+    const btn=document.getElementById('skillBtn');
+    const overlay=document.getElementById('cdOverlay');
+    btn.disabled=true;
+    overlay.style.display='flex';
+    let s=seconds;
+    overlay.textContent=s;
+    if(cdInterval)clearInterval(cdInterval);
+    cdInterval=setInterval(()=>{
+        s--;
+        overlay.textContent=Math.max(0,s);
+        if(s<=0){
+            clearInterval(cdInterval);
+            skillCd=false;
+            if(gameState==='combat') btn.disabled=false;
+            overlay.style.display='none';
         }
-        const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1) + '.';
-        row.innerHTML = `<span>${medal} ${p.name}</span><span>${Number(p.damage).toLocaleString()}</span>`;
-        topPlayers.appendChild(row);
+    },1000);
+}
+
+// ── VFX ─────────────────────────────────────────────────────
+function triggerHitVfx(dmg,isCrit){
+    // Shake
+    const vis=document.getElementById('enemyVisual');
+    vis.classList.remove('shaking'); void vis.offsetWidth; vis.classList.add('shaking');
+    vis.addEventListener('animationend',()=>vis.classList.remove('shaking'),{once:true});
+    // Flash
+    const ov=document.getElementById('hitOverlay');
+    ov.classList.remove('flash'); void ov.offsetWidth; ov.classList.add('flash');
+    ov.addEventListener('animationend',()=>ov.classList.remove('flash'),{once:true});
+    // Damage number
+    spawnDmgNum(dmg,isCrit);
+    spawnSlash(lastClickX,lastClickY);
+    isCrit?playCrit():playHit();
+}
+
+function spawnSlash(x,y){
+    const el=document.createElement('div');
+    el.className='slash';
+    el.style.left=(x-24)+'px'; el.style.top=(y-24)+'px';
+    document.getElementById('enemyVisual').appendChild(el);
+    el.addEventListener('animationend',()=>el.remove());
+}
+
+function spawnDmgNum(dmg,isCrit){
+    const el=document.createElement('div');
+    el.className='dmgPop '+(isCrit?'crit':'normal');
+    el.textContent=(isCrit?'CRIT! ':'-')+Number(dmg).toLocaleString();
+    const rx=lastClickX+(Math.random()*40-20);
+    const ry=lastClickY-20;
+    el.style.left=rx+'px'; el.style.top=ry+'px';
+    document.getElementById('enemyVisual').appendChild(el);
+    el.addEventListener('animationend',()=>el.remove());
+}
+
+function spawnXpPop(text){
+    const el=document.createElement('div');
+    el.className='xpPop';
+    el.textContent=text;
+    el.style.left='50%'; el.style.top='40%';
+    el.style.transform='translateX(-50%)';
+    document.body.appendChild(el);
+    el.addEventListener('animationend',()=>el.remove());
+}
+
+// ── XP + Level ───────────────────────────────────────────────
+function gainXP(amount){
+    profile.xp+=amount;
+    let leveled=false;
+    while(profile.xp>=profile.level*100&&profile.level<50){
+        profile.xp-=profile.level*100;
+        profile.level++;
+        leveled=true;
+    }
+    if(leveled) showLevelUp(profile.level);
+    updateHUD();
+}
+
+function showLevelUp(level){
+    const old=document.getElementById('lvlUpBanner');
+    if(old)old.remove();
+    const el=document.createElement('div');
+    el.id='lvlUpBanner';
+    el.innerHTML='<h2>LEVEL UP!</h2><p>YOU ARE NOW LEVEL '+level+'</p>';
+    document.body.appendChild(el);
+    el.addEventListener('animationend',()=>el.remove());
+}
+
+// ── Leaderboard ──────────────────────────────────────────────
+function renderLB(players){
+    const container=document.getElementById('lbRows');
+    container.innerHTML='';
+    (players||[]).forEach((p,i)=>{
+        const row=document.createElement('div');
+        row.className='lb-row'+(i===0?' gold':'')+(p.name===profile.username?' me':'');
+        const medals=['🥇','🥈','🥉'];
+        row.innerHTML=`<span>${medals[i]||(i+1+'.')} ${p.name}</span><span>${Number(p.damage).toLocaleString()}</span>`;
+        container.appendChild(row);
     });
 }
 
-function checkRageMode() {
-    const pct = bossHp / maxHp;
-    if (pct <= 0.25) {
-        bg.classList.add('rage');
-    } else {
-        bg.classList.remove('rage');
-    }
-}
-
-// ─────────────────────────────────────────────────────────────
-// Periodic Hydra roar (every 12–22 seconds)
-// ─────────────────────────────────────────────────────────────
-function scheduleRoar() {
-    const delay = 12000 + Math.random() * 10000;
-    setTimeout(() => {
-        if (!isDead) playRoarSound();
-        scheduleRoar();
-    }, delay);
-}
-scheduleRoar();
-
-
-// ─────────────────────────────────────────────────────────────
-// Player name – Login integration
-// ─────────────────────────────────────────────────────────────
-async function resolvePlayerName() {
-    // ① Festival-Name aus der Hub-Page (sessionStorage)
-    const fromHub = sessionStorage.getItem('festivalName');
-    if (fromHub) return fromHub;
-
-    // ② Festival-Profil vom Server
-    try {
-        const res = await fetch('https://api.ddon.org/api/festival/me', {
-            credentials: 'include'
-        });
-        if (res.ok) {
-            const d = await res.json();
-            if (d.exists && d.username) return d.username;
-        }
-    } catch (_) {}
-
-    // ③ Account-Name Fallback
-    try {
-        const res = await fetch('https://api.ddon.org/api/me', {
-            credentials: 'include'
-        });
-        if (res.ok) {
-            const d = await res.json();
-            if (d.name) return d.name;
-        }
-    } catch (_) {}
-
-    // ④ Letzter Fallback
-    let uid = sessionStorage.getItem('_bossUid');
-    if (!uid) {
-        uid = 'Arisen_' + Math.random().toString(36).slice(2, 6).toUpperCase();
-        sessionStorage.setItem('_bossUid', uid);
-    }
-    return uid;
-}
-
-// Init
-(async () => {
-    playerName = await resolvePlayerName();
-    // Eigenen Namen in der Leaderboard-Zeile highlighten
-    document.querySelectorAll('.playerRow').forEach(r => {
-        if (r.textContent.includes(playerName)) r.style.color = '#ffd700';
-    });
-})();
-
+init();
 </script>
 </body>
 </html>
