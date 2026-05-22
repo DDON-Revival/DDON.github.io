@@ -323,10 +323,7 @@ function getCtx(){
     if(actx.state==='suspended')actx.resume();
     return actx;
 }
-function playHit(){try{const c=getCtx();if(!c)return;const t=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type='sawtooth';o.frequency.setValueAtTime(240,t);o.frequency.exponentialRampToValueAtTime(40,t+.18);g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.001,t+.22);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+.22);}catch(e){}}
-function playCrit(){try{const c=getCtx();if(!c)return;const t=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type='square';o.frequency.setValueAtTime(320,t);o.frequency.exponentialRampToValueAtTime(80,t+.25);g.gain.setValueAtTime(.4,t);g.gain.exponentialRampToValueAtTime(.001,t+.28);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+.28);}catch(e){}}
-function playDeath(){try{const c=getCtx();if(!c)return;const t=c.currentTime;[140,95,62].forEach((f,i)=>{const o=c.createOscillator(),g=c.createGain();o.type='sawtooth';o.frequency.setValueAtTime(f*1.8,t+i*.1);o.frequency.exponentialRampToValueAtTime(f*.25,t+2.5);g.gain.setValueAtTime(.18,t+i*.1);g.gain.exponentialRampToValueAtTime(.001,t+2.5);o.connect(g);g.connect(c.destination);o.start(t+i*.1);o.stop(t+2.5);});}catch(e){}}
-function playBossHit(){try{const c=getCtx();if(!c)return;const t=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type='sawtooth';o.frequency.setValueAtTime(60,t);o.frequency.exponentialRampToValueAtTime(20,t+.4);g.gain.setValueAtTime(.5,t);g.gain.exponentialRampToValueAtTime(.001,t+.45);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+.45);}catch(e){}}
+
 
 // ── Init ───────────────────────────────────────────────────
 async function init(){
@@ -577,6 +574,10 @@ function handleMsg(d){
         if(enemy)enemy.hp=d.hp;
         updateEnemyBar();
         renderLB(d.leaderboard);
+        if(d.isPoison){
+            spawnDmgNum(d.damage,false,lastClickX+Math.random()*60-30,lastClickY-30);
+            return;
+        }
         if(!d.isBot&&!d.rapid){
             triggerHitVfx(d.damage,d.isCrit);
         } else if(d.rapid&&!d.isBot){
@@ -638,6 +639,11 @@ function handleMsg(d){
     if(d.type==='partyHealed'){myHp=myMaxHp;updatePlayerHpHud();if(currentLobbyId&&d.party)renderParty(d.party);}
     if(d.type==='priestHeal'){spawnXpLike('+'+d.amount+' HP','#5dbb8a');}
     if(d.type==='phaseChange'){showPhaseBanner(d.phase);}
+    if(d.type==='effectNotify'||d.type==='hit'&&d.effectNotify){
+        const eff=d.effectNotify||{effect:d.effect,desc:d.desc};
+        if(eff) showEffectNotif(eff);
+    }
+    if(d.type==='effectNotify'){ showEffectNotif(d); }
     if(d.type==='coinsEarned'){gainCoins(d.amount);}
     if(d.type==='partyUpdate'&&d.party){renderParty(d.party);}
 }
@@ -820,6 +826,16 @@ function gainCoins(amount){
     const cur=parseInt(el.textContent)||0;
     el.textContent=cur+amount;
     spawnXpLike('+'+amount+' 🪙','#ffd700');
+}
+
+function showEffectNotif(eff){
+    const container=document.getElementById('effectNotifs');
+    if(!container||!eff||!eff.desc) return;
+    const el=document.createElement('div');
+    el.className='eff-pop eff-'+(eff.effect||'generic');
+    el.textContent=eff.desc;
+    container.appendChild(el);
+    el.addEventListener('animationend',()=>el.remove());
 }
 
 init();
@@ -1071,6 +1087,26 @@ function showAchievementPopup(achievementId){
     pop.addEventListener('animationend',()=>pop.remove());
 }
 </script>
+
+
+<style>
+#effectNotifs{position:fixed;bottom:140px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none;z-index:400;}
+.eff-pop{background:rgba(10,11,20,.9);border:1px solid currentColor;padding:8px 20px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;animation:effFade 3s ease forwards;white-space:nowrap;}
+.eff-warcry{color:#c8a75d;border-color:#c8a75d;}
+.eff-barrier{color:#5dbb8a;border-color:#5dbb8a;}
+.eff-frostbolt{color:#5dbbbb;border-color:#5dbbbb;}
+.eff-stagger{color:#bb5d5d;border-color:#bb5d5d;}
+.eff-poison{color:#5dbb5d;border-color:#5dbb5d;}
+.eff-deathmark{color:#ff6a10;border-color:#ff6a10;}
+.eff-manashield{color:#7a5dbb;border-color:#7a5dbb;}
+.eff-resurrection{color:#ffd700;border-color:#ffd700;}
+.eff-holylight{color:#fff;border-color:#ffd700;}
+.eff-avatar{color:#ff4d4d;border-color:#ff4d4d;}
+.eff-arcanemaster{color:#7a5dbb;border-color:#7a5dbb;}
+@keyframes effFade{0%{opacity:0;transform:translateY(10px);}15%{opacity:1;transform:translateY(0);}75%{opacity:1;}100%{opacity:0;}}
+.dmgPop.poison{font-size:20px;color:#5dbb5d;}
+</style>
+<div id="effectNotifs"></div>
 
 </body>
 </html>
