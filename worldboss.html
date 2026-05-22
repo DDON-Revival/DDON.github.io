@@ -509,6 +509,8 @@ function updateHUD(){
 }
 let skillCooldowns=[false,false,false];
 let skillCdEndsAt=[0,0,0];
+const skillIdCooldowns={};
+const skillIdCooldowns={}; // skillId → end timestamp (prevents bypass via duplicate slots)
 
 function setupSkillBtn(){
     updateSkillButtons();
@@ -758,6 +760,10 @@ function useSkillSlot(slot){
     if(gameState!=='combat'||!enemy||enemy.hp<=0||isKO)return;
     if(skillCooldowns[slot])return;
     const slots=profile.activeSkills||[];
+    const checkId=slots[slot];
+    // Prevent cooldown bypass: check skillId cooldown
+    if(checkId&&skillIdCooldowns[checkId]&&Date.now()<skillIdCooldowns[checkId])return;
+    const slots=profile.activeSkills||[];
     const skillId=slots[slot];
     if(!skillId||!skillData)return;
     const sk=skillData.tree.skills.find(s=>s.id===skillId);
@@ -780,6 +786,13 @@ function sendAttack(isSkill){
 function startSkillCdSlot(slot,sec){
     skillCooldowns[slot]=true;
     skillCdEndsAt[slot]=Date.now()+(sec*1000);
+    // Also lock by skillId across all slots
+    const slots=profile.activeSkills||[];
+    const sid=slots[slot];
+    if(sid){ skillIdCooldowns[sid]=Date.now()+(sec*1000);
+        // Lock same skill in other slots too
+        equippedSlots.forEach((s,i)=>{ if(s===sid&&i!==slot) skillCooldowns[i]=true; });
+    }
     const btn=document.getElementById('skillBtn'+slot);
     const ov=document.getElementById('cdOverlay'+slot);
     if(btn) btn.disabled=true;
@@ -1089,6 +1102,8 @@ function openSlotPicker(slotIndex){
         el.className='sk-slot'+(equippedSlots[slotIndex]===sk.id?' filled':'');
         el.textContent=sk.name;
         el.onclick=()=>{
+            // Remove this skill from other slots first (no duplicates)
+            equippedSlots=equippedSlots.map((s,i)=>i!==slotIndex&&s===sk.id?null:s);
             equippedSlots[slotIndex]=sk.id;
             renderSlots();
             document.getElementById('slotPickerOverlay').style.display='none';
@@ -1099,6 +1114,8 @@ function openSlotPicker(slotIndex){
 }
 
 async function saveEquip(){
+    const btn=document.querySelector('[onclick="saveEquip()"]');
+    if(btn){ btn.textContent='SAVING...'; btn.disabled=true; }
     try{
         const r=await fetch('https://api.ddon.org/api/festival/skills/equip',{
             method:'POST',credentials:'include',
@@ -1108,10 +1125,20 @@ async function saveEquip(){
         const d=await r.json();
         if(d.success){
             profile.activeSkills=d.activeSkills;
+            equippedSlots=d.activeSkills.slice(0,3);
+            while(equippedSlots.length<3) equippedSlots.push(null);
             updateSkillBar();
-            closeSkillTree();
+            if(btn){ btn.textContent='✓ SAVED!'; btn.style.background='#5dbb8a'; }
+            setTimeout(()=>{
+                closeSkillTree();
+                if(btn){ btn.textContent='SAVE LOADOUT'; btn.style.background='#c8a75d'; btn.disabled=false; }
+            },800);
+        } else {
+            if(btn){ btn.textContent='ERROR'; btn.disabled=false; }
         }
-    }catch(_){}
+    }catch(_){
+        if(btn){ btn.textContent='ERROR'; btn.disabled=false; }
+    }
 }
 
 function updateSkillBar(){ updateSkillButtons(); }
