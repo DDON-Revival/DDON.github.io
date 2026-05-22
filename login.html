@@ -305,7 +305,7 @@ button:hover{
     <button data-key="autolootTitle" onclick="openAutoLoot()"></button>
 	
 	<button id="festivalBtn"
-        onclick="location.href='https://api.ddon.org/festival.html'"
+        onclick="openFestival()"
         style="display:none;">
     Dogma Festival III
 </button>
@@ -357,6 +357,86 @@ button:hover{
 </div>
 
     </div>
+
+<div class="card" id="festivalCard" style="display:none;">
+
+    <h2 style="color:#c8a75d;">
+        DOGMA FESTIVAL III
+    </h2>
+
+    <div style="
+        border:1px solid #2a2e50;
+        padding:25px;
+        background:linear-gradient(145deg,#121427,#0d1020);
+        margin-top:20px;
+    ">
+
+        <h3 style="color:#c8a75d;">
+            The Rift awakens once more.
+        </h3>
+
+        <p>
+            Welcome to the hidden development version of Dogma Festival III.
+        </p>
+
+        <div style="
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:20px;
+            margin-top:30px;
+        ">
+
+<div class="characterCard">
+
+    <h3>
+        Defense of the Rift
+    </h3>
+
+    <p>
+        4 Player Coop Survival
+    </p>
+
+    <button onclick="createLobby()">
+        Create Lobby
+    </button>
+
+    <button onclick="joinLobbyPrompt()">
+        Join Lobby
+    </button>
+
+</div>
+
+            <div class="characterCard">
+
+                <h3>
+                    Festival Rankings
+                </h3>
+
+                <p>
+                    Seasonal rankings coming soon.
+                </p>
+
+            </div>
+
+            <div class="characterCard">
+
+                <h3>
+                    Community Goal
+                </h3>
+
+                <p>
+                    Global monster kills will unlock rewards.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
 
 <!-- Change Password Modal -->
 <div id="passwordModal" style="display:none;" class="card">
@@ -740,6 +820,906 @@ async function openAutoLoot(){
 
 }
 
+function openFestival(){
+
+    const card = document.getElementById("festivalCard");
+
+    if(card.style.display === "none"){
+
+        card.style.display = "block";
+
+    }else{
+
+        card.style.display = "none";
+    }
+}
+
+function openFestivalPrototype(){
+
+    document.getElementById("riftGameOverlay").style.display = "block";
+
+    startRiftPrototype();
+	
+	bgMusic.play();
+}
+
+function closeRiftPrototype(){
+
+bgMusic.pause();
+bgMusic.currentTime = 0;
+
+    document.getElementById("riftGameOverlay").style.display = "none";
+}
+
+function startRiftPrototype(){
+
+    const canvas = document.getElementById("riftCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const keys = {};
+	const TILE_W = 96;
+const TILE_H = 48;
+
+const MAP_SIZE = 12;
+
+const fighterImg = new Image();
+fighterImg.src = "assets/player_fighter.png";
+
+const hunterImg = new Image();
+hunterImg.src = "assets/player_hunter.png";
+
+const priestImg = new Image();
+priestImg.src = "assets/player_priest.png";
+
+const goblinImg = new Image();
+goblinImg.src = "assets/goblin.png";
+
+const bossImg = new Image();
+bossImg.src = "assets/cyclops.png";
+
+const riftImg = new Image();
+riftImg.src = "assets/riftstone.png";
+
+const slashSound = new Audio(
+    "assets/sounds/slash.wav"
+);
+
+const hitSound = new Audio(
+    "assets/sounds/hit.wav"
+);
+	
+function isoToScreen(x,y){
+
+    return {
+        x: (x - y) * (TILE_W/2) + 640,
+        y: (x + y) * (TILE_H/2) + 160
+    };
+}
+
+let player = {
+    x: 0,
+    y: 0,
+    size: 32,
+    speed: 0.12,
+    hp: 100,
+    class: selectedClass
+};
+
+    let enemies = [];
+	let damageTexts = [];
+	let particles = [];
+
+    let kills = 0;
+	let wave = 1;
+	let enemiesToSpawn = 5;
+	let spawnedEnemies = 0;
+
+    let attackCooldown = false;
+	let attackFlash = 0;
+	let walkAnim = 0;
+	let screenShake = 0;
+	let fighterFrame = 0;
+let fighterAnimTick = 0;
+
+    // controls
+window.addEventListener("keydown",(e)=>{
+
+    if(
+        document.getElementById("riftGameOverlay").style.display !== "block"
+    ){
+        return;
+    }
+
+    e.preventDefault();
+
+    keys[e.key.toLowerCase()] = true;
+
+    if(e.key === "1"){
+        player.class = "fighter";
+    }
+
+    if(e.key === "2"){
+        player.class = "hunter";
+    }
+
+    if(e.key === "3"){
+        player.class = "priest";
+    }
+
+    if(e.code === "Space" && !attackCooldown){
+
+        attackCooldown = true;
+
+        attack();
+
+        setTimeout(()=>{
+            attackCooldown = false;
+        },250);
+    }
+});
+
+window.addEventListener("keyup",(e)=>{
+
+    if(
+        document.getElementById("riftGameOverlay").style.display !== "block"
+    ){
+        return;
+    }
+
+    keys[e.key.toLowerCase()] = false;
+});
+
+    // spawn goblins
+setInterval(()=>{
+
+    if(document.getElementById("riftGameOverlay").style.display === "none")
+        return;
+
+    // wave complete
+    if(spawnedEnemies >= enemiesToSpawn && enemies.length === 0){
+
+        wave++;
+
+        spawnedEnemies = 0;
+
+        enemiesToSpawn += 3;
+    }
+
+    // stop spawning if wave limit reached
+    if(spawnedEnemies >= enemiesToSpawn)
+        return;
+
+    spawnedEnemies++;
+
+    const side = Math.floor(Math.random()*4);
+
+    let x = 0;
+    let y = 0;
+
+if(side === 0){
+    x = -12;
+    y = Math.random()*12-6;
+}
+
+if(side === 1){
+    x = 12;
+    y = Math.random()*12-6;
+}
+
+if(side === 2){
+    x = Math.random()*12-6;
+    y = -12;
+}
+
+if(side === 3){
+    x = Math.random()*12-6;
+    y = 12;
+}
+
+const isBoss = wave % 5 === 0;
+
+enemies.push({
+    x,
+    y,
+    size: isBoss ? 180 : 84,
+speed: isBoss
+    ? 0.05
+    : 0.035 + (wave*0.003),
+    hp: isBoss
+        ? 25 + (wave*2)
+        : 2 + Math.floor(wave/2),
+    boss: isBoss
+});
+
+},1000);
+
+    function attack(){
+slashSound.pause();
+slashSound.currentTime = 0;
+
+slashSound.play().catch(()=>{});
+	attackFlash = 8;
+	
+	let attackRange = 1.8;
+
+if(player.class === "hunter"){
+    attackRange = 3.5;
+}
+
+if(player.class === "priest"){
+
+    player.hp += 5;
+
+    if(player.hp > 100)
+        player.hp = 100;
+}
+
+        enemies = enemies.filter(enemy=>{
+
+            const dx = enemy.x-player.x;
+            const dy = enemy.y-player.y;
+
+            const dist = Math.sqrt(dx*dx+dy*dy);
+			
+if(dist <= 0.001){
+    return true;
+}
+
+            if(dist < attackRange){
+			
+			const crit =
+    Math.random() < 0.18;
+
+                enemy.hp -= crit ? 2 : 1;
+hitSound.pause();
+hitSound.currentTime = 0;
+
+hitSound.play().catch(()=>{});
+				screenShake = crit
+    ? 14
+    : (enemy.boss ? 14 : 5);
+				
+for(let i = 0; i < 8; i++){
+
+    particles.push({
+
+        x: enemy.x,
+        y: enemy.y,
+
+        vx: Math.random()*0.6-0.3,
+        vy: Math.random()*0.6-0.3,
+
+        life: 25,
+
+        size: 2 + Math.random()*4
+    });
+}
+
+damageTexts.push({
+
+    x: enemy.x,
+    y: enemy.y,
+
+    text: crit ? "CRIT!" : "1",
+
+    crit: crit,
+
+    life: 40
+});
+
+                if(enemy.hp <= 0){
+
+                    kills++;
+
+                    return false;
+                }
+            }
+
+            return true;
+        });
+    }
+
+    function update(){
+
+        if(document.getElementById("riftGameOverlay").style.display === "none"){
+            return;
+        }
+
+let moving = false;
+
+        // movement
+if(
+    keys["w"] ||
+    keys["a"] ||
+    keys["s"] ||
+    keys["d"]
+){
+    moving = true;
+}		
+		
+if(keys["w"]){
+    player.x -= player.speed;
+    player.y -= player.speed;
+}
+
+if(keys["s"]){
+    player.x += player.speed;
+    player.y += player.speed;
+}
+
+if(keys["a"]){
+    player.x -= player.speed;
+    player.y += player.speed;
+}
+
+if(keys["d"]){
+    player.x += player.speed;
+    player.y -= player.speed;
+		
+}
+
+ws.send(JSON.stringify({
+
+    type: "move",
+
+    x: player.x,
+
+    y: player.y
+}));
+
+if(moving){
+
+    walkAnim += 0.18;
+
+}else{
+
+    walkAnim *= 0.8;
+}
+
+fighterAnimTick++;
+
+if(fighterAnimTick > 8){
+
+    fighterAnimTick = 0;
+
+    fighterFrame++;
+
+    // WALK
+    if(moving){
+
+if(fighterFrame > 5)
+    fighterFrame = 0;
+    }
+
+    // IDLE
+    else{
+
+        if(fighterFrame > 1000)
+            fighterFrame = 0;
+    }
+}
+
+        // clear
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+		
+		ctx.save();
+
+if(screenShake > 0){
+
+    ctx.translate(
+        Math.random()*screenShake-screenShake/2,
+        Math.random()*screenShake-screenShake/2
+    );
+
+    screenShake *= 0.85;
+}
+
+        // background
+        ctx.fillStyle = "#0b0d18";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+		for(let y = -MAP_SIZE; y <= MAP_SIZE; y++){
+
+    for(let x = -MAP_SIZE; x <= MAP_SIZE; x++){
+
+        const pos = isoToScreen(x,y);
+
+        ctx.beginPath();
+
+        ctx.moveTo(pos.x, pos.y);
+
+        ctx.lineTo(pos.x + TILE_W/2, pos.y + TILE_H/2);
+
+        ctx.lineTo(pos.x, pos.y + TILE_H);
+
+        ctx.lineTo(pos.x - TILE_W/2, pos.y + TILE_H/2);
+
+        ctx.closePath();
+
+        // center platform
+        const dist = Math.sqrt(x*x+y*y);
+
+        if(dist < 3){
+
+            ctx.fillStyle = "#3d355f";
+
+        }else{
+
+            ctx.fillStyle =
+                (x+y)%2 === 0
+                ? "#1c2333"
+                : "#18202d";
+        }
+
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(255,255,255,0.03)";
+        ctx.stroke();
+    }
+}
+
+const riftPos = isoToScreen(0,0);
+
+// rift aura
+ctx.beginPath();
+
+ctx.ellipse(
+    riftPos.x,
+    riftPos.y+10,
+    140,
+    70,
+    0,
+    0,
+    Math.PI*2
+);
+
+ctx.fillStyle = "rgba(127,92,255,0.25)";
+ctx.fill();
+
+        // riftstone
+
+ctx.beginPath();
+
+ctx.ellipse(
+    riftPos.x,
+    riftPos.y+12,
+    90,
+    40,
+    0,
+    0,
+    Math.PI*2
+);
+
+ctx.fillStyle = "rgba(0,0,0,0.4)";
+ctx.fill();
+
+ctx.drawImage(
+    riftImg,
+riftPos.x-110,
+riftPos.y-190,
+220,
+220
+);
+
+        // enemies
+        enemies.forEach(enemy=>{
+		
+enemy.animOffset =
+    Math.sin(Date.now()*0.005 + enemy.x)*4
+    +
+    Math.sin(Date.now()*0.015 + enemy.y)*3;
+
+const dx = 0-enemy.x;
+const dy = 0-enemy.y;
+
+const dist = Math.sqrt(dx*dx+dy*dy);
+
+if(dist <= 0.001){
+    return;
+}
+
+enemy.x += (dx/dist)*enemy.speed;
+enemy.y += (dy/dist)*enemy.speed;
+
+            // draw goblin
+const enemyPos = isoToScreen(
+    enemy.x,
+    enemy.y
+);			
+const currentEnemySprite = enemy.boss
+    ? bossImg
+    : goblinImg;
+
+const enemySize = enemy.boss ? 180 : 84;
+
+let enemyAnimSize =
+    enemySize +
+    Math.sin(Date.now()*0.01 + enemy.x)*4;
+
+ctx.beginPath();
+
+ctx.ellipse(
+    enemyPos.x,
+    enemyPos.y-6,
+    enemy.boss ? 40 : 18,
+    enemy.boss ? 18 : 8,
+    0,
+    0,
+    Math.PI*2
+);
+
+ctx.fillStyle = "rgba(0,0,0,0.35)";
+ctx.fill();
+
+ctx.drawImage(
+    currentEnemySprite,
+    enemyPos.x-(enemySize/2),
+    enemyPos.y-enemySize+enemy.animOffset,
+enemyAnimSize,
+enemyAnimSize
+);
+
+if(enemy.boss){
+
+    ctx.strokeStyle = "#ff0000";
+
+    ctx.lineWidth = 5;
+
+    ctx.stroke();
+}
+            // hit rift
+            if(dist < 1.2){
+
+                player.hp -= 0.05;
+            }
+        });
+
+        // player
+damageTexts.forEach(text=>{
+
+    text.y -= 1;
+    text.life--;
+
+    ctx.fillStyle =
+    text.crit
+    ? "#ff5252"
+    : "#ffffff";
+
+    ctx.font =
+    text.crit
+    ? "bold 34px Cinzel"
+    : "22px Cinzel";
+
+    const dmgPos = isoToScreen(
+        text.x,
+        text.y
+    );
+
+    ctx.fillText(
+        text.text,
+        dmgPos.x,
+        dmgPos.y-30
+    );
+
+});
+
+damageTexts = damageTexts.filter(
+    t => t.life > 0
+);
+
+particles.forEach(p=>{
+
+    p.x += p.vx;
+    p.y += p.vy;
+
+    p.life--;
+
+    const pPos = isoToScreen(
+        p.x,
+        p.y
+    );
+
+    ctx.beginPath();
+
+    ctx.arc(
+        pPos.x,
+        pPos.y,
+        p.size,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fillStyle =
+        "rgba(255,220,120,"+(p.life/25)+")";
+
+    ctx.fill();
+});
+
+particles = particles.filter(
+    p => p.life > 0
+);
+		if(attackFlash > 0){
+
+    attackFlash--;
+
+    ctx.beginPath();
+
+const attackPos = isoToScreen(
+    player.x,
+    player.y
+);
+
+const attackPulse =
+    80 + Math.sin(Date.now()*0.03)*8;
+
+ctx.ellipse(
+    attackPos.x,
+    attackPos.y,
+attackPulse,
+attackPulse/2,
+    0,
+    0,
+    Math.PI*2
+);
+
+    ctx.strokeStyle = "#ffffff";
+
+    ctx.lineWidth = 5;
+
+    ctx.stroke();
+}
+        if(player.class === "fighter"){
+    ctx.fillStyle = "#c8a75d";
+}
+
+if(player.class === "hunter"){
+    ctx.fillStyle = "#4fc3f7";
+}
+
+if(player.class === "priest"){
+    ctx.fillStyle = "#81c784";
+}
+
+const playerFloat =
+    Math.sin(Date.now()*0.003)*1
+    +
+    Math.sin(walkAnim)*2;
+
+const playerPos = isoToScreen(
+    player.x,
+    player.y
+);
+
+let playerAnimWidth = 96;
+let playerAnimHeight = 96;
+
+if(moving){
+
+    playerAnimWidth =
+        96 + Math.sin(walkAnim)*2;
+
+    playerAnimHeight =
+        96 - Math.sin(walkAnim)*2;
+}
+
+ctx.beginPath();
+
+ctx.ellipse(
+    playerPos.x,
+    playerPos.y-8,
+    22,
+    10,
+    0,
+    0,
+    Math.PI*2
+);
+
+ctx.fillStyle = "rgba(0,0,0,0.35)";
+ctx.fill();
+
+let bob = 0;
+
+if(moving){
+    bob = Math.sin(Date.now()*0.02)*4;
+}
+
+let localSprite = fighterImg;
+
+if(player.class === "hunter"){
+    localSprite = hunterImg;
+}
+
+if(player.class === "priest"){
+    localSprite = priestImg;
+}
+
+if(attackFlash > 0){
+
+    ctx.save();
+
+    ctx.translate(
+        playerPos.x+16,
+        playerPos.y
+    );
+
+    ctx.rotate(-0.15);
+
+    ctx.drawImage(
+    localSprite,
+        playerPos.x-64,
+        playerPos.y-112+bob,
+        128,
+        128
+    );
+
+    ctx.restore();
+
+}else{
+
+    ctx.drawImage(
+    localSprite,
+        playerPos.x-64,
+        playerPos.y-128+bob,
+        128,
+        128
+    );
+}
+
+multiplayerPlayers.forEach(mp=>{
+
+    // skip self
+    if(
+        Math.abs(mp.x-player.x) < 0.01 &&
+        Math.abs(mp.y-player.y) < 0.01
+    ){
+        return;
+    }
+
+    const mpPos =
+        isoToScreen(mp.x, mp.y);
+
+    let sprite = fighterImg;
+
+    if(mp.class === "hunter"){
+        sprite = hunterImg;
+    }
+
+    if(mp.class === "priest"){
+        sprite = priestImg;
+    }
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        mpPos.x,
+        mpPos.y-8,
+        22,
+        10,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fillStyle =
+        "rgba(0,0,0,0.35)";
+
+    ctx.fill();
+
+    ctx.drawImage(
+        sprite,
+        mpPos.x-64,
+        mpPos.y-112,
+        128,
+        128
+    );
+
+    ctx.fillStyle = "white";
+
+    ctx.font = "18px Cinzel";
+
+    ctx.fillText(
+        mp.name,
+        mpPos.x-20,
+        mpPos.y-30
+    );
+});
+
+        // UI
+        ctx.fillStyle = "white";
+
+        ctx.font = "32px Cinzel";
+
+        ctx.fillText(
+            "Defense of the Rift",
+            30,
+            50
+        );
+
+        ctx.font = "20px Cinzel";
+
+        ctx.fillText(
+            "WASD = Move",
+            30,
+            90
+        );
+
+        ctx.fillText(
+            "SPACE = Attack",
+            30,
+            120
+        );
+		
+ctx.fillText(
+    "1 = Fighter",
+    30,
+    150
+);
+
+ctx.fillText(
+    "2 = Hunter",
+    30,
+    180
+);
+
+ctx.fillText(
+    "3 = Priest",
+    30,
+    210
+);		
+		
+		if(wave % 5 === 0){
+
+    ctx.fillStyle = "#ff4444";
+
+    ctx.font = "28px Cinzel";
+
+    ctx.fillText(
+        "BOSS WAVE",
+        30,
+        130
+    );
+
+    ctx.fillStyle = "white";
+}
+		
+		ctx.fillText(
+    "Wave: "+wave,
+    30,
+    260
+);
+
+        ctx.fillText(
+            "Kills: "+kills,
+            30,
+            300
+        );
+
+        ctx.fillText(
+            "Rift HP: "+Math.floor(player.hp),
+            30,
+            340
+        );
+
+        // game over
+        if(player.hp <= 0){
+
+            ctx.fillStyle = "red";
+
+            ctx.font = "80px Cinzel";
+
+            ctx.fillText(
+                "RIFT DESTROYED",
+                350,
+                360
+            );
+
+            return;
+        }
+ctx.restore();
+        requestAnimationFrame(update);
+    }
+
+    update();
+}
 async function loadItems(){
 
     const res = await fetch(
@@ -919,9 +1899,443 @@ async function setEmail(){
     loadEmail();
 }
 
+let currentLobby = null;
+
+let selectedClass = "fighter";
+
+const ws = new WebSocket("wss://api.ddon.org/ws");
+
+ws.onopen = () => {
+    console.log("WS OPEN");
+};
+
+ws.onerror = (e) => {
+    console.log("WS ERROR", e);
+};
+
+ws.onclose = (e) => {
+    console.log("WS CLOSE", e);
+};
+
+let multiplayerPlayers = [];
+
+ws.onmessage = (event)=>{
+
+    const data =
+        JSON.parse(event.data);
+
+    // game started
+    if(data.type === "gameStarted"){
+
+        closeLobby();
+
+        openFestivalPrototype();
+    }
+
+    // room browser
+    if(data.type === "roomList"){
+
+        openRoomBrowser(data.rooms);
+    }
+
+    // room created
+    if(data.type === "roomCreated"){
+
+        currentLobby = {
+
+            code: data.code
+        };
+
+        openLobbyScreen();
+    }
+
+    // room update
+    if(data.type === "roomUpdate"){
+
+        multiplayerPlayers =
+            data.players;
+
+        if(currentLobby){
+
+            currentLobby.players =
+                multiplayerPlayers;
+
+            renderLobbyPlayers();
+        }
+    }
+
+    // errors
+    if(data.type === "error"){
+
+        alert(data.message);
+    }
+};
+
+function generateLobbyCode(){
+
+    const chars =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ123456789";
+
+    let code = "";
+
+    for(let i = 0; i < 4; i++){
+
+        code +=
+            chars[
+                Math.floor(Math.random()*chars.length)
+            ];
+    }
+
+    return code;
+}
+
+function createLobby(){
+
+    ws.send(JSON.stringify({
+
+        type: "createRoom",
+
+        name: prompt("Enter Name") || "Player"
+
+    }));
+}
+
+function joinLobbyPrompt(){
+
+    ws.send(JSON.stringify({
+
+        type: "getRooms"
+    }));
+}
+
+function openLobbyScreen(){
+
+    const html = `
+    
+    <div id="lobbyModal" style="
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,0.9);
+        z-index:999999;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    ">
+
+        <div style="
+            width:700px;
+            background:#14182b;
+            border:1px solid #c8a75d;
+            padding:30px;
+        ">
+
+            <h1 style="color:#c8a75d;">
+                Lobby ${currentLobby.code}
+            </h1>
+
+            <div id="lobbyPlayers"></div>
+
+            <div style="
+                display:flex;
+                gap:10px;
+                margin-top:20px;
+            ">
+
+                <button onclick="selectClass('fighter')">
+                    Fighter
+                </button>
+
+                <button onclick="selectClass('hunter')">
+                    Hunter
+                </button>
+
+                <button onclick="selectClass('priest')">
+                    Priest
+                </button>
+
+            </div>
+
+            <div style="
+                margin-top:30px;
+                display:flex;
+                gap:15px;
+            ">
+
+                <button onclick="toggleReady()">
+                    READY
+                </button>
+
+                <button onclick="startLobbyGame()">
+                    START GAME
+                </button>
+
+                <button onclick="closeLobby()">
+                    CLOSE
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+    `;
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        html
+    );
+
+    renderLobbyPlayers();
+}
+
+function renderLobbyPlayers(){
+
+    const container =
+        document.getElementById("lobbyPlayers");
+
+    container.innerHTML = "";
+
+    currentLobby.players.forEach(p=>{
+
+        container.innerHTML += `
+        
+        <div style="
+            background:#1c2338;
+            border:1px solid #2e3550;
+            padding:15px;
+            margin-top:10px;
+        ">
+
+            <b>${p.name}</b>
+            -
+            ${p.class}
+            -
+            ${p.ready ? "READY" : "NOT READY"}
+
+        </div>
+        `;
+    });
+}
+
+function selectClass(cls){
+
+    selectedClass = cls;
+
+    ws.send(JSON.stringify({
+
+        type: "class",
+
+        class: cls
+    }));
+}
+
+let localReady = false;
+
+function toggleReady(){
+
+    localReady = !localReady;
+
+    ws.send(JSON.stringify({
+
+        type: "ready",
+
+        ready: localReady
+    }));
+}
+
+function startLobbyGame(){
+
+    ws.send(JSON.stringify({
+
+        type: "startGame"
+    }));
+}
+
+function closeLobby(){
+
+    const modal =
+        document.getElementById("lobbyModal");
+
+    if(modal)
+        modal.remove();
+}
+
+function openRoomBrowser(rooms){
+
+    const old =
+        document.getElementById("roomBrowser");
+
+    if(old) old.remove();
+
+    let html = `
+    
+    <div id="roomBrowser" style="
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,0.9);
+        z-index:999999;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    ">
+
+        <div style="
+            width:700px;
+            background:#14182b;
+            border:1px solid #c8a75d;
+            padding:30px;
+            max-height:700px;
+            overflow:auto;
+        ">
+
+            <h1 style="color:#c8a75d;">
+                Join Lobby
+            </h1>
+    `;
+
+    if(!rooms.length){
+
+        html += `
+        <p>No active lobbies found.</p>
+        `;
+    }
+
+    rooms.forEach(room=>{
+
+        html += `
+        
+        <div style="
+            background:#1c2338;
+            border:1px solid #2e3550;
+            padding:20px;
+            margin-top:15px;
+        ">
+
+            <h3>Lobby ${room.code}</h3>
+
+            <p>
+                Players: ${room.players}/4
+            </p>
+
+            <button onclick="
+                joinRoomDirect('${room.code}')
+            ">
+                Join
+            </button>
+
+        </div>
+        `;
+    });
+
+    html += `
+    
+        <button onclick="
+            document.getElementById('roomBrowser').remove()
+        " style="
+            margin-top:20px;
+        ">
+            Close
+        </button>
+
+        </div>
+    </div>
+    `;
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        html
+    );
+}
+
+function joinRoomDirect(code){
+
+    document
+        .getElementById("roomBrowser")
+        ?.remove();
+
+    ws.send(JSON.stringify({
+
+        type: "joinRoom",
+
+        code,
+
+        name: prompt("Enter Name") || "Player"
+    }));
+}
+
+window.onload = function(){
+
+    initLanguageSelector();
+    applyTranslations();
+
+    fetch("https://api.ddon.org/api/characters",{
+        credentials: "include"
+    }).then(res => {
+        if(res.ok){
+
+            document.getElementById("dashboardContainer").style.display = "flex";
+
+            loadCharacters();
+            loadEmail();
+
+            fetch("https://api.ddon.org/api/me",{
+                credentials:"include"
+            })
+            .then(res=>res.json())
+            .then(data=>{
+
+                if(data.flags?.dogmaFestival){
+
+                    document.getElementById("festivalBtn").style.display = "block";
+                }
+            });
+
+        } else {
+
+            document.getElementById("loginSection").style.display = "block";
+        }
+    });
+};
+
 let allItems = [];
 let blockedItems = [];
 </script>
+
+<script src="js/navbar.js"></script>
+
+<div id="riftGameOverlay" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.95);
+    z-index:99999;
+">
+
+    <button onclick="closeRiftPrototype()" style="
+        position:absolute;
+        top:20px;
+        right:20px;
+        z-index:10;
+        background:#c8a75d;
+        color:black;
+        border:none;
+        padding:10px 16px;
+        font-weight:bold;
+        cursor:pointer;
+    ">
+        Close
+    </button>
+
+    <canvas id="riftCanvas"
+            width="1280"
+            height="720"
+            style="
+                width:100%;
+                height:100%;
+                display:block;
+            ">
+    </canvas>
+
 </div>
 </body>
 </html>
