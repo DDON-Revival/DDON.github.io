@@ -1098,9 +1098,17 @@ function openSlotPicker(slotIndex){
     list.appendChild(emptyEl);
 
     activeSkills.forEach(sk=>{
+        // Grey out skills already used in OTHER slots
+        const usedInOtherSlot = equippedSlots.some((s,i)=>s===sk.id&&i!==slotIndex);
         const el=document.createElement('div');
-        el.className='sk-slot'+(equippedSlots[slotIndex]===sk.id?' filled':'');
-        el.textContent=sk.name;
+        el.className='sk-slot'+(equippedSlots[slotIndex]===sk.id?' filled':usedInOtherSlot?' locked':'');
+        el.textContent=sk.name+(usedInOtherSlot?' (in use)':'');
+        if(usedInOtherSlot){
+            el.style.opacity='0.35';
+            el.style.cursor='not-allowed';
+            list.appendChild(el);
+            return; // skip onclick
+        }
         el.onclick=()=>{
             // Remove this skill from other slots first (no duplicates)
             equippedSlots=equippedSlots.map((s,i)=>i!==slotIndex&&s===sk.id?null:s);
