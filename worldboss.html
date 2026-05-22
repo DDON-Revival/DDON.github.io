@@ -102,7 +102,7 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
 .enemy-name{font-size:22px;color:#fff;letter-spacing:3px;margin-bottom:18px;}
 #enemyVisual{width:400px;height:280px;cursor:crosshair;position:relative;display:flex;align-items:center;justify-content:center;}
 #enemyVisual:hover{filter:brightness(1.1);}
-#enemyImg{width:100%;height:100%;object-fit:contain;animation:float 3s infinite ease-in-out;pointer-events:none;}
+#enemyImg{width:100%;height:100%;object-fit:contain;animation:float 3s infinite ease-in-out;pointer-events:none;mix-blend-mode:screen;}
 #hitOverlay{position:absolute;inset:0;pointer-events:none;border-radius:6px;}
 #hitOverlay.flash{animation:redFlash .3s ease forwards;}
 .hp-wrap{width:480px;margin-top:18px;}
@@ -222,7 +222,7 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
         <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
     </div>
     <button class="hud-party-btn" id="leavePartyBtn" style="display:none;" onclick="leaveParty()">LEAVE PARTY</button>
-    <div class="hud-right">ONLINE: <span id="onlineCount">0</span></div>
+    <div class="hud-right">🪙 <span id="coinCount">0</span> &nbsp;|&nbsp; ONLINE: <span id="onlineCount">0</span></div>
 </div>
 
 <!-- Party panel (left) -->
@@ -492,6 +492,7 @@ function handleMsg(d){
     if(d.type==='partyHealed'){myHp=myMaxHp;updatePlayerHpHud();if(currentLobbyId&&d.party)renderParty(d.party);}
     if(d.type==='priestHeal'){spawnXpLike('+'+d.amount+' HP','#5dbb8a');}
     if(d.type==='phaseChange'){showPhaseBanner(d.phase);}
+    if(d.type==='coinsEarned'){gainCoins(d.amount);}
     if(d.type==='partyUpdate'&&d.party){renderParty(d.party);}
 }
 
@@ -621,7 +622,22 @@ function renderLB(players){
     });
 }
 
+// ── Coins ──────────────────────────────────────────────────
+async function loadCoins(){
+    try{
+        const r=await fetch('https://api.ddon.org/api/festival/coins',{credentials:'include'});
+        if(r.ok){const d=await r.json();document.getElementById('coinCount').textContent=d.coins||0;}
+    }catch(_){}
+}
+function gainCoins(amount){
+    const el=document.getElementById('coinCount');
+    const cur=parseInt(el.textContent)||0;
+    el.textContent=cur+amount;
+    spawnXpLike('+'+amount+' 🪙','#ffd700');
+}
+
 init();
+loadCoins();
 </script>
 </body>
 </html>

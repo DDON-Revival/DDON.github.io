@@ -231,6 +231,7 @@ body{
     <div class="header-title">DOGMA FESTIVAL</div>
     <div class="header-right">
         <div id="playerBadge">···</div>
+        <div id="coinBadge" style="background:#1a1d35;border:1px solid #c8a75d;padding:7px 18px;color:#ffd700;font-size:13px;letter-spacing:2px;display:none;">🪙 <span id="festivalCoins">0</span></div>
         <button class="back-btn" onclick="location.href='login.html'">← PANEL</button>
     </div>
 </div>
@@ -303,21 +304,21 @@ body{
             </div>
         </div>
 
-        <!-- Placeholder 4 -->
-        <div class="game-card card-trial locked">
-            <div class="coming-soon-badge">COMING SOON</div>
-            <div class="card-banner">
-                <div class="card-banner-icon">🏆</div>
+        <!-- Anniversary Store -->
+        <div class="game-card card-trial" onclick="openStore()" style="cursor:pointer;">
+            <div class="card-banner" style="background:linear-gradient(135deg,#1a120a,#2a1a08,#0a0c16);">
+                <div class="card-banner-icon">🪙</div>
             </div>
             <div class="card-body">
-                <div class="card-tag tag-soon">◌ IN DEVELOPMENT</div>
-                <div class="card-name">Arisen's Trial</div>
+                <div class="card-tag tag-live">● OPEN</div>
+                <div class="card-name">Anniversary Store</div>
                 <div class="card-desc">
-                    Solo challenge runs with leaderboard rankings.
-                    Prove yourself in the depths of the Rift.
+                    Spend your Anniversary Coins on crafting materials
+                    earned from Festival battles.
                 </div>
                 <div class="card-footer">
-                    <button class="card-play-btn" disabled style="opacity:.3;cursor:default;">SOON</button>
+                    <button class="card-play-btn">SHOP</button>
+                    <span class="card-players">🪙 <span id="storeCoins">0</span> coins</span>
                 </div>
             </div>
         </div>
@@ -485,5 +486,121 @@ function playGame(url){
 // ── Start ────────────────────────────────────────────────────
 init();
 </script>
+
+<!-- Anniversary Store Overlay -->
+<div id="storeOverlay" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 20px;overflow-y:auto;">
+    <div style="width:100%;max-width:900px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;">
+            <div>
+                <div style="font-family:'Cinzel Decorative',serif;font-size:24px;color:#c8a75d;letter-spacing:3px;">Anniversary Store</div>
+                <div style="font-size:11px;color:#555;letter-spacing:3px;margin-top:4px;">SPEND YOUR COINS ON CRAFTING MATERIALS</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:20px;">
+                <div style="font-size:18px;color:#ffd700;letter-spacing:2px;">🪙 <span id="storeCoinsDisplay">0</span></div>
+                <button onclick="closeStore()" style="background:transparent;border:1px solid #444;color:#888;padding:8px 20px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;cursor:pointer;">✕ CLOSE</button>
+            </div>
+        </div>
+        <input id="storeSearch" placeholder="Search items..." oninput="filterStore()" style="width:100%;padding:12px 16px;background:#0f1020;border:1px solid #2a2e50;color:#fff;font-family:'Cinzel',serif;font-size:13px;margin-bottom:20px;outline:none;letter-spacing:1px;">
+        <div id="storeGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;"></div>
+    </div>
+</div>
+
+<style>
+.store-item{background:linear-gradient(145deg,#181a30,#101222);border:1px solid #2a2e50;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;transition:.2s;}
+.store-item:hover{border-color:#c8a75d;}
+.si-name{font-size:13px;color:#fff;letter-spacing:1px;flex:1;}
+.si-right{display:flex;align-items:center;gap:10px;}
+.si-price{font-size:12px;color:#ffd700;letter-spacing:1px;white-space:nowrap;}
+.si-qty{width:44px;padding:4px 6px;background:#0f1020;border:1px solid #2a2e50;color:#fff;font-family:'Cinzel',serif;font-size:12px;text-align:center;}
+.si-buy{background:#c8a75d;border:none;color:#0a0b14;padding:6px 12px;font-family:'Cinzel',serif;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:.2s;white-space:nowrap;}
+.si-buy:hover{box-shadow:0 0 10px rgba(200,167,93,.4);}
+.si-buy:disabled{opacity:.4;cursor:default;}
+.si-msg{font-size:10px;color:#5dbb8a;letter-spacing:1px;white-space:nowrap;}
+</style>
+
+<script>
+let shopItems = [];
+let myCoins   = 0;
+
+async function loadCoins(){
+    try{
+        const r = await fetch('https://api.ddon.org/api/festival/coins',{credentials:'include'});
+        if(r.ok){
+            const d = await r.json();
+            myCoins = d.coins || 0;
+            document.getElementById('festivalCoins').textContent = myCoins;
+            document.getElementById('storeCoins').textContent    = myCoins;
+            document.getElementById('storeCoinsDisplay').textContent = myCoins;
+            document.getElementById('coinBadge').style.display = 'block';
+        }
+    }catch(_){}
+}
+
+async function loadShop(){
+    if(shopItems.length) return;
+    try{
+        const r = await fetch('https://api.ddon.org/api/festival/shop');
+        if(r.ok) shopItems = await r.json();
+    }catch(_){}
+}
+
+function openStore(){
+    document.getElementById('storeOverlay').style.display='flex';
+    loadShop().then(()=>renderStore());
+    loadCoins();
+}
+function closeStore(){ document.getElementById('storeOverlay').style.display='none'; }
+
+function renderStore(filter=''){
+    const grid = document.getElementById('storeGrid');
+    grid.innerHTML='';
+    const q = filter.toLowerCase();
+    shopItems.filter(i=>!q||i.nameEn.toLowerCase().includes(q)).forEach(item=>{
+        const div=document.createElement('div');div.className='store-item';
+        div.innerHTML=`
+            <span class="si-name">${item.nameEn}</span>
+            <div class="si-right">
+                <input class="si-qty" type="number" value="1" min="1" max="99" id="qty_${item.itemId}">
+                <span class="si-price">🪙 ${item.price}</span>
+                <button class="si-buy" onclick="buyItem(${item.itemId},${item.price})">BUY</button>
+                <span class="si-msg" id="msg_${item.itemId}"></span>
+            </div>`;
+        grid.appendChild(div);
+    });
+}
+function filterStore(){ renderStore(document.getElementById('storeSearch').value); }
+
+async function buyItem(itemId, price){
+    const qtyEl = document.getElementById('qty_'+itemId);
+    const qty   = parseInt(qtyEl?.value)||1;
+    const cost  = price*qty;
+    const btn   = qtyEl?.parentElement?.querySelector('.si-buy');
+    const msg   = document.getElementById('msg_'+itemId);
+    if(cost>myCoins){if(msg){msg.textContent='Not enough coins';msg.style.color='#ff4d4d';}return;}
+    if(btn) btn.disabled=true;
+    try{
+        const r = await fetch('https://api.ddon.org/api/festival/shop/buy',{
+            method:'POST',credentials:'include',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({itemId,qty})
+        });
+        const d = await r.json();
+        if(d.success){
+            myCoins=d.coinsLeft;
+            document.getElementById('festivalCoins').textContent=myCoins;
+            document.getElementById('storeCoins').textContent=myCoins;
+            document.getElementById('storeCoinsDisplay').textContent=myCoins;
+            if(msg){msg.textContent='✓ Purchased';msg.style.color='#5dbb8a';setTimeout(()=>{msg.textContent='';},2500);}
+        } else {
+            if(msg){msg.textContent=d.error==='NOT_ENOUGH_COINS'?'Not enough coins':'Error';msg.style.color='#ff4d4d';}
+        }
+    }catch(_){if(msg){msg.textContent='Error';msg.style.color='#ff4d4d';}}
+    if(btn) btn.disabled=false;
+}
+
+// Load coins on page ready
+window.addEventListener('load',()=>{ if(document.getElementById('coinBadge')) loadCoins(); });
+</script>
+
 </body>
 </html>
