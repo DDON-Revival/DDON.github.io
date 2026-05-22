@@ -442,7 +442,7 @@ function setEnemy(e){
     badge.className='enemy-type-badge type-'+e.type;
     document.getElementById('enemyNameEl').textContent=e.name;
 
-    // Visual
+    // Visual – alle Enemies haben jetzt ein Bild
     const img=document.getElementById('enemyImg');
     const emo=document.getElementById('enemyEmoji');
     if(e.img){
@@ -450,8 +450,7 @@ function setEnemy(e){
     } else {
         img.style.display='none';
         emo.style.display='block';
-        emo.textContent=e.emoji||'👾';
-        emo.style.color=e.color||'#fff';
+        emo.textContent='?'; emo.style.color=e.color||'#fff';
     }
 
     updateEnemyBar();
