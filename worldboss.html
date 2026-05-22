@@ -455,7 +455,7 @@ async function connectWS(onReady){
                 return;
             }
             if(d.type==='authFailed'){console.error('WS auth failed');return;}
-            if(d.type==='kicked'){ws._kicked=true;ws.close();alert('Verbindung übernommen (anderer Tab).');location.href='festival.html';return;}
+            if(d.type==='kicked'){ws._kicked=true;ws.close();return;} // kicked = ignore, new session takes over
             if(d.type==='lobbyList'||d.type==='lobbyListUpdate'){if(document.getElementById('joinLobbyBox').style.display!=='none')renderLobbyList(d.lobbies);return;}
             if(d.type==='lobbyJoined'){
                 currentLobbyId=d.lobbyId;currentLobbyName=d.lobbyName;
@@ -501,9 +501,12 @@ function handleMsg(d){
     }
     if(d.type==='playerRecovered'){myHp=d.hp;myMaxHp=d.maxHp;isKO=false;updatePlayerHpHud();document.getElementById('clickHint').textContent='⚔ CLICK ENEMY TO ATTACK ⚔';document.getElementById('skillBtn').disabled=skillCd;}
     if(d.type==='partyUpdate'){
-        if(currentLobbyId&&d.party&&d.party.length>0){
-            document.getElementById('partyPanel').style.display='block';
-            renderParty(d.party);
+        if(d.party&&d.party.length>0){
+            // Show party panel whenever we get a party update with members
+            if(currentLobbyId){
+                document.getElementById('partyPanel').style.display='block';
+                renderParty(d.party);
+            }
         }
     }
     if(d.type==='partyHealed'){myHp=myMaxHp;updatePlayerHpHud();if(currentLobbyId&&d.party)renderParty(d.party);}
