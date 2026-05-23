@@ -896,10 +896,6 @@ function showEffectNotif(eff){
 init();
 loadCoins();
 
-// Language selector init
-if(window.buildLangSelector){
-    document.getElementById('langSelectorWrap').innerHTML=window.buildLangSelector();
-}
 window.addEventListener('langchange',()=>{ location.reload(); });
 
 </script>

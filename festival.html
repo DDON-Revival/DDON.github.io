@@ -243,7 +243,7 @@ body{
 
     <div class="hero">
         <div class="hero-eyebrow" data-i18n="third_anniversary">✦ Third Anniversary ✦</div>
-        <div class="hero-title">Welcome to the<br><span>Anniversary Celebration</span></div>
+        <div class="hero-title"><span data-i18n="festival_title">Welcome to the</span><br><span data-i18n="festival_sub">Anniversary Celebration</span></div>
         <div class="hero-sub" data-i18n="compete">Compete · Survive · Claim Glory</div>
     </div>
 
@@ -659,11 +659,7 @@ async function executeBuy(itemId, qty, price, characterId, btn, msg){
     if(btn) btn.disabled=false;
 }
 
-// Update lang selector
-window.addEventListener('load', ()=>{
-    const wrap = document.getElementById('langSelectorWrap');
-    if(wrap) wrap.innerHTML = window.buildLangSelector ? window.buildLangSelector() : '';
-});
+
 window.addEventListener('langchange', ()=>{
     // Re-render store if open
     if(document.getElementById('storeOverlay').style.display!=='none') renderStore(document.getElementById('storeSearch').value);
