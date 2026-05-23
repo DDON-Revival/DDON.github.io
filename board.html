@@ -101,12 +101,13 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
 
 <script>
 const COST = 10;
+const BASE_IMG = 'https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/';
 const BOARD_TILES = [
     {type:'start',   icon:'🏁', name:'START'},
     {type:'coin',    icon:'🪙', name:'+8 Coins',   coins:8},
     {type:'item',    icon:'🎁', name:'Mystery Item'},
     {type:'coin',    icon:'🪙', name:'+5 Coins',   coins:5},
-    {type:'boss',    icon:'👹', name:'Boss! -10c', coins:-10},
+    {type:'boss',    icon:'boss_goblin', name:'Boss! -10c', coins:-10},
     {type:'coin',    icon:'🪙', name:'+12 Coins',  coins:12},
     {type:'bonus',   icon:'🎲', name:'Extra Roll'},
     {type:'item',    icon:'🎁', name:'Rare Item'},
@@ -115,7 +116,7 @@ const BOARD_TILES = [
     {type:'jackpot', icon:'⭐', name:'JACKPOT!',   coins:30},
     {type:'item',    icon:'🎁', name:'Mystery Item'},
     {type:'coin',    icon:'🪙', name:'+10 Coins',  coins:10},
-    {type:'boss',    icon:'👺', name:'Goblin! -8c', coins:-8},
+    {type:'boss',    icon:'boss_warg', name:'Goblin! -8c', coins:-8},
     {type:'coin',    icon:'🪙', name:'+15 Coins',  coins:15},
     {type:'bonus',   icon:'🎲', name:'Extra Roll'},
 ];
@@ -168,7 +169,10 @@ function buildBoard(){
                 const t=BOARD_TILES[posIdx];
                 div.className=`tile tile-type-${t.type}`;
                 div.id='tile'+posIdx;
-                div.innerHTML=`<div class="tile-icon">${t.icon}</div><div class="tile-name">${t.name}</div>`;
+                const iconHtml = t.icon.startsWith('boss_')
+    ? '<img src="'+BASE_IMG+t.icon.replace('boss_','').charAt(0).toUpperCase()+t.icon.replace('boss_','').slice(1)+'01.png" style="width:50px;height:50px;object-fit:contain;mix-blend-mode:screen;" />'
+    : '<div class="tile-icon">'+t.icon+'</div>';
+div.innerHTML=iconHtml+'<div class="tile-name">'+t.name+'</div>';
             }
             board.appendChild(div);
         }

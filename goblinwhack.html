@@ -29,10 +29,10 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
 .hud-time{color:#ff4d4d;}
 .hud-score{color:#5dbb8a;}
 #board{display:grid;grid-template-columns:repeat(5,100px);grid-template-rows:repeat(3,100px);gap:12px;margin-bottom:20px;}
-.hole{width:100px;height:100px;background:linear-gradient(145deg,#0f1020,#080a14);border:2px solid #1a1e40;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:52px;transition:.1s;position:relative;overflow:hidden;}
+.hole{width:100px;height:100px;background:linear-gradient(145deg,#0f1020,#080a14);border:2px solid #1a1e40;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.1s;position:relative;overflow:hidden;}
 .hole:hover{border-color:#333;}
 .hole.active{cursor:crosshair;}
-.hole.active:hover{border-color:#5dbb8a;background:linear-gradient(145deg,#0f1a10,#081008);}
+.hole.active:hover{border-color:#5dbb8a;background:linear-gradient(145deg,#0f1a10,#081008);box-shadow:0 0 12px rgba(93,187,138,.3);}
 .goblin{position:absolute;animation:popUp .15s ease-out;}
 @keyframes popUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
 .goblin.hit{animation:hitAnim .2s ease-out forwards;}
@@ -143,7 +143,11 @@ async function startGame(){
     },1000);
 }
 
-const GOBLINS=['👺','👹','🧌'];
+const GOBLINS=[
+    'https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/Goblin01.png',
+    'https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/Warg01.png',
+    'https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/Saurian01.png'
+];
 let activeGoblins=new Set();
 
 function spawnGoblins(){
@@ -161,10 +165,10 @@ function spawnGoblins(){
         const hole=document.getElementById('hole'+idx);
         if(!hole) continue;
         hole.classList.add('active');
-        const g=document.createElement('div');
+        const g=document.createElement('img');
+        g.src=GOBLINS[Math.floor(Math.random()*GOBLINS.length)];
         g.className='goblin';
-        g.textContent=GOBLINS[Math.floor(Math.random()*GOBLINS.length)];
-        g.style.fontSize='52px';
+        g.style.cssText='width:76px;height:76px;object-fit:contain;mix-blend-mode:screen;pointer-events:none;';
         hole.appendChild(g);
         // Auto-hide after speed ms
         const t=setTimeout(()=>{
