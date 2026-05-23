@@ -509,8 +509,7 @@ function updateHUD(){
 }
 let skillCooldowns=[false,false,false];
 let skillCdEndsAt=[0,0,0];
-const skillIdCooldowns={};
-const skillIdCooldowns={}; // skillId → end timestamp (prevents bypass via duplicate slots)
+const skillIdCooldowns={}; // skillId → end timestamp
 
 function setupSkillBtn(){
     updateSkillButtons();
