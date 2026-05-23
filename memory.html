@@ -121,7 +121,7 @@ async function startGame(){
     timer=setInterval(()=>{timeLeft--;document.getElementById('timer').textContent=timeLeft;if(timeLeft<=0)endGame(false);},1000);
 }
 
-function flipCard(card){ tryStartMusic();
+function flipCard(card){
     if(!canFlip||card.dataset.revealed==='1'||flipped.length>=2)return;
     card.dataset.revealed='1';card.classList.add('flipped');flipped.push(card);
     if(flipped.length===2){
@@ -160,20 +160,6 @@ function resetGame(){
     document.getElementById('startBtn').disabled=false;
     document.getElementById('startBtn').textContent='PLAY — 3 COINS';
 }
-
-// ── Background Music ──────────────────────────────────────
-let bgMusic=null, musicStarted=false, isMuted=false;
-function initMusic(){
-    try{
-        bgMusic=new Audio('https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/sounds/music.mp3');
-        bgMusic.loop=true; bgMusic.volume=0.3;
-    }catch(_){}
-}
-function tryStartMusic(){
-    if(musicStarted||isMuted||!bgMusic)return;
-    musicStarted=true; bgMusic.play().catch(()=>{});
-}
-initMusic();
 
 loadCoins();
 </script>

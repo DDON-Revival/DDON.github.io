@@ -122,7 +122,7 @@ function selectVoc(id){
     document.getElementById('fightBtn').disabled=false;
 }
 
-async function fight(){ tryStartMusic();
+async function fight(){
     if(!selected||myCoins<COST){alert('Not enough coins!');return;}
     const btn=document.getElementById('fightBtn');
     btn.disabled=true; btn.textContent='DUELING···';
@@ -191,20 +191,6 @@ function resetRound(){
     document.getElementById('resultArea').style.display='none';
 }
 
-
-// ── Background Music ──────────────────────────────────────
-let bgMusic=null, musicStarted=false, isMuted=false;
-function initMusic(){
-    try{
-        bgMusic=new Audio('https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/sounds/music.mp3');
-        bgMusic.loop=true; bgMusic.volume=0.3;
-    }catch(_){}
-}
-function tryStartMusic(){
-    if(musicStarted||isMuted||!bgMusic)return;
-    musicStarted=true; bgMusic.play().catch(()=>{});
-}
-initMusic();
 
 loadCoins();
 </script>
