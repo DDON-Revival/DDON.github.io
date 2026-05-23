@@ -144,9 +144,9 @@ async function startGame(){
 }
 
 const GOBLINS=[
-    'https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/Goblin01.png',
-    'https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/Warg01.png',
-    'https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/Saurian01.png'
+    'https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/Goblin01.png?v=2',
+    'https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/Warg01.png?v=2',
+    'https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/Saurian01.png?v=2'
 ];
 let activeGoblins=new Set();
 
@@ -190,7 +190,7 @@ function clearGoblin(idx){
     hole.innerHTML='';
 }
 
-function onHoleClick(idx){
+function onHoleClick(idx){ tryStartMusic();
     if(!playing||!activeGoblins.has(idx)) return;
     score++;
     document.getElementById('score').textContent=score;
@@ -244,6 +244,21 @@ function resetGame(){
     document.getElementById('startBtn').disabled=false;
     document.getElementById('startBtn').textContent='PLAY — 5 COINS';
 }
+
+
+// ── Background Music ──────────────────────────────────────
+let bgMusic=null, musicStarted=false, isMuted=false;
+function initMusic(){
+    try{
+        bgMusic=new Audio('https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/sounds/music.mp3');
+        bgMusic.loop=true; bgMusic.volume=0.3;
+    }catch(_){}
+}
+function tryStartMusic(){
+    if(musicStarted||isMuted||!bgMusic)return;
+    musicStarted=true; bgMusic.play().catch(()=>{});
+}
+initMusic();
 
 loadCoins();
 </script>

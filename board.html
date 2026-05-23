@@ -215,7 +215,7 @@ function positionToken(idx, animate){
     token.style.top=(br.top-boardR.top+27)+'px';
 }
 
-async function rollDice(){
+async function rollDice(){ tryStartMusic();
     if(rolling) return;
     if(myCoins<COST){alert('Not enough coins!');return;}
     rolling=true;
@@ -374,6 +374,21 @@ function addLog(text,type=''){
 }
 
 function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+
+// ── Background Music ──────────────────────────────────────
+let bgMusic=null, musicStarted=false, isMuted=false;
+function initMusic(){
+    try{
+        bgMusic=new Audio('https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/main/assets/sounds/music.mp3');
+        bgMusic.loop=true; bgMusic.volume=0.3;
+    }catch(_){}
+}
+function tryStartMusic(){
+    if(musicStarted||isMuted||!bgMusic)return;
+    musicStarted=true; bgMusic.play().catch(()=>{});
+}
+initMusic();
 
 init();
 </script>
