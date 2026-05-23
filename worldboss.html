@@ -759,11 +759,9 @@ function useSkillSlot(slot){
     if(gameState!=='combat'||!enemy||enemy.hp<=0||isKO)return;
     if(skillCooldowns[slot])return;
     const slots=profile.activeSkills||[];
-    const checkId=slots[slot];
-    // Prevent cooldown bypass: check skillId cooldown
-    if(checkId&&skillIdCooldowns[checkId]&&Date.now()<skillIdCooldowns[checkId])return;
-    const slots=profile.activeSkills||[];
     const skillId=slots[slot];
+    // Prevent cooldown bypass: check skillId cooldown
+    if(skillId&&skillIdCooldowns[skillId]&&Date.now()<skillIdCooldowns[skillId])return;
     if(!skillId||!skillData)return;
     const sk=skillData.tree.skills.find(s=>s.id===skillId);
     if(!sk||sk.type!=='active')return;
