@@ -11,6 +11,7 @@ font-src 'self' https:;
 img-src 'self' https: data:;
 connect-src 'self' https://api.ddon.org wss://api.ddon.org;
 ">
+<script src="lang.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -231,6 +232,7 @@ body{
     <div class="header-title">DOGMA FESTIVAL</div>
     <div class="header-right">
         <div id="playerBadge">···</div>
+        <div id="langSelectorWrap"></div>
         <div id="coinBadge" style="background:#1a1d35;border:1px solid #c8a75d;padding:7px 18px;color:#ffd700;font-size:13px;letter-spacing:2px;display:none;">🪙 <span id="festivalCoins">0</span></div>
         <button class="back-btn" onclick="location.href='login.html'">← PANEL</button>
     </div>
@@ -240,9 +242,9 @@ body{
 <div class="main">
 
     <div class="hero">
-        <div class="hero-eyebrow">✦ Third Anniversary ✦</div>
+        <div class="hero-eyebrow" data-i18n="third_anniversary">✦ Third Anniversary ✦</div>
         <div class="hero-title">Welcome to the<br><span>Anniversary Celebration</span></div>
-        <div class="hero-sub">Compete · Survive · Claim Glory</div>
+        <div class="hero-sub" data-i18n="compete">Compete · Survive · Claim Glory</div>
     </div>
 
     <div class="grid">
@@ -253,8 +255,8 @@ body{
                 <div class="card-banner-icon">🐍</div>
             </div>
             <div class="card-body">
-                <div class="card-tag tag-live">● LIVE NOW</div>
-                <div class="card-name">World Boss</div>
+                <div class="card-tag tag-live" data-i18n="live_now">● LIVE NOW</div>
+                <div class="card-name" data-i18n="world_boss">World Boss</div>
                 <div class="card-desc">
                     Choose your vocation, level up and fight alongside
                     every Arisen. Bosses, elite enemies and a global leaderboard await.
@@ -292,7 +294,7 @@ body{
             </div>
             <div class="card-body">
                 <div class="card-tag tag-live">● LIVE NOW</div>
-                <div class="card-name">Dogma Arcade</div>
+                <div class="card-name" data-i18n="arcade_title">Dogma Arcade</div>
                 <div class="card-desc">
                     6 mini-games — Goblin Whack, Memory, Bingo, Quiz and more.
                     Spend coins, win more, earn items!
@@ -311,7 +313,7 @@ body{
             </div>
             <div class="card-body">
                 <div class="card-tag tag-live">● LIVE</div>
-                <div class="card-name">Achievements</div>
+                <div class="card-name" data-i18n="achievements_title">Achievements</div>
                 <div class="card-desc">
                     Track your progress and flex your accomplishments
                     across all Festival events.
@@ -330,7 +332,7 @@ body{
             </div>
             <div class="card-body">
                 <div class="card-tag tag-live">● OPEN</div>
-                <div class="card-name">Anniversary Store</div>
+                <div class="card-name" data-i18n="store_title">Anniversary Store</div>
                 <div class="card-desc">
                     Spend your Anniversary Coins on crafting materials
                     earned from Festival battles.
@@ -519,7 +521,7 @@ init();
                 <button onclick="closeStore()" style="background:transparent;border:1px solid #444;color:#888;padding:8px 20px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;cursor:pointer;">✕ CLOSE</button>
             </div>
         </div>
-        <input id="storeSearch" placeholder="Search items..." oninput="filterStore()" style="width:100%;padding:12px 16px;background:#0f1020;border:1px solid #2a2e50;color:#fff;font-family:'Cinzel',serif;font-size:13px;margin-bottom:20px;outline:none;letter-spacing:1px;">
+        <input id="storeSearch" placeholder="Search items..." data-i18n-placeholder="search_items" oninput="filterStore()" style="width:100%;padding:12px 16px;background:#0f1020;border:1px solid #2a2e50;color:#fff;font-family:'Cinzel',serif;font-size:13px;margin-bottom:20px;outline:none;letter-spacing:1px;">
         <div id="storeGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;"></div>
     </div>
 </div>
@@ -675,6 +677,16 @@ async function executeBuy(itemId, qty, price, characterId, btn, msg){
     }catch(_){if(msg){msg.textContent='Connection error';msg.style.color='#ff4d4d';}}
     if(btn) btn.disabled=false;
 }
+
+// Update lang selector
+window.addEventListener('load', ()=>{
+    const wrap = document.getElementById('langSelectorWrap');
+    if(wrap) wrap.innerHTML = window.buildLangSelector ? window.buildLangSelector() : '';
+});
+window.addEventListener('langchange', ()=>{
+    // Re-render store if open
+    if(document.getElementById('storeOverlay').style.display!=='none') renderStore(document.getElementById('storeSearch').value);
+});
 
 // Load coins on page ready
 window.addEventListener('load',()=>{ if(document.getElementById('coinBadge')) loadCoins(); });

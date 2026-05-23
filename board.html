@@ -121,38 +121,25 @@ const BOARD_TILES = [
     {type:'bonus',   icon:'🎲', name:'Extra Roll'},
 ];
 
-// Item pool — verified against festival_shop_items.json
-const ITEM_POOL = {
-    common: [
-        {itemId:7858, name:'Bronze Ore'},
-        {itemId:7752, name:'Goblin Horn'},
-        {itemId:7834, name:'Slime Liquid'},
-        {itemId:7863, name:'Drilled Ore'},
-        {itemId:7867, name:'Magick Medal'},
-        {itemId:7808, name:"Witch's Grimoire"},
-        {itemId:7854, name:'Copper Ore'},
-        {itemId:7829, name:'Healing Drop'},
-        {itemId:8017, name:'Beautiful Conch Shell'},
-        {itemId:9438, name:'Giant Single Pelt'},
-        {itemId:7937, name:'Hard Leather Cloth'},
-        {itemId:7963, name:'Hard Wood'},
-    ],
-    rare: [
-        {itemId:10988, name:'Large Dragon Bone'},
-        {itemId:11780, name:'Rare Meteorite Crystal'},
-        {itemId:11808, name:'Prism Crystal'},
-        {itemId:15967, name:'Dazzling Silver Plume'},
-        {itemId:19649, name:'Red Hot Smelted Ore'},
-        {itemId:21239, name:"Void's Heartbeat"},
-        {itemId:18735, name:'Steel Featherwork'},
-    ]
-};
-function randItem(type){ const pool=ITEM_POOL[type||'common']; return pool[Math.floor(Math.random()*pool.length)]; }
+// Item pool loaded from shop API
+let ITEM_POOL = [];
+async function loadItemPool(){
+    try{
+        const r = await fetch('https://api.ddon.org/api/festival/shop');
+        if(r.ok) ITEM_POOL = await r.json();
+    }catch(_){}
+}
+function randItem(){
+    if(!ITEM_POOL.length) return {itemId:7858, nameEn:'Bronze Ore', nameJp:'', name:'Bronze Ore'};
+    const item = ITEM_POOL[Math.floor(Math.random()*ITEM_POOL.length)];
+    return {...item, name: item.nameEn};
+}
 
 let position=0, myCoins=0, rolling=false, myChars=[], selectedChar=null;
 let pendingItem=null;
 
 async function init(){
+    await loadItemPool();
     await loadCoins();
     await loadChars();
     buildBoard();
@@ -286,7 +273,7 @@ async function handleTile(tile){
         }
     } else if(tile.type==='item'){
         const item=randItem(tile.rarity||'common');
-        const label=tile.rarity==='rare'?'Rare Item':'Mystery Item';
+        const label='Mystery Item';
         addLog(`${label}: ${item.name}!`,'item');
         boardMeta.gotItem=true;
         status.textContent=`Won: ${item.name}! Sending to Itempost...`;
