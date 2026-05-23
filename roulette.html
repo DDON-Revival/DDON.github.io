@@ -166,9 +166,9 @@ async function fight(){
 
     if(reward>0){
         try{
-            const r=await fetch('https://api.ddon.org/api/festival/arcade/payout',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:reward,game:'roulette'})});
+            const r=await fetch('https://api.ddon.org/api/festival/arcade/payout',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:reward,game:'roulette',meta:{streak,won:outcome==='win'}})});
             const d=await r.json();
-            if(d.success){myCoins=d.coinsLeft;document.getElementById('coinCount').textContent=myCoins;}
+            if(d.success){myCoins=d.coinsLeft;document.getElementById('coinCount').textContent=myCoins;showAchPopups(d.newAchievements);}
         }catch(_){}
     }
 
@@ -192,7 +192,40 @@ function resetRound(){
 }
 
 
+
+const ACH_NAMES={goblin_first:'Goblin Smasher',goblin_10:'Whack Master',goblin_20:'Goblin Destroyer',
+memory_first:'Sharp Mind',memory_fast:'Rift Scholar',roulette_first:'Duelist',roulette_streak:'Unstoppable Arisen',
+board_first:'Rolling Start',board_jackpot:"Fortune's Favorite",board_item:'Rift Collector',
+arcade_all:'Festival Champion',first_coin:'Coin Collector',coins_100:'Festival Regular',
+coins_500:'Festival Veteran',coins_1000:'Festival Legend'};
+const ACH_ICONS={goblin_first:'🪓',goblin_10:'💥',goblin_20:'👺',memory_first:'🃏',memory_fast:'⚡',
+roulette_first:'⚔️',roulette_streak:'🔥',board_first:'🎲',board_jackpot:'⭐',board_item:'🎁',
+arcade_all:'🎮',first_coin:'🪙',coins_100:'💰',coins_500:'💎',coins_1000:'👑'};
+
+function showAchPopups(ids){
+    (ids||[]).forEach((id,i)=>{
+        setTimeout(()=>{
+            const el=document.createElement('div');
+            el.className='ach-notif';
+            el.innerHTML='<div class="ach-notif-icon">'+(ACH_ICONS[id]||'🏆')+'</div><div class="ach-notif-eye">ACHIEVEMENT UNLOCKED</div><div class="ach-notif-name">'+(ACH_NAMES[id]||id)+'</div>';
+            document.getElementById('achNotifContainer').appendChild(el);
+            el.addEventListener('animationend',()=>el.remove());
+        },i*600);
+    });
+}
+
 loadCoins();
 </script>
+
+<style>
+#achNotifContainer{position:fixed;top:80px;right:20px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
+.ach-notif{background:linear-gradient(135deg,#181a30,#101222);border:1px solid #c8a75d;padding:12px 18px;min-width:240px;animation:achSlide 4s ease forwards;}
+@keyframes achSlide{0%{opacity:0;transform:translateX(40px);}10%{opacity:1;transform:translateX(0);}80%{opacity:1;}100%{opacity:0;}}
+.ach-notif-eye{font-size:9px;letter-spacing:3px;color:#c8a75d;opacity:.6;margin-bottom:4px;}
+.ach-notif-name{font-size:13px;color:#fff;letter-spacing:1px;}
+.ach-notif-icon{font-size:20px;margin-bottom:4px;}
+</style>
+<div id="achNotifContainer"></div>
+
 </body>
 </html>
