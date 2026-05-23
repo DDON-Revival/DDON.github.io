@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Rift Roulette – Dogma Arcade</title>
+<script src="lang.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;}
@@ -45,14 +46,15 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
 </head>
 <body>
 <div class="header">
-    <button class="back-btn" onclick="location.href='arcade.html'">← ARCADE</button>
+    <div id="langSelectorWrap" style="position:relative;"></div>
+    <button class="back-btn" onclick="location.href='arcade.html'"><span data-i18n="back_arcade">← ARCADE</span></button>
     <div style="font-family:'Cinzel Decorative',serif;font-size:16px;color:#ff4d4d;letter-spacing:3px;">⚔️ RIFT ROULETTE</div>
     <div class="coin-info">🪙 <span id="coinCount">···</span></div>
 </div>
 <div class="game-area">
     <div style="text-align:center;">
-        <div class="game-title">RIFT ROULETTE</div>
-        <div class="game-sub">VOCATION DUEL — CHOOSE YOUR CLASS</div>
+        <div class="game-title" data-i18n="roulette_title">RIFT ROULETTE</div>
+        <div class="game-sub" data-i18n="roulette_sub">VOCATION DUEL — CHOOSE YOUR CLASS</div>
     </div>
 
     <div class="rules-box">
@@ -99,8 +101,8 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
         <div class="result-label" id="resultLabel">·</div>
         <div class="result-coins" id="resultCoins">·</div>
         <div class="result-btns">
-            <button class="btn-again" onclick="resetRound()">PLAY AGAIN</button>
-            <button class="btn-back" onclick="location.href='arcade.html'">← ARCADE</button>
+            <button class="btn-again" onclick="resetRound()"><span data-i18n="play_again">PLAY AGAIN</span></button>
+            <button class="btn-back" onclick="location.href='arcade.html'"><span data-i18n="back_arcade">← ARCADE</span></button>
         </div>
     </div>
 </div>
@@ -215,6 +217,13 @@ function showAchPopups(ids){
 }
 
 loadCoins();
+
+// Language selector init
+if(window.buildLangSelector){
+    document.getElementById('langSelectorWrap').innerHTML=window.buildLangSelector();
+}
+window.addEventListener('langchange',()=>{ location.reload(); });
+
 </script>
 
 <style>

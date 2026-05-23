@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Arisen's Board – Dogma Arcade</title>
+<script src="lang.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;}
@@ -63,6 +64,7 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
 </head>
 <body>
 <div class="header">
+    <div id="langSelectorWrap" style="position:relative;"></div>
     <button class="back-btn" onclick="location.href='arcade.html'">← ARCADE</button>
     <div style="font-family:'Cinzel Decorative',serif;font-size:16px;color:#c8a75d;letter-spacing:3px;">🎲 ARISEN'S BOARD</div>
     <div class="coin-info">🪙 <span id="coinCount">···</span></div>
@@ -70,20 +72,20 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
 
 <div class="main">
     <div class="board-wrap">
-        <div class="board-title">THE RIFT BOARD</div>
+        <div class="board-title" data-i18n="board_title">THE RIFT BOARD</div>
         <div id="board"></div>
     </div>
     <div class="panel">
         <div class="panel-section">
-            <div class="panel-title">STATUS</div>
+            <div class="panel-title" data-i18n="status">STATUS</div>
             <div class="stat-row"><span>Position</span><span class="stat-val" id="posVal">0 / 15</span></div>
             <div class="stat-row"><span>Round</span><span class="stat-val" id="roundVal">0</span></div>
             <div class="stat-val" style="font-size:13px;color:#888;letter-spacing:1px;margin-bottom:16px;" id="statusMsg">Roll the dice to begin your journey!</div>
             <div class="dice-display" id="diceDisplay">🎲</div>
-            <button class="roll-btn" id="rollBtn" onclick="rollDice()">🎲 ROLL — 10 COINS</button>
+            <button class="roll-btn" id="rollBtn" onclick="rollDice()"><span data-i18n="roll_cost_10">🎲 ROLL — 10 COINS</span></button>
         </div>
         <div class="panel-section">
-            <div class="panel-title">JOURNEY LOG</div>
+            <div class="panel-title" data-i18n="journey_log">JOURNEY LOG</div>
             <div class="log" id="log"></div>
         </div>
     </div>
@@ -390,6 +392,13 @@ function showAchPopups(ids){
 }
 
 init();
+
+// Language selector init
+if(window.buildLangSelector){
+    document.getElementById('langSelectorWrap').innerHTML=window.buildLangSelector();
+}
+window.addEventListener('langchange',()=>{ location.reload(); });
+
 </script>
 
 <style>

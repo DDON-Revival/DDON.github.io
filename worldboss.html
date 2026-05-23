@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>World Boss – Dogma Festival III</title>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; img-src 'self' https: data:; connect-src 'self' https://api.ddon.org wss://api.ddon.org;">
+<script src="lang.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -160,31 +161,31 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
 
 <!-- Class select -->
 <div class="screen" id="classScreen" style="display:none;">
-    <div class="class-title">Choose Your Vocation</div>
-    <div class="class-sub">LOCKED AFTER LEVEL 5</div>
+    <div class="class-title" data-i18n="choose_vocation">Choose Your Vocation</div>
+    <div class="class-sub" data-i18n="locked_after_lvl5">LOCKED AFTER LEVEL 5</div>
     <div class="class-grid" id="classGrid"></div>
     <button class="class-confirm" id="classConfirmBtn" disabled onclick="confirmClass()">CONFIRM VOCATION</button>
 </div>
 
 <!-- Lobby screen -->
 <div class="screen" id="lobbyScreen" style="display:none;">
-    <div class="lobby-title">Enter the Battle</div>
-    <div class="lobby-sub">CHOOSE YOUR PATH</div>
+    <div class="lobby-title" data-i18n="enter_battle">Enter the Battle</div>
+    <div class="lobby-sub" data-i18n="choose_path">CHOOSE YOUR PATH</div>
 
     <div class="lobby-options" id="lobbyOptions">
         <div class="lobby-opt" onclick="playSolo()">
             <div class="lo-icon">⚔️</div>
-            <div class="lo-name">Play Solo</div>
+            <div class="lo-name" data-i18n="play_solo">Play Solo</div>
             <div class="lo-desc">Enter battle alone</div>
         </div>
         <div class="lobby-opt" onclick="showCreateLobby()">
             <div class="lo-icon">👑</div>
-            <div class="lo-name">Create Party</div>
+            <div class="lo-name" data-i18n="create_party">Create Party</div>
             <div class="lo-desc">Lead your own group</div>
         </div>
         <div class="lobby-opt" onclick="showJoinLobby()">
             <div class="lo-icon">🛡️</div>
-            <div class="lo-name">Join Party</div>
+            <div class="lo-name" data-i18n="join_party">Join Party</div>
             <div class="lo-desc">Find an existing group</div>
         </div>
     </div>
@@ -223,8 +224,8 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
         <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
     </div>
     <button class="hud-party-btn" id="leavePartyBtn" style="display:none;" onclick="leaveParty()">LEAVE PARTY</button>
-    <button onclick="openSkillTree()" style="background:transparent;border:1px solid #333;color:#888;padding:5px 12px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;cursor:pointer;transition:.2s;" onmouseover="this.style.borderColor='#c8a75d';this.style.color='#c8a75d';" onmouseout="this.style.borderColor='#333';this.style.color='#888';">🌳 SKILLS</button>
-    <button id="muteBtn" onclick="toggleMute()" style="background:transparent;border:1px solid #333;color:#888;padding:5px 12px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;cursor:pointer;transition:.2s;" onmouseover="this.style.borderColor='#c8a75d';this.style.color='#c8a75d';" onmouseout="this.style.borderColor='#333';this.style.color='#888';">🔊 SOUND</button>
+    <button onclick="openSkillTree()" style="background:transparent;border:1px solid #333;color:#888;padding:5px 12px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;cursor:pointer;transition:.2s;" onmouseover="this.style.borderColor='#c8a75d';this.style.color='#c8a75d';" onmouseout="this.style.borderColor='#333';this.style.color='#888';"><span data-i18n="skills">SKILLS</span></button>
+    <button id="muteBtn" onclick="toggleMute()" style="background:transparent;border:1px solid #333;color:#888;padding:5px 12px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;cursor:pointer;transition:.2s;" onmouseover="this.style.borderColor='#c8a75d';this.style.color='#c8a75d';" onmouseout="this.style.borderColor='#333';this.style.color='#888';"><span data-i18n="sound">SOUND</span></button>
     <div class="hud-right">🪙 <span id="coinCount">0</span> &nbsp;|&nbsp; ONLINE: <span id="onlineCount">0</span></div>
 </div>
 
@@ -238,7 +239,7 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
 
 <!-- Leaderboard (right) -->
 <div id="lb" style="display:none;">
-    <h3>⚔ FIGHT DAMAGE</h3>
+    <h3 data-i18n="fight_damage">⚔ FIGHT DAMAGE</h3>
     <div id="lbRows"></div>
 </div>
 
@@ -266,7 +267,7 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
 
 <!-- Skill bar -->
 <div id="skillBar" style="display:none;">
-    <div class="click-hint" id="clickHint">⚔ CLICK ENEMY TO ATTACK ⚔</div>
+    <div class="click-hint" id="clickHint" data-i18n="click_to_attack">⚔ CLICK ENEMY TO ATTACK ⚔</div>
     <div style="display:flex;gap:12px;align-items:center;">
         <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
             <button id="skillBtn0" onclick="useSkillSlot(0)" disabled style="background:rgba(200,167,93,.12);border:1px solid rgba(200,167,93,.45);color:#c8a75d;padding:11px 28px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;cursor:pointer;transition:.2s;position:relative;min-width:180px;text-align:center;">
@@ -894,6 +895,13 @@ function showEffectNotif(eff){
 
 init();
 loadCoins();
+
+// Language selector init
+if(window.buildLangSelector){
+    document.getElementById('langSelectorWrap').innerHTML=window.buildLangSelector();
+}
+window.addEventListener('langchange',()=>{ location.reload(); });
+
 </script>
 
 <!-- Skill Tree Overlay -->
@@ -936,7 +944,7 @@ loadCoins();
 </style>
 <div class="st-wrap">
     <div class="st-header">
-        <div class="st-title">🌳 SKILL TREE</div>
+        <div class="st-title">🌳 <span data-i18n="skill_tree">SKILL TREE</span></div>
         <div style="display:flex;gap:20px;align-items:center;">
             <div class="st-points">🔹 <span id="stPoints">0</span> Points Available</div>
             <button class="st-close" onclick="closeSkillTree()">✕ CLOSE</button>

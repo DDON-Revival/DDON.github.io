@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Memory of the Rift – Dogma Arcade</title>
+<script src="lang.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;}
@@ -44,14 +45,15 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
 </head>
 <body>
 <div class="header">
-    <button class="back-btn" onclick="location.href='arcade.html'">← ARCADE</button>
+    <div id="langSelectorWrap" style="position:relative;"></div>
+    <button class="back-btn" onclick="location.href='arcade.html'"><span data-i18n="back_arcade">← ARCADE</span></button>
     <div style="font-family:'Cinzel Decorative',serif;font-size:16px;color:#7a5dbb;letter-spacing:3px;">MEMORY OF THE RIFT</div>
     <div class="coin-info">🪙 <span id="coinCount">···</span></div>
 </div>
 <div class="game-area">
     <div id="startScreen" style="display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center;">
-        <div class="game-title">MEMORY OF THE RIFT</div>
-        <div class="game-sub">MATCH EVERY MONSTER BEFORE TIME RUNS OUT</div>
+        <div class="game-title" data-i18n="memory_title">MEMORY OF THE RIFT</div>
+        <div class="game-sub" data-i18n="memory_sub">MATCH EVERY MONSTER BEFORE TIME RUNS OUT</div>
         <div class="rules-box">
             <p>🃏 14 cards — 7 monster pairs from the Rift</p>
             <p>⏱ 90 seconds to find all pairs</p>
@@ -73,8 +75,8 @@ body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100v
         <div class="result-coins" id="resultCoins"></div>
         <div class="result-sub" id="resultSub"></div>
         <div class="result-btns">
-            <button class="btn-again" onclick="resetGame()">PLAY AGAIN</button>
-            <button class="btn-back" onclick="location.href='arcade.html'">← ARCADE</button>
+            <button class="btn-again" onclick="resetGame()"><span data-i18n="play_again">PLAY AGAIN</span></button>
+            <button class="btn-back" onclick="location.href='arcade.html'"><span data-i18n="back_arcade">← ARCADE</span></button>
         </div>
     </div>
 </div>
@@ -184,6 +186,13 @@ function showAchPopups(ids){
 }
 
 loadCoins();
+
+// Language selector init
+if(window.buildLangSelector){
+    document.getElementById('langSelectorWrap').innerHTML=window.buildLangSelector();
+}
+window.addEventListener('langchange',()=>{ location.reload(); });
+
 </script>
 
 <style>
