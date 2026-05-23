@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dogma Arcade – Festival III</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:radial-gradient(circle at top,#121425,#0a0b14);color:#e6e6e6;font-family:'Cinzel',serif;min-height:100vh;}
+#particles{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.3;}
+.header{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:20px 60px;background:linear-gradient(to right,#0f111f,#14162a);border-bottom:1px solid #2a2d48;}
+.header-title{font-family:'Cinzel Decorative',serif;font-size:20px;color:#c8a75d;letter-spacing:3px;}
+.header-right{display:flex;align-items:center;gap:16px;font-size:13px;}
+.coin-badge{background:#1a1d35;border:1px solid #c8a75d;padding:6px 16px;color:#ffd700;letter-spacing:2px;}
+.back-btn{background:transparent;border:1px solid #444;color:#777;padding:6px 14px;cursor:pointer;font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;}
+.back-btn:hover{border-color:#c8a75d;color:#c8a75d;}
+.main{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:50px 40px;}
+.hero{text-align:center;margin-bottom:60px;}
+.hero-eye{font-size:11px;letter-spacing:6px;color:#c8a75d;opacity:.6;margin-bottom:12px;}
+.hero-title{font-family:'Cinzel Decorative',serif;font-size:42px;color:#fff;margin-bottom:12px;text-shadow:0 0 40px rgba(200,167,93,.2);}
+.hero-title span{color:#c8a75d;}
+.hero-sub{font-size:13px;color:#555;letter-spacing:3px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;}
+.game-card{background:linear-gradient(145deg,#181a30,#101222);border:1px solid #2a2e50;overflow:hidden;cursor:pointer;transition:.3s;position:relative;}
+.game-card:hover:not(.locked){transform:translateY(-5px);border-color:#c8a75d;box-shadow:0 0 28px rgba(200,167,93,.18);}
+.game-card.locked{cursor:default;opacity:.5;}
+.card-banner{height:140px;display:flex;align-items:center;justify-content:center;font-size:60px;position:relative;}
+.card-body{padding:20px 22px 24px;}
+.card-tag-live{font-size:10px;letter-spacing:4px;color:#ff4d4d;margin-bottom:8px;}
+.card-tag-solo{font-size:10px;letter-spacing:4px;color:#5dbb8a;margin-bottom:8px;}
+.card-tag-multi{font-size:10px;letter-spacing:4px;color:#c8a75d;margin-bottom:8px;}
+.card-name{font-size:18px;color:#fff;letter-spacing:2px;margin-bottom:7px;}
+.card-desc{font-size:12px;color:#555;line-height:1.6;margin-bottom:16px;}
+.card-footer{display:flex;justify-content:space-between;align-items:center;}
+.card-cost{font-size:12px;color:#ffd700;letter-spacing:1px;}
+.card-play{background:#c8a75d;border:none;color:#0a0b14;padding:8px 20px;font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;}
+.card-play:hover{box-shadow:0 0 14px rgba(200,167,93,.4);}
+.soon-badge{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.7);border:1px solid #333;color:#555;font-size:9px;letter-spacing:3px;padding:3px 8px;}
+</style>
+</head>
+<body>
+<canvas id="particles"></canvas>
+<div class="header">
+    <div class="header-title">🎮 DOGMA ARCADE</div>
+    <div class="header-right">
+        <div class="coin-badge">🪙 <span id="coinCount">···</span></div>
+        <button class="back-btn" onclick="location.href='festival.html'">← FESTIVAL</button>
+    </div>
+</div>
+<div class="main">
+    <div class="hero">
+        <div class="hero-eye">✦ DOGMA FESTIVAL III ✦</div>
+        <div class="hero-title">DOGMA <span>ARCADE</span></div>
+        <div class="hero-sub">SPEND COINS · WIN MORE · CLAIM REWARDS</div>
+    </div>
+    <div class="grid">
+        <!-- Goblin Whack -->
+        <div class="game-card" onclick="go('goblinwhack.html')">
+            <div class="card-banner" style="background:linear-gradient(135deg,#1a2a10,#0e1a08);">🪓</div>
+            <div class="card-body">
+                <div class="card-tag-solo">◆ SOLO</div>
+                <div class="card-name">Goblin Whack</div>
+                <div class="card-desc">Smash as many Goblins as you can before they escape! Faster clicks = more coins.</div>
+                <div class="card-footer">
+                    <span class="card-cost">🪙 5 per round</span>
+                    <button class="card-play">PLAY</button>
+                </div>
+            </div>
+        </div>
+        <!-- Memory -->
+        <div class="game-card" onclick="go('memory.html')">
+            <div class="card-banner" style="background:linear-gradient(135deg,#0a1a2a,#081018);">🃏</div>
+            <div class="card-body">
+                <div class="card-tag-solo">◆ SOLO</div>
+                <div class="card-name">Memory of the Rift</div>
+                <div class="card-desc">Match pairs of DDON monsters before time runs out. Finish faster for bigger rewards.</div>
+                <div class="card-footer">
+                    <span class="card-cost">🪙 3 per round</span>
+                    <button class="card-play">PLAY</button>
+                </div>
+            </div>
+        </div>
+        <!-- Rift Roulette -->
+        <div class="game-card" onclick="go('roulette.html')">
+            <div class="card-banner" style="background:linear-gradient(135deg,#1a0a0a,#2a0808);">⚔️</div>
+            <div class="card-body">
+                <div class="card-tag-solo">◆ SOLO</div>
+                <div class="card-name">Rift Roulette</div>
+                <div class="card-desc">Fighter vs Hunter vs Mage — DDON Vocation Duel! Beat the enemy vocation to win.</div>
+                <div class="card-footer">
+                    <span class="card-cost">🪙 5 per round</span>
+                    <button class="card-play">PLAY</button>
+                </div>
+            </div>
+        </div>
+        <!-- Arisen's Board -->
+        <div class="game-card" onclick="go('board.html')">
+            <div class="card-banner" style="background:linear-gradient(135deg,#1a1208,#2a1a08);">🎲</div>
+            <div class="card-body">
+                <div class="card-tag-live">★ FEATURED</div>
+                <div class="card-name">Arisen's Board</div>
+                <div class="card-desc">Roll the dice and traverse the Rift Board. Land on reward tiles and win items sent directly to your Itempost!</div>
+                <div class="card-footer">
+                    <span class="card-cost">🪙 10 per roll</span>
+                    <button class="card-play">PLAY</button>
+                </div>
+            </div>
+        </div>
+        <!-- Pawns Bingo -->
+        <div class="game-card" onclick="go('bingo.html')">
+            <div class="card-banner" style="background:linear-gradient(135deg,#0a0a1a,#10102a);">🔮</div>
+            <div class="card-body">
+                <div class="card-tag-multi">👥 MULTIPLAYER</div>
+                <div class="card-name">Pawns Bingo</div>
+                <div class="card-desc">Live Bingo with up to 20 Arisen. Numbers drawn every few seconds — first BINGO wins!</div>
+                <div class="card-footer">
+                    <span class="card-cost">🪙 10 per card</span>
+                    <button class="card-play">PLAY</button>
+                </div>
+            </div>
+        </div>
+        <!-- Monster Quiz -->
+        <div class="game-card" onclick="go('quiz.html')">
+            <div class="card-banner" style="background:linear-gradient(135deg,#0a1a0a,#081408);">🧠</div>
+            <div class="card-body">
+                <div class="card-tag-multi">👥 MULTIPLAYER</div>
+                <div class="card-name">Monster Quiz</div>
+                <div class="card-desc">How well do you know DDON monsters? Race against other Arisen to answer first!</div>
+                <div class="card-footer">
+                    <span class="card-cost">🪙 5 per game</span>
+                    <button class="card-play">PLAY</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+// Particles
+(function(){
+    const c=document.getElementById('particles'),ctx=c.getContext('2d');
+    let W,H,pts=[];
+    function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
+    function init(){pts=[];for(let i=0;i<50;i++)pts.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.2+.3,vx:(Math.random()-.5)*.15,vy:(Math.random()-.5)*.15,o:Math.random()*.4+.1});}
+    function draw(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(200,167,93,${p.o})`;ctx.fill();});requestAnimationFrame(draw);}
+    resize();init();draw();window.addEventListener('resize',()=>{resize();init();});
+})();
+
+async function loadCoins(){
+    try{const r=await fetch('https://api.ddon.org/api/festival/coins',{credentials:'include'});if(r.ok){const d=await r.json();document.getElementById('coinCount').textContent=d.coins||0;}}catch(_){}
+}
+
+function go(url){
+    // Auth check
+    fetch('https://api.ddon.org/api/me',{credentials:'include'}).then(r=>{
+        if(r.ok) location.href=url;
+        else location.href='festival.html';
+    }).catch(()=>location.href='festival.html');
+}
+
+loadCoins();
+</script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pawns Bingo – Dogma Arcade</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;user-select:none;}
+body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+.header{display:flex;justify-content:space-between;align-items:center;padding:16px 40px;background:rgba(10,11,20,.95);border-bottom:1px solid #2a2d48;}
+.back-btn{background:transparent;border:1px solid #333;color:#666;padding:6px 14px;cursor:pointer;font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;}
+.back-btn:hover{border-color:#c8a75d;color:#c8a75d;}
+.coin-info{color:#ffd700;font-size:14px;letter-spacing:2px;}
+.main{flex:1;display:flex;gap:30px;padding:24px 40px;align-items:flex-start;justify-content:center;}
+
+/* Card */
+.bingo-card{background:linear-gradient(145deg,#181a30,#101222);border:1px solid #2a2e50;padding:16px;}
+.bingo-header{display:grid;grid-template-columns:repeat(5,64px);gap:4px;margin-bottom:4px;}
+.bingo-col-label{height:32px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;letter-spacing:2px;}
+.b-label{color:#3b82f6;}.i-label{color:#a855f7;}.n-label{color:#ffd700;}
+.g-label{color:#22c55e;}.o-label{color:#f97316;}
+.bingo-grid{display:grid;grid-template-columns:repeat(5,64px);grid-template-rows:repeat(5,64px);gap:4px;}
+.bingo-cell{display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;background:#0f1020;border:2px solid #1a1e40;cursor:default;transition:.2s;letter-spacing:0;}
+.bingo-cell.marked{background:linear-gradient(145deg,#1a1530,#100e22);border-color:#7a5dbb;color:#c8a75d;}
+.bingo-cell.free{background:linear-gradient(145deg,#1a1020,#100818);border-color:#c8a75d;font-size:13px;color:#c8a75d;}
+.bingo-cell.new-mark{animation:cellMark .4s ease;}
+@keyframes cellMark{0%{transform:scale(1.3);}100%{transform:scale(1);}}
+
+/* Numbers drawn */
+.drawn-wrap{display:flex;flex-direction:column;gap:16px;min-width:280px;}
+.drawn-title{font-size:11px;letter-spacing:3px;color:#c8a75d;margin-bottom:8px;}
+.last-number{font-size:64px;text-align:center;color:#fff;letter-spacing:4px;padding:10px;background:rgba(255,255,255,.04);border:1px solid #2a2e50;min-height:100px;display:flex;align-items:center;justify-content:center;}
+.drawn-list{display:flex;flex-wrap:wrap;gap:6px;max-height:200px;overflow-y:auto;}
+.drawn-num{width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:12px;background:#1a1e40;border:1px solid #2a2e50;color:#888;}
+.drawn-num.just-drawn{border-color:#c8a75d;color:#c8a75d;}
+
+/* Players */
+.players-panel{background:linear-gradient(145deg,#181a30,#101222);border:1px solid #2a2e50;padding:16px;min-width:200px;}
+.player-row{display:flex;justify-content:space-between;font-size:12px;color:#888;margin-bottom:8px;letter-spacing:1px;}
+.player-row.me{color:#c8a75d;}
+
+/* Status */
+.status-panel{text-align:center;padding:16px;background:linear-gradient(145deg,#181a30,#101222);border:1px solid #2a2e50;}
+.status-msg{font-size:14px;color:#888;letter-spacing:2px;margin-bottom:12px;}
+.bingo-banner{font-family:'Cinzel Decorative',serif;font-size:32px;color:#ffd700;display:none;animation:bingoPop .5s ease;}
+@keyframes bingoPop{from{transform:scale(0);}to{transform:scale(1);}}
+
+#startScreen{text-align:center;display:flex;flex-direction:column;align-items:center;gap:20px;}
+.game-title{font-family:'Cinzel Decorative',serif;font-size:30px;color:#3b82f6;letter-spacing:4px;}
+.rules{background:rgba(255,255,255,.04);border:1px solid #2a2e50;padding:20px 32px;max-width:440px;text-align:left;}
+.rules p{font-size:12px;color:#888;line-height:1.8;letter-spacing:1px;}
+.start-btn{background:#3b82f6;border:none;color:#fff;padding:13px 48px;font-family:'Cinzel',serif;font-size:14px;font-weight:700;letter-spacing:3px;cursor:pointer;}
+.start-btn:disabled{opacity:.4;cursor:default;}
+</style>
+</head>
+<body>
+<div class="header">
+    <button class="back-btn" onclick="location.href='arcade.html'">← ARCADE</button>
+    <div style="font-family:'Cinzel Decorative',serif;font-size:16px;color:#3b82f6;letter-spacing:3px;">🔮 PAWNS BINGO</div>
+    <div class="coin-info">🪙 <span id="coinCount">···</span></div>
+</div>
+<div class="main">
+    <div id="startScreen">
+        <div class="game-title">PAWNS BINGO</div>
+        <div style="font-size:12px;color:#555;letter-spacing:3px;">LIVE MULTIPLAYER BINGO</div>
+        <div class="rules">
+            <p>🔮 Join a room with up to 20 Arisen</p>
+            <p>📋 Each player gets a unique 5×5 card</p>
+            <p>🔢 Numbers drawn every 3 seconds automatically</p>
+            <p>🏆 First BINGO wins 30 coins!</p>
+            <p>🪙 Cost: 10 Coins per card</p>
+            <p>⏱ Room starts after 3 players join or 30s timer</p>
+        </div>
+        <button class="start-btn" id="startBtn" onclick="joinBingo()">JOIN BINGO — 10 COINS</button>
+    </div>
+
+    <div id="gameScreen" style="display:none;flex-direction:column;gap:20px;align-items:center;width:100%;">
+        <div style="display:flex;gap:30px;align-items:flex-start;">
+            <!-- Card -->
+            <div>
+                <div class="bingo-card">
+                    <div class="bingo-header">
+                        <div class="bingo-col-label b-label">B</div>
+                        <div class="bingo-col-label i-label">I</div>
+                        <div class="bingo-col-label n-label">N</div>
+                        <div class="bingo-col-label g-label">G</div>
+                        <div class="bingo-col-label o-label">O</div>
+                    </div>
+                    <div class="bingo-grid" id="bingoGrid"></div>
+                </div>
+            </div>
+            <!-- Drawn numbers -->
+            <div class="drawn-wrap">
+                <div class="status-panel">
+                    <div class="status-msg" id="statusMsg">Waiting for players···</div>
+                    <div class="bingo-banner" id="bingoBanner">🎉 BINGO! 🎉</div>
+                </div>
+                <div style="background:rgba(255,255,255,.04);border:1px solid #2a2e50;padding:16px;">
+                    <div class="drawn-title">LAST NUMBER</div>
+                    <div class="last-number" id="lastNum">—</div>
+                </div>
+                <div style="background:rgba(255,255,255,.04);border:1px solid #2a2e50;padding:16px;">
+                    <div class="drawn-title">DRAWN NUMBERS (<span id="drawnCount">0</span>)</div>
+                    <div class="drawn-list" id="drawnList"></div>
+                </div>
+            </div>
+            <!-- Players -->
+            <div class="players-panel">
+                <div class="drawn-title">PLAYERS</div>
+                <div id="playersList"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const COST=10;
+let ws=null, myCoins=0, myCard=null, myUsername='';
+
+async function loadCoins(){
+    try{const r=await fetch('https://api.ddon.org/api/festival/coins',{credentials:'include'});if(r.ok){const d=await r.json();myCoins=d.coins||0;document.getElementById('coinCount').textContent=myCoins;}}catch(_){}
+}
+
+async function getToken(){
+    const r=await fetch('https://api.ddon.org/api/festival/wstoken',{credentials:'include'});
+    const d=await r.json(); return d.token;
+}
+
+async function getMe(){
+    const r=await fetch('https://api.ddon.org/api/festival/me',{credentials:'include'});
+    const d=await r.json(); return d.username||'Arisen';
+}
+
+async function joinBingo(){
+    if(myCoins<COST){alert('Not enough coins!');return;}
+    const btn=document.getElementById('startBtn'); btn.disabled=true; btn.textContent='JOINING···';
+    // Charge coins
+    try{
+        const r=await fetch('https://api.ddon.org/api/festival/arcade/bet',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:COST})});
+        const d=await r.json();
+        if(!d.success){alert('Not enough coins!');btn.disabled=false;btn.textContent='JOIN BINGO — 10 COINS';return;}
+        myCoins=d.coinsLeft; document.getElementById('coinCount').textContent=myCoins;
+    }catch(_){btn.disabled=false;btn.textContent='JOIN BINGO — 10 COINS';return;}
+
+    myUsername=await getMe();
+    const token=await getToken();
+    ws=new WebSocket('wss://api.ddon.org/ws-arcade');
+    ws.onopen=()=>{ ws.send(JSON.stringify({type:'auth',token})); };
+    ws.onmessage=e=>{ try{handleMsg(JSON.parse(e.data));}catch(_){} };
+    ws.onclose=()=>{};
+}
+
+function handleMsg(d){
+    if(d.type==='authOk'){
+        ws.send(JSON.stringify({type:'bingoJoin'}));
+        return;
+    }
+    if(d.type==='bingoCard'){
+        myCard=d.card;
+        document.getElementById('startScreen').style.display='none';
+        document.getElementById('gameScreen').style.display='flex';
+        renderCard(myCard);
+        document.getElementById('statusMsg').textContent='Waiting for players to join···';
+        return;
+    }
+    if(d.type==='bingoPlayerJoined'||d.type==='bingoPlayerLeft'){
+        renderPlayers(d.state?.players||[]);
+        document.getElementById('statusMsg').textContent=`${d.state.playerCount} player(s) in room`;
+        return;
+    }
+    if(d.type==='bingoStart'){
+        document.getElementById('statusMsg').textContent='GAME STARTED! Mark your numbers!';
+        renderPlayers(d.state?.players||[]);
+        return;
+    }
+    if(d.type==='bingoNumber'){
+        const n=d.number;
+        document.getElementById('lastNum').textContent=n;
+        document.getElementById('drawnCount').textContent=d.drawnNumbers.length;
+        markNumber(n);
+        addDrawnNum(n);
+        return;
+    }
+    if(d.type==='bingoWin'){
+        const iWon=d.winners.includes(myUsername);
+        document.getElementById('statusMsg').textContent='BINGO! Winner: '+d.winners.join(', ')+(iWon?' (YOU!)':'');
+        if(iWon){
+            document.getElementById('bingoBanner').style.display='block';
+            myCoins+=30; document.getElementById('coinCount').textContent=myCoins;
+        }
+        return;
+    }
+}
+
+const COL_COLORS=['#3b82f6','#a855f7','#ffd700','#22c55e','#f97316'];
+
+function renderCard(card){
+    const grid=document.getElementById('bingoGrid'); grid.innerHTML='';
+    for(let r=0;r<5;r++){
+        for(let c=0;c<5;c++){
+            const n=card[r][c];
+            const cell=document.createElement('div');
+            cell.id=`cell_${r}_${c}`;
+            if(n===0){cell.className='bingo-cell free';cell.textContent='FREE';}
+            else{cell.className='bingo-cell';cell.textContent=n;cell.style.color=COL_COLORS[c];}
+            grid.appendChild(cell);
+        }
+    }
+}
+
+function markNumber(n){
+    if(!myCard) return;
+    for(let r=0;r<5;r++){
+        for(let c=0;c<5;c++){
+            if(myCard[r][c]===n){
+                const cell=document.getElementById(`cell_${r}_${c}`);
+                if(cell){cell.classList.add('marked','new-mark');setTimeout(()=>cell.classList.remove('new-mark'),400);}
+            }
+        }
+    }
+}
+
+function addDrawnNum(n){
+    const list=document.getElementById('drawnList');
+    const el=document.createElement('div');
+    el.className='drawn-num just-drawn'; el.textContent=n;
+    list.prepend(el);
+    setTimeout(()=>el.classList.remove('just-drawn'),2000);
+}
+
+function renderPlayers(players){
+    const el=document.getElementById('playersList'); el.innerHTML='';
+    players.forEach(p=>{
+        const row=document.createElement('div');
+        row.className='player-row'+(p.username===myUsername?' me':'');
+        row.innerHTML=`<span>${p.username}</span><span>${p.marked} marked</span>`;
+        el.appendChild(row);
+    });
+}
+
+loadCoins();
+</script>
+</body>
+</html>

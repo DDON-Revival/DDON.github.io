@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Monster Quiz – Dogma Arcade</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;user-select:none;}
+body{background:#0a0b14;color:#e6e6e6;font-family:'Cinzel',serif;min-height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+.header{display:flex;justify-content:space-between;align-items:center;padding:16px 40px;background:rgba(10,11,20,.95);border-bottom:1px solid #2a2d48;}
+.back-btn{background:transparent;border:1px solid #333;color:#666;padding:6px 14px;cursor:pointer;font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;}
+.back-btn:hover{border-color:#c8a75d;color:#c8a75d;}
+.coin-info{color:#ffd700;font-size:14px;letter-spacing:2px;}
+.main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+
+#startScreen{text-align:center;display:flex;flex-direction:column;align-items:center;gap:20px;}
+.game-title{font-family:'Cinzel Decorative',serif;font-size:30px;color:#22c55e;letter-spacing:4px;}
+.rules{background:rgba(255,255,255,.04);border:1px solid #2a2e50;padding:20px 32px;max-width:440px;text-align:left;}
+.rules p{font-size:12px;color:#888;line-height:1.8;letter-spacing:1px;}
+.start-btn{background:#22c55e;border:none;color:#0a0b14;padding:13px 48px;font-family:'Cinzel',serif;font-size:14px;font-weight:700;letter-spacing:3px;cursor:pointer;}
+.start-btn:disabled{opacity:.4;cursor:default;}
+
+#gameScreen{display:none;flex-direction:column;align-items:center;gap:24px;width:100%;max-width:700px;}
+.q-header{display:flex;justify-content:space-between;width:100%;font-size:12px;letter-spacing:2px;color:#888;}
+.q-timer{color:#ff4d4d;font-size:20px;}
+.q-progress{color:#22c55e;}
+.q-text{font-size:20px;color:#fff;letter-spacing:2px;text-align:center;line-height:1.5;padding:24px;background:rgba(255,255,255,.04);border:1px solid #2a2e50;width:100%;}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;}
+.opt-btn{padding:16px 20px;background:linear-gradient(145deg,#181a30,#101222);border:2px solid #2a2e50;color:#fff;font-family:'Cinzel',serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:.2s;text-align:left;}
+.opt-btn:hover:not(:disabled){border-color:#22c55e;}
+.opt-btn.correct{border-color:#22c55e;background:linear-gradient(145deg,#0a1a0a,#081008);color:#22c55e;}
+.opt-btn.wrong{border-color:#ff4d4d;background:linear-gradient(145deg,#1a0a0a,#100808);color:#ff4d4d;}
+.opt-btn:disabled{cursor:default;}
+.scoreboard{width:100%;background:rgba(255,255,255,.04);border:1px solid #2a2e50;padding:16px;}
+.score-row{display:flex;justify-content:space-between;font-size:13px;color:#888;margin-bottom:8px;letter-spacing:1px;padding:6px 10px;}
+.score-row.me{color:#22c55e;}
+.score-row.first{color:#ffd700;}
+.status-txt{font-size:13px;color:#888;letter-spacing:2px;text-align:center;}
+.answered-badge{font-size:12px;color:#22c55e;letter-spacing:2px;}
+
+#resultScreen{display:none;flex-direction:column;align-items:center;gap:20px;width:100%;max-width:600px;}
+.result-title{font-family:'Cinzel Decorative',serif;font-size:28px;color:#22c55e;}
+.result-table{width:100%;background:rgba(255,255,255,.04);border:1px solid #2a2e50;}
+.result-row{display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #1a1e40;font-size:13px;letter-spacing:1px;}
+.result-row.me{color:#22c55e;font-weight:700;}
+.result-btns{display:flex;gap:14px;}
+.btn-again{background:#22c55e;border:none;color:#0a0b14;padding:11px 30px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:2px;cursor:pointer;}
+.btn-back{background:transparent;border:1px solid #444;color:#888;padding:11px 24px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;cursor:pointer;}
+.btn-back:hover{border-color:#c8a75d;color:#c8a75d;}
+</style>
+</head>
+<body>
+<div class="header">
+    <button class="back-btn" onclick="location.href='arcade.html'">← ARCADE</button>
+    <div style="font-family:'Cinzel Decorative',serif;font-size:16px;color:#22c55e;letter-spacing:3px;">🧠 MONSTER QUIZ</div>
+    <div class="coin-info">🪙 <span id="coinCount">···</span></div>
+</div>
+<div class="main">
+    <div id="startScreen">
+        <div class="game-title">MONSTER QUIZ</div>
+        <div style="font-size:12px;color:#555;letter-spacing:3px;">HOW WELL DO YOU KNOW DDON?</div>
+        <div class="rules">
+            <p>🧠 15 questions about DDON monsters and lore</p>
+            <p>⏱ 15 seconds per question</p>
+            <p>⚡ Faster answers score the same — just be correct!</p>
+            <p>🏆 1st: 20 coins · 2nd: 12 coins · 3rd: 6 coins · Others: 2 coins</p>
+            <p>🪙 Cost: 5 Coins · Room starts with 2+ players or after 20s</p>
+        </div>
+        <button class="start-btn" id="startBtn" onclick="joinQuiz()">JOIN QUIZ — 5 COINS</button>
+    </div>
+
+    <div id="gameScreen">
+        <div class="q-header">
+            <span class="q-progress">Q <span id="qNum">0</span> / <span id="qTotal">15</span></span>
+            <span class="answered-badge" id="answeredBadge" style="display:none;">✓ Answered</span>
+            <span class="q-timer" id="qTimer">15</span>
+        </div>
+        <div class="q-text" id="qText">Waiting for question···</div>
+        <div class="options" id="options"></div>
+        <div class="scoreboard">
+            <div style="font-size:10px;letter-spacing:3px;color:#22c55e;margin-bottom:10px;">LIVE SCORES</div>
+            <div id="scoreRows"></div>
+        </div>
+        <div class="status-txt" id="statusTxt"></div>
+    </div>
+
+    <div id="resultScreen">
+        <div class="result-title">QUIZ COMPLETE!</div>
+        <div class="result-table" id="resultTable"></div>
+        <div class="result-btns">
+            <button class="btn-again" onclick="location.reload()">PLAY AGAIN</button>
+            <button class="btn-back" onclick="location.href='arcade.html'">← ARCADE</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const COST=5;
+let ws=null, myCoins=0, myUsername='', answered=false;
+
+async function loadCoins(){
+    try{const r=await fetch('https://api.ddon.org/api/festival/coins',{credentials:'include'});if(r.ok){const d=await r.json();myCoins=d.coins||0;document.getElementById('coinCount').textContent=myCoins;}}catch(_){}
+}
+async function getToken(){const r=await fetch('https://api.ddon.org/api/festival/wstoken',{credentials:'include'});const d=await r.json();return d.token;}
+async function getMe(){const r=await fetch('https://api.ddon.org/api/festival/me',{credentials:'include'});const d=await r.json();return d.username||'Arisen';}
+
+async function joinQuiz(){
+    if(myCoins<COST){alert('Not enough coins!');return;}
+    const btn=document.getElementById('startBtn');btn.disabled=true;btn.textContent='JOINING···';
+    try{
+        const r=await fetch('https://api.ddon.org/api/festival/arcade/bet',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:COST})});
+        const d=await r.json();
+        if(!d.success){alert('Not enough coins!');btn.disabled=false;btn.textContent='JOIN QUIZ — 5 COINS';return;}
+        myCoins=d.coinsLeft;document.getElementById('coinCount').textContent=myCoins;
+    }catch(_){btn.disabled=false;btn.textContent='JOIN QUIZ — 5 COINS';return;}
+
+    myUsername=await getMe();
+    const token=await getToken();
+    ws=new WebSocket('wss://api.ddon.org/ws-arcade');
+    ws.onopen=()=>ws.send(JSON.stringify({type:'auth',token}));
+    ws.onmessage=e=>{ try{handleMsg(JSON.parse(e.data));}catch(_){} };
+}
+
+function handleMsg(d){
+    if(d.type==='authOk'){
+        ws.send(JSON.stringify({type:'quizJoin'}));
+        return;
+    }
+    if(d.type==='quizJoined'){
+        document.getElementById('startScreen').style.display='none';
+        document.getElementById('gameScreen').style.flex='1';
+        document.getElementById('gameScreen').style.display='flex';
+        document.getElementById('gameScreen').style.flexDirection='column';
+        document.getElementById('statusTxt').textContent=`${d.playerCount} player(s) in room — waiting···`;
+        return;
+    }
+    if(d.type==='quizPlayerJoined'){
+        document.getElementById('statusTxt').textContent=`${d.playerCount} player(s) — ${d.username} joined!`;
+        return;
+    }
+    if(d.type==='quizCountdown'){
+        document.getElementById('statusTxt').textContent=`Starting in ${d.seconds}s!`;
+        return;
+    }
+    if(d.type==='quizQuestion'){
+        answered=false;
+        document.getElementById('answeredBadge').style.display='none';
+        document.getElementById('qNum').textContent=d.questionIdx+1;
+        document.getElementById('qTotal').textContent=d.total;
+        document.getElementById('qText').textContent=d.question;
+        document.getElementById('qTimer').textContent=d.timeLeft;
+        document.getElementById('statusTxt').textContent='';
+        const opts=document.getElementById('options');opts.innerHTML='';
+        d.options.forEach(opt=>{
+            const btn=document.createElement('button');
+            btn.className='opt-btn'; btn.textContent=opt;
+            btn.onclick=()=>submitAnswer(opt);
+            opts.appendChild(btn);
+        });
+        return;
+    }
+    if(d.type==='quizTimer'){
+        document.getElementById('qTimer').textContent=d.timeLeft;
+        return;
+    }
+    if(d.type==='quizAnswered'){
+        answered=true;
+        document.getElementById('answeredBadge').style.display='block';
+        document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
+        return;
+    }
+    if(d.type==='quizReveal'){
+        document.querySelectorAll('.opt-btn').forEach(b=>{
+            b.disabled=true;
+            if(b.textContent===d.correct) b.classList.add('correct');
+            else if(answered&&b.classList.contains('selected')) b.classList.add('wrong');
+        });
+        renderScores(d.scores);
+        return;
+    }
+    if(d.type==='quizPlayerLeft'){
+        document.getElementById('statusTxt').textContent=`${d.playerCount} player(s) remaining`;
+        return;
+    }
+    if(d.type==='quizEnd'){
+        document.getElementById('gameScreen').style.display='none';
+        document.getElementById('resultScreen').style.display='flex';
+        const table=document.getElementById('resultTable');
+        d.payouts.forEach((p,i)=>{
+            const row=document.createElement('div');
+            row.className='result-row'+(p.username===myUsername?' me':'');
+            row.innerHTML=`<span>${i+1}. ${p.username}</span><span>${p.score} correct</span><span>+${p.reward} 🪙</span>`;
+            table.appendChild(row);
+        });
+        const myResult=d.payouts.find(p=>p.username===myUsername);
+        if(myResult){ myCoins+=myResult.reward; document.getElementById('coinCount').textContent=myCoins; }
+        return;
+    }
+}
+
+function submitAnswer(ans){
+    if(answered) return;
+    answered=true;
+    document.querySelectorAll('.opt-btn').forEach(b=>{
+        b.disabled=true;
+        if(b.textContent===ans) b.classList.add('selected');
+    });
+    ws.send(JSON.stringify({type:'quizAnswer',answer:ans}));
+    document.getElementById('answeredBadge').style.display='block';
+}
+
+function renderScores(scores){
+    const el=document.getElementById('scoreRows');el.innerHTML='';
+    scores.forEach((s,i)=>{
+        const row=document.createElement('div');
+        row.className='score-row'+(s.username===myUsername?' me':'')+(i===0?' first':'');
+        row.innerHTML=`<span>${i+1}. ${s.username}</span><span>${s.score} ✓</span>`;
+        el.appendChild(row);
+    });
+}
+
+loadCoins();
+</script>
+</body>
+</html>
