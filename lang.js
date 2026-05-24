@@ -81,7 +81,7 @@ function _buildSelector(){
         opt.className = 'lang-opt';
         opt.dataset.code = code;
         opt.textContent = label;
-        opt.style.cssText = `padding:11px 18px;font-size:12px;color:${code===_lang?'#c8a75d':'#888'};letter-spacing:1px;cursor:pointer;font-family:Cinzel,serif;transition:.15s;`;
+        opt.style.cssText = `padding:11px 18px;font-size:12px;color:${code===_lang?'#c8a75d':'#888'};letter-spacing:1px;cursor:pointer;font-family:Cinzel,serif;transition:.15s;display:block;width:100%;box-sizing:border-box;`;
         opt.addEventListener('click', () => window.setLang(code));
         opt.addEventListener('mouseover', () => { opt.style.background='rgba(200,167,93,.1)'; opt.style.color='#c8a75d'; });
         opt.addEventListener('mouseout',  () => { opt.style.background=''; opt.style.color = code===_lang?'#c8a75d':'#888'; });

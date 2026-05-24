@@ -142,6 +142,7 @@ let pendingItem=null;
 
 async function init(){
     await loadItemPool();
+    BOARD_TILES=getBoardTiles();
     await loadCoins();
     await loadChars();
     buildBoard();
@@ -157,6 +158,7 @@ async function loadChars(){
 }
 
 function buildBoard(){
+    BOARD_TILES=getBoardTiles();
     const board=document.getElementById('board');
     board.innerHTML='';
     // Layout: 16 tiles in a loop on a 5x4 grid (perimeter)
@@ -232,7 +234,7 @@ async function rollDice(){
     const roll=Math.floor(Math.random()*6)+1;
     setTimeout(async()=>{
         diceEl.textContent=faces[roll-1];
-        addLog(`Rolled a ${roll}!`);
+        addLog(window.t('rolled_a')+' '+roll+'!');
 
         // Move token step by step
         for(let i=0;i<roll;i++){
@@ -267,11 +269,11 @@ async function handleTile(tile){
         if(c>0){
             addLog(`${tile.name} → +${c} coins`,'good');
             await payout(c);
-            status.textContent=`Gained ${c} coins!`;
+            status.textContent=`+${c} ${window.t('ach_coins')}!`;
         } else {
             addLog(`${tile.name} → ${c} coins`,'bad');
             await deductCoins(Math.abs(c));
-            status.textContent=`Lost ${Math.abs(c)} coins!`;
+            status.textContent=`-${Math.abs(c)} ${window.t('ach_coins')}!`;
         }
     } else if(tile.type==='item'){
         const item=randItem(tile.rarity||'common');
@@ -284,7 +286,7 @@ async function handleTile(tile){
         addLog(window.t('jackpot')+' +30 coins!','jackpot');
         boardMeta.jackpot=true;
         await payout(30);
-        status.textContent='JACKPOT! 30 coins earned!';
+        status.textContent=window.t('jackpot')+'! +30 '+window.t('ach_coins')+'!';
     } else if(tile.type==='bonus'){
         addLog(window.t('extra_roll')+'','good');
         status.textContent=window.t('extra_roll');
@@ -297,7 +299,7 @@ async function handleTile(tile){
     } else if(tile.type==='curse'){
         addLog(`Cursed! -${Math.abs(tile.coins)} coins`,'bad');
         await deductCoins(Math.abs(tile.coins));
-        status.textContent='Cursed by the Rift!';
+        status.textContent=window.t('curse_hit');
     }
 }
 
