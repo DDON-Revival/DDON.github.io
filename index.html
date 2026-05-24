@@ -4,231 +4,70 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DDON Revival</title>
-
-<meta http-equiv="Content-Security-Policy"
-content="
-default-src 'self';
-script-src 'self' 'unsafe-inline';
-style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-font-src https://fonts.gstatic.com;
-connect-src https://api.ddon.org;
-img-src 'self' https://live.ddon.org;
-">
-
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.ddon.org; img-src 'self' data:;">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
-
 <style>
-/* ============================================================
-   BASE DESIGN (always active)
-============================================================ */
-body{
-    margin:0;
-    font-family:'Cinzel',serif;
-    background:#0f0f14;
-    color:#e6e6e6;
-    overflow-x:hidden;
-}
-#particles{
-    position:fixed;width:100%;height:100%;top:0;left:0;
-    z-index:-1;background:#0f0f14;overflow:hidden;
-}
-.spark{
-    position:absolute;width:4px;height:4px;background:#c8a75d;
-    border-radius:50%;opacity:0.7;animation:float 8s linear infinite;
-}
-@keyframes float{
-    0%{transform:translateY(100vh);opacity:0;}
-    20%{opacity:1;}
-    100%{transform:translateY(-10vh);opacity:0;}
-}
-header{
-    background:#1b1b25;padding:20px;
-    display:flex;justify-content:space-between;align-items:center;
-    border-bottom:2px solid #c8a75d;
-    position:relative;z-index:10;
-}
+/* ── Toggle: set true for Anniversary, false for Normal ── */
+
+/* ── BASE ── */
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Cinzel',serif;background:#0f0f14;color:#e6e6e6;overflow-x:hidden;}
+#particles{position:fixed;width:100%;height:100%;top:0;left:0;z-index:-1;background:#0f0f14;overflow:hidden;}
+.spark{position:absolute;width:4px;height:4px;background:#c8a75d;border-radius:50%;opacity:.7;animation:float 8s linear infinite;}
+@keyframes float{0%{transform:translateY(100vh);opacity:0;}20%{opacity:1;}100%{transform:translateY(-10vh);opacity:0;}}
+header{background:#1b1b25;padding:20px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #c8a75d;position:relative;z-index:10;}
 nav a{color:#e6e6e6;text-decoration:none;margin:0 15px;}
 nav a:hover{color:#c8a75d;}
-.hero{
-    text-align:center;padding:120px 20px;
-    background:linear-gradient(to bottom,#1b1b25,#0f0f14);
-    position:relative;overflow:hidden;
-}
+.hero{text-align:center;padding:120px 20px;background:linear-gradient(to bottom,#1b1b25,#0f0f14);}
 .hero h1{font-size:60px;color:#c8a75d;}
 .section{padding:80px 20px;text-align:center;}
-.card{
-    background:#1b1b25;padding:30px;margin:20px;
-    display:inline-block;width:300px;border:1px solid #2a2a35;transition:0.3s;
-}
+.card{background:#1b1b25;padding:30px;margin:20px;display:inline-block;width:300px;border:1px solid #2a2a35;transition:.3s;vertical-align:top;}
 .card:hover{border-color:#c8a75d;transform:translateY(-5px);}
 .lang-selector{position:relative;}
-.lang-btn{
-    background:#1b1b25;border:1px solid #c8a75d;
-    color:#c8a75d;padding:6px 12px;cursor:pointer;font-family:'Cinzel',serif;
-}
-.lang-dropdown{display:none;position:absolute;right:0;background:#1b1b25;border:1px solid #c8a75d;z-index:999;}
+.lang-btn{background:#1b1b25;border:1px solid #c8a75d;color:#c8a75d;padding:6px 12px;cursor:pointer;font-family:'Cinzel',serif;}
+.lang-dropdown{display:none;position:absolute;right:0;background:#1b1b25;border:1px solid #c8a75d;z-index:999;min-width:140px;}
 .lang-dropdown div{padding:6px 12px;cursor:pointer;}
 .lang-dropdown div:hover{background:#2a2a35;}
 .lang-selector:hover .lang-dropdown{display:block;}
 footer{text-align:center;padding:20px;background:#1b1b25;}
-.discord-btn{
-    display:inline-block;margin-top:40px;padding:14px 30px;
-    background:#5865F2;color:white;font-weight:bold;text-decoration:none;
-    border-radius:6px;transition:0.3s;font-size:18px;
-}
+.discord-btn{display:inline-block;margin-top:20px;padding:14px 30px;background:#5865F2;color:#fff;font-weight:bold;text-decoration:none;border-radius:6px;transition:.3s;font-size:18px;}
 .discord-btn:hover{background:#4752C4;transform:scale(1.05);}
 
+/* ── ANNIVERSARY HERO ── */
+.anniv-hero{text-align:center;padding:80px 20px 60px;background:linear-gradient(to bottom,#1b1b25,#0f0f14);display:flex;flex-direction:column;align-items:center;gap:14px;}
+.anniv-emblem-wrap{position:relative;width:160px;height:165px;overflow:hidden;animation:pulse 3s ease-in-out infinite;}
+.anniv-emblem-wrap img{position:absolute;top:-3px;left:-3px;width:540px;height:auto;mix-blend-mode:screen;}
+@keyframes pulse{0%,100%{filter:drop-shadow(0 0 14px rgba(200,167,93,.5));}50%{filter:drop-shadow(0 0 30px rgba(255,215,0,.85));}}
+.anniv-title{font-family:'Cinzel Decorative',serif;font-size:52px;color:#ffd700;text-shadow:0 0 40px rgba(255,215,0,.4),0 2px 4px rgba(0,0,0,.8);margin:0;letter-spacing:3px;}
+.anniv-sub{font-size:16px;color:#c8a75d;letter-spacing:6px;margin:0;}
+.anniv-tag{font-size:12px;color:#aaa;letter-spacing:3px;margin:0;}
 
-/* ============================================================
-   ANNIVERSARY DESIGN (active when Anniversary_Design = true)
-============================================================ */
+/* ── COUNTDOWN ── */
+.countdown-box{border:1px solid rgba(200,167,93,.4);padding:20px 40px;background:rgba(10,8,20,.5);backdrop-filter:blur(4px);margin-top:10px;text-align:center;}
+.countdown-label{font-size:11px;color:#c8a75d;letter-spacing:4px;margin-bottom:8px;}
+.countdown-timer{font-family:'Cinzel Decorative',serif;font-size:36px;color:#ffd700;letter-spacing:4px;text-shadow:0 0 20px rgba(255,215,0,.4);}
+.countdown-date{font-size:10px;color:#555;letter-spacing:3px;margin-top:6px;}
 
-/* ── Emblem cropped from 3rd_annivb.png ── */
-/* Image is ~1456x816 — emblem is top-left ~28% width, ~52% height */
-.anniv-emblem-crop{
-    display:inline-block;
-    width:155px;
-    height:160px;
-    overflow:hidden;
-    position:relative;
-    flex-shrink:0;
-    filter:drop-shadow(0 0 20px rgba(200,167,93,.8));
-    animation:emblemPulse 3s ease-in-out infinite;
-}
-.anniv-emblem-crop img{
-    position:absolute;
-    top:-4px;
-    left:-4px;
-    width:530px;
-    height:auto;
-    mix-blend-mode:screen;
-}
-@keyframes emblemPulse{
-    0%,100%{filter:drop-shadow(0 0 12px rgba(200,167,93,.5));}
-    50%{filter:drop-shadow(0 0 28px rgba(255,215,0,.9)) brightness(1.1);}
-}
-
-/* ── Animated gold particles for anniversary ── */
-.anniv-particle{
-    position:absolute;pointer-events:none;
-    width:6px;height:6px;border-radius:50%;
-    background:radial-gradient(circle,#ffd700,#c8a75d);
-    animation:annivFloat linear infinite;
-    opacity:0;
-}
-@keyframes annivFloat{
-    0%{opacity:0;transform:translateY(0) scale(0);}
-    10%{opacity:.8;transform:translateY(-20px) scale(1);}
-    100%{opacity:0;transform:translateY(-120px) scale(.3);}
-}
-
-/* ── Anniversary banner (hero replacement) ── */
-.anniv-hero{
-    position:relative;text-align:center;overflow:hidden;
-    min-height:520px;display:flex;align-items:center;justify-content:center;
-    flex-direction:column;
-}
-.anniv-hero-bg{
-    position:absolute;inset:0;
-    background:linear-gradient(to bottom,rgba(10,8,20,.2),rgba(10,8,20,.85));
-    z-index:1;
-}
-.anniv-hero-img{
-    position:absolute;inset:0;width:100%;height:100%;
-    object-fit:cover;object-position:center top;opacity:.7;
-}
-.anniv-hero-content{
-    position:relative;z-index:2;
-    display:flex;flex-direction:column;align-items:center;gap:16px;
-    padding:60px 20px;
-}
-.anniv-emblem{
-    width:140px;height:140px;object-fit:contain;
-    filter:drop-shadow(0 0 20px rgba(200,167,93,.8));
-    animation:emblemPulse 3s ease-in-out infinite;
-}
-@keyframes emblemPulse{
-    0%,100%{filter:drop-shadow(0 0 16px rgba(200,167,93,.6));}
-    50%{filter:drop-shadow(0 0 36px rgba(255,215,0,.9));}
-}
-.anniv-title{
-    font-family:'Cinzel Decorative',serif;
-    font-size:52px;color:#ffd700;
-    text-shadow:0 0 40px rgba(255,215,0,.5),0 2px 4px rgba(0,0,0,.8);
-    margin:0;letter-spacing:4px;
-}
-.anniv-subtitle{
-    font-size:18px;color:#c8a75d;letter-spacing:6px;
-    text-shadow:0 0 20px rgba(200,167,93,.4);margin:0;
-}
-.anniv-tagline{
-    font-size:13px;color:#e6e6e6;letter-spacing:3px;opacity:.8;margin:0;
-}
-
-/* ── Anniversary header badge ── */
-.anniv-header-badge{
-    display:flex;align-items:center;gap:10px;
-    background:linear-gradient(135deg,rgba(200,167,93,.15),rgba(255,215,0,.08));
-    border:1px solid rgba(200,167,93,.4);
-    padding:6px 16px;border-radius:2px;
-}
-.anniv-header-badge img{width:32px;height:32px;object-fit:contain;}
-.anniv-header-badge span{
-    font-size:11px;color:#c8a75d;letter-spacing:2px;
-    font-family:'Cinzel',serif;
-}
-
-/* ── Anniversary news card ── */
-.card-anniversary{
-    background:linear-gradient(145deg,#1a1508,#120f04);
-    border:1px solid #c8a75d;position:relative;overflow:hidden;
-}
-.card-anniversary::before{
-    content:'★ 3RD ANNIVERSARY ★';
-    position:absolute;top:10px;left:50%;transform:translateX(-50%);
-    font-size:9px;color:#c8a75d;letter-spacing:3px;white-space:nowrap;
-}
-.card-anniversary h3{margin-top:16px;color:#ffd700;}
-.card-anniversary p{color:#c8a75d;}
-
-/* ── Gold shimmer on header border ── */
-.anniv-active header{
-    border-bottom:2px solid transparent;
-    background-image:linear-gradient(#1b1b25,#1b1b25),
-        linear-gradient(90deg,#c8a75d,#ffd700,#c8a75d,#ffd700);
-    background-origin:border-box;
-    background-clip:padding-box,border-box;
-    animation:headerShimmer 3s linear infinite;
-}
-@keyframes headerShimmer{
-    0%{background-image:linear-gradient(#1b1b25,#1b1b25),linear-gradient(90deg,#c8a75d,#ffd700,#c8a75d,#ffd700);}
-    100%{background-image:linear-gradient(#1b1b25,#1b1b25),linear-gradient(270deg,#c8a75d,#ffd700,#c8a75d,#ffd700);}
-}
+/* ── GOLD PARTICLES ── */
+.gp{position:absolute;border-radius:50%;background:radial-gradient(circle,#ffd700,#c8a75d);animation:gpFloat linear infinite;pointer-events:none;}
+@keyframes gpFloat{0%{opacity:0;transform:translateY(0) scale(0);}15%{opacity:.8;transform:translateY(-30px) scale(1);}100%{opacity:0;transform:translateY(-150px) scale(.2);}}
 </style>
 </head>
-
 <body>
 
-<!-- ============================================================
-     🎛 TOGGLE: set true to enable anniversary mode
-============================================================ -->
 <script>
-const Anniversary_Design = true;   // ← true = Anniversary | false = Normal
-const Normal_Design = !Anniversary_Design;
+// ┌─────────────────────────────────────────┐
+// │  TOGGLE:  true = Anniversary Design     │
+// │           false = Normal Design         │
+// └─────────────────────────────────────────┘
+const Anniversary_Design = true;
 </script>
 
 <div id="particles"></div>
 
 <header>
-    <div style="display:flex;align-items:center;gap:16px;">
-        <h2 style="margin:0;">DDON Revival</h2>
-        <!-- Anniversary badge (only shown in anniversary mode) -->
-    </div>
-
-    <div id="totalPlayersBox" style="color:#c8a75d;font-weight:bold;">
-        Total Players Online: 0
-    </div>
-
+    <h2 style="margin:0;">DDON Revival</h2>
+    <div id="totalPlayersBox" style="color:#c8a75d;font-weight:bold;">Total Players Online: 0</div>
     <nav>
         <a href="#home" data-key="home">Home</a>
         <a href="#news" data-key="news">News</a>
@@ -239,55 +78,46 @@ const Normal_Design = !Anniversary_Design;
         <a href="custom.html" data-key="customFeatures">Custom Features</a>
         <a href="login.html" style="color:#c8a75d;font-weight:bold;">Login</a>
     </nav>
-
     <div class="lang-selector">
         <button class="lang-btn">🌍</button>
         <div class="lang-dropdown" id="languageList"></div>
     </div>
 </header>
 
-<!-- ── NORMAL HERO ── -->
-<section id="home" class="hero" id="normalHero">
+<!-- NORMAL HERO -->
+<section id="normalHero" class="hero">
     <h1 data-key="title">Dragon's Dogma Online</h1>
     <p data-key="subtitle">Biggest Server • Custom Content • Hardcore</p>
-    <a href="https://discord.gg/ub8Newzh95" target="_blank" rel="noopener" class="discord-btn">
-        Join our Discord
-    </a>
+    <a href="https://discord.gg/ub8Newzh95" target="_blank" rel="noopener" class="discord-btn">Join our Discord</a>
 </section>
 
-<!-- ── ANNIVERSARY HERO (injected by JS when Anniversary_Design = true) ── -->
-<div id="annivHero" style="display:none;">
-    <div class="anniv-hero" style="background:linear-gradient(to bottom,#1b1b25,#0f0f14);padding:80px 20px;">
-        <div class="anniv-hero-content">
-            <div class="anniv-emblem-crop"><img src="3rd_annivb.png" alt="3rd Anniversary Emblem"></div>
-            <div class="anniv-title">DOGMA FESTIVAL</div>
-            <div class="anniv-subtitle">✦ THIRD ANNIVERSARY ✦</div>
-            <div class="anniv-tagline">3 YEARS OF ADVENTURE • THANK YOU, ARISENS</div>
-            <div id="festivalBtnWrap" style="margin-top:20px;text-align:center;">
-                <!-- Unlocks May 29 2026 -->
-                <div id="festivalLocked" style="display:none;">
-                    <div style="border:1px solid rgba(200,167,93,.4);padding:18px 36px;background:rgba(10,8,20,.6);backdrop-filter:blur(4px);">
-                        <div style="font-size:11px;color:#c8a75d;letter-spacing:4px;margin-bottom:10px;">🎉 FESTIVAL OPENS IN</div>
-                        <div id="festCountdown" style="font-family:'Cinzel Decorative',serif;font-size:32px;color:#ffd700;letter-spacing:4px;text-shadow:0 0 20px rgba(255,215,0,.4);">··:··:··:··</div>
-                        <div style="font-size:10px;color:#555;letter-spacing:3px;margin-top:8px;">29 MAY 2026 · 00:00 UTC</div>
-                    </div>
-                </div>
-                <a id="festivalOpen" href="festival.html" style="display:none;padding:14px 40px;background:linear-gradient(135deg,#c8a75d,#ffd700);color:#0a0b14;font-family:'Cinzel',serif;font-size:14px;font-weight:700;letter-spacing:3px;text-decoration:none;transition:.2s;"
-                   onmouseover="this.style.boxShadow='0 0 28px rgba(255,215,0,.5)'"
-                   onmouseout="this.style.boxShadow='none'">
-                    🎉 JOIN THE FESTIVAL
-                </a>
-            </div>
-            <a href="https://discord.gg/ub8Newzh95" target="_blank" rel="noopener" class="discord-btn" style="margin-top:10px;">
-                Join our Discord
-            </a>
+<!-- ANNIVERSARY HERO -->
+<div id="annivHero" style="position:relative;overflow:hidden;">
+    <div class="anniv-hero">
+        <!-- Emblem: cropped from 3rd_annivb.png via CSS -->
+        <div class="anniv-emblem-wrap">
+            <img src="3rd_annivb.png" alt="3rd Anniversary Emblem">
         </div>
+        <div class="anniv-title">DOGMA FESTIVAL</div>
+        <div class="anniv-sub">✦ THIRD ANNIVERSARY ✦</div>
+        <div class="anniv-tag">3 YEARS OF ADVENTURE • THANK YOU, ARISENS</div>
+
+        <!-- Countdown / Open button -->
+        <div class="countdown-box" id="countdownBox">
+            <div class="countdown-label">🎉 FESTIVAL OPENS IN</div>
+            <div class="countdown-timer" id="countdownTimer">··d ··h ··m ··s</div>
+            <div class="countdown-date">29 MAY 2026 · 00:00 UTC</div>
+        </div>
+        <a id="festOpenBtn" href="festival.html" style="display:none;padding:14px 40px;background:linear-gradient(135deg,#c8a75d,#ffd700);color:#0a0b14;font-family:'Cinzel',serif;font-size:14px;font-weight:700;letter-spacing:3px;text-decoration:none;margin-top:10px;"
+           onmouseover="this.style.boxShadow='0 0 28px rgba(255,215,0,.5)'"
+           onmouseout="this.style.boxShadow='none'">🎉 JOIN THE FESTIVAL</a>
+
+        <a href="https://discord.gg/ub8Newzh95" target="_blank" rel="noopener" class="discord-btn">Join our Discord</a>
     </div>
 </div>
 
 <section id="news" class="section">
     <h2 data-key="newsTitle">Latest News</h2>
-
     <div class="card">
         <h3 data-key="news1Title">Server Opening</h3>
         <p data-key="news1Text">DDON is now live!</p>
@@ -303,152 +133,94 @@ const Normal_Design = !Anniversary_Design;
     <div id="serverStatusContainer"></div>
 </section>
 
-<footer>
-    2023 DDON Revival • Unofficial Fan Project
-</footer>
+<footer>2023 DDON Revival • Unofficial Fan Project</footer>
 
 <script src="translations.js"></script>
-
 <script>
 /* ── Sparks ── */
-const pContainer = document.getElementById("particles");
+const pCont = document.getElementById('particles');
 for(let i=0;i<40;i++){
-    let spark=document.createElement("div");
-    spark.classList.add("spark");
-    spark.style.left=Math.random()*100+"vw";
-    spark.style.animationDuration=(5+Math.random()*5)+"s";
-    spark.style.animationDelay=Math.random()*5+"s";
-    pContainer.appendChild(spark);
+    const s=document.createElement('div'); s.className='spark';
+    s.style.left=Math.random()*100+'vw';
+    s.style.animationDuration=(5+Math.random()*5)+'s';
+    s.style.animationDelay=Math.random()*5+'s';
+    pCont.appendChild(s);
 }
 
-/* ── Apply Anniversary Design ── */
+/* ── Apply design toggle ── */
 if(Anniversary_Design){
-    document.body.classList.add('anniv-active');
+    document.getElementById('normalHero').style.display = 'none';
+    document.getElementById('annivHero').style.display  = 'block';
 
-    // Show/hide hero sections
-    document.querySelector('#home.hero').style.display = 'none';
-    document.getElementById('annivHero').style.display = 'block';
-
-
-    // Show anniversary news card
-    document.getElementById('annivNewsCard').style.display = 'inline-block';
-
-
-    // Add gold floating particles to anniversary hero
-    const hero = document.querySelector('.anniv-hero');
-    if(hero){
-        for(let i=0;i<25;i++){
-            const p=document.createElement('div');
-            p.className='anniv-particle';
-            p.style.left=Math.random()*100+'%';
-            p.style.bottom='0';
-            p.style.animationDuration=(3+Math.random()*4)+'s';
-            p.style.animationDelay=Math.random()*4+'s';
-            p.style.width=p.style.height=(3+Math.random()*5)+'px';
-            hero.appendChild(p);
-        }
+    // Gold floating particles in anniversary hero
+    const hero = document.getElementById('annivHero');
+    for(let i=0;i<20;i++){
+        const p=document.createElement('div'); p.className='gp';
+        const sz=3+Math.random()*5;
+        p.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;bottom:0;animation-duration:${3+Math.random()*4}s;animation-delay:${Math.random()*5}s;`;
+        hero.appendChild(p);
     }
 
-    // emblem uses CSS background-crop, no JS needed
+    /* ── Countdown ── */
+    const OPEN = new Date('2026-05-29T00:00:00Z');
+    function tick(){
+        const diff = OPEN - Date.now();
+        if(diff <= 0){
+            document.getElementById('countdownBox').style.display = 'none';
+            document.getElementById('festOpenBtn').style.display  = 'inline-block';
+            return;
+        }
+        const d=Math.floor(diff/86400000);
+        const h=Math.floor(diff%86400000/3600000);
+        const m=Math.floor(diff%3600000/60000);
+        const s=Math.floor(diff%60000/1000);
+        const p=n=>String(n).padStart(2,'0');
+        document.getElementById('countdownTimer').textContent=`${p(d)}d ${p(h)}h ${p(m)}m ${p(s)}s`;
+    }
+    tick(); setInterval(tick,1000);
+} else {
+    document.getElementById('normalHero').style.display = 'block';
+    document.getElementById('annivHero').style.display  = 'none';
 }
 
-/* ── Language System ── */
+/* ── Language ── */
 function setLanguage(lang){
-    const t = translations[lang];
-    if(!t) return;
-    document.querySelectorAll("[data-key]").forEach(el=>{
-        const key = el.getAttribute("data-key");
-        if(t[key]) el.textContent = t[key];
+    const t=translations&&translations[lang]; if(!t) return;
+    document.querySelectorAll('[data-key]').forEach(el=>{
+        const k=el.getAttribute('data-key'); if(t[k]) el.textContent=t[k];
     });
-    localStorage.setItem("lang", lang);
+    localStorage.setItem('lang',lang);
     loadServerStatus();
 }
-
-if(typeof languages !== 'undefined'){
-    languages.forEach(lang=>{
-        const div=document.createElement("div");
-        div.innerHTML=`${lang.flag} ${lang.name}`;
-        div.onclick=()=>setLanguage(lang.code);
-        document.getElementById("languageList").appendChild(div);
+if(typeof languages!=='undefined'){
+    languages.forEach(l=>{
+        const d=document.createElement('div');
+        d.innerHTML=`${l.flag} ${l.name}`;
+        d.onclick=()=>setLanguage(l.code);
+        document.getElementById('languageList').appendChild(d);
     });
 }
-
-const saved = localStorage.getItem("lang") || "en";
-setLanguage(saved);
+setLanguage(localStorage.getItem('lang')||'en');
 
 /* ── Server Status ── */
 async function loadServerStatus(){
     try{
-        const t = translations[localStorage.getItem("lang") || "en"];
-        const res = await fetch("https://api.ddon.org/api/channel-status", {credentials:"include"});
-        const data = await res.json();
-        const container = document.getElementById("serverStatusContainer");
-        container.innerHTML = "";
-        const channelNames = {11:"Channel 1",20:"Channel 2",30:"Channel 3",40:"Channel 4",50:"Channel 5",60:"Channel 6",70:"Channel 7",80:"Channel 8",90:"Collab",100:"Custom Enemy",110:"Boss Rush"};
-        let totalOnline = 0;
-        Object.keys(channelNames).forEach(id => {
-            const channel = data.find(c => parseInt(c.server_id) === parseInt(id));
-            const players = channel ? parseInt(channel.players) : 0;
-            totalOnline += players;
-            const div = document.createElement("div");
-            div.className = "card" + (Anniversary_Design ? "" : "");
-            const h3 = document.createElement("h3"); h3.textContent = channelNames[id];
-            const p1 = document.createElement("p");
-            p1.textContent = (t?.statusLabel||"Status") + ": 🟢 " + (t?.online||"Online");
-            const p2 = document.createElement("p");
-            p2.textContent = (t?.playersLabel||"Players") + ": " + players;
-            div.appendChild(h3); div.appendChild(p1); div.appendChild(p2);
-            container.appendChild(div);
+        const t=(translations&&translations[localStorage.getItem('lang')||'en'])||{};
+        const data=await(await fetch('https://api.ddon.org/api/channel-status',{credentials:'include'})).json();
+        const c=document.getElementById('serverStatusContainer'); c.innerHTML='';
+        const names={11:'Channel 1',20:'Channel 2',30:'Channel 3',40:'Channel 4',50:'Channel 5',60:'Channel 6',70:'Channel 7',80:'Channel 8',90:'Collab',100:'Custom Enemy',110:'Boss Rush'};
+        let total=0;
+        Object.keys(names).forEach(id=>{
+            const ch=data.find(x=>parseInt(x.server_id)===parseInt(id));
+            const pl=ch?parseInt(ch.players):0; total+=pl;
+            const div=document.createElement('div'); div.className='card';
+            div.innerHTML=`<h3>${names[id]}</h3><p>🟢 ${t.online||'Online'}</p><p>${t.playersLabel||'Players'}: ${pl}</p>`;
+            c.appendChild(div);
         });
-        document.getElementById("totalPlayersBox").textContent =
-            (t?.totalPlayers||"Total Players Online") + ": " + totalOnline;
-    } catch(err){ console.error("Channel load failed", err); }
+        document.getElementById('totalPlayersBox').textContent=(t.totalPlayers||'Total Players Online')+': '+total;
+    }catch(e){console.error(e);}
 }
-
-loadServerStatus();
-setInterval(loadServerStatus, 5000);
-
-/* ── Festival Countdown ── */
-(function(){
-    const OPEN_DATE = new Date('2026-05-29T00:00:00Z');
-
-    function updateCountdown(){
-        const now = new Date();
-        const diff = OPEN_DATE - now;
-
-        if(diff <= 0){
-            // Festival is open!
-            const locked = document.getElementById('festivalLocked');
-            const open   = document.getElementById('festivalOpen');
-            const newsLocked = document.getElementById('festNewsLocked');
-            const newsOpen   = document.getElementById('festNewsOpen');
-            if(locked) locked.style.display = 'none';
-            if(open)   open.style.display   = 'inline-block';
-            if(newsLocked) newsLocked.style.display = 'none';
-            if(newsOpen)   newsOpen.style.display   = 'inline';
-            return;
-        }
-
-        // Show countdown
-        const locked = document.getElementById('festivalLocked');
-        if(locked) locked.style.display = 'block';
-
-        const d = Math.floor(diff / 86400000);
-        const h = Math.floor((diff % 86400000) / 3600000);
-        const m = Math.floor((diff % 3600000) / 60000);
-        const s = Math.floor((diff % 60000) / 1000);
-
-        const pad = n => String(n).padStart(2,'0');
-        const el = document.getElementById('festCountdown');
-        if(el) el.textContent = `${pad(d)}d ${pad(h)}h ${pad(m)}m ${pad(s)}s`;
-    }
-
-    if(Anniversary_Design){
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-    }
-})();
+loadServerStatus(); setInterval(loadServerStatus,5000);
 </script>
-
 </body>
 </html>
