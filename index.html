@@ -36,7 +36,12 @@ footer{text-align:center;padding:20px;background:#1b1b25;}
 /* ── ANNIVERSARY HERO ── */
 .anniv-hero{text-align:center;padding:80px 20px 60px;background:linear-gradient(to bottom,#1b1b25,#0f0f14);display:flex;flex-direction:column;align-items:center;gap:14px;}
 .anniv-emblem-wrap{position:relative;width:160px;height:165px;overflow:hidden;animation:pulse 3s ease-in-out infinite;}
-.anniv-emblem-wrap img{position:absolute;top:-3px;left:-3px;width:540px;height:auto;mix-blend-mode:screen;}
+.anniv-emblem-wrap img{
+    position:absolute;top:-3px;left:-3px;width:540px;height:auto;
+    mix-blend-mode:screen;
+    mask-image:radial-gradient(ellipse 68% 72% at 28% 44%, black 35%, transparent 72%);
+    -webkit-mask-image:radial-gradient(ellipse 68% 72% at 28% 44%, black 35%, transparent 72%);
+}
 @keyframes pulse{0%,100%{filter:drop-shadow(0 0 14px rgba(200,167,93,.5));}50%{filter:drop-shadow(0 0 30px rgba(255,215,0,.85));}}
 .anniv-title{font-family:'Cinzel Decorative',serif;font-size:52px;color:#ffd700;text-shadow:0 0 40px rgba(255,215,0,.4),0 2px 4px rgba(0,0,0,.8);margin:0;letter-spacing:3px;}
 .anniv-sub{font-size:16px;color:#c8a75d;letter-spacing:6px;margin:0;}
@@ -106,7 +111,7 @@ const Anniversary_Design = true;
         <div class="countdown-box" id="countdownBox">
             <div class="countdown-label">🎉 FESTIVAL OPENS IN</div>
             <div class="countdown-timer" id="countdownTimer">··d ··h ··m ··s</div>
-            <div class="countdown-date">29 MAY 2026 · 00:00 UTC</div>
+            <div class="countdown-date">29 MAY 2026 · 22:30 CEST</div>
         </div>
         <a id="festOpenBtn" href="festival.html" style="display:none;padding:14px 40px;background:linear-gradient(135deg,#c8a75d,#ffd700);color:#0a0b14;font-family:'Cinzel',serif;font-size:14px;font-weight:700;letter-spacing:3px;text-decoration:none;margin-top:10px;"
            onmouseover="this.style.boxShadow='0 0 28px rgba(255,215,0,.5)'"
@@ -162,7 +167,7 @@ if(Anniversary_Design){
     }
 
     /* ── Countdown ── */
-    const OPEN = new Date('2026-05-29T00:00:00Z');
+    const OPEN = new Date('2026-05-29T20:30:00Z'); // 22:30 CEST
     function tick(){
         const diff = OPEN - Date.now();
         if(diff <= 0){
