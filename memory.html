@@ -151,7 +151,7 @@ async function endGame(success){
     let reward=0;
     if(success){reward=elapsed<30?15:elapsed<60?10:6;}
     const title=success?(elapsed<30?window.t('lightning_fast'):elapsed<60?'WELL DONE!':'COMPLETED!'):"TIME'S UP!";
-    const sub=success?window.t('completed')+' '++elapsed+'s · '+moves+' moves':window.t('time_up');
+    const sub=success?window.t('completed')+' '+elapsed+'s · '+moves+' moves':window.t('time_up');
     if(reward>0){
         try{const r=await fetch('https://api.ddon.org/api/festival/arcade/payout',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:reward,game:'memory',meta:{elapsed,won:success}})});const d=await r.json();if(d.success){myCoins=d.coinsLeft;document.getElementById('coinCount').textContent=myCoins;showAchPopups(d.newAchievements);}}catch(_){}
     }

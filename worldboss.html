@@ -698,7 +698,7 @@ function setEnemy(e){
     document.getElementById('enemyVisual').classList.remove('dead','shaking');
     const badge=document.getElementById('enemyTypeBadge');
     const badgeKeys={normal:'enemy_normal',elite:'enemy_elite',boss:'enemy_boss'};badge.textContent=window.t(badgeKeys[e.type]||'enemy_normal');badge.className='enemy-type-badge type-'+e.type;
-    document.getElementById('enemyNameEl').textContent=e.name;
+    const _lang=window.getLang?window.getLang():'en'; document.getElementById('enemyNameEl').textContent=(_lang==='jp'&&e.nameJp)?e.nameJp:e.name;
     const img=document.getElementById('enemyImg');
     img.src=e.img||'';img.style.display=e.img?'block':'none';
     updateEnemyBar();
