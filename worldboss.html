@@ -1040,7 +1040,7 @@ function buildSkillCard(sk){
 
     card.innerHTML=`
         <div class="sk-icon sk-type-${sk.type}">${sk.type==='active'?window.t('active_skill'):window.t('passive_skill')}</div>
-        <div class="sk-name">${sk.name}</div>
+        <div class="sk-name">${(window.t&&window.t('skill_name_'+sk.id)!=='skill_name_'+sk.id)?window.t('skill_name_'+sk.id):sk.name}</div>
         <div class="sk-desc">${sk.description}</div>
         ${curLvl?`<div class="sk-current">${curLvl.desc}</div>`:''}
         ${!isUnlocked&&minLvl>1?`<div class="sk-req">Requires Lv.${minLvl}</div>`:''}
