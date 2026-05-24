@@ -557,7 +557,9 @@ function renderStore(filter=''){
     const grid = document.getElementById('storeGrid');
     grid.innerHTML='';
     const q = filter.toLowerCase();
-    shopItems.filter(i=>!q||i.nameEn.toLowerCase().includes(q)).forEach(item=>{
+    const curLang=window.getLang?window.getLang():'en';
+    shopItems.filter(i=>!q||i.nameEn.toLowerCase().includes(q)||(i.nameJp&&i.nameJp.includes(q))).forEach(item=>{
+        const itemName=(curLang==='jp'&&item.nameJp)?item.nameJp:item.nameEn;
         const div=document.createElement('div');div.className='store-item';
         div.innerHTML=`
             <span class="si-name">${item.nameEn}</span>
