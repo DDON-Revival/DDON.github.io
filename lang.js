@@ -75,7 +75,15 @@ function _buildSelector(){
     // Create dropdown
     const dd = document.createElement('div');
     dd.id = 'langDropdown';
-    dd.style.cssText = 'display:none;position:absolute;right:0;top:100%;background:#0f111f;border:1px solid #2a2d48;z-index:9999;min-width:170px;max-height:340px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.9);';
+    dd.style.cssText = 'display:none;position:fixed;background:#0f111f;border:1px solid #2a2d48;z-index:99999;min-width:180px;max-height:340px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.95);';
+    // Position dropdown below button using fixed coords
+    function positionDropdown(){
+        const btnRect = btn.getBoundingClientRect();
+        dd.style.top = (btnRect.bottom + 4) + 'px';
+        dd.style.right = (window.innerWidth - btnRect.right) + 'px';
+        dd.style.left = 'auto';
+    }
+    btn.addEventListener('mousedown', positionDropdown);
 
     Object.entries(LANG_LABELS).forEach(([code, label]) => {
         const opt = document.createElement('div');
