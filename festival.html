@@ -495,7 +495,7 @@ init();
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;">
             <div>
                 <div style="font-family:'Cinzel Decorative',serif;font-size:24px;color:#c8a75d;letter-spacing:3px;">Anniversary Store</div>
-                <div style="font-size:11px;color:#555;letter-spacing:3px;margin-top:4px;" data-i18n="store_sub">SPEND YOUR COINS ON CRAFTING MATERIALS</div>
+                <div style="font-size:11px;color:#555;letter-spacing:3px;margin-top:4px;" data-i18n="store_sub"><span data-i18n="store_sub">SPEND YOUR COINS ON CRAFTING MATERIALS</span></div>
             </div>
             <div style="display:flex;align-items:center;gap:20px;">
                 <div style="font-size:18px;color:#ffd700;letter-spacing:2px;">🪙 <span id="storeCoinsDisplay">0</span></div>
@@ -707,8 +707,8 @@ window.addEventListener('load',()=>{ if(document.getElementById('coinBadge')) lo
 <div style="width:100%;max-width:1000px;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
         <div>
-            <div style="font-family:'Cinzel Decorative',serif;font-size:22px;color:#c8a75d;letter-spacing:3px;">Achievements</div>
-            <div style="font-size:11px;color:#555;letter-spacing:3px;margin-top:4px;"><span id="achUnlockedCount">0</span> / <span id="achTotalCount">0</span> Unlocked</div>
+            <div style="font-family:'Cinzel Decorative',serif;font-size:22px;color:#c8a75d;letter-spacing:3px;" data-i18n="ach_overlay_title">Achievements</div>
+            <div style="font-size:11px;color:#555;letter-spacing:3px;margin-top:4px;"><span id="achUnlockedCount">0</span> / <span id="achTotalCount">0</span> <span data-i18n="ach_count_of">Unlocked</span></div>
         </div>
         <button onclick="document.getElementById('achOverlay').style.display='none'" style="background:transparent;border:1px solid #444;color:#888;padding:8px 20px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;cursor:pointer;">✕ CLOSE</button>
     </div>
@@ -718,7 +718,7 @@ window.addEventListener('load',()=>{ if(document.getElementById('coinBadge')) lo
         <button class="ach-filter-btn" onclick="filterAch('combat',this)" data-i18n="ach_combat">COMBAT</button>
         <button class="ach-filter-btn" onclick="filterAch('social',this)" data-i18n="ach_social">SOCIAL</button>
         <button class="ach-filter-btn" onclick="filterAch('coins',this)" data-i18n="ach_coins">COINS</button>
-        <button class="ach-filter-btn" onclick="filterAch('class',this)">CLASS</button>
+        <button class="ach-filter-btn" onclick="filterAch('class',this)" data-i18n="ach_class">CLASS</button>
         <button class="ach-filter-btn" onclick="filterAch('special',this)" data-i18n="ach_special">SPECIAL</button>
     </div>
     <div class="ach-grid" id="achGrid"></div>

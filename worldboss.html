@@ -697,7 +697,7 @@ function setEnemy(e){
     enemy=e;
     document.getElementById('enemyVisual').classList.remove('dead','shaking');
     const badge=document.getElementById('enemyTypeBadge');
-    badge.textContent=e.type.toUpperCase();badge.className='enemy-type-badge type-'+e.type;
+    const badgeKeys={normal:'enemy_normal',elite:'enemy_elite',boss:'enemy_boss'};badge.textContent=window.t(badgeKeys[e.type]||'enemy_normal');badge.className='enemy-type-badge type-'+e.type;
     document.getElementById('enemyNameEl').textContent=e.name;
     const img=document.getElementById('enemyImg');
     img.src=e.img||'';img.style.display=e.img?'block':'none';
@@ -720,7 +720,7 @@ function showWaiting(seconds,nextType){
     document.getElementById('combatView').style.display='none';
     document.getElementById('waitScreen').style.display='flex';
     document.getElementById('skillBtn').disabled=true;
-    if(nextType){const labels={normal:'NORMAL ENEMY',elite:'ELITE ENEMY',boss:window.t('next_boss')};document.getElementById('nextTypeBadge').textContent='NEXT: '+(labels[nextType]||nextType.toUpperCase());}
+    if(nextType){const labels={normal:window.t('enemy_normal_label'),elite:window.t('enemy_elite_label'),boss:window.t('next_boss')};document.getElementById('nextTypeBadge').textContent=window.t('next_enemy')+' '+(labels[nextType]||nextType.toUpperCase());}
     if(seconds){let s=Math.ceil(seconds);document.getElementById('countdown').textContent=s;const t=setInterval(()=>{s--;document.getElementById('countdown').textContent=Math.max(0,s);if(s<=0)clearInterval(t);},1000);}
 }
 function showKO(koUntil){
@@ -897,6 +897,7 @@ init();
 loadCoins();
 
 window.addEventListener('langchange',()=>{ location.reload(); });
+window._translationsReady=true;
 
 </script>
 
@@ -976,6 +977,10 @@ let editingSlot = -1;
 
 async function openSkillTree(){
     document.getElementById('skillTreeOverlay').style.display='flex';
+    // Ensure lang.js translations are loaded
+    if(window._translationsReady===false){
+        await new Promise(r=>setTimeout(r,500));
+    }
     await loadSkillData();
     renderSkillTree();
 }
@@ -1039,9 +1044,9 @@ function buildSkillCard(sk){
         <div class="sk-desc">${sk.description}</div>
         ${curLvl?`<div class="sk-current">${curLvl.desc}</div>`:''}
         ${!isUnlocked&&minLvl>1?`<div class="sk-req">Requires Lv.${minLvl}</div>`:''}
-        ${sk.requires.length?`<div class="sk-req">Needs: ${reqNames}</div>`:''}
-        ${isUnlocked?'<div class="sk-unlocked-badge">✓ UNLOCKED</div>':''}
-        ${isAvailable?`<button class="sk-btn" onclick="unlockSkill('${sk.id}')">🔹 UNLOCK (1 pt)</button>`:''}
+        ${sk.requires.length?`<div class="sk-req">${window.t('needs')} ${reqNames}</div>`:''}
+        ${isUnlocked?`<div class="sk-unlocked-badge">${window.t('already_unlocked')}</div>`:''}
+        ${isAvailable?`<button class="sk-btn" onclick="unlockSkill('${sk.id}')">${window.t('unlock_1pt')}</button>`:''}
         ${isLocked&&!isUnlocked?`<button class="sk-btn" disabled>${!lvlOk?`Lv.${minLvl} Required`:window.t('req_not_met')}</button>`:''}
     `;
     return card;
