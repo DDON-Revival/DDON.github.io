@@ -87,14 +87,15 @@ footer{text-align:center;padding:20px;background:#1b1b25;}
 /* Image is ~1456x816 — emblem is top-left ~28% width, ~52% height */
 .anniv-emblem-crop{
     display:inline-block;
-    width:140px;
-    height:145px;
+    width:150px;
+    height:155px;
     background:url('3rd_annivb.png') no-repeat;
-    background-size:500px auto;
-    background-position:0px 0px;
-    filter:drop-shadow(0 0 16px rgba(200,167,93,.7));
+    background-size:520px auto;
+    background-position:-4px -4px;
+    filter:drop-shadow(0 0 20px rgba(200,167,93,.8));
     animation:emblemPulse 3s ease-in-out infinite;
     flex-shrink:0;
+    mix-blend-mode:screen;
 }
 @keyframes emblemPulse{
     0%,100%{filter:drop-shadow(0 0 12px rgba(200,167,93,.5));}
@@ -257,7 +258,7 @@ const Normal_Design = !Anniversary_Design;
     <div class="anniv-hero" style="background:linear-gradient(to bottom,#1b1b25,#0f0f14);padding:80px 20px;">
         <div class="anniv-hero-content">
             <div class="anniv-emblem-crop"></div>
-            <div class="anniv-title">DOGMA FESTIVAL III</div>
+            <div class="anniv-title">DOGMA FESTIVAL</div>
             <div class="anniv-subtitle">✦ THIRD ANNIVERSARY ✦</div>
             <div class="anniv-tagline">3 YEARS OF ADVENTURE • THANK YOU, ARISENS</div>
             <div id="festivalBtnWrap" style="margin-top:20px;text-align:center;">
@@ -284,13 +285,6 @@ const Normal_Design = !Anniversary_Design;
 
 <section id="news" class="section">
     <h2 data-key="newsTitle">Latest News</h2>
-
-    <!-- Anniversary news card (shown in anniversary mode) -->
-    <div class="card card-anniversary" id="annivNewsCard" style="display:none;">
-        <h3>🎉 3rd Anniversary Festival</h3>
-        <p>The Dogma Festival III is live! Fight world bosses, play arcade games and earn Anniversary Coins.</p>
-        <span id="festNewsLink"><a href="festival.html" style="color:#ffd700;font-size:13px;letter-spacing:2px;display:none;" id="festNewsOpen">→ ENTER THE FESTIVAL</a><span id="festNewsLocked" style="color:#555;font-size:11px;letter-spacing:2px;">⏳ OPENS MAY 29</span></span>
-    </div>
 
     <div class="card">
         <h3 data-key="news1Title">Server Opening</h3>
@@ -333,8 +327,6 @@ if(Anniversary_Design){
     document.querySelector('#home.hero').style.display = 'none';
     document.getElementById('annivHero').style.display = 'block';
 
-    // Show badge in header
-    document.getElementById('annivBadge').style.display = 'flex';
 
     // Show anniversary news card
     document.getElementById('annivNewsCard').style.display = 'inline-block';
