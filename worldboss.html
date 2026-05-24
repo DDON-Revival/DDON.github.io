@@ -491,6 +491,8 @@ function startGame(onReady){
         equippedSlots = (profile.activeSkills||[]).slice(0,3);
         while(equippedSlots.length<3) equippedSlots.push(null);
         updateSkillButtons();
+        // Re-update after translations guaranteed loaded
+        setTimeout(updateSkillButtons, 600);
     });
     ensureWS(onReady);
     document.addEventListener('keydown',e=>{
@@ -896,7 +898,12 @@ function showEffectNotif(eff){
 init();
 loadCoins();
 
-window.addEventListener('langchange',()=>{ location.reload(); });
+window.addEventListener('langchange',()=>{
+    // Update skill buttons with new language without reloading
+    if(skillData) updateSkillButtons();
+    // Reload after short delay to translate all other elements
+    setTimeout(()=>location.reload(), 100);
+});
 window._translationsReady=true;
 
 </script>
@@ -1081,7 +1088,7 @@ function renderSlots(){
         const slotLabels=['Q','E','R'];
         if(equippedSlots[i]){
             const sk=skillData?.tree?.skills?.find(s=>s.id===equippedSlots[i]);
-            el.textContent=slotLabels[i]+' — '+(sk?sk.name:'Unknown');
+            const _n=sk?(window.t&&window.t('skill_name_'+sk.id)!=='skill_name_'+sk.id?window.t('skill_name_'+sk.id):sk.name):'Unknown'; el.textContent=slotLabels[i]+' — '+_n;
             el.classList.add('filled');
         } else {
             el.textContent=slotLabels[i]+' — Empty';
@@ -1108,7 +1115,7 @@ function openSlotPicker(slotIndex){
         const usedInOtherSlot = equippedSlots.some((s,i)=>s===sk.id&&i!==slotIndex);
         const el=document.createElement('div');
         el.className='sk-slot'+(equippedSlots[slotIndex]===sk.id?' filled':usedInOtherSlot?' locked':'');
-        el.textContent=sk.name+(usedInOtherSlot?' (in use)':'');
+        const _sn=(window.t&&window.t('skill_name_'+sk.id)!=='skill_name_'+sk.id)?window.t('skill_name_'+sk.id):sk.name; el.textContent=_sn+(usedInOtherSlot?' (in use)':'');
         if(usedInOtherSlot){
             el.style.opacity='0.35';
             el.style.cursor='not-allowed';
