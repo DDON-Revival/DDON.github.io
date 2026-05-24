@@ -107,16 +107,16 @@ const BASE_IMG = 'https://raw.githubusercontent.com/DDON-Revival/DDON.github.io/
 const BOARD_TILES = [
     {type:'start',   icon:'🏁', name:'START'},
     {type:'coin',    icon:'🪙', name:'+8 Coins',   coins:8},
-    {type:'item',    icon:'🎁', name:'Mystery Item', rarity:'common'},
+    {type:'item',    icon:'🎁', name:window.t('mystery_item'), rarity:'common'},
     {type:'coin',    icon:'🪙', name:'+5 Coins',   coins:5},
     {type:'boss',    icon:'boss_goblin', name:'Boss! -10c', coins:-10},
     {type:'coin',    icon:'🪙', name:'+12 Coins',  coins:12},
     {type:'bonus',   icon:'🎲', name:'Extra Roll'},
-    {type:'item',    icon:'🎁', name:'Rare Item', rarity:'rare'},
+    {type:'item',    icon:'🎁', name:window.t('rare_item'), rarity:'rare'},
     {type:'curse',   icon:'💀', name:'Curse -5c',  coins:-5},
     {type:'coin',    icon:'🪙', name:'+6 Coins',   coins:6},
     {type:'jackpot', icon:'⭐', name:'JACKPOT!',   coins:30},
-    {type:'item',    icon:'🎁', name:'Mystery Item', rarity:'common'},
+    {type:'item',    icon:'🎁', name:window.t('mystery_item'), rarity:'common'},
     {type:'coin',    icon:'🪙', name:'+10 Coins',  coins:10},
     {type:'boss',    icon:'boss_warg', name:'Goblin! -8c', coins:-8},
     {type:'coin',    icon:'🪙', name:'+15 Coins',  coins:15},
@@ -209,14 +209,14 @@ async function rollDice(){
     if(myCoins<COST){alert('Not enough coins!');return;}
     rolling=true;
     const btn=document.getElementById('rollBtn');
-    btn.disabled=true; btn.textContent='ROLLING···';
+    btn.disabled=true; btn.textContent=window.t('rolling');
 
     try{
         const r=await fetch('https://api.ddon.org/api/festival/arcade/bet',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:COST})});
         const d=await r.json();
-        if(!d.success){alert('Not enough coins!');btn.disabled=false;btn.textContent='🎲 ROLL — 10 COINS';rolling=false;return;}
+        if(!d.success){alert('Not enough coins!');btn.disabled=false;btn.textContent=window.t('roll_cost_10');rolling=false;return;}
         myCoins=d.coinsLeft;document.getElementById('coinCount').textContent=myCoins;
-    }catch(_){btn.disabled=false;btn.textContent='🎲 ROLL — 10 COINS';rolling=false;return;}
+    }catch(_){btn.disabled=false;btn.textContent=window.t('roll_cost_10');rolling=false;return;}
 
     // Animate dice
     const diceEl=document.getElementById('diceDisplay');
@@ -252,14 +252,14 @@ async function rollDice(){
 
         rolling=false;
         btn.disabled=false;
-        btn.textContent='🎲 ROLL — 10 COINS';
+        btn.textContent=window.t('roll_cost_10');
     },900);
 }
 
 async function handleTile(tile){
     const status=document.getElementById('statusMsg');
     if(tile.type==='start'){
-        addLog('Back to START! Full lap bonus: +5 🪙','good');
+        addLog(window.t('back_to_start')+'','good');
         await payout(5);
         status.textContent='Full lap! Bonus coins earned.';
     } else if(tile.type==='coin'){
@@ -275,19 +275,19 @@ async function handleTile(tile){
         }
     } else if(tile.type==='item'){
         const item=randItem(tile.rarity||'common');
-        const label='Mystery Item';
+        const label=window.t('mystery_item');
         addLog(`${label}: ${item.name}!`,'item');
         boardMeta.gotItem=true;
         status.textContent=`Won: ${item.name}! Sending to Itempost...`;
         await deliverItem(item);
     } else if(tile.type==='jackpot'){
-        addLog('⭐ JACKPOT! +30 coins!','jackpot');
+        addLog(window.t('jackpot')+' +30 coins!','jackpot');
         boardMeta.jackpot=true;
         await payout(30);
         status.textContent='JACKPOT! 30 coins earned!';
     } else if(tile.type==='bonus'){
-        addLog('Extra Roll granted!','good');
-        status.textContent='Extra roll! Roll again for free!';
+        addLog(window.t('extra_roll')+'','good');
+        status.textContent=window.t('extra_roll');
         // Give a free roll by refunding cost
         await payout(COST);
     } else if(tile.type==='boss'){
@@ -353,7 +353,7 @@ async function sendItem(item,charId){
             headers:{'Content-Type':'application/json'},
             body:JSON.stringify({itemId:item.itemId,qty:1,characterId:charId})
         });
-        document.getElementById('statusMsg').textContent=`${item.name} sent to Itempost! ✓`;
+        document.getElementById('statusMsg').textContent=`${item.name} ${window.t('sent_itempost')}`;
     }catch(_){}
 }
 

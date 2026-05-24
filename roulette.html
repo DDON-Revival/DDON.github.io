@@ -127,7 +127,7 @@ function selectVoc(id){
 async function fight(){
     if(!selected||myCoins<COST){alert('Not enough coins!');return;}
     const btn=document.getElementById('fightBtn');
-    btn.disabled=true; btn.textContent='DUELING···';
+    btn.disabled=true; btn.textContent=window.t('rolling');
 
     try{
         const r=await fetch('https://api.ddon.org/api/festival/arcade/bet',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:COST})});
@@ -179,7 +179,7 @@ async function fight(){
     const ra=document.getElementById('resultArea');ra.style.display='flex';
     document.getElementById('resultVs').innerHTML=`<span title="You: ${playerVoc.name}">${playerVoc.icon}</span><span style="font-size:24px;color:#555">VS</span><span title="Enemy: ${enemyVoc.name}">${enemyVoc.icon}</span>`;
     const rl=document.getElementById('resultLabel');
-    rl.textContent=outcome==='win'?'VICTORY!':(outcome==='draw'?'DRAW':'DEFEAT');
+    rl.textContent=outcome==='win'?window.t('victory'):(outcome==='draw'?window.t('draw'):window.t('defeat'));
     rl.className='result-label '+(outcome==='win'?'win':outcome==='draw'?'draw':'lose');
     document.getElementById('resultCoins').textContent=(reward>0?'+':'')+reward+' 🪙'+(streak>=3?' (Streak ×'+Math.floor(reward/COST/2)+'!)':'');
 }

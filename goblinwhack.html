@@ -123,13 +123,13 @@ function buildBoard(){
 async function startGame(){
     if(myCoins<COST){alert('Not enough coins!');return;}
     const btn=document.getElementById('startBtn');
-    btn.disabled=true; btn.textContent='STARTING···';
+    btn.disabled=true; btn.textContent=window.t('rolling');
     try{
         const r=await fetch('https://api.ddon.org/api/festival/arcade/bet',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:COST})});
         const d=await r.json();
-        if(!d.success){alert(d.error==='NOT_ENOUGH_COINS'?'Not enough coins!':'Error');btn.disabled=false;btn.textContent='PLAY — 5 COINS';return;}
+        if(!d.success){alert(d.error==='NOT_ENOUGH_COINS'?'Not enough coins!':'Error');btn.disabled=false;btn.textContent=window.t('play_cost_5');return;}
         myCoins=d.coinsLeft; document.getElementById('coinCount').textContent=myCoins;
-    }catch(_){btn.disabled=false;btn.textContent='PLAY — 5 COINS';return;}
+    }catch(_){btn.disabled=false;btn.textContent=window.t('play_cost_5');return;}
 
     score=0; timeLeft=30; playing=true;
     document.getElementById('startScreen').style.display='none';
@@ -217,7 +217,7 @@ async function endGame(){
 
     // Payout: score*2 coins, min 0, max 25
     const reward=Math.min(25,score*2);
-    const title=score>=20?'GOBLIN SLAYER!':score>=10?'WELL DONE!':'KEEP PRACTICING!';
+    const title=score>=20?window.t('lightning_fast'):score>=10?window.t('well_done'):window.t('round_over');
     const sub=score>=20?'Maximum reward achieved!':score>=10?'Solid performance!':'Try again for more coins!';
 
     if(reward>0){
@@ -245,7 +245,7 @@ function resetGame(){
     document.getElementById('resultScreen').style.display='none';
     document.getElementById('startScreen').style.display='block';
     document.getElementById('startBtn').disabled=false;
-    document.getElementById('startBtn').textContent='PLAY — 5 COINS';
+    document.getElementById('startBtn').textContent=window.t('play_cost_5');
 }
 
 

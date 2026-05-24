@@ -442,7 +442,7 @@ function renderLobbyList(lobbies){
     lobbies.forEach(l=>{
         const row=document.createElement('div');row.className='lobby-row';
         const full=l.count>=l.max;
-        row.innerHTML=`<span class="lr-name">${l.name}</span><span class="lr-count ${full?'lr-full':''}">${l.count}/${l.max}${full?' FULL':''}</span>`;
+        row.innerHTML=`<span class="lr-name">${l.name}</span><span class="lr-count ${full?'lr-full':''}">${l.count}/${l.max}${full?' '+window.t('full'):''}</span>`;
         if(!full) row.onclick=()=>joinLobby(l.id,l.name);
         el.appendChild(row);
     });
@@ -670,7 +670,7 @@ function handleMsg(d){
             });
         }
     }
-    if(d.type==='playerRecovered'){myHp=d.hp;myMaxHp=d.maxHp;isKO=false;updatePlayerHpHud();document.getElementById('clickHint').textContent='⚔ CLICK ENEMY TO ATTACK ⚔';document.getElementById('skillBtn').disabled=skillCd;}
+    if(d.type==='playerRecovered'){myHp=d.hp;myMaxHp=d.maxHp;isKO=false;updatePlayerHpHud();document.getElementById('clickHint').textContent=window.t('click_to_attack');document.getElementById('skillBtn').disabled=skillCd;}
     if(d.type==='partyUpdate'){
         if(d.party&&d.party.length>0){
             // Show party panel whenever we get a party update with members
@@ -720,12 +720,12 @@ function showWaiting(seconds,nextType){
     document.getElementById('combatView').style.display='none';
     document.getElementById('waitScreen').style.display='flex';
     document.getElementById('skillBtn').disabled=true;
-    if(nextType){const labels={normal:'NORMAL ENEMY',elite:'ELITE ENEMY',boss:'⚠ WORLD BOSS'};document.getElementById('nextTypeBadge').textContent='NEXT: '+(labels[nextType]||nextType.toUpperCase());}
+    if(nextType){const labels={normal:'NORMAL ENEMY',elite:'ELITE ENEMY',boss:window.t('next_boss')};document.getElementById('nextTypeBadge').textContent='NEXT: '+(labels[nextType]||nextType.toUpperCase());}
     if(seconds){let s=Math.ceil(seconds);document.getElementById('countdown').textContent=s;const t=setInterval(()=>{s--;document.getElementById('countdown').textContent=Math.max(0,s);if(s<=0)clearInterval(t);},1000);}
 }
 function showKO(koUntil){
     isKO=true;
-    document.getElementById('clickHint').textContent='☠ KO — RECOVERING ☠';
+    document.getElementById('clickHint').textContent=window.t('ko_recovering');
     document.getElementById('skillBtn').disabled=true;
     const sec=Math.ceil((koUntil-Date.now())/1000);
     let s=sec;const t=setInterval(()=>{s--;document.getElementById('clickHint').textContent=`☠ KO — ${Math.max(0,s)}s ☠`;if(s<=0)clearInterval(t);},1000);
@@ -840,7 +840,7 @@ function spawnXpLike(text,color){const el=document.createElement('div');el.class
 // ── Phase banner ───────────────────────────────────────────
 function showPhaseBanner(phase){
     document.getElementById('phaseBanner')?.remove();
-    const cfg={2:{text:'PHASE 2',sub:'THE BEAST STIRS',color:'#bb8a5d'},3:{text:'PHASE 3',sub:'DESPERATE FURY',color:'#ff6a10'},4:{text:'ENRAGED',sub:'UNSTOPPABLE RAGE',color:'#ff2020'}};
+    const cfg={2:{text:window.t('phase2'),sub:window.t('phase2_sub'),color:'#bb8a5d'},3:{text:window.t('phase3'),sub:window.t('phase3_sub'),color:'#ff6a10'},4:{text:window.t('phase4'),sub:window.t('phase4_sub'),color:'#ff2020'}};
     const c=cfg[phase];if(!c)return;
     const el=document.createElement('div');el.id='phaseBanner';
     el.innerHTML=`<h2 style="color:${c.color}">${c.text}</h2><p style="color:${c.color}80">${c.sub}</p>`;
@@ -997,7 +997,7 @@ function renderSkillTree(){
     });
     const container=document.getElementById('stTiers');
     container.innerHTML='';
-    const tierLabels={1:'TIER 1',2:'TIER 2',3:'TIER 3',4:'TIER 4 — ULTIMATE'};
+    const tierLabels={1:window.t('tier1'),2:window.t('tier2'),3:window.t('tier3'),4:window.t('tier4')};
     Object.keys(tiers).sort().forEach(tier=>{
         const row=document.createElement('div');row.className='st-tier';
         const label=document.createElement('div');label.className='st-tier-label';
@@ -1034,7 +1034,7 @@ function buildSkillCard(sk){
     }).join(', ');
 
     card.innerHTML=`
-        <div class="sk-icon sk-type-${sk.type}">${sk.type==='active'?'◆ ACTIVE':'◇ PASSIVE'}</div>
+        <div class="sk-icon sk-type-${sk.type}">${sk.type==='active'?window.t('active_skill'):window.t('passive_skill')}</div>
         <div class="sk-name">${sk.name}</div>
         <div class="sk-desc">${sk.description}</div>
         ${curLvl?`<div class="sk-current">${curLvl.desc}</div>`:''}
@@ -1042,7 +1042,7 @@ function buildSkillCard(sk){
         ${sk.requires.length?`<div class="sk-req">Needs: ${reqNames}</div>`:''}
         ${isUnlocked?'<div class="sk-unlocked-badge">✓ UNLOCKED</div>':''}
         ${isAvailable?`<button class="sk-btn" onclick="unlockSkill('${sk.id}')">🔹 UNLOCK (1 pt)</button>`:''}
-        ${isLocked&&!isUnlocked?`<button class="sk-btn" disabled>${!lvlOk?`Lv.${minLvl} Required`:'Unlock required first'}</button>`:''}
+        ${isLocked&&!isUnlocked?`<button class="sk-btn" disabled>${!lvlOk?`Lv.${minLvl} Required`:window.t('req_not_met')}</button>`:''}
     `;
     return card;
 }
@@ -1137,10 +1137,10 @@ async function saveEquip(){
             equippedSlots=d.activeSkills.slice(0,3);
             while(equippedSlots.length<3) equippedSlots.push(null);
             updateSkillBar();
-            if(btn){ btn.textContent='✓ SAVED!'; btn.style.background='#5dbb8a'; }
+            if(btn){ btn.textContent=window.t('saved'); btn.style.background='#5dbb8a'; }
             setTimeout(()=>{
                 closeSkillTree();
-                if(btn){ btn.textContent='SAVE LOADOUT'; btn.style.background='#c8a75d'; btn.disabled=false; }
+                if(btn){ btn.textContent=window.t('save_loadout'); btn.style.background='#c8a75d'; btn.disabled=false; }
             },800);
         } else {
             if(btn){ btn.textContent='ERROR'; btn.disabled=false; }
