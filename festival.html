@@ -686,7 +686,15 @@ async function executeBuy(itemId, qty, price, characterId, btn, msg){
                 document.body.appendChild(wPop);
                 setTimeout(()=>wPop.remove(),4000);
             }
-            if(msg){msg.textContent=text;msg.style.color=d.warning?'#c8a75d':'#5dbb8a';setTimeout(()=>{msg.textContent='';},3500);}
+            // Show visible popup at bottom of screen
+            if(!d.warning){
+                const sPop=document.createElement('div');
+                sPop.style.cssText='position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#0a1a0a;border:1px solid #5dbb8a;color:#5dbb8a;padding:14px 28px;font-family:Cinzel,serif;font-size:13px;letter-spacing:2px;z-index:9999;white-space:nowrap;';
+                sPop.textContent='✓ '+window.t('purchased');
+                document.body.appendChild(sPop);
+                setTimeout(()=>sPop.remove(),3000);
+            }
+            if(msg){msg.textContent='';} // clear inline msg
         } else {
             const errMap = { NOT_ENOUGH_COINS:window.t('not_enough_coins'), NO_CHARACTER_SELECTED:'Select a character', ITEM_NOT_FOUND:'Item not found' };
             if(msg){msg.textContent=errMap[d.error]||'Error';msg.style.color='#ff4d4d';}
