@@ -144,7 +144,7 @@ let pendingItem=null;
 async function init(){
     BOARD_TILES=makeTiles();
     await loadItemPool();
-    BOARD_TILES=getBoardTiles();
+    
     await loadCoins();
     await loadChars();
     buildBoard();

@@ -66,6 +66,7 @@ function _buildSelector(){
     btn.style.cssText = 'background:transparent;border:1px solid #333;color:#888;padding:6px 14px;font-family:Cinzel,serif;font-size:11px;letter-spacing:1px;cursor:pointer;white-space:nowrap;';
     btn.addEventListener('click', e => {
         e.stopPropagation();
+        e.preventDefault();
         window.toggleLangDropdown();
     });
     btn.addEventListener('mouseover', () => { btn.style.borderColor='#c8a75d'; btn.style.color='#c8a75d'; });
@@ -81,7 +82,7 @@ function _buildSelector(){
         opt.className = 'lang-opt';
         opt.dataset.code = code;
         opt.textContent = label;
-        opt.style.cssText = `padding:11px 18px;font-size:12px;color:${code===_lang?'#c8a75d':'#888'};letter-spacing:1px;cursor:pointer;font-family:Cinzel,serif;transition:.15s;display:block;width:100%;box-sizing:border-box;`;
+        opt.style.cssText = `padding:12px 20px;font-size:12px;color:${code===_lang?'#c8a75d':'#888'};letter-spacing:1px;cursor:pointer!important;font-family:Cinzel,serif;transition:.15s;display:block;width:100%;box-sizing:border-box;user-select:none;`;
         opt.addEventListener('click', () => window.setLang(code));
         opt.addEventListener('mouseover', () => { opt.style.background='rgba(200,167,93,.1)'; opt.style.color='#c8a75d'; });
         opt.addEventListener('mouseout',  () => { opt.style.background=''; opt.style.color = code===_lang?'#c8a75d':'#888'; });
@@ -90,6 +91,7 @@ function _buildSelector(){
 
     const container = document.createElement('div');
     container.style.cssText = 'position:relative;';
+    dd.addEventListener('click', e => e.stopPropagation());
     container.appendChild(btn);
     container.appendChild(dd);
     wrap.innerHTML = '';

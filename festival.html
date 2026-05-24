@@ -651,7 +651,14 @@ async function executeBuy(itemId, qty, price, characterId, btn, msg){
         const d = await r.json();
         if(d.success){
             updateCoinsDisplay(d.coinsLeft);
-            const text = d.warning ? '⚠ '+d.warning : window.t('purchased');
+            const text = d.warning ? '⚠ '+window.t('inv_full') : window.t('purchased');
+            if(d.warning){
+                const wPop=document.createElement('div');
+                wPop.style.cssText='position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a0808;border:1px solid #ff4d4d;color:#ff4d4d;padding:14px 28px;font-family:Cinzel,serif;font-size:13px;letter-spacing:2px;z-index:9999;white-space:nowrap;';
+                wPop.textContent='⚠ '+window.t('inv_full');
+                document.body.appendChild(wPop);
+                setTimeout(()=>wPop.remove(),4000);
+            }
             if(msg){msg.textContent=text;msg.style.color=d.warning?'#c8a75d':'#5dbb8a';setTimeout(()=>{msg.textContent='';},3500);}
         } else {
             const errMap = { NOT_ENOUGH_COINS:window.t('not_enough_coins'), NO_CHARACTER_SELECTED:'Select a character', ITEM_NOT_FOUND:'Item not found' };
