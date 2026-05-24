@@ -530,7 +530,7 @@ function updateSkillButtons(){
         }
         const sk=skillData?.tree?.skills?.find(s=>s.id===skillId);
         if(sk){
-            lbl.textContent=(sk.icon||'⚡')+' '+sk.name;
+            const _skName=(window.t&&window.t('skill_name_'+sk.id)!=='skill_name_'+sk.id)?window.t('skill_name_'+sk.id):sk.name; lbl.textContent=(sk.icon||'⚡')+' '+_skName;
             btn.disabled=skillCooldowns[i]||isKO||gameState!=='combat';
         }
     });

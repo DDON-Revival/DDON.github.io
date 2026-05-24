@@ -135,7 +135,9 @@ async function loadItemPool(){
 function randItem(){
     if(!ITEM_POOL.length) return {itemId:7858, nameEn:'Bronze Ore', nameJp:'', name:'Bronze Ore'};
     const item = ITEM_POOL[Math.floor(Math.random()*ITEM_POOL.length)];
-    return {...item, name: item.nameEn};
+    const _l=window.getLang?window.getLang():'en';
+    const _n=(_l==='jp'&&item.nameJp)?item.nameJp:item.nameEn;
+    return {...item, name: _n};
 }
 
 let position=0, myCoins=0, rolling=false, myChars=[], selectedChar=null;
