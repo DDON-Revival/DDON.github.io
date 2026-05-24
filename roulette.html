@@ -221,16 +221,6 @@ loadCoins();
 window.addEventListener('langchange',()=>{ location.reload(); });
 
 </script>
-
-<style>
-#achNotifContainer{position:fixed;top:80px;right:20px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
-.ach-notif{background:linear-gradient(135deg,#181a30,#101222);border:1px solid #c8a75d;padding:12px 18px;min-width:240px;animation:achSlide 4s ease forwards;}
-@keyframes achSlide{0%{opacity:0;transform:translateX(40px);}10%{opacity:1;transform:translateX(0);}80%{opacity:1;}100%{opacity:0;}}
-.ach-notif-eye{font-size:9px;letter-spacing:3px;color:#c8a75d;opacity:.6;margin-bottom:4px;}
-.ach-notif-name{font-size:13px;color:#fff;letter-spacing:1px;}
-.ach-notif-icon{font-size:20px;margin-bottom:4px;}
-</style>
-<div id="achNotifContainer"></div>
-
+<div id="achNotifContainer" style="position:fixed;top:80px;right:20px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none;"></div>
 </body>
 </html>
