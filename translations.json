@@ -200,7 +200,16 @@
     "play_btn": "PLAY",
     "shop_btn": "SHOP",
     "view_btn": "VIEW",
-    "panel_btn": "← PANEL"
+    "panel_btn": "← PANEL",
+    "goblin_card_desc": "Smash as many Goblins as you can before they escape! Faster clicks = more coins.",
+    "memory_card_desc": "Match pairs of DDON monsters before time runs out. Finish faster for bigger rewards.",
+    "roulette_card_desc": "Fighter vs Hunter vs Mage — DDON Vocation Duel! Beat the enemy vocation to win.",
+    "board_card_desc": "Roll the dice and traverse the Rift Board. Land on reward tiles and win items sent directly to your Itempost!",
+    "solo_tag": "◆ SOLO",
+    "featured_tag": "★ FEATURED",
+    "per_round_5": "5 per round",
+    "per_round_3": "3 per round",
+    "per_roll_10": "10 per roll"
   },
   "jp": {
     "festival_title": "へようこそ",
@@ -403,7 +412,16 @@
     "arcade_desc": "4つのミニゲーム — ゴブリン叩き、記憶、ルーレット、覚者のボード。コインを使って、より多く獲得！",
     "store_desc": "フェスティバルの戦いで獲得した記念コインでクラフト素材を購入しましょう。",
     "achievements_desc": "進捗を追跡し、全フェスティバルイベントでの成果を披露しましょう。",
-    "panel_btn": "← パネル"
+    "panel_btn": "← パネル",
+    "goblin_card_desc": "逃げる前にできるだけ多くのゴブリンを叩け！速いクリック＝より多くのコイン。",
+    "memory_card_desc": "時間切れ前にDDONモンスターのペアをマッチさせろ。速く終わるほど報酬が大きい。",
+    "roulette_card_desc": "ファイター vs ハンター vs メイジ — DDON職業デュエル！敵の職業を倒して勝利しろ。",
+    "board_card_desc": "サイコロを振って裂け目ボードを進め。報酬タイルに止まり、アイテムポストに直接届くアイテムを獲得しろ！",
+    "solo_tag": "◆ ソロ",
+    "featured_tag": "★ 注目",
+    "per_round_5": "1回5コイン",
+    "per_round_3": "1回3コイン",
+    "per_roll_10": "1回10コイン"
   },
   "zh": {
     "festival_title": "欢迎来到",
@@ -606,7 +624,16 @@
     "arcade_desc": "4个迷你游戏。使用金币赢得更多，获取物品！",
     "store_desc": "用节日战斗获得的周年纪念金币购买合成材料。",
     "achievements_desc": "追踪进度，展示成就。",
-    "panel_btn": "← 面板"
+    "panel_btn": "← 面板",
+    "goblin_card_desc": "在地精逃跑之前尽可能多地打倒它们！点击越快 = 金币越多。",
+    "memory_card_desc": "在时间耗尽前匹配DDON怪物对。完成得越快，奖励越丰厚。",
+    "roulette_card_desc": "战士 vs 猎人 vs 法师 — DDON职业决斗！击败敌方职业即可获胜。",
+    "board_card_desc": "掷骰子穿越裂隙棋盘。落在奖励格上，赢得直接发送到物品栏的物品！",
+    "solo_tag": "◆ 单人",
+    "featured_tag": "★ 推荐",
+    "per_round_5": "每局5金币",
+    "per_round_3": "每局3金币",
+    "per_roll_10": "每次10金币"
   },
   "pt": {
     "festival_title": "Bem-vindo à",
@@ -809,7 +836,16 @@
     "arcade_desc": "4 mini-jogos. Gaste moedas, ganhe mais, obtenha itens!",
     "store_desc": "Gaste suas Moedas de Aniversário em materiais de criação obtidos nas batalhas.",
     "achievements_desc": "Acompanhe seu progresso e exiba suas conquistas.",
-    "panel_btn": "← PAINEL"
+    "panel_btn": "← PAINEL",
+    "goblin_card_desc": "Esmague o máximo de Goblins antes que fujam! Cliques mais rápidos = mais moedas.",
+    "memory_card_desc": "Combine pares de monstros DDON antes do tempo acabar. Termine mais rápido para recompensas maiores.",
+    "roulette_card_desc": "Fighter vs Hunter vs Mage — Duelo de Vocação DDON! Vença a vocação inimiga.",
+    "board_card_desc": "Role os dados e atravesse o Tabuleiro do Abismo. Caia em casas de recompensa e ganhe itens diretamente no Itempost!",
+    "solo_tag": "◆ SOLO",
+    "featured_tag": "★ DESTAQUE",
+    "per_round_5": "5 por rodada",
+    "per_round_3": "3 por rodada",
+    "per_roll_10": "10 por lançamento"
   },
   "es": {
     "festival_title": "Bienvenido a la",
@@ -1012,7 +1048,16 @@
     "arcade_desc": "4 mini-juegos. Gasta monedas, gana más, obtén objetos!",
     "store_desc": "Gasta tus Monedas de Aniversario en materiales de artesanía.",
     "achievements_desc": "Rastrea tu progreso y muestra tus logros.",
-    "panel_btn": "← PANEL"
+    "panel_btn": "← PANEL",
+    "goblin_card_desc": "¡Aplasta tantos Goblins como puedas antes de que escapen! Clics más rápidos = más monedas.",
+    "memory_card_desc": "Combina pares de monstruos DDON antes de que se acabe el tiempo. Termina más rápido para mejores recompensas.",
+    "roulette_card_desc": "Fighter vs Hunter vs Mage — Duelo de Vocación DDON! ¡Vence la vocación enemiga para ganar.",
+    "board_card_desc": "Lanza los dados y atraviesa el Tablero del Abismo. ¡Cae en casillas de recompensa y gana objetos enviados directamente a tu Itempost!",
+    "solo_tag": "◆ SOLO",
+    "featured_tag": "★ DESTACADO",
+    "per_round_5": "5 por ronda",
+    "per_round_3": "3 por ronda",
+    "per_roll_10": "10 por tirada"
   },
   "ru": {
     "festival_title": "Добро пожаловать на",
@@ -1215,7 +1260,16 @@
     "arcade_desc": "4 мини-игры. Тратьте монеты, выигрывайте больше!",
     "store_desc": "Тратьте юбилейные монеты на крафтовые материалы.",
     "achievements_desc": "Отслеживайте прогресс и хвастайтесь достижениями.",
-    "panel_btn": "← ПАНЕЛЬ"
+    "panel_btn": "← ПАНЕЛЬ",
+    "goblin_card_desc": "Бей гоблинов пока не убежали! Чем быстрее — тем больше монет.",
+    "memory_card_desc": "Находи пары монстров DDON до истечения времени. Чем быстрее — тем больше награда.",
+    "roulette_card_desc": "Боец vs Охотник vs Маг — Дуэль призваний DDON! Победи противника.",
+    "board_card_desc": "Бросай кости и иди по Доске Разлома. Попади на клетку наград и получи предметы прямо в Ящик!",
+    "solo_tag": "◆ СОЛО",
+    "featured_tag": "★ ИЗБРАННОЕ",
+    "per_round_5": "5 за раунд",
+    "per_round_3": "3 за раунд",
+    "per_roll_10": "10 за бросок"
   },
   "tr": {
     "festival_title": "Hoş Geldiniz",
@@ -1418,7 +1472,16 @@
     "arcade_desc": "4 mini oyun. Coin harca, daha fazla kazan!",
     "store_desc": "Yıldönümü Coinlerinizi crafting malzemeleri için harcayın.",
     "achievements_desc": "İlerlemenizi takip edin ve başarılarınızı sergileyin.",
-    "panel_btn": "← PANEL"
+    "panel_btn": "← PANEL",
+    "goblin_card_desc": "Kaçmadan önce olabildiğince çok Goblin ez! Hızlı tıklama = daha fazla coin.",
+    "memory_card_desc": "Süre dolmadan DDON canavarı çiftlerini eşleştir. Daha hızlı bitir, daha büyük ödül kazan.",
+    "roulette_card_desc": "Fighter vs Hunter vs Mage — DDON Meslek Duelosi! Düşman mesleğini yenerek kazan.",
+    "board_card_desc": "Zar at ve Yarık Tahtasını geç. Ödül karelerine in ve doğrudan Itempost'una gönderilen eşyaları kazan!",
+    "solo_tag": "◆ SOLO",
+    "featured_tag": "★ ÖNE ÇIKAN",
+    "per_round_5": "tur başına 5",
+    "per_round_3": "tur başına 3",
+    "per_roll_10": "atış başına 10"
   },
   "pl": {
     "festival_title": "Witaj na",
@@ -1621,7 +1684,16 @@
     "arcade_desc": "4 mini-gry. Wydaj monety, wygraj więcej!",
     "store_desc": "Wydaj monety rocznicowe na materiały do craftingu.",
     "achievements_desc": "Śledź swój postęp i chwal się osiągnięciami.",
-    "panel_btn": "← PANEL"
+    "panel_btn": "← PANEL",
+    "goblin_card_desc": "Uderzaj w Gobliny zanim uciekną! Szybsze kliknięcia = więcej monet.",
+    "memory_card_desc": "Dopasuj pary potworów DDON zanim czas minie. Im szybciej, tym większa nagroda.",
+    "roulette_card_desc": "Fighter vs Hunter vs Mage — Duelo Powołań DDON! Pokonaj powołanie wroga, aby wygrać.",
+    "board_card_desc": "Rzuć kośćmi i przemierz Planszę Szczeliny. Stań na polach nagród i wygraj przedmioty wysyłane do Itempost!",
+    "solo_tag": "◆ SOLO",
+    "featured_tag": "★ WYRÓŻNIONE",
+    "per_round_5": "5 za rundę",
+    "per_round_3": "3 za rundę",
+    "per_roll_10": "10 za rzut"
   },
   "kr": {
     "festival_title": "환영합니다",
@@ -1824,7 +1896,16 @@
     "arcade_desc": "4개의 미니게임. 코인을 써서 더 많이 이기세요!",
     "store_desc": "기념일 코인으로 제작 재료를 구매하세요.",
     "achievements_desc": "진행 상황을 추적하고 성과를 자랑하세요.",
-    "panel_btn": "← 패널"
+    "panel_btn": "← 패널",
+    "goblin_card_desc": "도망치기 전에 최대한 많은 고블린을 때려라! 빠른 클릭 = 더 많은 코인.",
+    "memory_card_desc": "시간이 끝나기 전에 DDON 몬스터 쌍을 맞춰라. 빠를수록 더 큰 보상.",
+    "roulette_card_desc": "파이터 vs 헌터 vs 메이지 — DDON 직업 결투! 적의 직업을 이겨라.",
+    "board_card_desc": "주사위를 굴려 균열 보드를 이동하라. 보상 칸에 멈춰 아이템 포스트로 직접 전송되는 아이템을 획득하라!",
+    "solo_tag": "◆ 솔로",
+    "featured_tag": "★ 추천",
+    "per_round_5": "라운드당 5",
+    "per_round_3": "라운드당 3",
+    "per_roll_10": "굴림당 10"
   },
   "it": {
     "festival_title": "Benvenuto alla",
@@ -2027,7 +2108,16 @@
     "arcade_desc": "4 mini-giochi. Spendi monete, vinci di più!",
     "store_desc": "Spendi le tue Monete Anniversario per materiali di crafting.",
     "achievements_desc": "Tieni traccia dei tuoi progressi e mostra i risultati.",
-    "panel_btn": "← PANNELLO"
+    "panel_btn": "← PANNELLO",
+    "goblin_card_desc": "Schiaccia più Goblin possibile prima che scappino! Clic più veloci = più monete.",
+    "memory_card_desc": "Abbina le coppie di mostri DDON prima che il tempo finisca. Finisci prima per ricompense maggiori.",
+    "roulette_card_desc": "Fighter vs Hunter vs Mage — Duello di Vocazione DDON! Sconfiggi la vocazione nemica per vincere.",
+    "board_card_desc": "Tira i dadi e attraversa la Tavola della Fenditura. Atterrare sulle caselle premio e vincere oggetti inviati direttamente al tuo Itempost!",
+    "solo_tag": "◆ SOLO",
+    "featured_tag": "★ IN EVIDENZA",
+    "per_round_5": "5 per round",
+    "per_round_3": "3 per round",
+    "per_roll_10": "10 per lancio"
   },
   "fr": {
     "festival_title": "Bienvenue à la",
@@ -2230,7 +2320,16 @@
     "arcade_desc": "4 mini-jeux. Dépensez des pièces, gagnez plus!",
     "store_desc": "Dépensez vos pièces anniversaire pour des matériaux de craft.",
     "achievements_desc": "Suivez vos progrès et montrez vos accomplissements.",
-    "panel_btn": "← PANNEAU"
+    "panel_btn": "← PANNEAU",
+    "goblin_card_desc": "Écrasez autant de Gobelins que possible avant qu'ils fuient! Clic rapide = plus de pièces.",
+    "memory_card_desc": "Associez les paires de monstres DDON avant la fin du temps. Finissez plus vite pour de meilleures récompenses.",
+    "roulette_card_desc": "Fighter vs Hunter vs Mage — Duel de Vocation DDON! Battez la vocation ennemie pour gagner.",
+    "board_card_desc": "Lancez les dés et traversez le Plateau de la Faille. Atterrissez sur des cases de récompense et gagnez des objets envoyés directement à votre Itempost!",
+    "solo_tag": "◆ SOLO",
+    "featured_tag": "★ À LA UNE",
+    "per_round_5": "5 par manche",
+    "per_round_3": "3 par manche",
+    "per_roll_10": "10 par lancer"
   },
   "gr": {
     "festival_title": "Καλώς ήρθατε στη",
@@ -2433,6 +2532,15 @@
     "arcade_desc": "4 mini-παιχνίδια. Ξόδεψε νομίσματα, κέρδισε περισσότερα!",
     "store_desc": "Ξόδεψε τα νομίσματα για υλικά κατασκευής.",
     "achievements_desc": "Παρακολούθησε την πρόοδό σου και επίδειξε τα επιτεύγματά σου.",
-    "panel_btn": "← ΠΊΝΑΚΑΣ"
+    "panel_btn": "← ΠΊΝΑΚΑΣ",
+    "goblin_card_desc": "Χτύπα όσο πιο πολλούς Γκόμπλιν μπορείς πριν φύγουν! Πιο γρήγορα κλικ = περισσότερα νομίσματα.",
+    "memory_card_desc": "Ταίριαξε ζευγάρια τεράτων DDON πριν τελειώσει ο χρόνος. Πιο γρήγορος = μεγαλύτερη ανταμοιβή.",
+    "roulette_card_desc": "Fighter vs Hunter vs Mage — Μονομαχία Κλήσης DDON! Νίκα την κλήση του εχθρού.",
+    "board_card_desc": "Ρολάρε ζάρια και διάσχισε το Ταμπλό της Ρωγμής. Σταμάτα σε πλακάκια ανταμοιβής και κέρδισε αντικείμενα που στέλνονται κατευθείαν στο Itempost!",
+    "solo_tag": "◆ ΜΌΝΟΣ",
+    "featured_tag": "★ ΕΠΙΛΕΓΜΈΝΟ",
+    "per_round_5": "5 ανά γύρο",
+    "per_round_3": "3 ανά γύρο",
+    "per_roll_10": "10 ανά ρολάρισμα"
   }
 }
