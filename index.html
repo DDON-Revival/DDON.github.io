@@ -87,14 +87,20 @@ footer{text-align:center;padding:20px;background:#1b1b25;}
 /* Image is ~1456x816 — emblem is top-left ~28% width, ~52% height */
 .anniv-emblem-crop{
     display:inline-block;
-    width:150px;
-    height:155px;
-    background:url('3rd_annivb.png') no-repeat;
-    background-size:520px auto;
-    background-position:-4px -4px;
+    width:155px;
+    height:160px;
+    overflow:hidden;
+    position:relative;
+    flex-shrink:0;
     filter:drop-shadow(0 0 20px rgba(200,167,93,.8));
     animation:emblemPulse 3s ease-in-out infinite;
-    flex-shrink:0;
+}
+.anniv-emblem-crop img{
+    position:absolute;
+    top:-4px;
+    left:-4px;
+    width:530px;
+    height:auto;
     mix-blend-mode:screen;
 }
 @keyframes emblemPulse{
@@ -217,10 +223,6 @@ const Normal_Design = !Anniversary_Design;
     <div style="display:flex;align-items:center;gap:16px;">
         <h2 style="margin:0;">DDON Revival</h2>
         <!-- Anniversary badge (only shown in anniversary mode) -->
-        <div class="anniv-header-badge" id="annivBadge" style="display:none;">
-            <img src="3rd_annivb.png" id="annivBadgeImg" alt="3rd Anniversary">
-            <span>3RD ANNIVERSARY</span>
-        </div>
     </div>
 
     <div id="totalPlayersBox" style="color:#c8a75d;font-weight:bold;">
@@ -257,7 +259,7 @@ const Normal_Design = !Anniversary_Design;
 <div id="annivHero" style="display:none;">
     <div class="anniv-hero" style="background:linear-gradient(to bottom,#1b1b25,#0f0f14);padding:80px 20px;">
         <div class="anniv-hero-content">
-            <div class="anniv-emblem-crop"></div>
+            <div class="anniv-emblem-crop"><img src="3rd_annivb.png" alt="3rd Anniversary Emblem"></div>
             <div class="anniv-title">DOGMA FESTIVAL</div>
             <div class="anniv-subtitle">✦ THIRD ANNIVERSARY ✦</div>
             <div class="anniv-tagline">3 YEARS OF ADVENTURE • THANK YOU, ARISENS</div>
