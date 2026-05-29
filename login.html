@@ -11,11 +11,12 @@ default-src 'self' https:;
 script-src 'self' 'unsafe-inline' https:;
 style-src 'self' 'unsafe-inline' https:;
 font-src 'self' https:;
-img-src 'self' https: data:;
 connect-src 'self'
 https://api.ddon.org
 https://raw.githubusercontent.com
+https:
 wss://api.ddon.org;
+img-src 'self' https: data:;
 ">
 
 <style>
@@ -304,9 +305,9 @@ button:hover{
     <button data-key="autolootTitle" onclick="openAutoLoot()"></button>
 	
 	<button id="festivalBtn"
-        onclick="location.href='festival.html'"
+        onclick="openFestival()"
         style="display:none;">
-    Dogma Festival
+    Dogma Festival III
 </button>
 
     <button data-key="logout" onclick="logout()"></button>
@@ -360,7 +361,7 @@ button:hover{
 <div class="card" id="festivalCard" style="display:none;">
 
     <h2 style="color:#c8a75d;">
-        DOGMA FESTIVAL
+        DOGMA FESTIVAL III
     </h2>
 
     <div style="
@@ -1896,6 +1897,370 @@ async function setEmail(){
         t[data.error];
 
     loadEmail();
+}
+
+let currentLobby = null;
+
+let selectedClass = "fighter";
+
+const ws = new WebSocket("wss://api.ddon.org/ws");
+
+ws.onopen = () => {
+    console.log("WS OPEN");
+};
+
+ws.onerror = (e) => {
+    console.log("WS ERROR", e);
+};
+
+ws.onclose = (e) => {
+    console.log("WS CLOSE", e);
+};
+
+let multiplayerPlayers = [];
+
+ws.onmessage = (event)=>{
+
+    const data =
+        JSON.parse(event.data);
+
+    // game started
+    if(data.type === "gameStarted"){
+
+        closeLobby();
+
+        openFestivalPrototype();
+    }
+
+    // room browser
+    if(data.type === "roomList"){
+
+        openRoomBrowser(data.rooms);
+    }
+
+    // room created
+    if(data.type === "roomCreated"){
+
+        currentLobby = {
+
+            code: data.code
+        };
+
+        openLobbyScreen();
+    }
+
+    // room update
+    if(data.type === "roomUpdate"){
+
+        multiplayerPlayers =
+            data.players;
+
+        if(currentLobby){
+
+            currentLobby.players =
+                multiplayerPlayers;
+
+            renderLobbyPlayers();
+        }
+    }
+
+    // errors
+    if(data.type === "error"){
+
+        alert(data.message);
+    }
+};
+
+function generateLobbyCode(){
+
+    const chars =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ123456789";
+
+    let code = "";
+
+    for(let i = 0; i < 4; i++){
+
+        code +=
+            chars[
+                Math.floor(Math.random()*chars.length)
+            ];
+    }
+
+    return code;
+}
+
+function createLobby(){
+
+    ws.send(JSON.stringify({
+
+        type: "createRoom",
+
+        name: prompt("Enter Name") || "Player"
+
+    }));
+}
+
+function joinLobbyPrompt(){
+
+    ws.send(JSON.stringify({
+
+        type: "getRooms"
+    }));
+}
+
+function openLobbyScreen(){
+
+    const html = `
+    
+    <div id="lobbyModal" style="
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,0.9);
+        z-index:999999;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    ">
+
+        <div style="
+            width:700px;
+            background:#14182b;
+            border:1px solid #c8a75d;
+            padding:30px;
+        ">
+
+            <h1 style="color:#c8a75d;">
+                Lobby ${currentLobby.code}
+            </h1>
+
+            <div id="lobbyPlayers"></div>
+
+            <div style="
+                display:flex;
+                gap:10px;
+                margin-top:20px;
+            ">
+
+                <button onclick="selectClass('fighter')">
+                    Fighter
+                </button>
+
+                <button onclick="selectClass('hunter')">
+                    Hunter
+                </button>
+
+                <button onclick="selectClass('priest')">
+                    Priest
+                </button>
+
+            </div>
+
+            <div style="
+                margin-top:30px;
+                display:flex;
+                gap:15px;
+            ">
+
+                <button onclick="toggleReady()">
+                    READY
+                </button>
+
+                <button onclick="startLobbyGame()">
+                    START GAME
+                </button>
+
+                <button onclick="closeLobby()">
+                    CLOSE
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+    `;
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        html
+    );
+
+    renderLobbyPlayers();
+}
+
+function renderLobbyPlayers(){
+
+    const container =
+        document.getElementById("lobbyPlayers");
+
+    container.innerHTML = "";
+
+    currentLobby.players.forEach(p=>{
+
+        container.innerHTML += `
+        
+        <div style="
+            background:#1c2338;
+            border:1px solid #2e3550;
+            padding:15px;
+            margin-top:10px;
+        ">
+
+            <b>${p.name}</b>
+            -
+            ${p.class}
+            -
+            ${p.ready ? "READY" : "NOT READY"}
+
+        </div>
+        `;
+    });
+}
+
+function selectClass(cls){
+
+    selectedClass = cls;
+
+    ws.send(JSON.stringify({
+
+        type: "class",
+
+        class: cls
+    }));
+}
+
+let localReady = false;
+
+function toggleReady(){
+
+    localReady = !localReady;
+
+    ws.send(JSON.stringify({
+
+        type: "ready",
+
+        ready: localReady
+    }));
+}
+
+function startLobbyGame(){
+
+    ws.send(JSON.stringify({
+
+        type: "startGame"
+    }));
+}
+
+function closeLobby(){
+
+    const modal =
+        document.getElementById("lobbyModal");
+
+    if(modal)
+        modal.remove();
+}
+
+function openRoomBrowser(rooms){
+
+    const old =
+        document.getElementById("roomBrowser");
+
+    if(old) old.remove();
+
+    let html = `
+    
+    <div id="roomBrowser" style="
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,0.9);
+        z-index:999999;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    ">
+
+        <div style="
+            width:700px;
+            background:#14182b;
+            border:1px solid #c8a75d;
+            padding:30px;
+            max-height:700px;
+            overflow:auto;
+        ">
+
+            <h1 style="color:#c8a75d;">
+                Join Lobby
+            </h1>
+    `;
+
+    if(!rooms.length){
+
+        html += `
+        <p>No active lobbies found.</p>
+        `;
+    }
+
+    rooms.forEach(room=>{
+
+        html += `
+        
+        <div style="
+            background:#1c2338;
+            border:1px solid #2e3550;
+            padding:20px;
+            margin-top:15px;
+        ">
+
+            <h3>Lobby ${room.code}</h3>
+
+            <p>
+                Players: ${room.players}/4
+            </p>
+
+            <button onclick="
+                joinRoomDirect('${room.code}')
+            ">
+                Join
+            </button>
+
+        </div>
+        `;
+    });
+
+    html += `
+    
+        <button onclick="
+            document.getElementById('roomBrowser').remove()
+        " style="
+            margin-top:20px;
+        ">
+            Close
+        </button>
+
+        </div>
+    </div>
+    `;
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        html
+    );
+}
+
+function joinRoomDirect(code){
+
+    document
+        .getElementById("roomBrowser")
+        ?.remove();
+
+    ws.send(JSON.stringify({
+
+        type: "joinRoom",
+
+        code,
+
+        name: prompt("Enter Name") || "Player"
+    }));
 }
 
 window.onload = function(){
