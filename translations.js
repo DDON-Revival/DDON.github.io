@@ -236,7 +236,7 @@ autolootLoading: "Loading items..."
 
 
 downloadLinks:{
-    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQC-fbPWX3lvSbKmsvkwG48uAff6ChkGJUdukSH16fBnqw8?e=TeByFn",
+    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQBmSc5BfpaaQKPHbJFlbNP9AbsG_uqfCHhhM-5_p7MmqpE?e=1BZeOP",
     multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
  },
 
@@ -706,7 +706,7 @@ step7Text:"完成教程任务以解锁功能，并跟随红色主线标记。"
 
 
 downloadLinks:{
-    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQC-fbPWX3lvSbKmsvkwG48uAff6ChkGJUdukSH16fBnqw8?e=TeByFn",
+    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQBmSc5BfpaaQKPHbJFlbNP9AbsG_uqfCHhhM-5_p7MmqpE?e=1BZeOP",
     multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
 },
 
@@ -942,7 +942,7 @@ step7Text:"Complete o tutorial para desbloquear recursos."
 },
 
 downloadLinks:{
-    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQC-fbPWX3lvSbKmsvkwG48uAff6ChkGJUdukSH16fBnqw8?e=TeByFn",
+    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQBmSc5BfpaaQKPHbJFlbNP9AbsG_uqfCHhhM-5_p7MmqpE?e=1BZeOP",
     multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
 },
 
@@ -1179,7 +1179,7 @@ step7Text:"Completa el tutorial inicial."
 },
 
 downloadLinks:{
-    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQC-fbPWX3lvSbKmsvkwG48uAff6ChkGJUdukSH16fBnqw8?e=TeByFn",
+    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQBmSc5BfpaaQKPHbJFlbNP9AbsG_uqfCHhhM-5_p7MmqpE?e=1BZeOP",
     multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
 },
 
@@ -1416,7 +1416,7 @@ step7Text:"Пройдите обучающие задания."
 },
 
 downloadLinks:{
-    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQC-fbPWX3lvSbKmsvkwG48uAff6ChkGJUdukSH16fBnqw8?e=TeByFn",
+    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQBmSc5BfpaaQKPHbJFlbNP9AbsG_uqfCHhhM-5_p7MmqpE?e=1BZeOP",
     multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
 },
 
@@ -1652,7 +1652,7 @@ step7Text:"Eğitim görevlerini tamamlayın."
 },
 
 downloadLinks:{
-    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQC-fbPWX3lvSbKmsvkwG48uAff6ChkGJUdukSH16fBnqw8?e=TeByFn",
+    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQBmSc5BfpaaQKPHbJFlbNP9AbsG_uqfCHhhM-5_p7MmqpE?e=1BZeOP",
     multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
 },
 
@@ -1888,7 +1888,7 @@ step7Text:"Ukończ samouczek."
 },
 
 downloadLinks:{
-    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQC-fbPWX3lvSbKmsvkwG48uAff6ChkGJUdukSH16fBnqw8?e=TeByFn",
+    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQBmSc5BfpaaQKPHbJFlbNP9AbsG_uqfCHhhM-5_p7MmqpE?e=1BZeOP",
     multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
 },
 
@@ -2124,7 +2124,7 @@ step7Text:"튜토리얼을 완료하세요."
 },
 
 downloadLinks:{
-    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQC-fbPWX3lvSbKmsvkwG48uAff6ChkGJUdukSH16fBnqw8?e=TeByFn",
+    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQBmSc5BfpaaQKPHbJFlbNP9AbsG_uqfCHhhM-5_p7MmqpE?e=1BZeOP",
     multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
 },
 
@@ -2360,7 +2360,7 @@ step7Text:"Completa il tutorial."
 },
 
 downloadLinks:{
-    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQC-fbPWX3lvSbKmsvkwG48uAff6ChkGJUdukSH16fBnqw8?e=TeByFn",
+    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQBmSc5BfpaaQKPHbJFlbNP9AbsG_uqfCHhhM-5_p7MmqpE?e=1BZeOP",
     multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
 },
 
@@ -2597,7 +2597,7 @@ step7Text:"Terminez le tutoriel."
 },
 
 downloadLinks:{
-    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQC-fbPWX3lvSbKmsvkwG48uAff6ChkGJUdukSH16fBnqw8?e=TeByFn",
+    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQBmSc5BfpaaQKPHbJFlbNP9AbsG_uqfCHhhM-5_p7MmqpE?e=1BZeOP",
     multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
 },
 
@@ -2833,7 +2833,7 @@ step7Text:"Ολοκληρώστε το tutorial."
 },
 
 downloadLinks:{
-    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQC-fbPWX3lvSbKmsvkwG48uAff6ChkGJUdukSH16fBnqw8?e=TeByFn",
+    full:"https://1drv.ms/u/c/d03bbc39b7e96cf2/IQBmSc5BfpaaQKPHbJFlbNP9AbsG_uqfCHhhM-5_p7MmqpE?e=1BZeOP",
     multi:"https://drive.google.com/drive/folders/1FOAOGG14IKbK1i0jZGEm94ewBagWx6qw?usp=drive_link",
 },
 
