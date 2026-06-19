@@ -1900,13 +1900,6 @@ async function setEmail(){
 }
 
 function checkFestivalFlag(){
-    fetch("https://api.ddon.org/api/me",{ credentials:"include" })
-        .then(res=>res.json())
-        .then(data=>{
-            if(data.flags?.dogmaFestival){
-                document.getElementById("festivalBtn").style.display = "block";
-            }
-        });
 }
 
 window.onload = function(){
